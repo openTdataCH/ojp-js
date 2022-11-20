@@ -1,6 +1,7 @@
 export * from './config/map-colors'
 export * from './helpers/date-helpers'
 export * from './helpers/mapbox-layer-helpers'
+export * from './helpers/xml-helpers'
 export * from './journey/journey-response'
 export * from './location/location'
 export * from './location/geoposition-bbox'
