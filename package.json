@@ -1,0 +1,32 @@
+{
+  "name": "ojp-sdk",
+  "version": "0.9.0",
+  "description": "OJP (Open Journey Planner) Javascript SDK",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc"
+  },
+  "keywords": [
+    "ojp",
+    "transit",
+    "mobility",
+    "sbb"
+  ],
+  "author": "Vasile Cotovanu",
+  "license": "MIT",
+  "dependencies": {
+    "mapbox-gl": "2.11.0",
+    "xmlbuilder": "15.1.1",
+    "xpath": "0.0.32"
+  },
+  "devDependencies": {
+    "@types/mapbox-gl": "2.7.8",
+    "@types/node": "18.11.9",
+    "typescript": "4.9.3"
+  },
+  "files": [
+    "lib/**/*"
+  ]
+}
