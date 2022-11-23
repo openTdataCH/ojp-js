@@ -8,7 +8,7 @@ Include the `ojp-sdk` package in the `./package.json` dependencies of your proje
 
 ```
   "dependencies": {
-    "ojp-sdk": "0.9.0"
+    "ojp-sdk": "0.9.1"
   }
 ```
 
