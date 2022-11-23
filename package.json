@@ -8,6 +8,10 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc"
   },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/openTdataCH/ojp-js.git"
+  },
   "keywords": [
     "ojp",
     "transit",
