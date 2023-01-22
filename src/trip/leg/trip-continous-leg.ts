@@ -120,8 +120,7 @@ export class TripContinousLeg extends TripLeg {
         feature.properties['PathGuidanceSection.GuidanceAdvice'] = pathGuidanceSection.guidanceAdvice ?? '';
         feature.properties['PathGuidanceSection.TurnAction'] = pathGuidanceSection.turnAction ?? '';
 
-        // TODO - dont show guidances for now
-        // features.push(feature);
+        features.push(feature);
       }
     });
 
@@ -192,5 +191,24 @@ export class TripContinousLeg extends TripLeg {
     }
 
     return this.legDistance + ' m'
+  }
+
+  protected override useBeeline(): boolean {
+    if (this.legType === 'TransferLeg') {
+      if (this.pathGuidance === null) {
+        return super.useBeeline();
+      }
+
+      let hasGeoData = false;
+      this.pathGuidance.sections.forEach(section => {
+        if (section.trackSection?.linkProjection) {
+          hasGeoData = true;
+        }
+      });
+
+      return hasGeoData === false;
+    }
+
+    return super.useBeeline();
   }
 }

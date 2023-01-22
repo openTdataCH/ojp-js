@@ -2,6 +2,7 @@
 
 # 0.9.3 - 22.01.2023
 - Updates documentation - see [#6](https://github.com/openTdataCH/ojp-js/pull/6)
+- Show transfer path guidance on the map - see [#5](https://github.com/openTdataCH/ojp-js/pull/5)
 
 # 0.9.2 - 14.01.2023
 - keep app stages in the OJP Demo app, outside of the SDK
