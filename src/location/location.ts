@@ -185,7 +185,19 @@ export class Location {
       return this.stopPlace.stopPlaceName;
     }
 
-    return this.locationName ?? null;
+    if (this.topographicPlace?.name) {
+      return this.topographicPlace.name;
+    }
+    
+    if (this.locationName) {
+      return this.locationName;
+    }
+
+    if (this.geoPosition) {
+      return this.geoPosition.asLatLngString();
+    }
+
+    return null;
   }
 
   public findClosestLocation(otherLocations: Location[]): NearbyLocation | null {
