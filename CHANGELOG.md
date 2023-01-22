@@ -1,0 +1,10 @@
+# CHANGELOG
+
+# 0.9.2 - 14.01.2023
+- keep app stages in the OJP Demo app, outside of the SDK
+
+# 0.9.1 - 23.11.2022
+- updates documentation
+
+# 0.9.0 - 20.11.2022
+- initial commit
