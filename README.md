@@ -13,7 +13,7 @@ Include the `ojp-sdk` package in the `./package.json` dependencies of your proje
 
 ```
   "dependencies": {
-    "ojp-sdk": "0.9.2"
+    "ojp-sdk": "0.9.3"
   }
 ```
 
@@ -23,3 +23,8 @@ Update project dependencies
 $ npm install
 ```
 
+## License
+
+The project is released under a [MIT license](./LICENSE).
+
+Copyright (c) 2021 - 2023 Open Data Platform Mobility Switzerland - [opentransportdata.swiss](https://opentransportdata.swiss/en/).
