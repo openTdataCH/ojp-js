@@ -120,7 +120,6 @@ export class TripContinousLeg extends TripLeg {
         feature.properties['PathGuidanceSection.GuidanceAdvice'] = pathGuidanceSection.guidanceAdvice ?? '';
         feature.properties['PathGuidanceSection.TurnAction'] = pathGuidanceSection.turnAction ?? '';
 
-        // TODO - dont show guidances for now
         features.push(feature);
       }
     });
