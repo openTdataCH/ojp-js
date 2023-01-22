@@ -3,6 +3,7 @@ import { GeoPosition } from "./geoposition";
 import { StopPlace } from "./stopplace";
 import { Address } from "./address";
 import { PointOfInterest } from "./poi";
+import { TopographicPlace } from "./topographic-place";
 
 interface NearbyLocation {
   distance: number
@@ -16,6 +17,7 @@ export class Location {
   public stopPlace: StopPlace | null
   public geoPosition: GeoPosition | null
   public poi: PointOfInterest | null
+  public topographicPlace: TopographicPlace | null
   public attributes: Record<string, any>
 
   constructor() {
@@ -24,7 +26,8 @@ export class Location {
     this.locationName = null;
     this.stopPlace = null;
     this.geoPosition = null;
-    this.poi = null
+    this.poi = null;
+    this.topographicPlace = null;
     this.attributes = {}
   }
 
@@ -36,6 +39,7 @@ export class Location {
     location.stopPlace = StopPlace.initFromContextNode(contextNode)
     location.geoPosition = GeoPosition.initFromContextNode(contextNode)
     location.poi = PointOfInterest.initFromContextNode(contextNode)
+    location.topographicPlace = TopographicPlace.initFromContextNode(contextNode);
 
     let locationName = XPathOJP.queryText('ojp:LocationName/ojp:Text', contextNode)
     if (locationName === null) {
