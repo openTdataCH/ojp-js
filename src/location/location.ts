@@ -28,7 +28,7 @@ export class Location {
     this.geoPosition = null;
     this.poi = null;
     this.topographicPlace = null;
-    this.attributes = {}
+    this.attributes = {};
   }
 
   public static initWithOJPContextNode(contextNode: Node): Location {
@@ -56,6 +56,17 @@ export class Location {
       if (attrValue) {
         location.attributes[attrKey] = attrValue.trim()
       }
+    })
+
+    const extensionAttributesNodes = XPathOJP.queryNodes('ojp:Extension/ojp:LocationExtensionStructure/*', contextNode)
+    extensionAttributesNodes.forEach(attributeNode => {
+      const nodeNameParts = attributeNode.nodeName.split(':')
+      if (nodeNameParts.length !== 2) {
+        return;
+      }
+      const attrKey = nodeNameParts[1]
+      const attrValue = attributeNode.textContent;
+      location.attributes[attrKey] = attrValue;
     })
 
     if (location.stopPointRef === null && location.stopPlace?.stopPlaceRef) {
