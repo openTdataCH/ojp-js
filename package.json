@@ -6,7 +6,8 @@
   "types": "lib/index.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc"
+    "build": "tsc",
+    "tscw": "tsc --watch"
   },
   "repository": {
     "type": "git",
@@ -28,7 +29,8 @@
   "devDependencies": {
     "@types/mapbox-gl": "2.7.8",
     "@types/node": "18.11.9",
-    "typescript": "4.9.3"
+    "typescript": "4.9.3",
+    "watchify": "4.0.0"
   },
   "files": [
     "lib/**/*"
