@@ -146,14 +146,13 @@ export class TripContinousLeg extends TripLeg {
   }
 
   protected override computeLegLineType(): TripLegLineType {
-    if (this.legType === 'ContinousLeg') {
-      if (this.isDriveCarLeg()) {
-        return 'Self-Drive Car'
-      }
+    if (this.isDriveCarLeg()) {
+      return 'Self-Drive Car'
+    }
 
-      if (this.isSharedMobility()) {
-        return 'Shared Mobility'
-      }
+    if (this.isSharedMobility()) {
+      return 'Shared Mobility'
+    }
     }
 
     if (this.legType === 'TransferLeg') {
