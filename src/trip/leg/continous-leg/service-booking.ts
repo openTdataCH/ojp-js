@@ -30,22 +30,25 @@ export class ServiceBooking {
         }
 
         infoURL = infoURL.trim();
-        
         if (infoURL.length < 2) {
             return null;
         }
         // strip out <>
-        infoURL = infoURL.substring(1, infoURL.length - 1);
+        if (infoURL[0] === '<') {
+          infoURL = infoURL.substring(1, infoURL.length - 1);
+        }
 
         var el = document.createElement('textarea');
         el.innerHTML = infoURL.trim();
         infoURL = el.innerText;
 
-        bookingArrangements.push({
-            agencyCode: agencyCode.trim(),
-            agencyName: ServiceBooking.computeAgencyName(agencyCode),
-            infoURL: infoURL,
-        });
+        const bookingArrangement: BookingArrangement = {
+          agencyCode: agencyCode.trim(),
+          agencyName: ServiceBooking.computeAgencyName(agencyCode),
+          infoURL: infoURL,
+        };
+
+        bookingArrangements.push(bookingArrangement);
     });
 
     const serviceBooking = new ServiceBooking(bookingArrangements);
