@@ -10,12 +10,14 @@ import { TripLegPropertiesEnum, TripLegDrawType, TripLegLineType } from '../../t
 import { MapLegLineTypeColor } from '../../config/map-colors'
 import { Duration } from '../../shared/duration'
 import { IndividualTransportMode } from '../../types/individual-mode.types'
+import { ServiceBooking } from './continous-leg/service-booking'
 
 export class TripContinousLeg extends TripLeg {
   public legTransportMode: IndividualTransportMode | null
   public legDistance: number
   public pathGuidance: PathGuidance | null
   public walkDuration: Duration | null
+  public serviceBooking: ServiceBooking | null;
 
   constructor(legType: LegType, legIDx: number, legDistance: number, fromLocation: Location, toLocation: Location) {
     super(legType, legIDx, fromLocation, toLocation)
@@ -23,7 +25,8 @@ export class TripContinousLeg extends TripLeg {
     this.legTransportMode = null
     this.legDistance = legDistance
     this.pathGuidance = null
-    this.walkDuration = null
+    this.walkDuration = null;
+    this.serviceBooking = null;
   }
 
   public static initFromTripLeg(legIDx: number, legNode: Node | null, legType: LegType): TripContinousLeg | null {
@@ -50,7 +53,10 @@ export class TripContinousLeg extends TripLeg {
     tripLeg.legDuration = Duration.initFromContextNode(legNode)
 
     tripLeg.pathGuidance = PathGuidance.initFromTripLeg(legNode);
-    tripLeg.legTransportMode = tripLeg.computeLegTransportMode(legNode)
+    tripLeg.legTransportMode = tripLeg.computeLegTransportMode(legNode);
+    if (tripLeg.legTransportMode === 'taxi') {
+      tripLeg.serviceBooking = ServiceBooking.initWithContextNode(legNode);
+    }
 
     tripLeg.legTrack = LegTrack.initFromLegNode(legNode);
 
@@ -79,6 +85,10 @@ export class TripContinousLeg extends TripLeg {
       return 'cycle'
     }
 
+    if (legModeS === 'taxi') {
+      return 'taxi'
+    }
+
     return null
   }
 
@@ -99,6 +109,10 @@ export class TripContinousLeg extends TripLeg {
 
   public isWalking(): boolean {
     return this.legTransportMode === 'walk';
+  }
+
+  public isTaxi(): boolean {
+    return this.legTransportMode === 'taxi';
   }
 
   protected override computeSpecificJSONFeatures(): GeoJSON.Feature[] {
@@ -140,14 +154,16 @@ export class TripContinousLeg extends TripLeg {
   }
 
   protected override computeLegLineType(): TripLegLineType {
-    if (this.legType === 'ContinousLeg') {
-      if (this.isDriveCarLeg()) {
-        return 'Self-Drive Car'
-      }
+    if (this.isDriveCarLeg()) {
+      return 'Self-Drive Car'
+    }
 
-      if (this.isSharedMobility()) {
-        return 'Shared Mobility'
-      }
+    if (this.isSharedMobility()) {
+      return 'Shared Mobility'
+    }
+
+    if (this.isTaxi()) {
+      return 'OnDemand';
     }
 
     if (this.legType === 'TransferLeg') {
@@ -181,7 +197,11 @@ export class TripContinousLeg extends TripLeg {
       return MapLegLineTypeColor.Transfer
     }
 
-    return MapLegLineTypeColor.Walk
+    if (this.isTaxi()) {
+      return MapLegLineTypeColor.OnDemand;
+    }
+
+    return MapLegLineTypeColor.Walk;
   }
 
   public formatDistance(): string {
