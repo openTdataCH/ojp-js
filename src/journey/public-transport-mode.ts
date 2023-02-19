@@ -27,7 +27,7 @@ export class PublicTransportMode {
     const publicTransportMode = new PublicTransportMode(ptMode, name, shortName)
 
     const busSubmode = XPathOJP.queryText('ojp:Mode/siri:BusSubmode', serviceNode)
-    publicTransportMode.isDemandMode = busSubmode === 'demandAndResponseBus'
+    publicTransportMode.isDemandMode = busSubmode !== null
 
     return publicTransportMode
   }
