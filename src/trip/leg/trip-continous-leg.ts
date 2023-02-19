@@ -85,6 +85,10 @@ export class TripContinousLeg extends TripLeg {
       return 'cycle'
     }
 
+    if (legModeS === 'taxi') {
+      return 'taxi'
+    }
+
     return null
   }
 
@@ -105,6 +109,10 @@ export class TripContinousLeg extends TripLeg {
 
   public isWalking(): boolean {
     return this.legTransportMode === 'walk';
+  }
+
+  public isTaxi(): boolean {
+    return this.legTransportMode === 'taxi';
   }
 
   protected override computeSpecificJSONFeatures(): GeoJSON.Feature[] {
@@ -153,6 +161,9 @@ export class TripContinousLeg extends TripLeg {
     if (this.isSharedMobility()) {
       return 'Shared Mobility'
     }
+
+    if (this.isTaxi()) {
+      return 'OnDemand';
     }
 
     if (this.legType === 'TransferLeg') {
@@ -186,7 +197,11 @@ export class TripContinousLeg extends TripLeg {
       return MapLegLineTypeColor.Transfer
     }
 
-    return MapLegLineTypeColor.Walk
+    if (this.isTaxi()) {
+      return MapLegLineTypeColor.OnDemand;
+    }
+
+    return MapLegLineTypeColor.Walk;
   }
 
   public formatDistance(): string {
