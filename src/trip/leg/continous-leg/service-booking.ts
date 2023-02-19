@@ -16,7 +16,7 @@ export class ServiceBooking {
   public static initWithContextNode(contextNode: Node): ServiceBooking | null {
     const bookingArrangementsNodes = XPathOJP.queryNodes('ojp:service/ojp:BookingArrangements/ojp:BookingArrangement', contextNode);
     if (bookingArrangementsNodes.length === 0) {
-        debugger;
+        console.error('ERROR - no BookingArrangements nodes found');
         return null;
     }
 
