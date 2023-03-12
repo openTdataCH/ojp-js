@@ -1,7 +1,11 @@
 # CHANGELOG
 
 ## 0.9.6 - 12.03.2023
-
+- improve TripRequest
+  - removed `ojp:NumberOfResults`, keep it only for TEST LA
+  - `IndividualTransportOptions` is used only for monomodal, walk | cycle (own bicyicle) modes - with different max duration params
+  - use `ItModesToCover` for walk | self drive | cycle modes
+  - use OJP `Extension` for bicycle_rental | car_sharing | escooter_rental modes
 - other changes
   - use `self-drive-car` type for car sharing response types
   - fix on-demand bus mode that was matching also the normal bus routes
