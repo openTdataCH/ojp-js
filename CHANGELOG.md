@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 0.9.7 - 12.03.2023
+- adds `Location` Probability and OriginSystem - see [#15](https://github.com/openTdataCH/ojp-js/pull/15)
+
 ## 0.9.6 - 12.03.2023
 - improve TripRequest - see [#14](https://github.com/openTdataCH/ojp-js/pull/14)
   - removed `ojp:NumberOfResults`, keep it only for TEST LA

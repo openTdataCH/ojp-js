@@ -22,6 +22,8 @@ export class Location {
   public poi: PointOfInterest | null
   public topographicPlace: TopographicPlace | null
   public attributes: Record<string, any>
+  public probability: number | null
+  public originSystem: string | null
 
   constructor() {
     this.address = null
@@ -32,6 +34,8 @@ export class Location {
     this.poi = null;
     this.topographicPlace = null;
     this.attributes = {};
+    this.probability = null;
+    this.originSystem = null;
   }
 
   public static initWithOJPContextNode(contextNode: Node): Location {
@@ -75,6 +79,13 @@ export class Location {
     if (location.stopPointRef === null && location.stopPlace?.stopPlaceRef) {
       location.stopPointRef = location.stopPlace.stopPlaceRef;
     }
+
+    const probabilityS = XPathOJP.queryText('../ojp:Probability', contextNode);
+    if (probabilityS) {
+      location.probability = parseFloat(probabilityS);
+    }
+
+    location.originSystem = XPathOJP.queryText('../ojp:OriginSystem', contextNode);
 
     return location
   }
