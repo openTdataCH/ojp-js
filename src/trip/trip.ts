@@ -9,6 +9,7 @@ import { TripContinousLeg } from './leg/trip-continous-leg'
 import { Duration } from '../shared/duration'
 import { Location } from '../location/location';
 import { GeoPositionBBOX } from '../location/geoposition-bbox'
+import { GeoPosition } from '../location/geoposition'
 import { IndividualTransportMode } from '../types/individual-mode.types'
 
 export class Trip {
@@ -208,6 +209,19 @@ export class Trip {
     if (toGeoPosition) {
       bbox.extend(toGeoPosition);
     }
+
+    this.legs.forEach(leg => {
+      const features = leg.computeGeoJSONFeatures();
+      features.forEach(feature => {
+        const featureBBOX = feature.bbox ?? null;
+        if (featureBBOX === null) {
+          return;
+        }
+
+        bbox.extend(new GeoPosition(featureBBOX[0], featureBBOX[1]));
+        bbox.extend(new GeoPosition(featureBBOX[2], featureBBOX[3]));
+      });
+    });
 
     return bbox;
   }
