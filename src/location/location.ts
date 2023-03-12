@@ -10,6 +10,9 @@ interface NearbyLocation {
   location: Location
 }
 
+// TODO - long term: subclass from Location?
+export type LocationType = 'stop' | 'address' | 'poi' | 'topographicPlace'
+
 export class Location {
   public address: Address | null
   public stopPointRef: string | null
@@ -235,5 +238,25 @@ export class Location {
     });
 
     return closestLocation;
+  }
+
+  public getLocationType(): LocationType | null {
+    if (this.stopPlace) {
+      return 'stop';
+    }
+
+    if (this.poi) {
+      return 'poi';
+    }
+
+    if (this.address) {
+      return 'address';
+    }
+
+    if (this.topographicPlace) {
+      return 'topographicPlace';
+    }
+
+    return null
   }
 }
