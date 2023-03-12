@@ -78,7 +78,7 @@ export class TripContinousLeg extends TripLeg {
     }
 
     if (legModeS === 'self-drive-car') {
-      return 'car_self_driving'
+      return 'self-drive-car'
     }
 
     if (legModeS === 'cycle') {
@@ -93,7 +93,7 @@ export class TripContinousLeg extends TripLeg {
   }
 
   public isDriveCarLeg(): boolean {
-    return this.legTransportMode === 'car_self_driving';
+    return this.legTransportMode === 'self-drive-car';
   }
 
   public isSharedMobility(): boolean {
