@@ -1,8 +1,12 @@
 # CHANGELOG
 
 ## 0.9.6 - 12.03.2023
-
-- other changes
+- improve TripRequest - see [#14](https://github.com/openTdataCH/ojp-js/pull/14)
+  - removed `ojp:NumberOfResults`, keep it only for TEST LA
+  - `IndividualTransportOptions` is used only for monomodal, walk | cycle (own bicyicle) modes - with different max duration params
+  - use `ItModesToCover` for walk | self drive | cycle modes
+  - use OJP `Extension` for bicycle_rental | car_sharing | escooter_rental modes
+- other changes - see [#13](https://github.com/openTdataCH/ojp-js/pull/13)
   - use `self-drive-car` type for car sharing response types
   - fix on-demand bus mode that was matching also the normal bus routes
   - add types to `Location` object so we can differentiate between Stop, POI, TopographicPlace and Address

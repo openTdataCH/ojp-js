@@ -18,7 +18,7 @@ export class TripRequest extends OJPBaseRequest {
     this.buildTripRequestNode();
     const bodyXML_s = this.serviceRequestNode.end();
     super.fetchOJPResponse(bodyXML_s, (responseText, errorData) => {
-      const tripsResponse = TripsResponse.initWithXML(responseText, this.requestParams.transportMode);
+      const tripsResponse = TripsResponse.initWithXML(responseText, this.requestParams.modeType, this.requestParams.transportMode);
       if (errorData === null && !tripsResponse.hasValidResponse) {
         errorData = {
           error: 'ParseTripsXMLError',
@@ -87,10 +87,20 @@ export class TripRequest extends OJPBaseRequest {
 
         // https://github.com/openTdataCH/ojp-demo-app-src/issues/64
         // Allow maxduration for more than 40m for walking / cycle monomodal routes
-        if (isMonomodal && (transportMode === 'walk' || transportMode === 'cycle')) {
-          const transportModeOptionsNode = endPointNode.ele('ojp:IndividualTransportOptions');
-          transportModeOptionsNode.ele('ojp:Mode', transportMode);
-          transportModeOptionsNode.ele('ojp:MaxDuration', 'PT3000M');
+        
+        if (isMonomodal) {
+          const modesWithOptions: IndividualTransportMode[] = ['walk', 'cycle'];
+          if (modesWithOptions.indexOf(transportMode) !== -1) {
+            const transportModeOptionsNode = endPointNode.ele('ojp:IndividualTransportOptions');
+            transportModeOptionsNode.ele('ojp:Mode', transportMode);
+            
+            if (transportMode === 'walk') {
+              transportModeOptionsNode.ele('ojp:MaxDuration', 'PT3000M');
+            }
+            if (transportMode === 'cycle') {
+              transportModeOptionsNode.ele('ojp:MaxDuration', 'PT600M');
+            }
+          }
         }
       }
     });
@@ -98,7 +108,9 @@ export class TripRequest extends OJPBaseRequest {
     const paramsNode = tripRequestNode.ele('ojp:Params');
 
     const numberOfResults = this.computeNumberOfResultsParam();
-    paramsNode.ele('ojp:NumberOfResults', numberOfResults);
+    if (numberOfResults !== null) {
+      paramsNode.ele('ojp:NumberOfResults', numberOfResults);
+    }
 
     paramsNode.ele('ojp:IncludeTrackSections', true)
     paramsNode.ele('ojp:IncludeLegProjection', true)
@@ -106,16 +118,9 @@ export class TripRequest extends OJPBaseRequest {
     paramsNode.ele('ojp:IncludeIntermediateStops', true)
 
     if (isMonomodal) {
-      if (transportMode === 'walk') {
-        paramsNode.ele('ojp:ItModesToCover', 'walk');
-      }
-
-      if (transportMode === 'car_self_driving') {
-        paramsNode.ele('ojp:ItModesToCover', 'self-drive-car');
-      }
-
-      if (transportMode === 'cycle') {
-        paramsNode.ele('ojp:ItModesToCover', 'cycle');
+      const standardModes: IndividualTransportMode[] = ['walk', 'self-drive-car', 'cycle'];
+      if (standardModes.indexOf(transportMode) !== -1) {
+        paramsNode.ele('ojp:ItModesToCover', transportMode);
       } 
 
       const sharingModes: IndividualTransportMode[] = ['bicycle_rental', 'car_sharing', 'escooter_rental'];
@@ -153,19 +158,11 @@ export class TripRequest extends OJPBaseRequest {
     }
   }
 
-  private computeNumberOfResultsParam(): number {
+  private computeNumberOfResultsParam(): number | null {
     if (this.stageConfig.key === 'TEST LA') {
       return 1;
     }
-
-    if (this.requestParams.modeType === 'monomodal') {
-      const customModes: IndividualTransportMode[] = ['walk', 'cycle', 'car_self_driving', 'bicycle_rental', 'escooter_rental', 'car_sharing'];
-      const isCustomMode = customModes.indexOf(this.requestParams.transportMode) !== -1;
-      if (isCustomMode) {
-        return 0;
-      }
-    }
-
-    return 5;
+    
+    return null;
   }
 }
