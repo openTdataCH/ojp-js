@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 0.9.6 - 12.03.2023
+
+- other changes
+  - use `self-drive-car` type for car sharing response types
+  - fix on-demand bus mode that was matching also the normal bus routes
+  - add types to `Location` object so we can differentiate between Stop, POI, TopographicPlace and Address
+  - LIR name lookup requests can also filter by type, i.e. `Stop`
+  - adjust BBOX for the trips to include also the leg polylines
+
 ## 0.9.5 - 19.02.2023
 - fix for broken taxi / booking data - see [OJP demo app extension #87](https://github.com/openTdataCH/ojp-demo-app-src/issues/87), [#12](https://github.com/openTdataCH/ojp-js/pull/12)
 
