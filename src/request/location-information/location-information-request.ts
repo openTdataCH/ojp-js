@@ -15,9 +15,13 @@ export class LocationInformationRequest extends OJPBaseRequest {
     this.requestParams = requestParams;
   }
 
-  public static initWithLocationName(stageConfig: StageConfig, locationName: string): LocationInformationRequest {
+  public static initWithLocationName(stageConfig: StageConfig, locationName: string, geoRestrictionType: GeoRestrictionType | null = null): LocationInformationRequest {
     const requestParams = <LocationInformationRequestParams>{
       locationName: locationName
+    }
+
+    if (geoRestrictionType !== null) {
+      requestParams.geoRestrictionType = geoRestrictionType;
     }
 
     const locationInformationRequest = new LocationInformationRequest(stageConfig, requestParams);
@@ -167,14 +171,18 @@ export class LocationInformationRequest extends OJPBaseRequest {
   }
 
   private computeRestrictionType(): string | null {
-      if (this.requestParams.geoRestrictionType === 'poi_all') {
-        return 'poi'
-      }
+    if (this.requestParams.geoRestrictionType === 'stop') {
+      return 'stop';
+    }
 
-      if (this.requestParams.geoRestrictionType === 'poi_amenity') {
-        return 'poi'
-      }
+    if (this.requestParams.geoRestrictionType === 'poi_all') {
+      return 'poi'
+    }
 
-      return this.requestParams.geoRestrictionType;
+    if (this.requestParams.geoRestrictionType === 'poi_amenity') {
+      return 'poi'
+    }
+
+    return this.requestParams.geoRestrictionType;
   }
 }
