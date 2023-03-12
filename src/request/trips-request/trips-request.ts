@@ -18,7 +18,7 @@ export class TripRequest extends OJPBaseRequest {
     this.buildTripRequestNode();
     const bodyXML_s = this.serviceRequestNode.end();
     super.fetchOJPResponse(bodyXML_s, (responseText, errorData) => {
-      const tripsResponse = TripsResponse.initWithXML(responseText, this.requestParams.transportMode);
+      const tripsResponse = TripsResponse.initWithXML(responseText, this.requestParams.modeType, this.requestParams.transportMode);
       if (errorData === null && !tripsResponse.hasValidResponse) {
         errorData = {
           error: 'ParseTripsXMLError',

@@ -23,7 +23,7 @@ export class Trip {
     this.stats = tripStats
   }
 
-  public static initFromTripResultNode(tripResultNode: Node, transportMode: IndividualTransportMode) {
+  public static initFromTripResultNode(tripResultNode: Node) {
     const tripId = XPathOJP.queryText('ojp:Trip/ojp:TripId', tripResultNode)
     if (tripId === null) {
       return null;
@@ -74,33 +74,6 @@ export class Trip {
 
       legs.push(tripLeg);
     })
-
-    if (transportMode === 'walk') {
-      const firstNonWalkingLeg = legs.find(leg => {
-        return leg.legType !== 'ContinousLeg'
-      })
-
-      if (firstNonWalkingLeg) {
-        return null
-      }
-    }
-
-    if (transportMode === 'car_self_driving' || transportMode === 'car_sharing') {
-       // TripRequest response returns <ojp:IndividualMode>self-drive-car</ojp:IndividualMode> also for car_sharing
-      const hasLegWithCarMode = Trip.hasLegWithTransportMode(legs, 'car_self_driving');
-      if (!hasLegWithCarMode) {
-        return null;
-      }
-    }
-
-    const customTransportModes: IndividualTransportMode[] = ['cycle', 'bicycle_rental', 'escooter_rental'];
-    if (customTransportModes.indexOf(transportMode) !== -1) {
-      // TripRequest response returns <ojp:IndividualMode>cycle</ojp:IndividualMode> for cycle (indvidual and sharing), escooters (sharing)
-      const hasLegWithTransportMode = Trip.hasLegWithTransportMode(legs, 'cycle');
-      if (hasLegWithTransportMode === false) {
-        return null;
-      }
-    }
 
     const trip = new Trip(tripId, legs, tripStats);
 
