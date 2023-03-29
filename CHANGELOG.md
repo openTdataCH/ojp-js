@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 0.9.8 - 29.03.2023
+- add plus functionality to duration 
+
 ## 0.9.7 - 12.03.2023
 - adds `Location` Probability and OriginSystem - see [#15](https://github.com/openTdataCH/ojp-js/pull/15)
 

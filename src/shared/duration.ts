@@ -59,4 +59,8 @@ export class Duration {
 
     return durationParts.join('')
   }
+
+  public plus(otherDuration: Duration): Duration {
+    return Duration.initFromTotalMinutes(this.totalMinutes + otherDuration.totalMinutes)
+  }
 }
