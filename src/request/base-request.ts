@@ -2,6 +2,8 @@ import xmlbuilder from 'xmlbuilder';
 import { RequestErrorData } from './request-error'
 import { StageConfig } from '../types/stage-config';
 
+import fetch from 'cross-fetch';
+
 export interface RequestData {
   requestXmlS: string | null
   requestDatetime: Date | null

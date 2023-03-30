@@ -9,6 +9,8 @@ import { StopEventRequestParams } from './stop-event-request-params';
 import { RequestErrorData } from '../request-error';
 import { StopEventType } from '../../types/stop-event-type';
 
+import { DOMParser } from 'xmldom'
+
 export class StopEventRequest extends OJPBaseRequest {
     public requestParams: StopEventRequestParams
 
