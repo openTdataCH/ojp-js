@@ -3,6 +3,7 @@
   "version": "0.9.7",
   "description": "OJP (Open Journey Planner) Javascript SDK",
   "main": "lib/index.js",
+  "type": "module",
   "types": "lib/index.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
