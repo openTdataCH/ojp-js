@@ -31,7 +31,7 @@ export class ServiceBooking {
 
         infoURL = infoURL.trim();
         if (infoURL.length < 2) {
-            return null;
+            return;
         }
         // strip out <>
         if (infoURL[0] === '<') {
