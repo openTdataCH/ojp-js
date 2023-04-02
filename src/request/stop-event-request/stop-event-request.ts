@@ -39,6 +39,12 @@ export class StopEventRequest extends OJPBaseRequest {
     private handleResponseData(responseText: string, error: RequestErrorData | null): StopEvent[] {
         const stopEvents: StopEvent[] = [];
 
+        if (error !== null) {
+            console.error('ERROR StopEventRequest');
+            console.log(error);
+            return stopEvents;
+        }
+
         const responseXML = new DOMParser().parseFromString(responseText, 'application/xml');
 
         const mapContextLocations = this.parseMapContextLocations(responseXML);
