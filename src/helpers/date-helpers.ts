@@ -19,7 +19,7 @@ export class DateHelpers {
   }
 
   // 21:38
-  public static formatTimeHHMM(d: Date, separator: string = ':'): string {
+  public static formatTimeHHMM(d: Date): string {
     const dateFormatted = DateHelpers.formatDate(d)
     return dateFormatted.substring(11,16);
   }
