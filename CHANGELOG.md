@@ -1,7 +1,7 @@
 # CHANGELOG
 
 ## 0.9.9 - 02.04.2023
-- various small fixes
+- various small fixes - see [#18](https://github.com/openTdataCH/ojp-js/pull/18)
 
 ## 0.9.8 - 02.04.2023
 - use `cross-fetch` and `xmldom` to enable usage also from command line - see [#17](https://github.com/openTdataCH/ojp-js/pull/17)
