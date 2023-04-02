@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.9.8 - 02.04.2023
+- use `ES6` for both target and module
+- use `cross-fetch` and `xmldom` to enable usage also from command line
+
 ## 0.9.7 - 12.03.2023
 - adds `Location` Probability and OriginSystem - see [#15](https://github.com/openTdataCH/ojp-js/pull/15)
 
