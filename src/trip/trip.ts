@@ -5,12 +5,10 @@ import { TripStats } from '../types/trip-stats'
 import { TripLeg } from './leg/trip-leg'
 import { TripLegFactory } from './leg/trip-leg-factory'
 import { TripTimedLeg } from './leg/trip-timed-leg'
-import { TripContinousLeg } from './leg/trip-continous-leg'
 import { Duration } from '../shared/duration'
 import { Location } from '../location/location';
 import { GeoPositionBBOX } from '../location/geoposition-bbox'
 import { GeoPosition } from '../location/geoposition'
-import { IndividualTransportMode } from '../types/individual-mode.types'
 
 export class Trip {
   public id: string
@@ -78,19 +76,6 @@ export class Trip {
     const trip = new Trip(tripId, legs, tripStats);
 
     return trip;
-  }
-
-  private static hasLegWithTransportMode(legs: TripLeg[], transportMode: IndividualTransportMode): boolean {
-    const foundLeg = legs.find(leg => {
-      if (leg.legType === 'ContinousLeg') {
-        const continousLeg = leg as TripContinousLeg
-        return continousLeg.legTransportMode === transportMode;
-      }
-
-      return false
-    }) ?? null;
-
-    return foundLeg !== null;
   }
 
   public computeDepartureTime(): Date | null {
