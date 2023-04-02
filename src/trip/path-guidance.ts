@@ -13,7 +13,7 @@ export class PathGuidance {
 
     let sections: PathGuidanceSection[] = [];
 
-    sectionNodes.forEach((sectionNode, sectionIdx) => {
+    sectionNodes.forEach(sectionNode => {
       const pathGuidanceSection = PathGuidanceSection.initFromSectionNode(sectionNode);
       if (pathGuidanceSection) {
         sections.push(pathGuidanceSection)

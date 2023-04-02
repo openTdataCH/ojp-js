@@ -35,7 +35,7 @@ export class StopPlace {
     }
 
     const topographicPlaceRef = XPathOJP.queryText('ojp:StopPlace/ojp:TopographicPlaceRef', contextNode)
-    const stopPlace = new StopPlace(stopPlaceRef, stopPlaceName, topographicPlaceRef)
+    const stopPlace = new StopPlace(stopPlaceRef, stopPlaceName, topographicPlaceRef, stopType)
 
     return stopPlace
   }

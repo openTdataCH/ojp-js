@@ -1,7 +1,6 @@
 import mapboxgl from "mapbox-gl";
 
 import { MapLegTypeColor, MapLegTypes, MapLegLineTypeColor, MapTripLegLineTypes } from "../config/map-colors";
-import { LegType } from "../trip";
 
 import { TripLegDrawType, TripLegLineType, TripLegPropertiesEnum } from "../types/map-geometry-types";
 import { StopPointType } from "../types/stop-point-type";
@@ -41,13 +40,6 @@ export class MapboxLayerHelpers {
     caseExpression.push('#FF1493')
 
     return caseExpression
-  }
-
-  private static FilterByLegType(legType: LegType): mapboxgl.Expression {
-    const filterExpression: mapboxgl.Expression = [
-      "==", ["get", TripLegPropertiesEnum.LegType], legType
-    ]
-    return filterExpression
   }
 
   private static FilterByDrawType(drawType: TripLegDrawType): mapboxgl.Expression {

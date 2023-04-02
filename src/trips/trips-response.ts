@@ -78,7 +78,7 @@ export class TripsResponse {
 
   private static sortTrips(trips: Trip[], tripModeType: TripModeType, transportMode: IndividualTransportMode) {
     if (tripModeType !== 'monomodal') {
-      return trips;
+      return;
     }
 
     // Push first the monomodal trip with one leg matching the transport mode

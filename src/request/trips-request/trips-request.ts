@@ -159,10 +159,10 @@ export class TripRequest extends OJPBaseRequest {
   }
 
   private computeNumberOfResultsParam(): number | null {
-    if (this.stageConfig.key === 'TEST LA') {
+    if (this.stageConfig.key === 'LA Beta') {
       return 1;
     }
     
-    return null;
+    return 5;
   }
 }
