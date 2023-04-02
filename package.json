@@ -27,7 +27,7 @@
     "xmlbuilder": "15.1.1",
     "xpath": "0.0.32",
     "cross-fetch": "3.1.5",
-    "xmldom": "0.6.0"
+    "@xmldom/xmldom": "0.8.7"
   },
   "devDependencies": {
     "@types/node": "18.11.9",
