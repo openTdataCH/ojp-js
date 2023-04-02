@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 0.9.10 - 02.04.2023
+- fix `xmldom` inclusion
+
 ## 0.9.9 - 02.04.2023
 - various small fixes - see [#18](https://github.com/openTdataCH/ojp-js/pull/18)
 
