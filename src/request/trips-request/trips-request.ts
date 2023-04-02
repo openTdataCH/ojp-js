@@ -163,6 +163,6 @@ export class TripRequest extends OJPBaseRequest {
       return 1;
     }
     
-    return null;
+    return 5;
   }
 }
