@@ -1,4 +1,4 @@
-import * as xmlbuilder from 'xmlbuilder';
+import xmlbuilder from 'xmlbuilder';
 import { RequestErrorData } from './request-error'
 import { StageConfig } from '../types/stage-config';
 
