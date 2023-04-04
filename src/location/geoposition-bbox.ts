@@ -60,13 +60,15 @@ export class GeoPositionBBOX {
     return bbox
   }
 
-  asLngLatBounds(): mapboxgl.LngLatBounds {
-    const bounds = new mapboxgl.LngLatBounds()
+  asLngLatBounds(): mapboxgl.LngLatBoundsLike {
+    const bounds = [
+      this.southWest.longitude,
+      this.southWest.latitude,
+      this.northEast.longitude,
+      this.northEast.latitude,
+    ];
 
-    bounds.extend(this.southWest.asLngLat())
-    bounds.extend(this.northEast.asLngLat())
-
-    return bounds
+    return bounds as mapboxgl.LngLatBoundsLike;
   }
 
   isValid(): boolean {

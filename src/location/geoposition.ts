@@ -47,9 +47,13 @@ export class GeoPosition {
     return geoPosition
   }
 
-  public asLngLat(): mapboxgl.LngLat {
-    const lnglat = new mapboxgl.LngLat(this.longitude, this.latitude);
-    return lnglat
+  public asLngLat(): mapboxgl.LngLatLike {
+    const lnglat = [
+      this.longitude, 
+      this.latitude,
+    ];
+
+    return lnglat as mapboxgl.LngLatLike;
   }
 
   public asLatLngString(roundCoords: boolean = true): string {
