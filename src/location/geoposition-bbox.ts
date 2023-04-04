@@ -1,4 +1,4 @@
-import mapboxgl from "mapbox-gl";
+import * as mapboxgl from "mapbox-gl";
 import { GeoPosition } from "./geoposition";
 
 export class GeoPositionBBOX {
