@@ -1,4 +1,4 @@
-import xmlbuilder from 'xmlbuilder';
+import * as xmlbuilder from 'xmlbuilder';
 
 import { StageConfig } from '../../types/stage-config'
 import { XPathOJP } from '../../helpers/xpath-ojp';
