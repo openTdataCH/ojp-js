@@ -1,3 +1,5 @@
+import * as GeoJSON from 'geojson'
+
 import { XPathOJP } from '../helpers/xpath-ojp'
 
 import { TripStats } from '../types/trip-stats'

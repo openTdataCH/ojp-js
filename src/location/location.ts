@@ -1,3 +1,5 @@
+import * as GeoJSON from 'geojson'
+
 import { XPathOJP } from "../helpers/xpath-ojp";
 import { GeoPosition } from "./geoposition";
 import { StopPlace } from "./stopplace";
