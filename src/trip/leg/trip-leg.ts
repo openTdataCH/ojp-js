@@ -1,3 +1,5 @@
+import * as GeoJSON from 'geojson'
+
 import { Location } from '../../location/location'
 import { LegTrack } from './leg-track'
 

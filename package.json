@@ -1,6 +1,6 @@
 {
   "name": "ojp-sdk",
-  "version": "0.9.10",
+  "version": "0.9.11",
   "description": "OJP (Open Journey Planner) Javascript SDK",
   "main": "lib/index.js",
   "type": "module",
@@ -23,15 +23,15 @@
   "author": "Vasile Cotovanu",
   "license": "MIT",
   "dependencies": {
-    "mapbox-gl": "2.11.0",
+    "@xmldom/xmldom": "0.8.7",
     "xmlbuilder": "15.1.1",
     "xpath": "0.0.32",
-    "cross-fetch": "3.1.5",
-    "@xmldom/xmldom": "0.8.7"
+    "cross-fetch": "3.1.5"
   },
   "devDependencies": {
-    "@types/node": "18.11.9",
     "@types/mapbox-gl": "2.7.8",
+    "@types/geojson": "7946.0.10",
+    "@types/node": "18.11.9",
     "@types/xmldom": "0.1.31",
     "typescript": "4.9.3",
     "watchify": "4.0.0"

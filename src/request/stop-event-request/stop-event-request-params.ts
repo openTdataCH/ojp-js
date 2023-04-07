@@ -1,4 +1,4 @@
-import xmlbuilder from 'xmlbuilder';
+import * as xmlbuilder from 'xmlbuilder';
 
 import { GeoPosition } from "../../location/geoposition"
 import { StopEventType } from "../../types/stop-event-type"

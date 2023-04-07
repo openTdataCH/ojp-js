@@ -1,3 +1,5 @@
+import * as GeoJSON from 'geojson'
+
 import { JourneyService } from '../../journey/journey-service'
 import { StopPoint } from './timed-leg/stop-point'
 import { LegTrack } from './leg-track'

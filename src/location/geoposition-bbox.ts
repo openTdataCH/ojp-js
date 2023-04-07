@@ -1,4 +1,3 @@
-import mapboxgl from "mapbox-gl";
 import { GeoPosition } from "./geoposition";
 
 export class GeoPositionBBOX {
@@ -58,15 +57,6 @@ export class GeoPositionBBOX {
     ]
 
     return bbox
-  }
-
-  asLngLatBounds(): mapboxgl.LngLatBounds {
-    const bounds = new mapboxgl.LngLatBounds()
-
-    bounds.extend(this.southWest.asLngLat())
-    bounds.extend(this.northEast.asLngLat())
-
-    return bounds
   }
 
   isValid(): boolean {

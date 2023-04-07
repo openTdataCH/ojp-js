@@ -1,4 +1,4 @@
-import mapboxgl from "mapbox-gl";
+import * as mapboxgl from "mapbox-gl";
 
 import { MapLegTypeColor, MapLegTypes, MapLegLineTypeColor, MapTripLegLineTypes } from "../config/map-colors";
 

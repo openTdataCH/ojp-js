@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 0.9.11 - 07.04.2023
+- fix dependencies inclusion
+  - avoid usage of `allowSyntheticDefaultImports` by using `import * as`
+  - declare `GeoJSON` types
+  - no need to import the heavy mapbox-gl lib, just need the TS `@types`
+
 ## 0.9.10 - 02.04.2023
 - fix `xmldom` inclusion - see [#19](https://github.com/openTdataCH/ojp-js/pull/19)
 
