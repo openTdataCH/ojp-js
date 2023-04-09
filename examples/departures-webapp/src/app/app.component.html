@@ -1,4 +1,23 @@
 <h1>Departures</h1>
 
-<hr/>
-
+<table>
+  <tr>
+    <th>Service</th>
+    <th class="description">Description</th>
+    <th>Departure</th>
+  </tr>
+  <tr *ngFor="let departureRow of this.departureRows">
+    <td class="service">
+      <div class="service-line">{{ departureRow.service.line }}</div>
+      <div class="journey-number">{{ departureRow.journey.number }}</div>
+    </td>
+    <td>
+      <div class="journey-from-to">{{ departureRow.journey.headingText }}</div>
+      <div class="journey-stops">{{ departureRow.journey.stops }}</div>
+    </td>
+    <td class="time-cell">
+      <div class="stop-time">{{ departureRow.departure.timeF }}</div>
+      <div class="delay-text">{{ departureRow.departure.delayText }}</div>
+    </td>
+  </tr>
+</table>
