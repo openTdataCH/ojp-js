@@ -17,18 +17,30 @@ type DepartureRow = {
   }
 }
 
+type RenderModel = {
+  stop: {
+    id: string
+    name: string
+  },
+  departures: DepartureRow[]
+}
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  public departureRows: DepartureRow[]
+  public renderModel: RenderModel
+  private queryParams: URLSearchParams
   
   title = 'departures-webapp';
   
   constructor() {
-    this.departureRows = []
+    this.renderModel = {} as RenderModel;
+    this.renderModel.departures = [];
+    
+    this.queryParams = new URLSearchParams(document.location.search);
 
     const mapStopRefs = {
       'BERN': '8507000',
@@ -37,14 +49,41 @@ export class AppComponent {
       'BASEL': '8500010',
       'BASEL_BAD': '8500090',
     }
-    const stopRef = mapStopRefs.BERN_BAHNHOF;
+    const stopRef = this.queryParams.get('stop_id') ?? mapStopRefs.BERN_BAHNHOF;
+
+    const locationRequest = OJP.LocationInformationRequest.initWithStopPlaceRef(OJP.DEFAULT_STAGE, stopRef);
+    locationRequest.fetchResponse().then(locations => {
+      if (locations.length === 0) {
+        console.log('ERROR - fetching locations for ' + stopRef);
+        return;
+      }
+      
+      const stopPlace = locations[0].stopPlace;
+      if (stopPlace === null) {
+        return;
+      }
+
+      this.renderModel.stop = {
+        id: stopPlace.stopPlaceRef,
+        name: stopPlace.stopPlaceName,
+      }
+    })
     
+    setTimeout(() => {
+      this.fetchLatestDepartures(stopRef);
+    }, 1000 * 60);
+    this.fetchLatestDepartures(stopRef);
+  }
+
+  private fetchLatestDepartures(stopRef: string) {
     const request = OJP.StopEventRequest.initWithStopPlaceRef(OJP.DEFAULT_STAGE, stopRef, 'departure', new Date());
+    console.log('FETCH departures for ' + stopRef + ' ...');
     request.fetchResponse().then(stopEvents => {
-      this.departureRows = []
+      console.log(stopEvents);
+      this.renderModel.departures = []
       stopEvents.forEach(stopEvent => {
         const departureRow = this.computeDepartureRow(stopEvent)
-        this.departureRows.push(departureRow);
+        this.renderModel.departures.push(departureRow);
       });
     });
   }

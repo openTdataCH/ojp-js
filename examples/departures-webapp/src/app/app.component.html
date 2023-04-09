@@ -1,12 +1,14 @@
 <h1>Departures</h1>
 
+<div class="stop-info" *ngIf="this.renderModel.stop">{{ this.renderModel.stop.name }} ({{ this.renderModel.stop.id }})</div>
+
 <table>
   <tr>
     <th>Service</th>
     <th class="description">Description</th>
     <th>Departure</th>
   </tr>
-  <tr *ngFor="let departureRow of this.departureRows">
+  <tr *ngFor="let departureRow of this.renderModel.departures">
     <td class="service">
       <div class="service-line">{{ departureRow.service.line }}</div>
       <div class="journey-number">{{ departureRow.journey.number }}</div>
