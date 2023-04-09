@@ -1,0 +1,5 @@
+# Departures CLI
+
+```
+npm init
+```
