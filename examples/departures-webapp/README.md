@@ -2,7 +2,7 @@
 
 This is an Angular web-application created to demonstrate the capabilities of the OJP-JS SDK.
 
-![](./img/departures_bern.png)
+![](./img/departures_bern.png | width=800)
 
 ## Steps
 
