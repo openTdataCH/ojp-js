@@ -9,7 +9,7 @@ This is a command-line Node JS application created to demonstrate the capabiliti
 - create new Node JS application: `$ npm init`
 - adds `ojp-sdk` inside package.json `dependencies` section
 - install dependencies via `$ npm install`
-- includes and use OJP-JS SDK, see [./src/app/app.component.ts](./src/index.js) JavaScript file
+- includes and use OJP-JS SDK, see [./src/index.js](./src/index.js) JavaScript file
 ```
 import * as OJP from 'ojp-sdk'
 
