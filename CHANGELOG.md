@@ -6,6 +6,7 @@
   - declare `GeoJSON` types
   - no need to import the heavy mapbox-gl lib, just need the TS `@types`
 - adds default stage to be used without registering a new key - see [#21](https://github.com/openTdataCH/ojp-js/pull/21)
+- adds [./examples](./examples) projects
 
 ## 0.9.10 - 02.04.2023
 - fix `xmldom` inclusion - see [#19](https://github.com/openTdataCH/ojp-js/pull/19)
