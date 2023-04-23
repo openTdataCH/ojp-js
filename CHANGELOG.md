@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 0.9.12 - 23.04.2023
+- small changes - see [#23](https://github.com/openTdataCH/ojp-js/pull/23)
+  - exports `Duration` for external usage
+  - adds support for `taxi` IndividualTransportMode in `TripRequest` calls
+
 ## 0.9.11 - 07.04.2023
 - fix dependencies inclusion - see [#20](https://github.com/openTdataCH/ojp-js/pull/20)
   - avoid usage of `allowSyntheticDefaultImports` by using `import * as`
