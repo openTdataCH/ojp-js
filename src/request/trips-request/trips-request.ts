@@ -121,11 +121,11 @@ export class TripRequest extends OJPBaseRequest {
       const standardModes: IndividualTransportMode[] = ['walk', 'self-drive-car', 'cycle'];
       if (standardModes.indexOf(transportMode) !== -1) {
         paramsNode.ele('ojp:ItModesToCover', transportMode);
-      } 
+      }
 
-      const sharingModes: IndividualTransportMode[] = ['bicycle_rental', 'car_sharing', 'escooter_rental'];
-      const isSharing = sharingModes.indexOf(transportMode) !== -1;
-      if (isSharing) {
+      const sharingModes: IndividualTransportMode[] = ['bicycle_rental', 'car_sharing', 'escooter_rental', 'taxi'];
+      const isExtension = sharingModes.indexOf(transportMode) !== -1;
+      if (isExtension) {
         const paramsExtensionNode = paramsNode.ele('ojp:Extension');
         paramsExtensionNode.ele('ojp:ItModesToCover', transportMode);
       }
