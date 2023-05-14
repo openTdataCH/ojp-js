@@ -81,16 +81,15 @@ export class TripRequest extends OJPBaseRequest {
         }
       }
 
-      if (isFrom) {
-        const dateF = this.requestParams.departureDate.toISOString();
-        endPointNode.ele('ojp:DepArrTime', dateF);
-
-        // https://github.com/openTdataCH/ojp-demo-app-src/issues/64
-        // Allow maxduration for more than 40m for walking / cycle monomodal routes
-        
-        if (isMonomodal) {
+      if (isMonomodal) {
+        if (isFrom) {
+          // https://github.com/openTdataCH/ojp-demo-app-src/issues/64
+          // Allow maxduration for more than 40m for walking / cycle monomodal routes
           const modesWithOptions: IndividualTransportMode[] = ['walk', 'cycle'];
           if (modesWithOptions.indexOf(transportMode) !== -1) {
+            const dateF = this.requestParams.departureDate.toISOString();
+            endPointNode.ele('ojp:DepArrTime', dateF);  
+
             const transportModeOptionsNode = endPointNode.ele('ojp:IndividualTransportOptions');
             transportModeOptionsNode.ele('ojp:Mode', transportMode);
             
@@ -100,6 +99,33 @@ export class TripRequest extends OJPBaseRequest {
             if (transportMode === 'cycle') {
               transportModeOptionsNode.ele('ojp:MaxDuration', 'PT600M');
             }
+          }
+        }  
+      } else {
+        if (transportMode === 'taxi') {
+          const hasExtension: boolean = (() => {
+            if (isFrom && this.requestParams.modeType === 'mode_at_end') {
+              return false;
+            }
+            
+            if (!isFrom && this.requestParams.modeType === 'mode_at_start') {
+              return false;
+            }
+  
+            return true;
+          })();
+          
+          if (hasExtension) {
+            // TODO - in a method
+            const transportModeOptionsNode = endPointNode.ele('ojp:IndividualTransportOptions');
+            if (tripLocation.customTransportMode) {
+              transportModeOptionsNode.ele('ojp:Mode', tripLocation.customTransportMode)
+            }
+    
+            transportModeOptionsNode.ele('ojp:MinDuration', 'PT' + tripLocation.minDuration + 'M')
+            transportModeOptionsNode.ele('ojp:MaxDuration', 'PT' + tripLocation.maxDuration + 'M')
+            transportModeOptionsNode.ele('ojp:MinDistance', tripLocation.minDistance)
+            transportModeOptionsNode.ele('ojp:MaxDistance', tripLocation.maxDistance)
           }
         }
       }
@@ -130,31 +156,34 @@ export class TripRequest extends OJPBaseRequest {
         paramsExtensionNode.ele('ojp:ItModesToCover', transportMode);
       }
     } else {
-      const paramsExtensionNode = paramsNode.ele('ojp:Extension');
+      const hasExtension = transportMode !== 'taxi';
+      if (hasExtension) {
+        const paramsExtensionNode = paramsNode.ele('ojp:Extension');
       
-      tripEndpoints.forEach(tripEndpoint => {
-        const isFrom = tripEndpoint === 'From';
-        if (isFrom && this.requestParams.modeType === 'mode_at_end') {
-          return;
-        }
-        if (!isFrom && this.requestParams.modeType === 'mode_at_start') {
-          return;
-        }
-        
-        const tripLocation = isFrom ? this.requestParams.fromTripLocation : this.requestParams.toTripLocation;
-        
-        let tagName = isFrom ? 'Origin' : 'Destination';
-        const endpointNode = paramsExtensionNode.ele('ojp:' + tagName);
-  
-        endpointNode.ele('ojp:MinDuration', 'PT' + tripLocation.minDuration + 'M')
-        endpointNode.ele('ojp:MaxDuration', 'PT' + tripLocation.maxDuration + 'M')
-        endpointNode.ele('ojp:MinDistance', tripLocation.minDistance)
-        endpointNode.ele('ojp:MaxDistance', tripLocation.maxDistance)
-  
-        if (tripLocation.customTransportMode) {
-          endpointNode.ele('ojp:Mode', tripLocation.customTransportMode)
-        }
-      });
+        tripEndpoints.forEach(tripEndpoint => {
+          const isFrom = tripEndpoint === 'From';
+          if (isFrom && this.requestParams.modeType === 'mode_at_end') {
+            return;
+          }
+          if (!isFrom && this.requestParams.modeType === 'mode_at_start') {
+            return;
+          }
+          
+          const tripLocation = isFrom ? this.requestParams.fromTripLocation : this.requestParams.toTripLocation;
+          
+          let tagName = isFrom ? 'Origin' : 'Destination';
+          const endpointNode = paramsExtensionNode.ele('ojp:' + tagName);
+    
+          endpointNode.ele('ojp:MinDuration', 'PT' + tripLocation.minDuration + 'M')
+          endpointNode.ele('ojp:MaxDuration', 'PT' + tripLocation.maxDuration + 'M')
+          endpointNode.ele('ojp:MinDistance', tripLocation.minDistance)
+          endpointNode.ele('ojp:MaxDistance', tripLocation.maxDistance)
+    
+          if (tripLocation.customTransportMode) {
+            endpointNode.ele('ojp:Mode', tripLocation.customTransportMode)
+          }
+        });
+      }
     }
   }
 
