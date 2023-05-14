@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 0.9.13 - 14.05.2023
+- use strings for `StageConfig.key`, dont force the consumer to use only predefined OJP stages
+
 ## 0.9.12 - 23.04.2023
 - small changes - see [#23](https://github.com/openTdataCH/ojp-js/pull/23)
   - exports `Duration` for external usage
