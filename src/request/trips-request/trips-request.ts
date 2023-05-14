@@ -2,7 +2,7 @@ import { JourneyPointType } from '../../types/journey-points';
 import { OJPBaseRequest } from '../base-request';
 import { TripsRequestParams } from './trips-request-params';
 import { TripsResponse } from '../../trips/trips-response'
-import { StageConfig } from '../../types/stage-config';
+import { Default_APP_Stage, StageConfig } from '../../types/stage-config';
 import { RequestErrorData } from './../request-error'
 import { IndividualTransportMode } from '../../types/individual-mode.types';
 
@@ -159,7 +159,8 @@ export class TripRequest extends OJPBaseRequest {
   }
 
   private computeNumberOfResultsParam(): number | null {
-    if (this.stageConfig.key === 'LA Beta') {
+    const stageLABeta: Default_APP_Stage = 'LA Beta'
+    if (this.stageConfig.key === stageLABeta) {
       return 1;
     }
     
