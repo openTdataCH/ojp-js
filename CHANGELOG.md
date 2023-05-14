@@ -2,7 +2,7 @@
 
 ## 0.9.13 - 14.05.2023
 - use strings for `StageConfig.key`, dont force the consumer to use only predefined OJP stages - see [#24](https://github.com/openTdataCH/ojp-js/pull/24)
-- adds support for taxi mode in `OJP.TripRequest` - see [#87](https://github.com/openTdataCH/ojp-demo-app-src/issues/87)
+- adds support for taxi mode in `OJP.TripRequest` - see [#87](https://github.com/openTdataCH/ojp-demo-app-src/issues/87), see PR [#25](https://github.com/openTdataCH/ojp-js/pull/25)
 
 ## 0.9.12 - 23.04.2023
 - small changes - see [#23](https://github.com/openTdataCH/ojp-js/pull/23)
