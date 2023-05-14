@@ -118,12 +118,12 @@ export class TripRequest extends OJPBaseRequest {
     paramsNode.ele('ojp:IncludeIntermediateStops', true)
 
     if (isMonomodal) {
-      const standardModes: IndividualTransportMode[] = ['walk', 'self-drive-car', 'cycle'];
+      const standardModes: IndividualTransportMode[] = ['walk', 'self-drive-car', 'cycle', 'taxi'];
       if (standardModes.indexOf(transportMode) !== -1) {
         paramsNode.ele('ojp:ItModesToCover', transportMode);
       }
 
-      const sharingModes: IndividualTransportMode[] = ['bicycle_rental', 'car_sharing', 'escooter_rental', 'taxi'];
+      const sharingModes: IndividualTransportMode[] = ['bicycle_rental', 'car_sharing', 'escooter_rental'];
       const isExtension = sharingModes.indexOf(transportMode) !== -1;
       if (isExtension) {
         const paramsExtensionNode = paramsNode.ele('ojp:Extension');
