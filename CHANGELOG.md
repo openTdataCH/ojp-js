@@ -4,6 +4,7 @@
 - `OJP.TripRequest` changes
   - restore `ojp:DepArrTime`
   - allow toggling of the `<ojp:IncludeLegProjection>` param
+  - allow usage of either `ojp:NumberOfResultsAfter` or `ojp:NumberOfResults` param
 
 ## 0.9.13 - 14.05.2023
 - use strings for `StageConfig.key`, dont force the consumer to use only predefined OJP stages - see [#24](https://github.com/openTdataCH/ojp-js/pull/24)
