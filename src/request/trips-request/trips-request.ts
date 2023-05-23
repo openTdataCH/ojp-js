@@ -137,7 +137,8 @@ export class TripRequest extends OJPBaseRequest {
 
     const numberOfResults = this.computeNumberOfResultsParam();
     if (numberOfResults !== null) {
-      paramsNode.ele('ojp:NumberOfResults', numberOfResults);
+      const nodeName = this.requestParams.useNumberOfResultsAfter ? 'ojp:NumberOfResultsAfter' : 'ojp:NumberOfResults';
+      paramsNode.ele(nodeName, numberOfResults);
     }
 
     paramsNode.ele('ojp:IncludeTrackSections', true)
