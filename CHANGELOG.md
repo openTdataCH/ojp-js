@@ -1,7 +1,7 @@
 # CHANGELOG
 
 ## 0.9.14 - 23.05.2023
-- `OJP.TripRequest` changes
+- `OJP.TripRequest` changes - see [PR #26](https://github.com/openTdataCH/ojp-js/pull/26)
   - restore `ojp:DepArrTime`
   - allow toggling of the `<ojp:IncludeLegProjection>` param
   - allow usage of either `ojp:NumberOfResultsAfter` or `ojp:NumberOfResults` param
