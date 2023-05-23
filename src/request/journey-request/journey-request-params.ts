@@ -7,6 +7,7 @@ export class JourneyRequestParams {
   tripModeTypes: TripModeType[]
   transportModes: IndividualTransportMode[]
   departureDate: Date
+  includeLegProjection: boolean
 
   constructor(tripLocations: TripLocationPoint[], tripModeTypes: TripModeType[], transportModes: IndividualTransportMode[], departureDate: Date) {
 
@@ -14,6 +15,7 @@ export class JourneyRequestParams {
     this.tripModeTypes = tripModeTypes
     this.transportModes = transportModes
     this.departureDate = departureDate
+    this.includeLegProjection = true
   }
 
   public static initWithLocationsAndDate(

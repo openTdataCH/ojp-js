@@ -81,15 +81,17 @@ export class TripRequest extends OJPBaseRequest {
         }
       }
 
+      if (isFrom) {
+        const dateF = this.requestParams.departureDate.toISOString();
+        endPointNode.ele('ojp:DepArrTime', dateF);  
+      }
+
       if (isMonomodal) {
         if (isFrom) {
           // https://github.com/openTdataCH/ojp-demo-app-src/issues/64
           // Allow maxduration for more than 40m for walking / cycle monomodal routes
           const modesWithOptions: IndividualTransportMode[] = ['walk', 'cycle'];
           if (modesWithOptions.indexOf(transportMode) !== -1) {
-            const dateF = this.requestParams.departureDate.toISOString();
-            endPointNode.ele('ojp:DepArrTime', dateF);  
-
             const transportModeOptionsNode = endPointNode.ele('ojp:IndividualTransportOptions');
             transportModeOptionsNode.ele('ojp:Mode', transportMode);
             
@@ -135,11 +137,12 @@ export class TripRequest extends OJPBaseRequest {
 
     const numberOfResults = this.computeNumberOfResultsParam();
     if (numberOfResults !== null) {
-      paramsNode.ele('ojp:NumberOfResults', numberOfResults);
+      const nodeName = this.requestParams.useNumberOfResultsAfter ? 'ojp:NumberOfResultsAfter' : 'ojp:NumberOfResults';
+      paramsNode.ele(nodeName, numberOfResults);
     }
 
     paramsNode.ele('ojp:IncludeTrackSections', true)
-    paramsNode.ele('ojp:IncludeLegProjection', true)
+    paramsNode.ele('ojp:IncludeLegProjection', this.requestParams.includeLegProjection)
     paramsNode.ele('ojp:IncludeTurnDescription', true)
     paramsNode.ele('ojp:IncludeIntermediateStops', true)
 

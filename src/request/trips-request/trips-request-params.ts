@@ -8,6 +8,8 @@ export class TripsRequestParams {
   departureDate: Date
   modeType: TripModeType
   transportMode: IndividualTransportMode
+  includeLegProjection: boolean
+  useNumberOfResultsAfter: boolean
 
   constructor(fromTripLocation: TripLocationPoint, toTripLocation: TripLocationPoint, departureDate: Date) {
     this.fromTripLocation = fromTripLocation
@@ -16,6 +18,9 @@ export class TripsRequestParams {
     
     this.modeType = 'monomodal'
     this.transportMode = 'public_transport'
+
+    this.includeLegProjection = true
+    this.useNumberOfResultsAfter = false
   }
 
   public static initWithLocationsAndDate(
