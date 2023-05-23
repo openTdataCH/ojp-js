@@ -139,7 +139,7 @@ export class TripRequest extends OJPBaseRequest {
     }
 
     paramsNode.ele('ojp:IncludeTrackSections', true)
-    paramsNode.ele('ojp:IncludeLegProjection', true)
+    paramsNode.ele('ojp:IncludeLegProjection', this.requestParams.includeLegProjection)
     paramsNode.ele('ojp:IncludeTurnDescription', true)
     paramsNode.ele('ojp:IncludeIntermediateStops', true)
 
