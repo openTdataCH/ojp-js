@@ -38,6 +38,7 @@ export class JourneyRequest extends OJPBaseRequest {
     }
 
     tripRequestParams.includeLegProjection = this.requestParams.includeLegProjection
+    tripRequestParams.useNumberOfResultsAfter = this.requestParams.useNumberOfResultsAfter
     tripRequestParams.modeType = this.requestParams.tripModeTypes[idx];
     tripRequestParams.transportMode = this.requestParams.transportModes[idx];
 
