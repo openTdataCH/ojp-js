@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 0.9.15 - 02.07.2023
+- [PR #27](https://github.com/openTdataCH/ojp-js/pull/27)
+- pretty print the XML payload in the OJP APIs calls
+- `NumberOfResultsAfter` is now default in the `OJP.TripRequest` calls
+- use `PrivateModeFilter` for the OJP APIs calls
+- add helpers for reuse of the `OJP.StopEventRequest` calls
+
 ## 0.9.14 - 23.05.2023
 - `OJP.TripRequest` changes - see [PR #26](https://github.com/openTdataCH/ojp-js/pull/26)
   - restore `ojp:DepArrTime`
