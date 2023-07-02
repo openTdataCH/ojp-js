@@ -50,7 +50,9 @@ export class StopEventRequestParams {
         requestParamsNode.ele('ojp:IncludeOnwardCalls', this.includeOnwardCalls);
         requestParamsNode.ele('ojp:IncludeRealtimeData', this.includeRealtimeData);
 
-        const bodyXML_s = contextEl.end();
+        const bodyXML_s = contextEl.end({
+            pretty: true
+        });
 
         return bodyXML_s;
     }
