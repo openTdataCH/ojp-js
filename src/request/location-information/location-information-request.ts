@@ -63,7 +63,9 @@ export class LocationInformationRequest extends OJPBaseRequest {
 
   public fetchResponse(): Promise<Location[]> {
     this.buildRequestNode();
-    const bodyXML_s = this.serviceRequestNode.end();
+    const bodyXML_s = this.serviceRequestNode.end({
+      pretty: true
+    });
 
     const loadingPromise = new Promise<Location[]>((resolve, reject) => {
       super.fetchOJPResponse(bodyXML_s, (responseText, errorData) => {
@@ -168,6 +170,9 @@ export class LocationInformationRequest extends OJPBaseRequest {
         })
       }
     }
+
+    const extensionsNode = requestNode.ele('Extensions');
+    extensionsNode.ele('ParamsExtension').ele('PrivateModeFilter').ele('Exclude', 'false');
   }
 
   private computeRestrictionType(): string | null {

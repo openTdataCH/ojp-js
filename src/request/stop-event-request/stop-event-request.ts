@@ -28,7 +28,7 @@ export class StopEventRequest extends OJPBaseRequest {
 
         const loadingPromise = new Promise<StopEvent[]>((resolve, reject) => {
             super.fetchOJPResponse(bodyXML_s, (responseText, errorData) => {
-                const stopEvents = this.handleResponseData(responseText, errorData);
+                const stopEvents = StopEventRequest.handleResponseData(responseText, errorData);
                 resolve(stopEvents);
             });
         });
@@ -36,7 +36,7 @@ export class StopEventRequest extends OJPBaseRequest {
         return loadingPromise;
     }
 
-    private handleResponseData(responseText: string, error: RequestErrorData | null): StopEvent[] {
+    public static handleResponseData(responseText: string, error: RequestErrorData | null): StopEvent[] {
         const stopEvents: StopEvent[] = [];
 
         if (error !== null) {
@@ -47,7 +47,7 @@ export class StopEventRequest extends OJPBaseRequest {
 
         const responseXML = new DOMParser().parseFromString(responseText, 'application/xml');
 
-        const mapContextLocations = this.parseMapContextLocations(responseXML);
+        const mapContextLocations = StopEventRequest.parseMapContextLocations(responseXML);
 
         const nodes = XPathOJP.queryNodes('//ojp:OJPStopEventDelivery/ojp:StopEventResult/ojp:StopEvent', responseXML);
         nodes.forEach(node => {
@@ -61,7 +61,12 @@ export class StopEventRequest extends OJPBaseRequest {
         return stopEvents;
     }
 
-    private parseMapContextLocations(responseXML: Document): Record<string, Location> {
+    public computeRequestXmlString(): string {
+        const bodyXML_s = this.requestParams.buildRequestXML(this.serviceRequestNode);
+        return bodyXML_s;
+    }
+
+    private static parseMapContextLocations(responseXML: Document): Record<string, Location> {
         const mapContextLocations: Record<string, Location> = {};
 
         const locationNodes = XPathOJP.queryNodes('//ojp:OJPStopEventDelivery/ojp:StopEventResponseContext/ojp:Places/ojp:Location', responseXML);

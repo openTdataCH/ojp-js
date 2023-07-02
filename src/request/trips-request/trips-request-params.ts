@@ -20,7 +20,7 @@ export class TripsRequestParams {
     this.transportMode = 'public_transport'
 
     this.includeLegProjection = true
-    this.useNumberOfResultsAfter = false
+    this.useNumberOfResultsAfter = true
   }
 
   public static initWithLocationsAndDate(
