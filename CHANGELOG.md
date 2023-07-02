@@ -1,6 +1,7 @@
 # CHANGELOG
 
 ## 0.9.15 - 02.07.2023
+- [PR #27](https://github.com/openTdataCH/ojp-js/pull/27)
 - pretty print the XML payload in the OJP APIs calls
 - `NumberOfResultsAfter` is now default in the `OJP.TripRequest` calls
 - use `PrivateModeFilter` for the OJP APIs calls
