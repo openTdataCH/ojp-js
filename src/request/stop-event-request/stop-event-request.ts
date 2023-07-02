@@ -61,6 +61,11 @@ export class StopEventRequest extends OJPBaseRequest {
         return stopEvents;
     }
 
+    public computeRequestXmlString(): string {
+        const bodyXML_s = this.requestParams.buildRequestXML(this.serviceRequestNode);
+        return bodyXML_s;
+    }
+
     private static parseMapContextLocations(responseXML: Document): Record<string, Location> {
         const mapContextLocations: Record<string, Location> = {};
 
