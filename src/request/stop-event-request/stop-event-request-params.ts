@@ -50,6 +50,9 @@ export class StopEventRequestParams {
         requestParamsNode.ele('ojp:IncludeOnwardCalls', this.includeOnwardCalls);
         requestParamsNode.ele('ojp:IncludeRealtimeData', this.includeRealtimeData);
 
+        const extensionsNode = requestNode.ele('Extensions');
+        extensionsNode.ele('ParamsExtension').ele('PrivateModeFilter').ele('Exclude', 'false');
+
         const bodyXML_s = contextEl.end({
             pretty: true
         });

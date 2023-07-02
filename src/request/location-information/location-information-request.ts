@@ -170,6 +170,9 @@ export class LocationInformationRequest extends OJPBaseRequest {
         })
       }
     }
+
+    const extensionsNode = requestNode.ele('Extensions');
+    extensionsNode.ele('ParamsExtension').ele('PrivateModeFilter').ele('Exclude', 'false');
   }
 
   private computeRestrictionType(): string | null {
