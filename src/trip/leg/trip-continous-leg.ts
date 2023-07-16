@@ -56,7 +56,9 @@ export class TripContinousLeg extends TripLeg {
 
     tripLeg.pathGuidance = PathGuidance.initFromTripLeg(legNode);
     tripLeg.legTransportMode = tripLeg.computeLegTransportMode(legNode);
-    if (tripLeg.legTransportMode === 'taxi') {
+
+    const isOthersDriveCar = tripLeg.legTransportMode === 'taxi' || tripLeg.legTransportMode === 'others-drive-car';
+    if (isOthersDriveCar) {
       tripLeg.serviceBooking = ServiceBooking.initWithContextNode(legNode);
     }
 
@@ -114,7 +116,7 @@ export class TripContinousLeg extends TripLeg {
   }
 
   public isTaxi(): boolean {
-    return this.legTransportMode === 'taxi';
+    return this.legTransportMode === 'taxi' || this.legTransportMode === 'others-drive-car';
   }
 
   protected override computeSpecificJSONFeatures(): GeoJSON.Feature[] {
