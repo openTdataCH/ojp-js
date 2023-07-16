@@ -195,11 +195,6 @@ export class TripRequest extends OJPBaseRequest {
   }
 
   private computeNumberOfResultsParam(): number | null {
-    const stageLABeta: Default_APP_Stage = 'LA Beta'
-    if (this.stageConfig.key === stageLABeta) {
-      return 1;
-    }
-    
     return 5;
   }
 }
