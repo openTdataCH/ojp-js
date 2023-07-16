@@ -90,6 +90,11 @@ export class TripContinousLeg extends TripLeg {
     }
 
     if (legModeS === 'taxi') {
+      // HACK: BE returns 'taxi' for limo, check first booking agency to see if is actually a limo leg
+      const firstBookingAgency = XPathOJP.queryText('ojp:Service/ojp:BookingArrangements/ojp:BookingArrangement/ojp:BookingAgencyName/ojp:Text', legNode);
+      if (firstBookingAgency?.indexOf('_limousine_') !== -1) {
+        return 'others-drive-car';
+      }
       return 'taxi'
     }
 
