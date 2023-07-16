@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.9.16 - 16.07.2023
+- adds support for `others-drive-car` (limo) IndividualTransportMode - see [#87](https://github.com/openTdataCH/ojp-demo-app-src/issues/87)
+- remove `La Beta` stage hack for number of results in `OJP.TripRequest` calls
+
 ## 0.9.15 - 02.07.2023
 - [PR #27](https://github.com/openTdataCH/ojp-js/pull/27)
 - pretty print the XML payload in the OJP APIs calls

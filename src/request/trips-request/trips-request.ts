@@ -106,7 +106,8 @@ export class TripRequest extends OJPBaseRequest {
           }
         }  
       } else {
-        if (transportMode === 'taxi') {
+        const isOthersDriveCar = transportMode === 'taxi' || transportMode === 'others-drive-car';
+        if (isOthersDriveCar) {
           const hasExtension: boolean = (() => {
             if (isFrom && this.requestParams.modeType === 'mode_at_end') {
               return false;
@@ -149,7 +150,7 @@ export class TripRequest extends OJPBaseRequest {
     paramsNode.ele('ojp:IncludeIntermediateStops', true)
 
     if (isMonomodal) {
-      const standardModes: IndividualTransportMode[] = ['walk', 'self-drive-car', 'cycle', 'taxi'];
+      const standardModes: IndividualTransportMode[] = ['walk', 'self-drive-car', 'cycle', 'taxi', 'others-drive-car'];
       if (standardModes.indexOf(transportMode) !== -1) {
         paramsNode.ele('ojp:ItModesToCover', transportMode);
       }
@@ -161,7 +162,8 @@ export class TripRequest extends OJPBaseRequest {
         paramsExtensionNode.ele('ojp:ItModesToCover', transportMode);
       }
     } else {
-      const hasExtension = transportMode !== 'taxi';
+      const isOthersDriveCar = transportMode === 'taxi' || transportMode === 'others-drive-car';
+      const hasExtension = !isOthersDriveCar;
       if (hasExtension) {
         const paramsExtensionNode = paramsNode.ele('ojp:Extension');
       
@@ -193,11 +195,6 @@ export class TripRequest extends OJPBaseRequest {
   }
 
   private computeNumberOfResultsParam(): number | null {
-    const stageLABeta: Default_APP_Stage = 'LA Beta'
-    if (this.stageConfig.key === stageLABeta) {
-      return 1;
-    }
-    
     return 5;
   }
 }

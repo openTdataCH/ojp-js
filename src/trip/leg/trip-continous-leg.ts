@@ -56,7 +56,9 @@ export class TripContinousLeg extends TripLeg {
 
     tripLeg.pathGuidance = PathGuidance.initFromTripLeg(legNode);
     tripLeg.legTransportMode = tripLeg.computeLegTransportMode(legNode);
-    if (tripLeg.legTransportMode === 'taxi') {
+
+    const isOthersDriveCar = tripLeg.legTransportMode === 'taxi' || tripLeg.legTransportMode === 'others-drive-car';
+    if (isOthersDriveCar) {
       tripLeg.serviceBooking = ServiceBooking.initWithContextNode(legNode);
     }
 
@@ -88,6 +90,11 @@ export class TripContinousLeg extends TripLeg {
     }
 
     if (legModeS === 'taxi') {
+      // HACK: BE returns 'taxi' for limo, check first booking agency to see if is actually a limo leg
+      const firstBookingAgency = XPathOJP.queryText('ojp:Service/ojp:BookingArrangements/ojp:BookingArrangement/ojp:BookingAgencyName/ojp:Text', legNode);
+      if (firstBookingAgency?.indexOf('_limousine_') !== -1) {
+        return 'others-drive-car';
+      }
       return 'taxi'
     }
 
@@ -114,7 +121,7 @@ export class TripContinousLeg extends TripLeg {
   }
 
   public isTaxi(): boolean {
-    return this.legTransportMode === 'taxi';
+    return this.legTransportMode === 'taxi' || this.legTransportMode === 'others-drive-car';
   }
 
   protected override computeSpecificJSONFeatures(): GeoJSON.Feature[] {
