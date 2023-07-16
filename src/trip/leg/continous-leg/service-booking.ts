@@ -58,16 +58,16 @@ export class ServiceBooking {
 
   private static computeAgencyName(agencyCode: string): string {
     agencyCode = agencyCode.trim();
-    if (agencyCode === 'catalog_taxi_local.ch') {
+    if (agencyCode.endsWith('_local.ch')) {
       return 'local.ch';
     }
-    if (agencyCode === 'catalog_taxi_maps.google.ch') {
+    if (agencyCode.endsWith('_maps.google.ch')) {
       return 'maps.google.com';
     }
-    if (agencyCode === 'catalog_taxi_openstreetmap.org') {
+    if (agencyCode.endsWith('_openstreetmap.org')) {
       return 'openstreetmap.org';
     }
 
-    return 'n/a catalog';
+    return 'n/a catalog: ' + agencyCode;
   }
 }
