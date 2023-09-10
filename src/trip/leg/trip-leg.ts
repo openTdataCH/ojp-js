@@ -9,6 +9,7 @@ import { GeoPosition } from '../../location/geoposition'
 import { GeoPositionBBOX } from '../../location/geoposition-bbox'
 import { StopPointType } from '../../types/stop-point-type'
 import { Duration } from '../../shared/duration'
+import { PtSituationElement } from '../../situation/situation-element'
 
 export type LegType = 'ContinousLeg' | 'TimedLeg' | 'TransferLeg'
 
@@ -51,6 +52,10 @@ export class TripLeg {
         }
       }
     })
+  }
+
+  public patchSituations(mapContextSituations: Record<string, PtSituationElement>) {
+    // override
   }
 
   protected patchLocation(location: Location, mapContextLocations: Record<string, Location>) {
