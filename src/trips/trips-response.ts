@@ -4,6 +4,7 @@ import { XPathOJP } from '../helpers/xpath-ojp'
 import { IndividualTransportMode } from '../types/individual-mode.types'
 import { TripModeType } from '../types/trip-mode-type'
 import { TripContinousLeg } from '../trip/leg/trip-continous-leg'
+import { PtSituationElement } from '../situation/situation-element'
 
 export class TripsResponse {
   public hasValidResponse: boolean
@@ -25,7 +26,8 @@ export class TripsResponse {
     const serviceStatus = statusText === 'true'
 
     const contextLocations = TripsResponse.parseContextLocations(responseXML);
-    const trips = TripsResponse.parseTrips(responseXML, contextLocations, tripModeType, transportMode);
+    const contextSituations = TripsResponse.parseContextSituations(responseXML);
+    const trips = TripsResponse.parseTrips(responseXML, contextLocations, contextSituations, tripModeType, transportMode);
 
     const tripResponse = new TripsResponse(serviceStatus, responseXMLText, contextLocations, trips)
 
@@ -44,9 +46,24 @@ export class TripsResponse {
     return locations;
   }
 
+  private static parseContextSituations(responseXML: Document): PtSituationElement[] {
+    let situations: PtSituationElement[] = [];
+
+    const nodes = XPathOJP.queryNodes('//ojp:TripResponseContext/ojp:Situations/ojp:PtSituation', responseXML);
+    nodes.forEach(node => {
+      const situation = PtSituationElement.initFromSituationNode(node);
+      if (situation) {
+        situations.push(situation);
+      }
+    });
+
+    return situations;
+  }
+
   private static parseTrips(
     responseXML: Document, 
-    contextLocations: Location[], 
+    contextLocations: Location[],
+    contextSituations: PtSituationElement[],
     tripModeType: TripModeType, 
     transportMode: IndividualTransportMode
   ): Trip[] {
@@ -60,12 +77,18 @@ export class TripsResponse {
       }
     });
 
+    const mapContextSituations: Record<string, PtSituationElement> = {}
+    contextSituations.forEach(situation => {
+      mapContextSituations[situation.situationNumber] = situation
+    });
+
     const tripResultNodes = XPathOJP.queryNodes('//ojp:TripResult', responseXML);
     tripResultNodes.forEach(tripResult => {
-      const trip = Trip.initFromTripResultNode(tripResult as Node);
+      const trip = Trip.initFromTripResultNode(tripResult);
       if (trip) {
         trip.legs.forEach(leg => {
-          leg.patchLocations(mapContextLocations)
+          leg.patchLocations(mapContextLocations);
+          leg.patchSituations(mapContextSituations);
         })
         trips.push(trip);
       }
