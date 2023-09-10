@@ -3,6 +3,7 @@ import { TripLegLineType } from "../types/map-geometry-types";
 
 import { XPathOJP } from '../helpers/xpath-ojp'
 import { StopPlace } from '../location/stopplace';
+import { PtSituationElement } from '../situation/situation-element';
 
 export class JourneyService {
   public journeyRef: string;
@@ -12,6 +13,9 @@ export class JourneyService {
   public destinationStopPlace: StopPlace | null;
   public serviceLineNumber: string | null
   public journeyNumber: string | null
+  
+  public siriSituationIds: string[]
+  public siriSituations: PtSituationElement[]
 
   constructor(journeyRef: string, ptMode: PublicTransportMode, agencyID: string) {
     this.journeyRef = journeyRef;
@@ -22,6 +26,9 @@ export class JourneyService {
     this.destinationStopPlace = null;
     this.serviceLineNumber = null;
     this.journeyNumber = null;
+
+    this.siriSituationIds = [];
+    this.siriSituations = [];
   }
 
   public static initFromContextNode(contextNode: Node): JourneyService | null {
@@ -47,6 +54,15 @@ export class JourneyService {
 
     legService.serviceLineNumber = XPathOJP.queryText('ojp:PublishedLineName/ojp:Text', serviceNode);
     legService.journeyNumber = XPathOJP.queryText('ojp:Extension/ojp:PublishedJourneyNumber/ojp:Text', contextNode);
+
+    legService.siriSituationIds = []
+    const siriSituationIdNodes = XPathOJP.queryNodes('ojp:SituationFullRef/siri:SituationNumber', serviceNode);
+    siriSituationIdNodes.forEach(node => {
+      const situationId = XPathOJP.queryText('.', node);
+      if (situationId) {
+        legService.siriSituationIds.push(situationId);
+      }
+    });
 
     return legService
   }
