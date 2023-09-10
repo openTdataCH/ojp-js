@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 0.9.17 - 10.09.2023
+- adds support for [SIRI-SX](https://opentransportdata.swiss/en/siri-sx/) messages
+
 ## 0.9.16 - 16.07.2023
 - adds support for `others-drive-car` (limo) IndividualTransportMode - see [#87](https://github.com/openTdataCH/ojp-demo-app-src/issues/87)
 - remove `La Beta` stage hack for number of results in `OJP.TripRequest` calls
