@@ -14,6 +14,7 @@ import { MapLegLineTypeColor } from '../../config/map-colors';
 
 import { GeoPosition } from '../../location/geoposition';
 import { Location } from '../../location/location';
+import { PtSituationElement } from '../../situation/situation-element'
 
 export class TripTimedLeg extends TripLeg {
   public service: JourneyService
@@ -183,4 +184,13 @@ export class TripTimedLeg extends TripLeg {
     return useBeeline
   }
 
+  public patchSituations(mapContextSituations: Record<string, PtSituationElement>) {
+    this.service.siriSituations = [];
+    this.service.siriSituationIds.forEach(siriSituationId => {
+      const siriSituation = mapContextSituations[siriSituationId] ?? null;
+      if (siriSituation) {
+        this.service.siriSituations.push(siriSituation)
+      }
+    })
+  }
 }
