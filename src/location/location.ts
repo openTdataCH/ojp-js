@@ -153,7 +153,14 @@ export class Location {
       latitude = parseFloat(inputMatches[1])
     }
 
+    
     const location = Location.initWithLngLat(longitude, latitude)
+
+    const locationName = inputS.trim().replace(/(\(?[0-9\.]*\s?,\s?[0-9\.]*\)?)/, '').trim();
+    if (locationName !== '') {
+      location.locationName = locationName;
+    }
+
     return location
   }
 
