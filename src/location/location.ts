@@ -222,6 +222,10 @@ export class Location {
     if (this.topographicPlace?.name) {
       return this.topographicPlace.name;
     }
+
+    if (this.poi && this.poi.name) {
+      return this.poi.name;
+    }
     
     if (this.locationName) {
       return this.locationName;
