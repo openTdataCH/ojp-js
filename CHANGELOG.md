@@ -1,7 +1,11 @@
 # CHANGELOG
 
+## 0.9.18 - 08.10.2023
+- allow better parsing of coordinates / names, support for [Embed OJP Demo in other websites #45](https://github.com/openTdataCH/ojp-demo-app-src/issues/45), [PR #31](https://github.com/openTdataCH/ojp-js/pull/31)
+- adds new POI categories `other`, `sbb_services` [adapt POI categories #5](https://github.com/openTdataCH/ojp-demo-app/issues/5)
+
 ## 0.9.17 - 10.09.2023
-- adds support for [SIRI-SX](https://opentransportdata.swiss/en/siri-sx/) messages
+- adds support for [SIRI-SX](https://opentransportdata.swiss/en/siri-sx/) messages - [PR #30](https://github.com/openTdataCH/ojp-js/pull/30)
 
 ## 0.9.16 - 16.07.2023
 - adds support for `others-drive-car` (limo) IndividualTransportMode - see [#87](https://github.com/openTdataCH/ojp-demo-app-src/issues/87)

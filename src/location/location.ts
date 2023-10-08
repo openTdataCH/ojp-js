@@ -138,9 +138,9 @@ export class Location {
   }
 
   public static initFromLiteralCoords(inputS: string): Location | null {
-    inputS = inputS.trim().replace(/\s/g, '');
+    const inputLiteralCoords = inputS.trim().replace(/[^0-9\.,]/g, '');
 
-    const inputMatches = inputS.match(/^([0-9\.]+?),([0-9\.]+?)$/);
+    const inputMatches = inputLiteralCoords.match(/^([0-9\.]+?),([0-9\.]+?)$/);
     if (inputMatches === null) {
       return null
     }
@@ -153,7 +153,14 @@ export class Location {
       latitude = parseFloat(inputMatches[1])
     }
 
+    
     const location = Location.initWithLngLat(longitude, latitude)
+
+    const locationName = inputS.trim().replace(/(\(?[0-9\.]*\s?,\s?[0-9\.]*\)?)/, '').trim();
+    if (locationName !== '') {
+      location.locationName = locationName;
+    }
+
     return location
   }
 
@@ -214,6 +221,10 @@ export class Location {
 
     if (this.topographicPlace?.name) {
       return this.topographicPlace.name;
+    }
+
+    if (this.poi && this.poi.name) {
+      return this.poi.name;
     }
     
     if (this.locationName) {
