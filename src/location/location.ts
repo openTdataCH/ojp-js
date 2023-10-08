@@ -138,9 +138,9 @@ export class Location {
   }
 
   public static initFromLiteralCoords(inputS: string): Location | null {
-    inputS = inputS.trim().replace(/\s/g, '');
+    const inputLiteralCoords = inputS.trim().replace(/[^0-9\.,]/g, '');
 
-    const inputMatches = inputS.match(/^([0-9\.]+?),([0-9\.]+?)$/);
+    const inputMatches = inputLiteralCoords.match(/^([0-9\.]+?),([0-9\.]+?)$/);
     if (inputMatches === null) {
       return null
     }
