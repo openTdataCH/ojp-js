@@ -2,15 +2,20 @@ import { XPathOJP } from "../../../helpers/xpath-ojp"
 import { Location } from "../../../location/location"
 import { StopPointTime } from "./stop-point-time"
 import { StopPointType } from "../../../types/stop-point-type"
+import { PtSituationElement } from "../../../situation/situation-element"
 
 export class StopPoint {
   public stopPointType: StopPointType
+  
   public location: Location
   public arrivalData: StopPointTime | null
   public departureData: StopPointTime | null
   public plannedPlatform: string | null
   public actualPlatform: string | null
   public sequenceOrder: number | null
+
+  public siriSituationIds: string[]
+  public siriSituations: PtSituationElement[]
 
   constructor(
     stopPointType: StopPointType, 
@@ -26,6 +31,9 @@ export class StopPoint {
     this.plannedPlatform = plannedPlatform
     this.actualPlatform = null
     this.sequenceOrder =  sequenceOrder
+
+    this.siriSituationIds = [];
+    this.siriSituations = [];
   }
 
   public static initWithContextNode(stopPointType: StopPointType, contextNode: Node): StopPoint | null {
@@ -43,10 +51,19 @@ export class StopPoint {
     const sequenceOrderS = XPathOJP.queryText('ojp:Order', contextNode)
     const sequenceOrder = sequenceOrderS === null ? null : parseInt(sequenceOrderS, 10);
 
-    const stopPoint = new StopPoint(stopPointType, location, arrivalData, departureData, plannedPlatform, sequenceOrder)
-    stopPoint.actualPlatform = XPathOJP.queryText('ojp:EstimatedQuay/ojp:Text', contextNode)
+    const stopPoint = new StopPoint(stopPointType, location, arrivalData, departureData, plannedPlatform, sequenceOrder);
+    stopPoint.actualPlatform = XPathOJP.queryText('ojp:EstimatedQuay/ojp:Text', contextNode);
 
-    return stopPoint
+    stopPoint.siriSituationIds = []
+    const siriSituationIdNodes = XPathOJP.queryNodes('ojp:SituationFullRef/siri:SituationNumber', contextNode);
+    siriSituationIdNodes.forEach(node => {
+      const situationId = XPathOJP.queryText('.', node);
+      if (situationId) {
+        stopPoint.siriSituationIds.push(situationId);
+      }
+    });
+
+    return stopPoint;
   }
 
   public static computeStopPointTime(stopTimeType: string, contextNode: Node): StopPointTime | null {
@@ -58,5 +75,15 @@ export class StopPoint {
 
     const stopTime = StopPointTime.initWithContextNode(stopTimeNode)
     return stopTime
+  }
+
+  public patchSituations(mapContextSituations: Record<string, PtSituationElement>) {
+    this.siriSituations = [];
+    this.siriSituationIds.forEach(siriSituationId => {
+      const siriSituation = mapContextSituations[siriSituationId] ?? null;
+      if (siriSituation) {
+        this.siriSituations.push(siriSituation)
+      }
+    })
   }
 }

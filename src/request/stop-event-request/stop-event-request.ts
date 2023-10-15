@@ -10,6 +10,7 @@ import { RequestErrorData } from '../request-error';
 import { StopEventType } from '../../types/stop-event-type';
 
 import { DOMParser } from '@xmldom/xmldom'
+import { PtSituationElement } from '../../situation/situation-element';
 
 export class StopEventRequest extends OJPBaseRequest {
     public requestParams: StopEventRequestParams
@@ -48,12 +49,14 @@ export class StopEventRequest extends OJPBaseRequest {
         const responseXML = new DOMParser().parseFromString(responseText, 'application/xml');
 
         const mapContextLocations = StopEventRequest.parseMapContextLocations(responseXML);
+        const mapContextSituations = StopEventRequest.parseContextSituations(responseXML);
 
         const nodes = XPathOJP.queryNodes('//ojp:OJPStopEventDelivery/ojp:StopEventResult/ojp:StopEvent', responseXML);
         nodes.forEach(node => {
             const stopEvent = StopEvent.initFromContextNode(node);
             if (stopEvent) {
                 stopEvent.patchStopEventLocations(mapContextLocations);
+                stopEvent.stopPoint.patchSituations(mapContextSituations);
                 stopEvents.push(stopEvent);
             }
         });
@@ -75,6 +78,20 @@ export class StopEventRequest extends OJPBaseRequest {
             const stopPlaceRef = location.stopPlace?.stopPlaceRef ?? null;
             if (stopPlaceRef) {
                 mapContextLocations[stopPlaceRef] = location;
+            }
+        });
+
+        return mapContextLocations;
+    }
+
+    private static parseContextSituations(responseXML: Document): Record<string, PtSituationElement> {
+        const mapContextLocations: Record<string, PtSituationElement> = {};
+    
+        const nodes = XPathOJP.queryNodes('//ojp:OJPStopEventDelivery/ojp:StopEventResponseContext/ojp:Situations/ojp:PtSituation', responseXML);
+        nodes.forEach(node => {
+            const situation = PtSituationElement.initFromSituationNode(node);
+            if (situation) {
+                mapContextLocations[situation.situationNumber] = situation;
             }
         });
 
