@@ -4,6 +4,7 @@ import { JourneyService } from '../journey/journey-service'
 import { Location } from '../location/location';
 import { StopPointTime } from '../trip';
 import { DateHelpers } from '../helpers/date-helpers';
+import { PtSituationElement } from '../situation/situation-element';
 
 export type StationBoardType = 'Departures' | 'Arrivals'
 
@@ -29,6 +30,8 @@ export interface StationBoardModel {
     
     stopPlatform: string | null
     stopPlatformActual: string | null
+
+    stopSituations: PtSituationElement[]
 }
 
 export class StopEvent {
@@ -105,26 +108,23 @@ export class StopEvent {
         const serviceLineNumber = this.computeServiceLineNumber()
         const servicePtMode = this.journeyService.ptMode.shortName ?? 'N/A'
 
-        const tripNumber = this.journeyService.journeyNumber
-        const tripHeading = this.journeyService.destinationStopPlace?.stopPlaceName ?? 'N/A'
-        const tripOperator = this.journeyService.agencyID
-
         const arrivalTime = this.computeStopTimeData(this.stopPoint.arrivalData)
         const departureTime = this.computeStopTimeData(this.stopPoint.departureData)
-
-        const stopPlatform = this.stopPoint.plannedPlatform
-        const stopPlatformActual = this.stopPoint.actualPlatform
 
         const model = <StationBoardModel>{
             stopEvent: this,
             serviceLineNumber: serviceLineNumber,
             servicePtMode: servicePtMode,
-            tripNumber, tripHeading, tripOperator,
+            tripNumber: this.journeyService.journeyNumber, 
+            tripHeading: this.journeyService.destinationStopPlace?.stopPlaceName ?? 'N/A', 
+            tripOperator: this.journeyService.agencyID,
             mapStationBoardTime: {
                 Arrivals: arrivalTime,
                 Departures: departureTime
             },
-            stopPlatform, stopPlatformActual,
+            stopPlatform: this.stopPoint.plannedPlatform, 
+            stopPlatformActual: this.stopPoint.actualPlatform,
+            stopSituations: this.stopPoint.siriSituations,
         }
 
         return model;
