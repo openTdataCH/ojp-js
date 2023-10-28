@@ -103,7 +103,7 @@ export class Location {
 
   public static initWithLngLat(longitude: number, latitude: number): Location {
     const location = new Location()
-    location.geoPosition = new GeoPosition(longitude, latitude)
+    location.geoPosition = new GeoPosition(longitude, latitude);
 
     return location
   }
