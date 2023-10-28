@@ -15,6 +15,8 @@ interface NearbyLocation {
 // TODO - long term: subclass from Location?
 export type LocationType = 'stop' | 'address' | 'poi' | 'topographicPlace'
 
+const literalCoordsRegexp = /^([0-9\.]+?),([0-9\.]+?)$/;
+
 export class Location {
   public address: Address | null
   public stopPointRef: string | null
@@ -101,7 +103,7 @@ export class Location {
 
   public static initWithLngLat(longitude: number, latitude: number): Location {
     const location = new Location()
-    location.geoPosition = new GeoPosition(longitude, latitude)
+    location.geoPosition = new GeoPosition(longitude, latitude);
 
     return location
   }
@@ -138,9 +140,13 @@ export class Location {
   }
 
   public static initFromLiteralCoords(inputS: string): Location | null {
-    const inputLiteralCoords = inputS.trim().replace(/[^0-9\.,]/g, '');
+    let inputLiteralCoords = inputS.trim();
+    // strip: parantheses (groups)
+    inputLiteralCoords = inputLiteralCoords.replace(/\(.+?\)/g, '');
+    // strip: characters NOT IN [0..9 , .]
+    inputLiteralCoords = inputLiteralCoords.replace(/[^0-9\.,]/g, '');
 
-    const inputMatches = inputLiteralCoords.match(/^([0-9\.]+?),([0-9\.]+?)$/);
+    const inputMatches = inputLiteralCoords.match(literalCoordsRegexp);
     if (inputMatches === null) {
       return null
     }
@@ -152,15 +158,16 @@ export class Location {
       longitude = parseFloat(inputMatches[2])
       latitude = parseFloat(inputMatches[1])
     }
-
     
     const location = Location.initWithLngLat(longitude, latitude)
 
-    const locationName = inputS.trim().replace(/(\(?[0-9\.]*\s?,\s?[0-9\.]*\)?)/, '').trim();
-    if (locationName !== '') {
+    // Match the content inside the ()
+    const locationNameMatches = inputS.trim().match(/\(([^\)]*)\)?/);
+    if (locationNameMatches !== null) {
+      const locationName = locationNameMatches[1];
       location.locationName = locationName;
     }
-
+    
     return location
   }
 
@@ -214,7 +221,7 @@ export class Location {
     return feature
   }
 
-  public computeLocationName(): string | null {
+  public computeLocationName(includeLiteralCoords: boolean = true): string | null {
     if (this.stopPlace) {
       return this.stopPlace.stopPlaceName;
     }
@@ -231,7 +238,7 @@ export class Location {
       return this.locationName;
     }
 
-    if (this.geoPosition) {
+    if (includeLiteralCoords && this.geoPosition) {
       return this.geoPosition.asLatLngString();
     }
 

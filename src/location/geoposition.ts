@@ -8,9 +8,9 @@ export class GeoPosition {
   public properties: GeoJSON.GeoJsonProperties | null
 
   constructor(longitude: number, latitude: number) {
-    this.longitude = longitude
-    this.latitude = latitude
-    this.properties = null
+    this.longitude = parseFloat(longitude.toFixed(6));
+    this.latitude = parseFloat(latitude.toFixed(6));
+    this.properties = null;
   }
 
   public static initFromContextNode(contextNode: Node): GeoPosition | null {

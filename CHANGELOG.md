@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 0.9.20 - 28.10.2023
+- improve handling of coordinates in `Location` objects - [PR #34](https://github.com/openTdataCH/ojp-js/pull/34)
+
 ## 0.9.19 - 15.10.2023
 - adds [SIRI-SX](https://opentransportdata.swiss/en/siri-sx/) to `StopPoint` - [PR #32](https://github.com/openTdataCH/ojp-js/pull/32)
 
