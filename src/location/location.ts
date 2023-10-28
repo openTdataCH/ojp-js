@@ -221,7 +221,7 @@ export class Location {
     return feature
   }
 
-  public computeLocationName(): string | null {
+  public computeLocationName(includeLiteralCoords: boolean = true): string | null {
     if (this.stopPlace) {
       return this.stopPlace.stopPlaceName;
     }
@@ -238,7 +238,7 @@ export class Location {
       return this.locationName;
     }
 
-    if (this.geoPosition) {
+    if (includeLiteralCoords && this.geoPosition) {
       return this.geoPosition.asLatLngString();
     }
 
