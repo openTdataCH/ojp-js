@@ -9,7 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "ojp-sdk": "0.9.11",
+    "ojp-sdk": "0.9.21",
     "specifier-resolution-node": "1.1.1"
   },
   "type": "module"
