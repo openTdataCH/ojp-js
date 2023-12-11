@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 0.9.22 - 11.12.2023
+- adds support for node v20 in [examples](./examples/)
+
 ## 0.9.21 - 11.12.2023
 - cleanup left-overs
 
