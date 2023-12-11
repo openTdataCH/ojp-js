@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 0.9.21 - 11.12.2023
+- cleanup left-overs
+
 ## 0.9.20 - 28.10.2023
 - improve handling of coordinates in `Location` objects - [PR #34](https://github.com/openTdataCH/ojp-js/pull/34)
 
