@@ -19,5 +19,9 @@ const request = OJP.StopEventRequest.initWithStopPlaceRef(OJP.DEFAULT_STAGE, sto
 ```
 - run the main script in the terminal
 ```
+# node 18.x
 $ node --es-module-specifier-resolution=node src/index.js 8500090
+
+# node 20.x
+$ node --import=specifier-resolution-node/register src/index.js 8500090
 ```
