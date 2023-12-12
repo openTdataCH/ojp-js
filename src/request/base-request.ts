@@ -17,12 +17,15 @@ export class OJPBaseRequest {
 
   protected logRequests: boolean
 
+  public abortSignal: AbortSignal | null
+
   public lastRequestData: RequestData | null
 
   constructor(stageConfig: StageConfig) {
     this.stageConfig = stageConfig
     this.serviceRequestNode = this.computeServiceRequestNode();
     this.logRequests = false
+    this.abortSignal = null
 
     this.lastRequestData = {
       requestXmlS: null,
@@ -60,6 +63,7 @@ export class OJPBaseRequest {
     const responsePromise = fetch(apiEndpoint, {
       headers: requestHeaders,
       body: bodyXML_s,
+      signal: this.abortSignal,
       method: 'POST'
     });
 

@@ -43,6 +43,7 @@ export class JourneyRequest extends OJPBaseRequest {
     tripRequestParams.transportMode = this.requestParams.transportModes[idx];
 
     const tripRequest = new TripRequest(this.stageConfig, tripRequestParams);
+    tripRequest.abortSignal = this.abortSignal;
     tripRequest.fetchResponse((tripsResponse, error) => {
       if (error) {
         completion([], error)
