@@ -36,9 +36,6 @@ export class Trip {
     }
 
     const distanceS = XPathOJP.queryText('ojp:Trip/ojp:Distance', tripResultNode)
-    if (distanceS === null) {
-      return null;
-    }
 
     const transfersNoS = XPathOJP.queryText('ojp:Trip/ojp:Transfers', tripResultNode)
     if (transfersNoS === null) {
@@ -55,15 +52,9 @@ export class Trip {
     const tripStartTime = new Date(Date.parse(tripStartTimeS));
     const tripEndTime = new Date(Date.parse(tripEndTimeS));
 
-    const tripStats = <TripStats>{
-      duration: duration,
-      distanceMeters: parseInt(distanceS),
-      transferNo: parseInt(transfersNoS),
-      startDatetime: tripStartTime,
-      endDatetime: tripEndTime,
-    }
-
     let legs: TripLeg[] = [];
+
+    let tripLegsTotalDistance = 0;
 
     const tripResponseLegs = XPathOJP.queryNodes('ojp:Trip/ojp:TripLeg', tripResultNode)
     tripResponseLegs.forEach(tripLegNode => {
@@ -72,8 +63,29 @@ export class Trip {
         return
       }
 
+      const legTrackSections = tripLeg.legTrack?.trackSections ?? [];
+      legTrackSections.forEach(legTrackSection => {
+        tripLegsTotalDistance += legTrackSection.length ?? 0;
+      });
+
       legs.push(tripLeg);
     })
+
+    const distanceMeters: number = (() => {
+      if (distanceS === null) {
+        return tripLegsTotalDistance;
+      }
+
+      return parseInt(distanceS);
+    })();
+
+    const tripStats = <TripStats>{
+      duration: duration,
+      distanceMeters: distanceMeters,
+      transferNo: parseInt(transfersNoS),
+      startDatetime: tripStartTime,
+      endDatetime: tripEndTime,
+    }
 
     const trip = new Trip(tripId, legs, tripStats);
 

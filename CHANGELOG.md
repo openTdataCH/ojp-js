@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 0.9.23 - 09.01.2024
+- add support to compute the trip distance from the individual legs - [PR #40](https://github.com/openTdataCH/ojp-js/pull/40)
+
 ## 0.9.22 - 11.12.2023
 - adds support for node v20 in [examples](./examples/)
 
