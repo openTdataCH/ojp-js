@@ -19,7 +19,6 @@ const literalCoordsRegexp = /^([0-9\.]+?),([0-9\.]+?)$/;
 
 export class Location {
   public address: Address | null
-  public stopPointRef: string | null
   public locationName: string | null
   public stopPlace: StopPlace | null
   public geoPosition: GeoPosition | null
@@ -31,7 +30,6 @@ export class Location {
 
   constructor() {
     this.address = null
-    this.stopPointRef = null;
     this.locationName = null;
     this.stopPlace = null;
     this.geoPosition = null;
