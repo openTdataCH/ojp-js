@@ -1,11 +1,11 @@
 import * as xmlbuilder from 'xmlbuilder';
 
 import { StageConfig } from '../../types/stage-config'
-import { XPathOJP } from '../../helpers/xpath-ojp';
 import { Location } from '../../location/location';
 import { GeoRestrictionPoiOSMTag, GeoRestrictionType } from '../../types/geo-restriction.type';
 import { OJPBaseRequest } from '../base-request'
 import { LocationInformationRequestParams } from './location-information-request-params.interface'
+import { LocationInformationResponse } from './location-information-response';
 
 export class LocationInformationRequest extends OJPBaseRequest {
   public requestParams: LocationInformationRequestParams
@@ -69,37 +69,16 @@ export class LocationInformationRequest extends OJPBaseRequest {
 
     const loadingPromise = new Promise<Location[]>((resolve, reject) => {
       super.fetchOJPResponse(bodyXML_s, (responseText, errorData) => {
-        const responseXML = new DOMParser().parseFromString(responseText, 'application/xml');
-
-        const statusText = XPathOJP.queryText('//siri:OJPResponse/siri:ServiceDelivery/siri:Status', responseXML)
-        const hasServiceStatusOK = statusText === 'true'
-
-        const locations: Location[] = [];
-
-        if (!hasServiceStatusOK) {
-          if (errorData === null && !hasServiceStatusOK) {
-            errorData = {
-              error: 'ParseLocationInformationRequestXMLError',
-              message: 'Invalid LocationInformationRequest Response XML'
-            }
+        const locationInformationResponse = new LocationInformationResponse();
+        locationInformationResponse.parseXML(responseText, (locations, message) => {
+          if (message === 'LocationInformation.DONE') {
+            resolve(locations);
+          } else {
+            console.error('LocationInformationRequest.fetchResponse');
+            console.log(message);
+            reject(errorData);
           }
-
-          reject(errorData)
-          return;
-        }
-
-        const searchLocationNodes = XPathOJP.queryNodes('//ojp:OJPLocationInformationDelivery/ojp:Location', responseXML);
-        searchLocationNodes.forEach(searchLocationNode  => {
-          const locationNode = XPathOJP.queryNode('ojp:Location', searchLocationNode);
-          if (locationNode === null) {
-            return;
-          }
-
-          const location = Location.initWithOJPContextNode(locationNode)
-          locations.push(location);
         });
-
-        resolve(locations);
       });
     });
 
