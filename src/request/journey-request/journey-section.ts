@@ -1,5 +1,5 @@
-import { RequestData } from "../request"
-import { TripsResponse } from "../trips/trips-response"
+import { RequestData } from ".."
+import { TripsResponse } from "../../trips/trips-response"
 
 export class JourneySection {
   public requestData: RequestData

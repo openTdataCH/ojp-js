@@ -1,6 +1,6 @@
 import { StageConfig } from "../../types/stage-config";
-import { JourneySection } from "../../journey/journey-section";
-import { JourneyResponse } from "../../journey/journey-response";
+import { JourneySection } from "./journey-section";
+import { JourneyResponse } from "./journey-request-response";
 import { OJPBaseRequest } from "../base-request";
 import { TripRequest, TripRequestEvent } from "../trips-request/trips-request";
 import { TripsRequestParams } from "../trips-request/trips-request-params";

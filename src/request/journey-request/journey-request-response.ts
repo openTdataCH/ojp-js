@@ -1,5 +1,5 @@
-import { Duration } from "../shared/duration";
-import { Trip, TripLeg } from "../trip";
+import { Duration } from "../../shared/duration";
+import { Trip, TripLeg } from "../../trip";
 import { JourneySection } from "./journey-section";
 
 export class JourneyResponse {
