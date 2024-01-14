@@ -3,7 +3,6 @@ import * as GeoJSON from 'geojson'
 import { Location } from '../../location/location'
 
 import { PathGuidance } from '../path-guidance'
-import { XPathOJP } from '../../helpers/xpath-ojp'
 
 import { LegTrack } from './leg-track'
 
@@ -13,6 +12,7 @@ import { MapLegLineTypeColor } from '../../config/map-colors'
 import { Duration } from '../../shared/duration'
 import { IndividualTransportMode } from '../../types/individual-mode.types'
 import { ServiceBooking } from './continous-leg/service-booking'
+import { TreeNode } from '../../xml/tree-node'
 
 export class TripContinousLeg extends TripLeg {
   public legTransportMode: IndividualTransportMode | null
@@ -31,48 +31,53 @@ export class TripContinousLeg extends TripLeg {
     this.serviceBooking = null;
   }
 
-  public static initFromTripLeg(legIDx: number, legNode: Node | null, legType: LegType): TripContinousLeg | null {
-    if (legNode === null) {
+  public static initWithTreeNode(legIDx: number, treeNode: TreeNode, legType: LegType): TripContinousLeg | null {
+    const legStartPlaceRefTreeNode = treeNode.findChildNamed('ojp:LegStart');
+    const legEndPlaceRefTreeNode = treeNode.findChildNamed('ojp:LegEnd');
+    if (legStartPlaceRefTreeNode === null || legEndPlaceRefTreeNode === null) {
       return null;
     }
 
-    const fromLocationNode = XPathOJP.queryNode('ojp:LegStart', legNode)
-    const toLocationNode = XPathOJP.queryNode('ojp:LegEnd', legNode)
-    if (fromLocationNode === null || toLocationNode === null) {
-      return null
+    const legStartPlaceRef = Location.initWithTreeNode(legStartPlaceRefTreeNode);
+    const legEndPlaceRef = Location.initWithTreeNode(legEndPlaceRefTreeNode);
+    if (legStartPlaceRef === null || legEndPlaceRef === null) {
+      return null;
     }
 
-    const fromLocation = Location.initWithOJPContextNode(fromLocationNode)
-    const toLocation = Location.initWithOJPContextNode(toLocationNode)
+    let distanceS = treeNode.findTextFromChildNamed('ojp:Length') ?? '0';
+    const legDistance = parseInt(distanceS);
 
-    let distanceS = XPathOJP.queryText('ojp:Length', legNode)
-    if (distanceS === null) {
-      distanceS = '0';
-    }
-    const legDistance = parseInt(distanceS)
+    const tripLeg = new TripContinousLeg(legType, legIDx, legDistance, legStartPlaceRef, legEndPlaceRef);
+    tripLeg.legDuration = Duration.initWithTreeNode(treeNode);
 
-    const tripLeg = new TripContinousLeg(legType, legIDx, legDistance, fromLocation, toLocation);
-    tripLeg.legDuration = Duration.initFromContextNode(legNode)
-
-    tripLeg.pathGuidance = PathGuidance.initFromTripLeg(legNode);
-    tripLeg.legTransportMode = tripLeg.computeLegTransportMode(legNode);
+    tripLeg.pathGuidance = PathGuidance.initWithTreeNode(treeNode);
+    
+    tripLeg.legTransportMode = tripLeg.computeLegTransportModeFromTreeNode(treeNode);
 
     const isOthersDriveCar = tripLeg.legTransportMode === 'taxi' || tripLeg.legTransportMode === 'others-drive-car';
+    
     if (isOthersDriveCar) {
-      tripLeg.serviceBooking = ServiceBooking.initWithContextNode(legNode);
+      tripLeg.serviceBooking = ServiceBooking.initWithLegTreeNode(treeNode);
     }
 
-    tripLeg.legTrack = LegTrack.initFromLegNode(legNode);
+    tripLeg.legTrack = LegTrack.initWithLegTreeNode(treeNode);
 
     if (legType === 'TransferLeg') {
-      tripLeg.walkDuration = Duration.initFromContextNode(legNode, 'ojp:WalkDuration')
+      tripLeg.walkDuration = Duration.initWithTreeNode(treeNode, 'ojp:WalkDuration');
     }
 
     return tripLeg;
   }
 
-  private computeLegTransportMode(legNode: Node): IndividualTransportMode | null {
-    const legModeS = XPathOJP.queryText('ojp:Service/ojp:IndividualMode', legNode)
+  private computeLegTransportModeFromTreeNode(treeNode: TreeNode): IndividualTransportMode | null {
+    const legModeS = treeNode.findTextFromChildNamed('ojp:Service/ojp:IndividualMode');
+    const firstBookingAgency = treeNode.findTextFromChildNamed('ojp:Service/ojp:BookingArrangements/ojp:BookingArrangement/ojp:BookingAgencyName/ojp:Text');
+    const legMode = this.computeLegTransportModeFromString(legModeS, firstBookingAgency);
+
+    return legMode;
+  }
+
+  private computeLegTransportModeFromString(legModeS: string | null, firstBookingAgency: string | null = null): IndividualTransportMode | null {
     if (legModeS === null) {
       return null
     }
@@ -91,7 +96,6 @@ export class TripContinousLeg extends TripLeg {
 
     if (legModeS === 'taxi') {
       // HACK: BE returns 'taxi' for limo, check first booking agency to see if is actually a limo leg
-      const firstBookingAgency = XPathOJP.queryText('ojp:Service/ojp:BookingArrangements/ojp:BookingArrangement/ojp:BookingAgencyName/ojp:Text', legNode);
       if (firstBookingAgency?.indexOf('_limousine_') !== -1) {
         return 'others-drive-car';
       }

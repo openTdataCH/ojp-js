@@ -1,4 +1,4 @@
-import { XPathOJP } from "../helpers/xpath-ojp"
+import { TreeNode } from "../xml/tree-node"
 
 import { SituationContent } from "./situation-content"
 import { PtSituationSource } from './situation-source'
@@ -18,7 +18,7 @@ export class PtSituationElement {
   public priority: number
   public situationContent: SituationContent
 
-  public nodeXML: Node | null
+  public treeNode: TreeNode | null
 
   constructor(
     situationNumber: string,
@@ -39,34 +39,34 @@ export class PtSituationElement {
     this.priority = priority
     this.situationContent = situationContent
 
-    this.nodeXML = null;
+    this.treeNode = null;
   }
 
-  public static initFromSituationNode(node: Node): PtSituationElement | null {
-    const situationNumber = XPathOJP.queryText('siri:SituationNumber', node);
+  public static initWithSituationTreeNode(treeNode: TreeNode): PtSituationElement | null {
+    const situationNumber = treeNode.findTextFromChildNamed('siri:SituationNumber');
 
-    const creationTimeS = XPathOJP.queryText('siri:CreationTime', node);
+    const creationTimeS = treeNode.findTextFromChildNamed('siri:CreationTime');
     if (creationTimeS === null) {
       console.error('ERROR: PtSituationElement.initFromSituationNode - creationTimeS is null');
-      console.log(node);
+      console.log(treeNode);
       return null;
     }
     const creationTime = new Date(creationTimeS);
 
-    const participantRef = XPathOJP.queryText('siri:ParticipantRef', node);
+    const participantRef = treeNode.findTextFromChildNamed('siri:ParticipantRef');
 
-    const versionS = XPathOJP.queryText('siri:Version', node);
+    const versionS = treeNode.findTextFromChildNamed('siri:Version');
     if (versionS === null) {
       console.error('ERROR: PtSituationElement.initFromSituationNode - Version is NULL');
-      console.log(node);
+      console.log(treeNode);
       return null;
     }
-    const version = parseInt(versionS)
+    const version = parseInt(versionS);
 
-    const situationSource = PtSituationSource.initFromSituationNode(node);
+    const situationSource = PtSituationSource.initWithSituationTreeNode(treeNode);
 
-    const validityPeriodStartDateS = XPathOJP.queryText('siri:ValidityPeriod/siri:StartTime', node);
-    const validityPeriodEndDateS = XPathOJP.queryText('siri:ValidityPeriod/siri:EndTime', node);
+    const validityPeriodStartDateS = treeNode.findTextFromChildNamed('siri:ValidityPeriod/siri:StartTime');
+    const validityPeriodEndDateS = treeNode.findTextFromChildNamed('siri:ValidityPeriod/siri:EndTime');
     if (!(validityPeriodStartDateS && validityPeriodEndDateS)) {
       console.error('ERROR: PtSituationElement.initFromSituationNode - ValidityPeriod is null');
       console.log('      PtSituationElement.initFromSituationNode - ValidityPeriod/StartTime' + validityPeriodStartDateS);
@@ -78,19 +78,19 @@ export class PtSituationElement {
       endDate: new Date(validityPeriodEndDateS)
     };
 
-    const situationPriorityS = XPathOJP.queryText('siri:Priority', node);
+    const situationPriorityS = treeNode.findTextFromChildNamed('siri:Priority');
     if (situationPriorityS === null) {
       console.error('ERROR: PtSituationElement.initFromSituationNode - Priority is NULL');
-      console.log(node);
+      console.log(treeNode);
       return null;
     }
-    const situationPriority = parseInt(situationPriorityS)
+    const situationPriority = parseInt(situationPriorityS);
 
-    const situationContent = SituationContent.initFromSituationNode(node);
+    const situationContent = SituationContent.initWithSituationTreeNode(treeNode);
 
     if (!(situationNumber && participantRef && situationSource && situationContent)) {
       console.error('ERROR: PtSituationElement.initFromSituationNode - cant init');
-      console.log(node);
+      console.log(treeNode);
       return null;
     }
 
@@ -99,7 +99,7 @@ export class PtSituationElement {
       validityPeriod, situationPriority,
       situationContent,
     );
-    situationElement.nodeXML = node;
+    situationElement.treeNode = treeNode;
 
     return situationElement;
   }

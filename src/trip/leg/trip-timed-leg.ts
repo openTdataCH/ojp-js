@@ -9,12 +9,12 @@ import { TripLeg, LegType, LinePointData } from "./trip-leg"
 import { TripLegPropertiesEnum, TripLegDrawType, TripLegLineType } from "../../types/map-geometry-types";
 
 import { StopPointTime } from './timed-leg/stop-point-time'
-import { XPathOJP } from '../../helpers/xpath-ojp'
 import { MapLegLineTypeColor } from '../../config/map-colors';
 
 import { GeoPosition } from '../../location/geoposition';
 import { Location } from '../../location/location';
 import { PtSituationElement } from '../../situation/situation-element'
+import { TreeNode } from '../../xml/tree-node'
 
 export class TripTimedLeg extends TripLeg {
   public service: JourneyService
@@ -38,47 +38,41 @@ export class TripTimedLeg extends TripLeg {
     this.intermediateStopPoints = intermediateStopPoints
   }
 
-  public static initFromTripLeg(legIDx: number, legNode: Node | null): TripTimedLeg | null {
-    if (legNode === null) {
+  public static initWithTreeNode(legIDx: number, treeNode: TreeNode): TripTimedLeg | null {
+    const service = JourneyService.initWithTreeNode(treeNode);
+    if (service === null) {
       return null;
     }
 
-    const service = JourneyService.initFromContextNode(legNode);
-    if (service === null) {
-      return null
+    const fromStopTreeNode = treeNode.findChildNamed('ojp:LegBoard');
+    const toStopTreeNode = treeNode.findChildNamed('ojp:LegAlight');
+    if (fromStopTreeNode === null || toStopTreeNode === null) {
+      return null;
     }
 
-    const fromStopNode = XPathOJP.queryNode('ojp:LegBoard', legNode);
-    const toStopNode = XPathOJP.queryNode('ojp:LegAlight', legNode);
-    if (fromStopNode === null || toStopNode === null) {
-      return null
-    }
-
-    const fromStopPoint = StopPoint.initWithContextNode('From', fromStopNode)
-    const toStopPoint = StopPoint.initWithContextNode('To', toStopNode)
+    const fromStopPoint = StopPoint.initWithTreeNode(fromStopTreeNode, 'From')
+    const toStopPoint = StopPoint.initWithTreeNode(toStopTreeNode, 'To')
     if (fromStopPoint === null || toStopPoint === null) {
-      return null
+      return null;
     }
 
     const intermediateStopPoints: StopPoint[] = []
-    const intermediaryStopNodes: Node[] = XPathOJP.queryNodes('ojp:LegIntermediates', legNode) ?? [];
-    intermediaryStopNodes.forEach(stopNode => {
-      const stopPoint = StopPoint.initWithContextNode('Intermediate', stopNode)
+    const intermediaryStopTreeNodes: TreeNode[] = treeNode.findChildrenNamed('ojp:LegIntermediates');
+    intermediaryStopTreeNodes.forEach(intermediaryStopTreeNode => {
+      const stopPoint = StopPoint.initWithTreeNode(intermediaryStopTreeNode, 'Intermediate');
       if (stopPoint) {
         intermediateStopPoints.push(stopPoint)
       }
-    })
+    });
 
     const timedLeg = new TripTimedLeg(legIDx, service, fromStopPoint, toStopPoint, intermediateStopPoints);
-    
-    timedLeg.legTrack = LegTrack.initFromLegNode(legNode)
-    
-    // Try to get the duration from LegTrack
-    if (timedLeg.legTrack && timedLeg.legDuration === null) {
-      timedLeg.legDuration = timedLeg.legTrack.duration
-    }
 
-    return timedLeg
+    timedLeg.legTrack = LegTrack.initWithLegTreeNode(treeNode);
+    if (timedLeg.legTrack && timedLeg.legDuration === null) {
+      timedLeg.legDuration = timedLeg.legTrack.duration;
+    }
+    
+    return timedLeg;
   }
 
   public override patchLocations(mapContextLocations: Record<string, Location>) {

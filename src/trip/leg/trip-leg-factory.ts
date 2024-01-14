@@ -1,37 +1,39 @@
-import { XPathOJP } from "../../helpers/xpath-ojp";
+import { TreeNode } from "../../xml/tree-node";
 
 import { TripContinousLeg } from "./trip-continous-leg";
 import { TripTimedLeg } from "./trip-timed-leg";
 
 export class TripLegFactory {
-  public static initWithContextNode(contextNode: Node): TripContinousLeg | TripTimedLeg | null {
-    const legID_string = XPathOJP.queryText('ojp:LegId', contextNode)
+  public static initWithTreeNode(treeNode: TreeNode): TripContinousLeg | TripTimedLeg | null {
+    const legID_string = treeNode.findTextFromChildNamed('ojp:LegId');
     if (legID_string === null) {
-      return null
+      return null;
     }
     const legID = parseInt(legID_string, 10);
 
-    const tripContinousLegNode = XPathOJP.queryNode('ojp:ContinuousLeg', contextNode);
-    const tripContinousLeg = TripContinousLeg.initFromTripLeg(legID, tripContinousLegNode, 'ContinousLeg');
-    if (tripContinousLeg) {
-      return tripContinousLeg;
+    const transferLegTreeNode = treeNode.findChildNamed('ojp:TransferLeg');
+    if (transferLegTreeNode) {
+      const transferLeg = TripContinousLeg.initWithTreeNode(legID, transferLegTreeNode, 'TransferLeg');
+      if (transferLeg) {
+        return transferLeg;
+      }
     }
 
-    const tripTimedLegNode = XPathOJP.queryNode('ojp:TimedLeg', contextNode);
-    const tripTimedLeg = TripTimedLeg.initFromTripLeg(legID, tripTimedLegNode);
-    if (tripTimedLeg) {
-      return tripTimedLeg;
+    const timedLegTreeNode = treeNode.findChildNamed('ojp:TimedLeg');
+    if (timedLegTreeNode) {
+      const timedLeg = TripTimedLeg.initWithTreeNode(legID, timedLegTreeNode);
+      if (timedLeg) {
+        return timedLeg;
+      }
     }
 
-    const transferLegNode = XPathOJP.queryNode('ojp:TransferLeg', contextNode);
-    const transferLeg = TripContinousLeg.initFromTripLeg(legID, transferLegNode, 'TransferLeg');
-    if (transferLeg) {
-      return transferLeg;
+    const tripContinousLegTreeNode = treeNode.findChildNamed('ojp:ContinuousLeg');
+    if (tripContinousLegTreeNode) {
+      const tripContinousLeg = TripContinousLeg.initWithTreeNode(legID, tripContinousLegTreeNode, 'ContinousLeg');
+      if (tripContinousLeg) {
+        return tripContinousLeg;
+      }
     }
-
-    console.log('Cant factory leg #' + legID);
-    console.log(contextNode);
-    debugger;
 
     return null;
   }

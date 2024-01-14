@@ -1,8 +1,9 @@
-import { XPathOJP } from "../../../helpers/xpath-ojp"
 import { Location } from "../../../location/location"
 import { StopPointTime } from "./stop-point-time"
 import { StopPointType } from "../../../types/stop-point-type"
 import { PtSituationElement } from "../../../situation/situation-element"
+import { TreeNode } from "../../../xml/tree-node"
+import { StopPlace } from "../../../location/stopplace"
 
 export class StopPoint {
   public stopPointType: StopPointType
@@ -36,45 +37,36 @@ export class StopPoint {
     this.siriSituations = [];
   }
 
-  public static initWithContextNode(stopPointType: StopPointType, contextNode: Node): StopPoint | null {
-    const stopPointRef = XPathOJP.queryText('siri:StopPointRef', contextNode);
-    if (stopPointRef === null) {
+  public static initWithTreeNode(treeNode: TreeNode, stopPointType: StopPointType): StopPoint | null {
+    const stopPointRef = treeNode.findTextFromChildNamed('siri:StopPointRef');
+    const stopPointName = treeNode.findTextFromChildNamed('ojp:StopPointName/ojp:Text');
+    if (!(stopPointRef && stopPointName)) {
       return null;
     }
 
-    const location = Location.initWithOJPContextNode(contextNode)
+    const location = new Location();
+    location.stopPlace = new StopPlace(stopPointRef, stopPointName, null);
 
-    const arrivalData = StopPoint.computeStopPointTime('ServiceArrival', contextNode)
-    const departureData = StopPoint.computeStopPointTime('ServiceDeparture', contextNode)
-    const plannedPlatform = XPathOJP.queryText('ojp:PlannedQuay/ojp:Text', contextNode)
-    
-    const sequenceOrderS = XPathOJP.queryText('ojp:Order', contextNode)
+    const arrivalData = StopPointTime.initWithParentTreeNode(treeNode, 'ServiceArrival');
+    const departureData = StopPointTime.initWithParentTreeNode(treeNode, 'ServiceDeparture');
+    const plannedPlatform = treeNode.findTextFromChildNamed('ojp:PlannedQuay/ojp:Text');
+
+    const sequenceOrderS = treeNode.findTextFromChildNamed('ojp:Order');
     const sequenceOrder = sequenceOrderS === null ? null : parseInt(sequenceOrderS, 10);
 
     const stopPoint = new StopPoint(stopPointType, location, arrivalData, departureData, plannedPlatform, sequenceOrder);
-    stopPoint.actualPlatform = XPathOJP.queryText('ojp:EstimatedQuay/ojp:Text', contextNode);
+    stopPoint.actualPlatform = treeNode.findTextFromChildNamed('ojp:EstimatedQuay/ojp:Text');
 
-    stopPoint.siriSituationIds = []
-    const siriSituationIdNodes = XPathOJP.queryNodes('ojp:SituationFullRef/siri:SituationNumber', contextNode);
-    siriSituationIdNodes.forEach(node => {
-      const situationId = XPathOJP.queryText('.', node);
-      if (situationId) {
-        stopPoint.siriSituationIds.push(situationId);
+    stopPoint.siriSituationIds = [];
+    const situationFullRefTreeNodes = treeNode.findChildrenNamed('ojp:SituationFullRef');
+    situationFullRefTreeNodes.forEach(situationFullRefTreeNode => {
+      const situationNumber = situationFullRefTreeNode.findTextFromChildNamed('siri:SituationNumber');
+      if (situationNumber) {
+        stopPoint.siriSituationIds.push(situationNumber);
       }
     });
 
     return stopPoint;
-  }
-
-  public static computeStopPointTime(stopTimeType: string, contextNode: Node): StopPointTime | null {
-    const stopTimeNodeName = 'ojp:' + stopTimeType;
-    const stopTimeNode = XPathOJP.queryNode(stopTimeNodeName, contextNode);
-    if (stopTimeNode === null) {
-      return null
-    }
-
-    const stopTime = StopPointTime.initWithContextNode(stopTimeNode)
-    return stopTime
   }
 
   public patchSituations(mapContextSituations: Record<string, PtSituationElement>) {

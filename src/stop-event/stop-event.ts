@@ -1,10 +1,10 @@
-import { XPathOJP } from '../helpers/xpath-ojp'
 import { StopPoint } from '../trip/leg/timed-leg/stop-point'
 import { JourneyService } from '../journey/journey-service'
 import { Location } from '../location/location';
 import { StopPointTime } from '../trip';
 import { DateHelpers } from '../helpers/date-helpers';
 import { PtSituationElement } from '../situation/situation-element';
+import { TreeNode } from '../xml/tree-node';
 
 export type StationBoardType = 'Departures' | 'Arrivals'
 
@@ -47,17 +47,23 @@ export class StopEvent {
         this.nextStopPoints = [];
     }
 
-    public static initFromContextNode(contextNode: Node): StopEvent | null {
-        const currentStopNode = XPathOJP.queryNode('ojp:ThisCall/ojp:CallAtStop', contextNode);
-        if (currentStopNode === null) {
+    public static initWithTreeNode(treeNode: TreeNode): StopEvent | null {
+        const stopEventTreeNode = treeNode.findChildNamed('ojp:StopEvent');
+        if (stopEventTreeNode === null) {
             return null;
         }
-        const stopPoint = StopPoint.initWithContextNode('Intermediate', currentStopNode);
+
+        const currentStopTreeNode = stopEventTreeNode.findChildNamed('ojp:ThisCall/ojp:CallAtStop');
+        if (currentStopTreeNode === null) {
+            return null;
+        }
+
+        const stopPoint = StopPoint.initWithTreeNode(currentStopTreeNode, 'Intermediate');
         if (stopPoint === null) {
             return null;
         }
 
-        const journeyService = JourneyService.initFromContextNode(contextNode);
+        const journeyService = JourneyService.initWithTreeNode(stopEventTreeNode);
         if (journeyService === null) {
             return null;
         }
@@ -66,23 +72,23 @@ export class StopEvent {
 
         const tripNodeTypes = ['PreviousCall', 'OnwardCall'];
         tripNodeTypes.forEach(tripNodeType => {
-            const tripNodeXPATH = 'ojp:' + tripNodeType + '/ojp:CallAtStop';
-            const tripStopPointNodes =  XPathOJP.queryNodes(tripNodeXPATH, contextNode);
-            if (tripStopPointNodes.length === 0) {
-                return;
-            }
-
             const is_previous = tripNodeType === 'PreviousCall';
-            
-            let stopPointsRef = is_previous ? stopEvent.prevStopPoints : stopEvent.nextStopPoints;
-            tripStopPointNodes.forEach(tripStopPointNode => {
-                const tripStopPoint = StopPoint.initWithContextNode('Intermediate', tripStopPointNode);
-                if (tripStopPoint) {
-                    stopPointsRef.push(tripStopPoint);
+            const stopPointsRef = is_previous ? stopEvent.prevStopPoints : stopEvent.nextStopPoints;
+
+            const groupStopsTreeNodes = stopEventTreeNode.findChildrenNamed('ojp:' + tripNodeType);
+            groupStopsTreeNodes.forEach(groupStopsTreeNode => {
+                const tripStopPointNode = groupStopsTreeNode.findChildNamed('ojp:CallAtStop');
+                if (tripStopPointNode === null) {
+                    return;
                 }
+
+                const tripStopPoint = StopPoint.initWithTreeNode(tripStopPointNode, 'Intermediate');
+                    if (tripStopPoint) {
+                        stopPointsRef.push(tripStopPoint);
+                    }
             });
         });
-
+        
         return stopEvent;
     }
 
@@ -97,7 +103,7 @@ export class StopEvent {
         });
 
         stopPointsToPatch.forEach(stopPoint => {
-            const stopPointRef = stopPoint.location.stopPointRef;
+            const stopPointRef = stopPoint.location.stopPlace?.stopPlaceRef;
             if (stopPointRef && (stopPointRef in mapContextLocations)) {
                 stopPoint.location = mapContextLocations[stopPointRef];
             }

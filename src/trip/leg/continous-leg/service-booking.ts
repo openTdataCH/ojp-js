@@ -1,4 +1,4 @@
-import { XPathOJP } from "../../../helpers/xpath-ojp"
+import { TreeNode } from "../../../xml/tree-node";
 
 export interface BookingArrangement {
     agencyCode: string,
@@ -13,17 +13,22 @@ export class ServiceBooking {
     this.bookingArrangements = bookingArrangements;
   }
 
-  public static initWithContextNode(contextNode: Node): ServiceBooking | null {
-    const bookingArrangementsNodes = XPathOJP.queryNodes('ojp:service/ojp:BookingArrangements/ojp:BookingArrangement', contextNode);
-    if (bookingArrangementsNodes.length === 0) {
+  public static initWithLegTreeNode(legTreeNode: TreeNode): ServiceBooking | null {
+    const bookingArrangementsTreeNode = legTreeNode.findChildNamed('ojp:Service/ojp:BookingArrangements');
+    if (bookingArrangementsTreeNode === null) {
+      return null;
+    }
+
+    const bookingArrangementTreeNodes = bookingArrangementsTreeNode.findChildrenNamed('ojp:BookingArrangement');
+    if (bookingArrangementTreeNodes.length === 0) {
         console.error('ERROR - no BookingArrangements nodes found');
         return null;
     }
 
     const bookingArrangements: BookingArrangement[] = [];
-    bookingArrangementsNodes.forEach(bookingNode => {
-        const agencyCode = XPathOJP.queryText('ojp:BookingAgencyName/ojp:Text', bookingNode);
-        let infoURL = XPathOJP.queryText('ojp:InfoUrl', bookingNode);
+    bookingArrangementTreeNodes.forEach(bookingArrangementTreeNode => {
+        const agencyCode = bookingArrangementTreeNode.findTextFromChildNamed('ojp:BookingAgencyName/ojp:Text');
+        let infoURL = bookingArrangementTreeNode.findTextFromChildNamed('ojp:InfoUrl');
 
         if ((agencyCode === null) || (infoURL === null)) {
             return;

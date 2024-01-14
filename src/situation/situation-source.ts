@@ -1,4 +1,4 @@
-import { XPathOJP } from "../helpers/xpath-ojp"
+import { TreeNode } from "../xml/tree-node"
 
 export class PtSituationSource {
   public sourceType: string
@@ -13,21 +13,20 @@ export class PtSituationSource {
     this.externalCode = null
   }
 
-  public static initFromSituationNode(node: Node): PtSituationSource | null {
-    const sourceType = XPathOJP.queryText('siri:Source/siri:SourceType', node)
+  public static initWithSituationTreeNode(treeNode: TreeNode): PtSituationSource | null {
+    const sourceType = treeNode.findTextFromChildNamed('siri:Source/siri:SourceType');
 
     if (sourceType === null) {
       console.log('ERROR - cant PtSituationSource.initFromSituationNode')
-      console.log(node);
+      console.log(treeNode);
       return null;
     }
 
     const situationSource = new PtSituationSource(sourceType);
+    situationSource.countryRef = treeNode.findTextFromChildNamed('siri:Source/siri:CountryRef');
+    situationSource.name = treeNode.findTextFromChildNamed('siri:Source/siri:Name');
+    situationSource.externalCode = treeNode.findTextFromChildNamed('siri:Source/siri:ExternalCode');
 
-    situationSource.countryRef = XPathOJP.queryText('siri:Source/siri:CountryRef', node)
-    situationSource.name = XPathOJP.queryText('siri:Source/siri:Name', node)
-    situationSource.externalCode = XPathOJP.queryText('siri:Source/siri:ExternalCode', node)
-
-    return situationSource
+    return situationSource;
   }
 }

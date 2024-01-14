@@ -1,6 +1,6 @@
 import * as mapboxgl from "mapbox-gl";
 import * as GeoJSON from 'geojson'
-import { XPathOJP } from "../helpers/xpath-ojp";
+import { TreeNode } from "../xml/tree-node";
 
 export class GeoPosition {
   public longitude: number
@@ -13,24 +13,29 @@ export class GeoPosition {
     this.properties = null;
   }
 
-  public static initFromContextNode(contextNode: Node): GeoPosition | null {
-    const longitudeS = XPathOJP.queryText('ojp:GeoPosition/siri:Longitude', contextNode)
-    const latitudeS = XPathOJP.queryText('ojp:GeoPosition/siri:Latitude', contextNode)
-
+  public static initWithStringCoords(longitudeS: string | null, latitudeS: string | null) {
     if (longitudeS === null || latitudeS === null) {
-      return null
+      return null;
     }
 
-    const longitude = parseFloat(longitudeS)
-    const latitude = parseFloat(latitudeS)
+    const longitude = parseFloat(longitudeS);
+    const latitude = parseFloat(latitudeS);
 
     if (longitude === 0 || latitude === 0) {
-      return null
+      return null;
     }
 
-    const geoPosition = new GeoPosition(longitude, latitude)
+    const geoPosition = new GeoPosition(longitude, latitude);
 
-    return geoPosition
+    return geoPosition;
+  }
+
+  public static initWithLocationTreeNode(locationTreeNode: TreeNode): GeoPosition | null {
+    const longitudeS = locationTreeNode.findTextFromChildNamed('ojp:GeoPosition/siri:Longitude');
+    const latitudeS = locationTreeNode.findTextFromChildNamed('ojp:GeoPosition/siri:Latitude');
+
+    const geoPosition = GeoPosition.initWithStringCoords(longitudeS, latitudeS);
+    return geoPosition;
   }
 
   public static initWithFeature(feature: GeoJSON.Feature): GeoPosition | null {

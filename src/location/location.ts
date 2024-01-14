@@ -1,11 +1,11 @@
 import * as GeoJSON from 'geojson'
 
-import { XPathOJP } from "../helpers/xpath-ojp";
 import { GeoPosition } from "./geoposition";
 import { StopPlace } from "./stopplace";
 import { Address } from "./address";
 import { PointOfInterest } from "./poi";
 import { TopographicPlace } from "./topographic-place";
+import { TreeNode } from '../xml/tree-node';
 
 interface NearbyLocation {
   distance: number
@@ -19,7 +19,6 @@ const literalCoordsRegexp = /^([0-9\.]+?),([0-9\.]+?)$/;
 
 export class Location {
   public address: Address | null
-  public stopPointRef: string | null
   public locationName: string | null
   public stopPlace: StopPlace | null
   public geoPosition: GeoPosition | null
@@ -31,7 +30,6 @@ export class Location {
 
   constructor() {
     this.address = null
-    this.stopPointRef = null;
     this.locationName = null;
     this.stopPlace = null;
     this.geoPosition = null;
@@ -42,56 +40,37 @@ export class Location {
     this.originSystem = null;
   }
 
-  public static initWithOJPContextNode(contextNode: Node): Location {
+  public static initWithTreeNode(treeNode: TreeNode): Location {
     const location = new Location();
+    
+    location.address = Address.initWithLocationTreeNode(treeNode);
+    location.geoPosition = GeoPosition.initWithLocationTreeNode(treeNode);
+    location.locationName = treeNode.findTextFromChildNamed('ojp:LocationName/ojp:Text');
+    location.poi = PointOfInterest.initWithLocationTreeNode(treeNode);
+    location.stopPlace = StopPlace.initWithLocationTreeNode(treeNode);
+    location.topographicPlace = TopographicPlace.initWithLocationTreeNode(treeNode);
 
-    location.address = Address.initFromContextNode(contextNode)
-    location.stopPointRef = XPathOJP.queryText('siri:StopPointRef', contextNode)
-    location.stopPlace = StopPlace.initFromContextNode(contextNode)
-    location.geoPosition = GeoPosition.initFromContextNode(contextNode)
-    location.poi = PointOfInterest.initFromContextNode(contextNode)
-    location.topographicPlace = TopographicPlace.initFromContextNode(contextNode);
+    location.attributes = Location.computeAttributes(treeNode);
+    
+    return location;
+  }
 
-    let locationName = XPathOJP.queryText('ojp:LocationName/ojp:Text', contextNode)
-    if (locationName === null) {
-      locationName = XPathOJP.queryText('ojp:StopPointName/ojp:Text', contextNode)
-    }
-    location.locationName = locationName
-
-    location.attributes = {}
-    const attributesNodes = XPathOJP.queryNodes('ojp:Attribute/*', contextNode)
-    attributesNodes.forEach(attributeNode => {
-      const nodeNameParts = attributeNode.nodeName.split(':')
-      const attrKey = nodeNameParts.length === 1 ? nodeNameParts[0] : nodeNameParts[1]
-      const attrValue = XPathOJP.queryText('ojp:Attribute/' + attributeNode.nodeName, contextNode)
-      if (attrValue) {
-        location.attributes[attrKey] = attrValue.trim()
-      }
-    })
-
-    const extensionAttributesNodes = XPathOJP.queryNodes('ojp:Extension/ojp:LocationExtensionStructure/*', contextNode)
-    extensionAttributesNodes.forEach(attributeNode => {
-      const nodeNameParts = attributeNode.nodeName.split(':')
-      if (nodeNameParts.length !== 2) {
-        return;
-      }
-      const attrKey = nodeNameParts[1]
-      const attrValue = attributeNode.textContent;
-      location.attributes[attrKey] = attrValue;
-    })
-
-    if (location.stopPointRef === null && location.stopPlace?.stopPlaceRef) {
-      location.stopPointRef = location.stopPlace.stopPlaceRef;
+  public static initWithLocationResultTreeNode(locationResultTreeNode: TreeNode): Location | null {
+    const locationTreeNode = locationResultTreeNode.findChildNamed('ojp:Location');
+    if (locationTreeNode === null) {
+      return null;
     }
 
-    const probabilityS = XPathOJP.queryText('../ojp:Probability', contextNode);
+    const location = Location.initWithTreeNode(locationTreeNode);
+
+    const probabilityS = locationResultTreeNode.findTextFromChildNamed('ojp:Probability');
     if (probabilityS) {
       location.probability = parseFloat(probabilityS);
     }
 
-    location.originSystem = XPathOJP.queryText('../ojp:OriginSystem', contextNode);
+    location.originSystem = locationResultTreeNode.findTextFromChildNamed('ojp:OriginSystem');
 
-    return location
+    return location;
   }
 
   public static initWithStopPlaceRef(stopPlaceRef: string, stopPlaceName: string = ''): Location {
@@ -106,6 +85,50 @@ export class Location {
     location.geoPosition = new GeoPosition(longitude, latitude);
 
     return location
+  }
+
+  private static computeAttributes(treeNode: TreeNode): Record<string, any> {
+    const attributes: Record<string, any> = {};
+
+    // <ojp:Attribute>
+    //   <ojp:Text>
+    //       <ojp:Text xml:lang="de">Berner Generationenhaus</ojp:Text>
+    //   </ojp:Text>
+    //   <ojp:Code>carvelo2go:1c741450-02ed-412e-ce4d-bfd470da7281</ojp:Code>
+    //   <siri:HireFacility>cycleHire</siri:HireFacility>
+    // </ojp:Attribute>
+    const attributeTreeNode = treeNode.findChildNamed('ojp:Attribute');
+    if (attributeTreeNode) {
+      attributeTreeNode.children.forEach(attributeTreeNode => {
+        const nodeNameParts = attributeTreeNode.name.split(':');
+        const attrKey = nodeNameParts.length === 1 ? nodeNameParts[0] : nodeNameParts[1];
+  
+        const attrValue = attributeTreeNode.computeText();
+        if (attrValue !== null) {
+          attributes[attrKey] = attrValue;
+        }
+      });
+    }
+
+    // <ojp:Extension>
+    //     <ojp:LocationExtensionStructure>
+    //         <ojp:num_vehicles_available>1</ojp:num_vehicles_available>
+    //         <ojp:num_docks_available>0</ojp:num_docks_available>
+    //     </ojp:LocationExtensionStructure>
+    // </ojp:Extension>
+    const extensionAttributesTreeNode = treeNode.findChildNamed('ojp:Extension/ojp:LocationExtensionStructure');
+    if (extensionAttributesTreeNode) {
+      extensionAttributesTreeNode.children.forEach(attributeTreeNode => {
+        const nodeNameParts = attributeTreeNode.name.split(':');
+        if (nodeNameParts.length !== 2 || attributeTreeNode.text == null) {
+          return;
+        }
+        const attrKey = nodeNameParts[1];
+        attributes[attrKey] = attributeTreeNode.text;
+      });
+    }
+
+    return attributes;
   }
 
   public static initWithFeature(feature: GeoJSON.Feature): Location | null {

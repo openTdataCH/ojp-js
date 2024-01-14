@@ -1,9 +1,9 @@
 import { PublicTransportMode } from './public-transport-mode'
 import { TripLegLineType } from "../types/map-geometry-types";
 
-import { XPathOJP } from '../helpers/xpath-ojp'
 import { StopPlace } from '../location/stopplace';
 import { PtSituationElement } from '../situation/situation-element';
+import { TreeNode } from '../xml/tree-node';
 
 export class JourneyService {
   public journeyRef: string;
@@ -31,40 +31,40 @@ export class JourneyService {
     this.siriSituations = [];
   }
 
-  public static initFromContextNode(contextNode: Node): JourneyService | null {
-    const serviceNode = XPathOJP.queryNode('ojp:Service', contextNode)
-    if (serviceNode === null) {
+  public static initWithTreeNode(treeNode: TreeNode): JourneyService | null {
+    const serviceTreeNode = treeNode.findChildNamed('ojp:Service');
+    if (serviceTreeNode === null) {
       return null;
     }
 
-    const journeyRef = XPathOJP.queryText('ojp:JourneyRef', serviceNode);
-    const ptMode = PublicTransportMode.initFromServiceNode(serviceNode)
+    const journeyRef = serviceTreeNode.findTextFromChildNamed('ojp:JourneyRef');
+    const ptMode = PublicTransportMode.initWithServiceTreeNode(serviceTreeNode);
 
-    const ojpAgencyId = XPathOJP.queryText('ojp:OperatorRef', serviceNode);
+    const ojpAgencyId = serviceTreeNode.findTextFromChildNamed('ojp:OperatorRef');
     const agencyID = ojpAgencyId?.replace('ojp:', '');
 
     if (!(journeyRef && ptMode && agencyID)) {
-      return null
+      return null;
     }
 
     const legService = new JourneyService(journeyRef, ptMode, agencyID);
 
-    legService.originStopPlace = StopPlace.initFromServiceNode(serviceNode, 'Origin');
-    legService.destinationStopPlace = StopPlace.initFromServiceNode(serviceNode, 'Destination');
+    legService.originStopPlace = StopPlace.initWithServiceTreeNode(serviceTreeNode, 'Origin');
+    legService.destinationStopPlace = StopPlace.initWithServiceTreeNode(serviceTreeNode, 'Destination');
 
-    legService.serviceLineNumber = XPathOJP.queryText('ojp:PublishedLineName/ojp:Text', serviceNode);
-    legService.journeyNumber = XPathOJP.queryText('ojp:Extension/ojp:PublishedJourneyNumber/ojp:Text', contextNode);
+    legService.serviceLineNumber = serviceTreeNode.findTextFromChildNamed('ojp:PublishedLineName/ojp:Text');
+    legService.journeyNumber = treeNode.findTextFromChildNamed('ojp:Extension/ojp:PublishedJourneyNumber/ojp:Text');
 
-    legService.siriSituationIds = []
-    const siriSituationIdNodes = XPathOJP.queryNodes('ojp:SituationFullRef/siri:SituationNumber', serviceNode);
-    siriSituationIdNodes.forEach(node => {
-      const situationId = XPathOJP.queryText('.', node);
-      if (situationId) {
-        legService.siriSituationIds.push(situationId);
+    legService.siriSituationIds = [];
+    const situationFullRefTreeNodes = serviceTreeNode.findChildrenNamed('ojp:SituationFullRef');
+    situationFullRefTreeNodes.forEach(situationFullRefTreeNode => {
+      const situationNumber = situationFullRefTreeNode.findTextFromChildNamed('siri:SituationNumber');
+      if (situationNumber) {
+        legService.siriSituationIds.push(situationNumber);
       }
     });
 
-    return legService
+    return legService;
   }
 
   public computeLegLineType(): TripLegLineType {

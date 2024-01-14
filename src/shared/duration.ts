@@ -1,4 +1,4 @@
-import { XPathOJP } from "../helpers/xpath-ojp"
+import { TreeNode } from "../xml/tree-node"
 
 export class Duration {
   public hours: number
@@ -11,14 +11,20 @@ export class Duration {
     this.totalMinutes = hours * 60 + minutes
   }
 
-  public static initFromContextNode(contextNode: Node | null, nodeName: string = 'ojp:Duration'): Duration | null {
-    if (contextNode === null) {
-      return null
+  public static initWithTreeNode(parentTreeNode: TreeNode, nodeName: string = 'ojp:Duration'): Duration | null {
+    const durationS = parentTreeNode.findTextFromChildNamed(nodeName);
+    if (durationS === null) {
+      return null;
     }
 
-    let durationS = XPathOJP.queryText(nodeName, contextNode)
+    const duration = Duration.initFromDurationText(durationS);
+
+    return duration;
+  }
+
+  public static initFromDurationText(durationS: string | null): Duration | null {
     if (durationS === null) {
-      return null
+      return null;
     }
 
     // PT4H19M
@@ -37,7 +43,7 @@ export class Duration {
     }
 
     const duration = new Duration(hours, minutes)
-    return duration
+    return duration;
   }
 
   public static initFromTotalMinutes(totalMinutes: number): Duration {

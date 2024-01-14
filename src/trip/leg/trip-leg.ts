@@ -63,14 +63,26 @@ export class TripLeg {
       return
     }
 
-    const stopPointRef = location.stopPointRef
-    if (stopPointRef && (stopPointRef in mapContextLocations)) {
-      const contextLocation = mapContextLocations[stopPointRef]
-
-      location.locationName = contextLocation.locationName
-      location.stopPlace = contextLocation.stopPlace
-      location.geoPosition = contextLocation.geoPosition
+    const stopPlaceRef = location.stopPlace?.stopPlaceRef ?? null;
+    if (stopPlaceRef === null) {
+      console.error('TripLeg.patchLocation - no stopPlaceRef found in location');
+      console.log(location);
+      return;
     }
+
+    if (!(stopPlaceRef in mapContextLocations)) {
+      console.error('TripLeg.patchLocation - no stopPlaceRef found in mapContextLocations');
+      console.log(location);
+      console.log('location.stopPlace?.stopPlaceRef :' + stopPlaceRef);
+      console.log(mapContextLocations);
+      return;
+    }
+
+    const contextLocation = mapContextLocations[stopPlaceRef];
+
+    location.locationName = contextLocation.locationName;
+    location.stopPlace = contextLocation.stopPlace;
+    location.geoPosition = contextLocation.geoPosition;
   }
 
   public computeGeoJSONFeatures(): GeoJSON.Feature[] {

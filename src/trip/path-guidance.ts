@@ -1,4 +1,4 @@
-import { XPathOJP } from "../helpers/xpath-ojp";
+import { TreeNode } from "../xml/tree-node";
 import { LinkProjection } from "./link-projection";
 
 export class PathGuidance {
@@ -8,18 +8,22 @@ export class PathGuidance {
     this.sections = sections;
   }
 
-  public static initFromTripLeg(tripLegNode: Node): PathGuidance {
-    const sectionNodes = XPathOJP.queryNodes('ojp:PathGuidance/ojp:PathGuidanceSection', tripLegNode);
+  public static initWithTreeNode(treeNode: TreeNode): PathGuidance | null {
+    const pathGuidanceTreeNode = treeNode.findChildNamed('ojp:PathGuidance');
+    if (pathGuidanceTreeNode === null) {
+      return null;
+    }
 
     let sections: PathGuidanceSection[] = [];
 
-    sectionNodes.forEach(sectionNode => {
-      const pathGuidanceSection = PathGuidanceSection.initFromSectionNode(sectionNode);
+    const sectionTreeNodes = pathGuidanceTreeNode.findChildrenNamed('ojp:PathGuidanceSection');
+    sectionTreeNodes.forEach(sectionTreeNode => {
+      const pathGuidanceSection = PathGuidanceSection.initWithSectionTreeNode(sectionTreeNode);
       if (pathGuidanceSection) {
         sections.push(pathGuidanceSection)
       }
     });
-
+    
     const pathGuidance = new PathGuidance(sections);
 
     return pathGuidance;
@@ -37,16 +41,16 @@ class PathGuidanceSection {
     this.turnAction = null
   }
 
-  public static initFromSectionNode(sectionNode: Node): PathGuidanceSection {
+  public static initWithSectionTreeNode(sectionTreeNode: TreeNode): PathGuidanceSection {
     const pathGuidanceSection = new PathGuidanceSection();
-    const trackSectionNode = XPathOJP.queryNode('ojp:TrackSection', sectionNode);
+    const trackSectionTreeNode = sectionTreeNode.findChildNamed('ojp:TrackSection');
 
-    if (trackSectionNode) {
-      pathGuidanceSection.trackSection = TrackSection.initFromTrackSectionNode(trackSectionNode);
+    if (trackSectionTreeNode) {
+      pathGuidanceSection.trackSection = TrackSection.initWithTrackSectionTreeNode(trackSectionTreeNode);
     }
 
-    pathGuidanceSection.guidanceAdvice = XPathOJP.queryText('ojp:GuidanceAdvice', sectionNode);
-    pathGuidanceSection.turnAction = XPathOJP.queryText('ojp:TurnAction', sectionNode);
+    pathGuidanceSection.guidanceAdvice = sectionTreeNode.findTextFromChildNamed('ojp:GuidanceAdvice');
+    pathGuidanceSection.turnAction = sectionTreeNode.findTextFromChildNamed('ojp:TurnAction');
 
     return pathGuidanceSection;
   }
@@ -65,18 +69,18 @@ class TrackSection {
     this.length = null;
   }
 
-  public static initFromTrackSectionNode(trackSectionNode: Node): TrackSection {
+  public static initWithTrackSectionTreeNode(trackSectionTreeNode: TreeNode): TrackSection {
     const trackSection = new TrackSection();
 
-    trackSection.linkProjection = LinkProjection.initFromTrackSectionNode(trackSectionNode);
-    trackSection.roadName = XPathOJP.queryText('ojp:RoadName', trackSectionNode);
-    trackSection.duration = XPathOJP.queryText('ojp:Duration', trackSectionNode);
+    trackSection.linkProjection = LinkProjection.initWithTreeNode(trackSectionTreeNode);
+    trackSection.roadName = trackSectionTreeNode.findTextFromChildNamed('ojp:RoadName');
+    trackSection.duration = trackSectionTreeNode.findTextFromChildNamed('ojp:Duration');
 
-    const lengthS = XPathOJP.queryText('ojp:Length', trackSectionNode);
-    if (lengthS) {
+    const lengthS = trackSectionTreeNode.findTextFromChildNamed('ojp:Length');
+    if (lengthS !== null) {
       trackSection.length = parseInt(lengthS, 10);
     }
 
-    return trackSection
+    return trackSection;
   }
 }

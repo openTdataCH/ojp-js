@@ -1,16 +1,11 @@
-import { XPathOJP } from '../../helpers/xpath-ojp';
-
 import { StageConfig } from '../../types/stage-config'
 import { OJPBaseRequest } from '../base-request'
 import { StopEvent } from '../../stop-event/stop-event';
-import { Location } from '../../location/location'
 
 import { StopEventRequestParams } from './stop-event-request-params';
-import { RequestErrorData } from '../request-error';
 import { StopEventType } from '../../types/stop-event-type';
 
-import { DOMParser } from '@xmldom/xmldom'
-import { PtSituationElement } from '../../situation/situation-element';
+import { StopEventResponse } from './stop-event-response';
 
 export class StopEventRequest extends OJPBaseRequest {
     public requestParams: StopEventRequestParams
@@ -24,83 +19,43 @@ export class StopEventRequest extends OJPBaseRequest {
         this.requestParams = requestParams;
     }
 
-    fetchResponse(): Promise<StopEvent[]> {
-        const bodyXML_s = this.requestParams.buildRequestXML(this.serviceRequestNode);
+    public static initWithStopPlaceRef(stageConfig: StageConfig, stopPlaceRef: string, stopEventType: StopEventType, stopEventDate: Date): StopEventRequest {
+        const stopEventRequestParams = new StopEventRequestParams(stopPlaceRef, null, stopEventType, stopEventDate);
+        const stopEventRequest = new StopEventRequest(stageConfig, stopEventRequestParams);
+        return stopEventRequest;
+    }
 
-        const loadingPromise = new Promise<StopEvent[]>((resolve, reject) => {
+    public fetchResponse(): Promise<StopEvent[]> {
+        const loadingPromise = new Promise<StopEvent[]>(resolve => {
+            const bodyXML_s = this.requestParams.buildRequestXML(this.serviceRequestNode);
             super.fetchOJPResponse(bodyXML_s, (responseText, errorData) => {
-                const stopEvents = StopEventRequest.handleResponseData(responseText, errorData);
-                resolve(stopEvents);
+                if (errorData) {
+                    console.error('ERROR: StopEventRequest network');
+                    console.log(errorData);
+                    resolve([]);
+                    return;
+                }
+
+                const stopEventResponse = new StopEventResponse();
+                stopEventResponse.parseXML(responseText, (message) => {
+                    if (message === 'StopEvent.DONE') {
+                        resolve(stopEventResponse.stopEvents);
+                    } else {
+                        console.error('ERROR: StopEventRequest parse XML');
+                        console.log(errorData);
+                        console.log(responseText);
+                        resolve([]);
+                        return;
+                    }
+                })
             });
         });
 
         return loadingPromise;
     }
 
-    public static handleResponseData(responseText: string, error: RequestErrorData | null): StopEvent[] {
-        const stopEvents: StopEvent[] = [];
-
-        if (error !== null) {
-            console.error('ERROR StopEventRequest');
-            console.log(error);
-            return stopEvents;
-        }
-
-        const responseXML = new DOMParser().parseFromString(responseText, 'application/xml');
-
-        const mapContextLocations = StopEventRequest.parseMapContextLocations(responseXML);
-        const mapContextSituations = StopEventRequest.parseContextSituations(responseXML);
-
-        const nodes = XPathOJP.queryNodes('//ojp:OJPStopEventDelivery/ojp:StopEventResult/ojp:StopEvent', responseXML);
-        nodes.forEach(node => {
-            const stopEvent = StopEvent.initFromContextNode(node);
-            if (stopEvent) {
-                stopEvent.patchStopEventLocations(mapContextLocations);
-                stopEvent.stopPoint.patchSituations(mapContextSituations);
-                stopEvents.push(stopEvent);
-            }
-        });
-
-        return stopEvents;
-    }
-
     public computeRequestXmlString(): string {
         const bodyXML_s = this.requestParams.buildRequestXML(this.serviceRequestNode);
         return bodyXML_s;
-    }
-
-    private static parseMapContextLocations(responseXML: Document): Record<string, Location> {
-        const mapContextLocations: Record<string, Location> = {};
-
-        const locationNodes = XPathOJP.queryNodes('//ojp:OJPStopEventDelivery/ojp:StopEventResponseContext/ojp:Places/ojp:Location', responseXML);
-        locationNodes.forEach(locationNode => {
-            const location = Location.initWithOJPContextNode(locationNode);
-            const stopPlaceRef = location.stopPlace?.stopPlaceRef ?? null;
-            if (stopPlaceRef) {
-                mapContextLocations[stopPlaceRef] = location;
-            }
-        });
-
-        return mapContextLocations;
-    }
-
-    private static parseContextSituations(responseXML: Document): Record<string, PtSituationElement> {
-        const mapContextLocations: Record<string, PtSituationElement> = {};
-    
-        const nodes = XPathOJP.queryNodes('//ojp:OJPStopEventDelivery/ojp:StopEventResponseContext/ojp:Situations/ojp:PtSituation', responseXML);
-        nodes.forEach(node => {
-            const situation = PtSituationElement.initFromSituationNode(node);
-            if (situation) {
-                mapContextLocations[situation.situationNumber] = situation;
-            }
-        });
-
-        return mapContextLocations;
-    }
-
-    public static initWithStopPlaceRef(stageConfig: StageConfig, stopPlaceRef: string, stopEventType: StopEventType, stopEventDate: Date): StopEventRequest {
-        const stopEventRequestParams = new StopEventRequestParams(stopPlaceRef, null, stopEventType, stopEventDate);
-        const stopEventRequest = new StopEventRequest(stageConfig, stopEventRequestParams);
-        return stopEventRequest;
     }
 }

@@ -1,4 +1,4 @@
-import { XPathOJP } from "../helpers/xpath-ojp"
+import { TreeNode } from "../xml/tree-node"
 
 // OJP reference - these are the same?
 //  - 8.4.5.2 StopPoint Structure
@@ -18,31 +18,39 @@ export class StopPlace {
     this.stopType = stopType
   }
 
-  public static initFromContextNode(contextNode: Node): StopPlace | null {
+  public static initWithLocationTreeNode(locationTreeNode: TreeNode): StopPlace | null {
     let stopType: StopType = 'StopPlace';
-    let stopPlaceRef = XPathOJP.queryText('ojp:StopPlace/ojp:StopPlaceRef', contextNode)
-    let stopPlaceName = XPathOJP.queryText('ojp:StopPlace/ojp:StopPlaceName/ojp:Text', contextNode)
 
-    if (!(stopPlaceRef && stopPlaceName)) {
-      // Try to build the StopPlace from StopPoint
+    let stopPlaceRef = locationTreeNode.findTextFromChildNamed('ojp:StopPlace/ojp:StopPlaceRef');
+    let stopPlaceName = locationTreeNode.findTextFromChildNamed('ojp:StopPlace/ojp:StopPlaceName/ojp:Text') ?? '';
+    let topographicPlaceRef = locationTreeNode.findTextFromChildNamed('ojp:StopPlace/ojp:TopographicPlaceRef');
+
+    // Try to build the StopPlace from StopPoint
+    if (stopPlaceRef === null) {
       stopType = 'StopPoint';
-      stopPlaceRef = XPathOJP.queryText('ojp:StopPoint/siri:StopPointRef', contextNode)
-      stopPlaceName = XPathOJP.queryText('ojp:StopPoint/ojp:StopPointName/ojp:Text', contextNode)
+      stopPlaceRef = locationTreeNode.findTextFromChildNamed('ojp:StopPoint/siri:StopPointRef');
+      stopPlaceName = locationTreeNode.findTextFromChildNamed('ojp:StopPoint/ojp:StopPointName/ojp:Text') ?? '';
+      topographicPlaceRef = locationTreeNode.findTextFromChildNamed('ojp:StopPoint/ojp:TopographicPlaceRef');
     }
 
-    if (!(stopPlaceRef && stopPlaceName)) {
+    // Otherwise try to see if we have a single siri:StopPointRef node
+    if (stopPlaceRef === null) {
+      stopType = 'StopPoint';
+      stopPlaceRef = locationTreeNode.findTextFromChildNamed('siri:StopPointRef');
+    }
+
+    if (stopPlaceRef === null) {
       return null;
     }
 
-    const topographicPlaceRef = XPathOJP.queryText('ojp:StopPlace/ojp:TopographicPlaceRef', contextNode)
-    const stopPlace = new StopPlace(stopPlaceRef, stopPlaceName, topographicPlaceRef, stopType)
+    const stopPlace = new StopPlace(stopPlaceRef, stopPlaceName, topographicPlaceRef, stopType);
 
-    return stopPlace
+    return stopPlace;
   }
 
-  public static initFromServiceNode(serviceNode: Node, pointType: 'Origin' | 'Destination'): StopPlace | null {
-    const stopPlaceRef = XPathOJP.queryText('ojp:' + pointType + 'StopPointRef', serviceNode);
-    const stopPlaceText = XPathOJP.queryText('ojp:' + pointType + 'Text/ojp:Text', serviceNode);
+  public static initWithServiceTreeNode(treeNode: TreeNode, pointType: 'Origin' | 'Destination'): StopPlace | null {
+    const stopPlaceRef = treeNode.findTextFromChildNamed('ojp:' + pointType + 'StopPointRef');
+    const stopPlaceText = treeNode.findTextFromChildNamed('ojp:' + pointType + 'Text/ojp:Text');
 
     if (!(stopPlaceRef && stopPlaceText)) {
       return null;
