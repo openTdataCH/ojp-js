@@ -17,7 +17,7 @@ export class OJPBaseRequest {
 
   protected logRequests: boolean
 
-  public lastRequestData: RequestData | null
+  public lastRequestData: RequestData
 
   constructor(stageConfig: StageConfig) {
     this.stageConfig = stageConfig
@@ -68,18 +68,15 @@ export class OJPBaseRequest {
       console.log(bodyXML_s);
     }
 
-    const requestData = <RequestData>{
-      requestXmlS: bodyXML_s,
-      requestDatetime: new Date(),
-      responseXmlS: null,
-      responseDatetime: null,
-    }
-    this.lastRequestData = requestData
+    this.lastRequestData.requestXmlS = bodyXML_s;
+    this.lastRequestData.requestDatetime = new Date();
+    this.lastRequestData.responseXmlS = null;
+    this.lastRequestData.responseDatetime = null;
 
     responsePromise.then(response => {
       response.text().then(responseText => {
-        requestData.responseXmlS = responseText
-        requestData.responseDatetime = new Date()
+        this.lastRequestData.responseXmlS = responseText;
+        this.lastRequestData.responseDatetime = new Date();
 
         completion(responseText, null);
       }).catch(reason => {
