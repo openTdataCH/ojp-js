@@ -5,7 +5,7 @@ import { StopEvent } from '../../stop-event/stop-event';
 import { StopEventRequestParams } from './stop-event-request-params';
 import { StopEventType } from '../../types/stop-event-type';
 
-import { StopEventResponse } from '../../stop-event/stop-event-response';
+import { StopEventResponse } from './stop-event-response';
 
 export class StopEventRequest extends OJPBaseRequest {
     public requestParams: StopEventRequestParams

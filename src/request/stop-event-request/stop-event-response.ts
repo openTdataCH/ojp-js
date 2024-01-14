@@ -1,10 +1,10 @@
 import * as sax from 'sax';
 
-import { Location } from '../location/location'
-import { PtSituationElement } from '../situation/situation-element'
-import { TreeNode } from '../xml/tree-node';
-import { StopEvent } from './stop-event';
-import { RequestErrorData } from '../request/request-error';
+import { Location } from '../../location/location'
+import { PtSituationElement } from '../../situation/situation-element'
+import { TreeNode } from '../../xml/tree-node';
+import { StopEvent } from '../../stop-event/stop-event';
+import { RequestErrorData } from '../request-error';
 
 type StopEventResponseMessage = 'StopEvent.DONE' | 'ERROR';
 
