@@ -63,19 +63,28 @@ export class Trip {
       });
 
       legs.push(tripLeg);
-    })
+    });
 
-    const distanceMeters: number = (() => {
-      if (distanceS === null) {
-        return tripLegsTotalDistance;
-      }
+    if (legs.length === 0) {
+      console.error('Trip.initFromTreeNode no legs found ?');
+      console.log(treeNode);
+      return null;
+    }
 
-      return parseInt(distanceS);
-    })();
+    let distanceMeters = 0;
+    let distanceSource: DistanceSource = 'trip';
+    const distanceS = treeNode.findTextFromChildNamed('ojp:Distance');
+    if (distanceS === null) {
+      distanceSource = 'legs-sum';
+      distanceMeters = tripLegsTotalDistance;
+    } else {
+      distanceMeters = parseInt(distanceS);
+    }
 
-    const tripStats = <TripStats>{
+    const tripStats: TripStats = {
       duration: duration,
       distanceMeters: distanceMeters,
+      distanceSource: distanceSource,
       transferNo: parseInt(transfersNoS),
       startDatetime: tripStartTime,
       endDatetime: tripEndTime,
