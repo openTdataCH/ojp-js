@@ -1,7 +1,7 @@
-import { XPathOJP } from "../../helpers/xpath-ojp"
 import { GeoPosition } from "../../location/geoposition";
 import { Location } from "../../location/location"
 import { Duration } from "../../shared/duration";
+import { TreeNode } from "../../xml/tree-node";
 import { LinkProjection } from "../link-projection";
 
 export class LegTrack {
@@ -30,25 +30,25 @@ export class LegTrack {
     }
   }
 
-  public static initFromLegNode(contextNode: Node): LegTrack | null {
-    const legTrackNode = XPathOJP.queryNode('ojp:LegTrack', contextNode)
-    if (legTrackNode === null) {
+  public static initWithLegTreeNode(treeNode: TreeNode): LegTrack | null {
+    const legTrackTreeNode = treeNode.findChildNamed('ojp:LegTrack');
+    if (legTrackTreeNode === null) {
       return null;
     }
 
-    let trackSections: TrackSection[] = []
-
-    const trackSectionNodes = XPathOJP.queryNodes('ojp:TrackSection', legTrackNode);
-    trackSectionNodes.forEach(trackSectionNode => {
-      const trackSection = TrackSection.initFromContextNode(trackSectionNode);
+    const trackSections: TrackSection[] = [];
+    
+    const trackSectionTreeNodes = legTrackTreeNode.findChildrenNamed('ojp:TrackSection');
+    trackSectionTreeNodes.forEach(trackSectionTreeNode => {
+      const trackSection = TrackSection.initWithTreeNode(trackSectionTreeNode);
       if (trackSection) {
         trackSections.push(trackSection);
       }
-    })
+    });
 
     const legTrack = new LegTrack(trackSections);
 
-    return legTrack
+    return legTrack;
   }
 
   public fromGeoPosition(): GeoPosition | null {
@@ -95,27 +95,33 @@ class TrackSection {
     this.linkProjection = null
   }
 
-  public static initFromContextNode(contextNode: Node): TrackSection | null {
-    const trackStartNode = XPathOJP.queryNode('ojp:TrackStart', contextNode);
-    const trackEndNode = XPathOJP.queryNode('ojp:TrackEnd', contextNode);
+  public static initWithTreeNode(treeNode: TreeNode): TrackSection | null {
+    const trackStartTreeNode = treeNode.findChildNamed('ojp:TrackStart');
+    const trackEndTreeNode = treeNode.findChildNamed('ojp:TrackEnd');
 
-    if (trackStartNode === null || trackEndNode === null) {
+    if (!(trackStartTreeNode && trackEndTreeNode)) {
       return null;
     }
 
-    const fromLocation = Location.initWithOJPContextNode(trackStartNode)
-    const toLocation = Location.initWithOJPContextNode(trackEndNode)
+    const fromLocation = Location.initWithTreeNode(trackStartTreeNode);
+    const toLocation = Location.initWithTreeNode(trackEndTreeNode);
+
+    if (!(fromLocation && toLocation)) {
+      console.error('CANT instantiate TrackSection.initWithTreeNode');
+      console.log(treeNode);
+      return null;
+    }
 
     const trackSection = new TrackSection(fromLocation, toLocation);
-    trackSection.duration = Duration.initFromContextNode(contextNode)
+    trackSection.duration = Duration.initWithTreeNode(treeNode);
 
-    const lengthS = XPathOJP.queryText('ojp:Length', contextNode);
-    if (lengthS) {
+    const lengthS = treeNode.findTextFromChildNamed('ojp:Length');
+    if (lengthS !== null) {
       trackSection.length = parseInt(lengthS, 10);
     }
 
-    trackSection.linkProjection = LinkProjection.initFromTrackSectionNode(contextNode);
+    trackSection.linkProjection = LinkProjection.initWithTreeNode(treeNode);
 
-    return trackSection
+    return trackSection;
   }
 }

@@ -1,4 +1,4 @@
-import { XPathOJP } from "../../../helpers/xpath-ojp"
+import { TreeNode } from "../../../xml/tree-node"
 
 export class StopPointTime {
   public timetableTime: Date
@@ -17,8 +17,19 @@ export class StopPointTime {
     }
   }
 
-  public static initWithContextNode(contextNode: Node): StopPointTime | null {
-    const timetableTimeS = XPathOJP.queryText('ojp:TimetabledTime', contextNode);
+  public static initWithParentTreeNode(parentTreeNode: TreeNode, stopTimeType: string): StopPointTime | null {
+    const stopTimeNodeName = 'ojp:' + stopTimeType;
+    const stopTimeTreeNode = parentTreeNode.findChildNamed(stopTimeNodeName);
+    if (stopTimeTreeNode === null) {
+      return null
+    }
+
+    const stopTime = StopPointTime.initWithContextTreeNode(stopTimeTreeNode);
+    return stopTime;
+  }
+
+  private static initWithContextTreeNode(contextNode: TreeNode): StopPointTime | null {
+    const timetableTimeS = contextNode.findTextFromChildNamed('ojp:TimetabledTime');
     if (timetableTimeS === null) {
       return null;
     }
@@ -26,13 +37,13 @@ export class StopPointTime {
     const timetableTime = new Date(Date.parse(timetableTimeS));
 
     let estimatedTime: Date | null = null;
-    const estimatedTimeS = XPathOJP.queryText('ojp:EstimatedTime', contextNode);
+    const estimatedTimeS = contextNode.findTextFromChildNamed('ojp:EstimatedTime');
     if (estimatedTimeS) {
       estimatedTime = new Date(Date.parse(estimatedTimeS));
     }
 
     const stopPointTime = new StopPointTime(timetableTime, estimatedTime)
-    return stopPointTime
+    return stopPointTime;
   }
 
 }

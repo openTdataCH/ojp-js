@@ -1,4 +1,4 @@
-import { XPathOJP } from '../helpers/xpath-ojp'
+import { TreeNode } from '../xml/tree-node';
 
 type PublicTransportPictogram = 'picto-bus' | 'picto-railway' | 'picto-tram' | 'picto-rack-railway' | 'picto-funicular' | 'picto-cablecar' | 'picto-gondola' | 'picto-chairlift' | 'picto-boat' | 'car-sharing' | 'picto-bus-fallback';
 
@@ -15,22 +15,21 @@ export class PublicTransportMode {
     this.isDemandMode = false
   }
 
-  public static initFromServiceNode(serviceNode: Node): PublicTransportMode | null {
-    const ptMode = XPathOJP.queryText('ojp:Mode/ojp:PtMode', serviceNode)
-
+  public static initWithServiceTreeNode(serviceTreeNode: TreeNode): PublicTransportMode | null {
+    const ptMode = serviceTreeNode.findTextFromChildNamed('ojp:Mode/ojp:PtMode');
     if (ptMode === null) {
-      return null
+      return null;
     }
 
-    const name = XPathOJP.queryText('ojp:Mode/ojp:Name/ojp:Text', serviceNode)
-    const shortName = XPathOJP.queryText('ojp:Mode/ojp:ShortName/ojp:Text', serviceNode)
-    const publicTransportMode = new PublicTransportMode(ptMode, name, shortName)
+    const name = serviceTreeNode.findTextFromChildNamed('ojp:Mode/ojp:Name/ojp:Text');
+    const shortName = serviceTreeNode.findTextFromChildNamed('ojp:Mode/ojp:ShortName/ojp:Text');
+    const publicTransportMode = new PublicTransportMode(ptMode, name, shortName);
 
-    const busSubmode = XPathOJP.queryText('ojp:Mode/siri:BusSubmode', serviceNode)
+    const busSubmode = serviceTreeNode.findTextFromChildNamed('ojp:Mode/siri:BusSubmode')
     // publicTransportMode.isDemandMode = busSubmode !== null;
     publicTransportMode.isDemandMode = (busSubmode === 'demandAndResponseBus' || busSubmode === 'unknown');
 
-    return publicTransportMode
+    return publicTransportMode;
   }
 
   public isRail(): boolean {

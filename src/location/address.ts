@@ -1,4 +1,4 @@
-import { XPathOJP } from "../helpers/xpath-ojp";
+import { TreeNode } from "../xml/tree-node";
 
 export class Address {
   public addressCode: string
@@ -11,17 +11,22 @@ export class Address {
     this.topographicPlaceRef = topographicPlaceRef
   }
 
-  public static initFromContextNode(contextNode: Node): Address | null {
-    const addressCode = XPathOJP.queryText('ojp:Address/ojp:AddressCode', contextNode)
+  public static initWithLocationTreeNode(locationTreeNode: TreeNode): Address | null {
+    const addressTreeNode = locationTreeNode.findChildNamed('ojp:Address');
+    if (addressTreeNode === null) {
+      return null;
+    }
+
+    const addressCode = addressTreeNode.findTextFromChildNamed('ojp:AddressCode');
     if (addressCode === null) {
       return null
     }
 
-    const addressName = XPathOJP.queryText('ojp:Address/ojp:AddressName/ojp:Text', contextNode)
-    const topographicPlaceRef = XPathOJP.queryText('ojp:Address/ojp:TopographicPlaceRef', contextNode)
+    const addressName = addressTreeNode.findTextFromChildNamed('ojp:AddressName/ojp:Text')
+    const topographicPlaceRef = addressTreeNode.findTextFromChildNamed('ojp:TopographicPlaceRef')
 
-    const address = new Address(addressCode, addressName, topographicPlaceRef)
+    const address = new Address(addressCode, addressName, topographicPlaceRef);
 
-    return address
+    return address;
   }
 }

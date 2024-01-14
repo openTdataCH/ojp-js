@@ -1,8 +1,8 @@
 import * as GeoJSON from 'geojson'
 
-import { XPathOJP } from "../helpers/xpath-ojp";
 import { GeoPosition } from "../location/geoposition";
 import { GeoPositionBBOX } from "../location/geoposition-bbox";
+import { TreeNode } from '../xml/tree-node';
 
 export class LinkProjection {
   public coordinates: GeoPosition[];
@@ -14,19 +14,25 @@ export class LinkProjection {
     this.bbox = bbox;
   }
 
-  public static initFromTrackSectionNode(trackSectionNode: Node): LinkProjection | null {
+  public static initWithTreeNode(treeNode: TreeNode): LinkProjection | null {
+    const linkProjectionTreeNode = treeNode.findChildNamed('ojp:LinkProjection');
+    if (linkProjectionTreeNode === null) {
+      return null;
+    }
+
     const coordinates: GeoPosition[] = [];
 
-    const positionNodes = XPathOJP.queryNodes('ojp:LinkProjection/ojp:Position', trackSectionNode);
-    positionNodes.forEach(locationNode => {
-      const longitudeS = XPathOJP.queryText('siri:Longitude', locationNode);
-      const latitudeS = XPathOJP.queryText('siri:Latitude', locationNode);
+    const positionTreeNodes = linkProjectionTreeNode.findChildrenNamed('ojp:Position');
+    positionTreeNodes.forEach(positionTreeNode => {
+      const longitudeS = positionTreeNode.findTextFromChildNamed('siri:Longitude');
+      const latitudeS = positionTreeNode.findTextFromChildNamed('siri:Latitude');
 
       if (longitudeS && latitudeS) {
         const position = new GeoPosition(
           parseFloat(longitudeS),
           parseFloat(latitudeS),
         )
+
         coordinates.push(position);
       }
     });
@@ -38,6 +44,7 @@ export class LinkProjection {
     const bbox = new GeoPositionBBOX(coordinates)
 
     const linkProjection = new LinkProjection(coordinates, bbox);
+    
     return linkProjection;
   }
 

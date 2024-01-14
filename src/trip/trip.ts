@@ -1,8 +1,6 @@
 import * as GeoJSON from 'geojson'
 
-import { XPathOJP } from '../helpers/xpath-ojp'
-
-import { TripStats } from '../types/trip-stats'
+import { DistanceSource, TripStats } from '../types/trip-stats'
 
 import { TripLeg } from './leg/trip-leg'
 import { TripLegFactory } from './leg/trip-leg-factory'
@@ -11,6 +9,7 @@ import { Duration } from '../shared/duration'
 import { Location } from '../location/location';
 import { GeoPositionBBOX } from '../location/geoposition-bbox'
 import { GeoPosition } from '../location/geoposition'
+import { TreeNode } from '../xml/tree-node'
 
 export class Trip {
   public id: string
@@ -23,28 +22,24 @@ export class Trip {
     this.stats = tripStats
   }
 
-  public static initFromTripResultNode(tripResultNode: Node) {
-    const tripId = XPathOJP.queryText('ojp:Trip/ojp:TripId', tripResultNode)
+  public static initFromTreeNode(treeNode: TreeNode): Trip | null {
+    const tripId = treeNode.findTextFromChildNamed('ojp:TripId');
     if (tripId === null) {
       return null;
     }
 
-    const tripNode = XPathOJP.queryNode('ojp:Trip', tripResultNode)
-    const duration = Duration.initFromContextNode(tripNode)
+    const duration = Duration.initFromDurationText(treeNode.findTextFromChildNamed('ojp:Duration'));
     if (duration === null) {
       return null;
     }
 
-    const distanceS = XPathOJP.queryText('ojp:Trip/ojp:Distance', tripResultNode)
-
-    const transfersNoS = XPathOJP.queryText('ojp:Trip/ojp:Transfers', tripResultNode)
+    const transfersNoS = treeNode.findTextFromChildNamed('ojp:Transfers');
     if (transfersNoS === null) {
       return null;
     }
 
-    const tripStartTimeS = XPathOJP.queryText('ojp:Trip/ojp:StartTime', tripResultNode);
-    const tripEndTimeS = XPathOJP.queryText('ojp:Trip/ojp:EndTime', tripResultNode);
-
+    const tripStartTimeS = treeNode.findTextFromChildNamed('ojp:StartTime');
+    const tripEndTimeS = treeNode.findTextFromChildNamed('ojp:EndTime');
     if (tripStartTimeS === null || tripEndTimeS === null) {
       return null;
     }
@@ -52,15 +47,14 @@ export class Trip {
     const tripStartTime = new Date(Date.parse(tripStartTimeS));
     const tripEndTime = new Date(Date.parse(tripEndTimeS));
 
-    let legs: TripLeg[] = [];
-
+    const legs: TripLeg[] = [];
     let tripLegsTotalDistance = 0;
 
-    const tripResponseLegs = XPathOJP.queryNodes('ojp:Trip/ojp:TripLeg', tripResultNode)
-    tripResponseLegs.forEach(tripLegNode => {
-      const tripLeg = TripLegFactory.initWithContextNode(tripLegNode);
+    const tripLegTreeNodes = treeNode.findChildrenNamed('ojp:TripLeg');
+    tripLegTreeNodes.forEach(tripLegTreeNode => {
+      const tripLeg = TripLegFactory.initWithTreeNode(tripLegTreeNode);
       if (tripLeg === null) {
-        return
+        return;
       }
 
       const legTrackSections = tripLeg.legTrack?.trackSections ?? [];

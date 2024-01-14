@@ -1,4 +1,4 @@
-import { XPathOJP } from "../helpers/xpath-ojp"
+import { TreeNode } from "../xml/tree-node"
 
 export class TopographicPlace {
     public code: string
@@ -9,15 +9,15 @@ export class TopographicPlace {
       this.name = name
     }
 
-    public static initFromContextNode(contextNode: Node): TopographicPlace | null {
-        const code = XPathOJP.queryText('ojp:TopographicPlace/ojp:TopographicPlaceCode', contextNode)
-        const name = XPathOJP.queryText('ojp:TopographicPlace/ojp:TopographicPlaceName/ojp:Text', contextNode)
+    public static initWithLocationTreeNode(locationTreeNode: TreeNode): TopographicPlace | null {
+      const code = locationTreeNode.findTextFromChildNamed('ojp:TopographicPlace/ojp:TopographicPlaceCode');
+      const name = locationTreeNode.findTextFromChildNamed('ojp:TopographicPlace/ojp:TopographicPlaceName/ojp:Text');
     
-        if (!(code && name)) {
-          return null;
-        }
+      if (!(code && name)) {
+        return null;
+      }
 
-        const topographicPlace = new TopographicPlace(code, name);
-        return topographicPlace;
+      const topographicPlace = new TopographicPlace(code, name);
+      return topographicPlace;
     }
 }

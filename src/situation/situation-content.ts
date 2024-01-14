@@ -1,4 +1,4 @@
-import { XPathOJP } from "../helpers/xpath-ojp"
+import { TreeNode } from "../xml/tree-node"
 
 export class SituationContent {
   public summary: string
@@ -11,21 +11,21 @@ export class SituationContent {
     this.details = details
   }
 
-  public static initFromSituationNode(contextNode: Node): SituationContent | null {
-    const summary = XPathOJP.queryText('siri:Summary', contextNode);
-    const description = XPathOJP.queryText('siri:Description', contextNode);
+  public static initWithSituationTreeNode(treeNode: TreeNode): SituationContent | null {
+    const summary = treeNode.findTextFromChildNamed('siri:Summary');
+    const description = treeNode.findTextFromChildNamed('siri:Description');
 
     if (!(summary && description)) {
       console.error('ERROR: SituationContent.initFromSituationNode - cant init');
-      console.log(contextNode);
+      console.log(treeNode);
 
       return null;
     }
 
     const details: string[] = []
-    const detailNodes = XPathOJP.queryNodes('siri:Detail', contextNode);
-    detailNodes.forEach(node => {
-      const detailText = XPathOJP.queryText('.', node);
+    const detailNodes = treeNode.findChildrenNamed('siri:Detail');
+    detailNodes.forEach(detailTreeNode => {
+      const detailText = detailTreeNode.text;
       if (detailText) {
         details.push(detailText);
       }
@@ -33,7 +33,7 @@ export class SituationContent {
 
     if (details.length === 0) {
       console.error('ERROR: SituationContent.initFromSituationNode - empty details');
-      console.log(contextNode);
+      console.log(treeNode);
 
       return null;
     }
