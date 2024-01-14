@@ -1,11 +1,11 @@
 import * as sax from 'sax';
 
-import { Location } from '../location/location'
-import { Trip } from '../trip/trip'
-import { TripContinousLeg } from '../trip/leg/trip-continous-leg'
-import { PtSituationElement } from '../situation/situation-element'
-import { TreeNode } from '../xml/tree-node';
-import { TripRequestEvent, TripsRequestParams } from '../request';
+import { Location } from '../../location/location'
+import { Trip } from '../../trip/trip'
+import { TripContinousLeg } from '../../trip/leg/trip-continous-leg'
+import { PtSituationElement } from '../../situation/situation-element'
+import { TreeNode } from '../../xml/tree-node';
+import { TripRequestEvent, TripsRequestParams } from '..';
 
 export class TripsResponse {
   public hasValidResponse: boolean

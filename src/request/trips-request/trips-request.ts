@@ -1,7 +1,7 @@
 import { JourneyPointType } from '../../types/journey-points';
 import { OJPBaseRequest } from '../base-request';
 import { TripsRequestParams } from './trips-request-params';
-import { TripsResponse } from '../../trips/trips-response'
+import { TripsResponse } from './trips-request-response'
 import { StageConfig } from '../../types/stage-config';
 import { RequestErrorData } from './../request-error'
 import { IndividualTransportMode } from '../../types/individual-mode.types';
