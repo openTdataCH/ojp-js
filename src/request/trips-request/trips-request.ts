@@ -2,32 +2,36 @@ import { JourneyPointType } from '../../types/journey-points';
 import { OJPBaseRequest } from '../base-request';
 import { TripsRequestParams } from './trips-request-params';
 import { TripsResponse } from '../../trips/trips-response'
-import { Default_APP_Stage, StageConfig } from '../../types/stage-config';
+import { StageConfig } from '../../types/stage-config';
 import { RequestErrorData } from './../request-error'
 import { IndividualTransportMode } from '../../types/individual-mode.types';
 
+export type TripRequestEvent = 'TripRequest.TripsNo' | 'TripRequest.Trip' | 'TripRequest.DONE' | 'ERROR';
+type TripRequestCallback = (response: TripsResponse, isComplete: boolean, message: TripRequestEvent, error: RequestErrorData | null) => void;
+
 export class TripRequest extends OJPBaseRequest {
   public requestParams: TripsRequestParams
+  public response: TripsResponse | null
 
   constructor(stageConfig: StageConfig, requestParams: TripsRequestParams) {
     super(stageConfig);
     this.requestParams = requestParams;
+    this.response = null;
   }
 
-  public fetchResponse(completion: (response: TripsResponse, error: RequestErrorData | null) => void) {
+  public fetchResponse(callback: TripRequestCallback) {
     this.buildTripRequestNode();
     const bodyXML_s = this.serviceRequestNode.end({
       pretty: true
     });
+    
     super.fetchOJPResponse(bodyXML_s, (responseText, errorData) => {
-      const tripsResponse = TripsResponse.initWithXML(responseText, this.requestParams.modeType, this.requestParams.transportMode);
-      if (errorData === null && !tripsResponse.hasValidResponse) {
-        errorData = {
-          error: 'ParseTripsXMLError',
-          message: 'Invalid TripsRequest Response XML'
-        }
-      }
-      completion(tripsResponse, errorData);
+
+      const tripsResponse = new TripsResponse();
+      tripsResponse.tripRequestParams = this.requestParams;
+      tripsResponse.parseXML(responseText, (parseStatus, isComplete) => {
+        callback(tripsResponse, isComplete, parseStatus, null);
+      });
     });
   }
 

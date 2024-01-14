@@ -1,105 +1,127 @@
+import * as sax from 'sax';
+
 import { Location } from '../location/location'
 import { Trip } from '../trip/trip'
-import { XPathOJP } from '../helpers/xpath-ojp'
-import { IndividualTransportMode } from '../types/individual-mode.types'
-import { TripModeType } from '../types/trip-mode-type'
 import { TripContinousLeg } from '../trip/leg/trip-continous-leg'
 import { PtSituationElement } from '../situation/situation-element'
+import { TreeNode } from '../xml/tree-node';
+import { TripRequestEvent, TripsRequestParams } from '../request';
 
 export class TripsResponse {
   public hasValidResponse: boolean
-  public responseXMLText: string
-  public contextLocations: Location[]
   public trips: Trip[]
+  public parserTripsNo: number
+  public tripRequestParams: TripsRequestParams | null
 
-  constructor(hasValidResponse: boolean, responseXMLText: string, contextLocations: Location[], trips: Trip[]) {
-    this.hasValidResponse = hasValidResponse
-    this.responseXMLText = responseXMLText
-    this.contextLocations = contextLocations
-    this.trips = trips
+  constructor() {
+    this.hasValidResponse = false;
+    this.trips = [];
+    this.parserTripsNo = 0;
+    this.tripRequestParams = null;
   }
 
-  public static initWithXML(responseXMLText: string, tripModeType: TripModeType, transportMode: IndividualTransportMode): TripsResponse {
-    const responseXML = new DOMParser().parseFromString(responseXMLText, 'application/xml');
+  public parseXML(responseXMLText: string, callback: (message: TripRequestEvent, isComplete: boolean) => void) {
+    const saxStream = sax.createStream(true, { trim: true });
+    const rootNode = new TreeNode('root', null, {}, [], null);
 
-    const statusText = XPathOJP.queryText('//siri:OJPResponse/siri:ServiceDelivery/siri:Status', responseXML)
-    const serviceStatus = statusText === 'true'
+    let currentNode: TreeNode = rootNode;
+    const stack: TreeNode[] = [rootNode];
+    let mapContextLocations: Record<string, Location> = {};
+    let mapContextSituations: Record<string, PtSituationElement> = {};
 
-    const contextLocations = TripsResponse.parseContextLocations(responseXML);
-    const contextSituations = TripsResponse.parseContextSituations(responseXML);
-    const trips = TripsResponse.parseTrips(responseXML, contextLocations, contextSituations, tripModeType, transportMode);
+    this.hasValidResponse = false;
+    this.trips = [];
+    this.parserTripsNo = 0;
 
-    const tripResponse = new TripsResponse(serviceStatus, responseXMLText, contextLocations, trips)
+    const tripsNo = responseXMLText.split('<ojp:Trip>').length - 1;
+    this.parserTripsNo = tripsNo;
+    callback('TripRequest.TripsNo', false);
 
-    return tripResponse
-  }
+    saxStream.on('opentag', (node) => {
+      const newNode = new TreeNode(node.name, currentNode.name, node.attributes as Record<string, string>, [], null);
 
-  private static parseContextLocations(responseXML: Document): Location[] {
-    let locations: Location[] = [];
-
-    const locationNodes = XPathOJP.queryNodes('//ojp:TripResponseContext/ojp:Places/ojp:Location', responseXML);
-    locationNodes.forEach(locationNode => {
-      const location = Location.initWithOJPContextNode(locationNode)
-      locations.push(location);
+      currentNode.children.push(newNode);
+      stack.push(newNode);
+      currentNode = newNode;
     });
 
-    return locations;
-  }
+    saxStream.on('closetag', (nodeName) => {
+      stack.pop();
 
-  private static parseContextSituations(responseXML: Document): PtSituationElement[] {
-    let situations: PtSituationElement[] = [];
+      if (nodeName === 'ojp:Trip') {
+        const trip = Trip.initFromTreeNode(currentNode);
+        if (trip) {
+          trip.legs.forEach(leg => {
+            leg.patchLocations(mapContextLocations);
+            leg.patchSituations(mapContextSituations);
+          });
 
-    const nodes = XPathOJP.queryNodes('//ojp:TripResponseContext/ojp:Situations/ojp:PtSituation', responseXML);
-    nodes.forEach(node => {
-      const situation = PtSituationElement.initFromSituationNode(node);
-      if (situation) {
-        situations.push(situation);
+          this.trips.push(trip);
+
+          callback('TripRequest.Trip', false);
+        }
       }
+
+      if (nodeName === 'ojp:TripResponseContext') {
+        const placesTreeNode = currentNode.findChildNamed('ojp:Places');
+        if (placesTreeNode) {
+          mapContextLocations = {};
+              
+          const locationTreeNodes = placesTreeNode.findChildrenNamed('ojp:Location');
+          locationTreeNodes.forEach(locationTreeNode => {
+            const location = Location.initWithTreeNode(locationTreeNode);
+            const stopPlaceRef = location.stopPlace?.stopPlaceRef ?? null;
+            if (stopPlaceRef !== null) {
+              mapContextLocations[stopPlaceRef] = location;
+            }
+          });
+        }
+
+        const situationsTreeNode = currentNode.findChildNamed('ojp:Situations');
+        if (situationsTreeNode) {
+          mapContextSituations = {};
+
+          const situationTreeNodes = situationsTreeNode.findChildrenNamed('ojp:PtSituation');
+          situationTreeNodes.forEach(situationTreeNode => {
+            const situation = PtSituationElement.initWithSituationTreeNode(situationTreeNode);
+            if (situation) {
+              mapContextSituations[situation.situationNumber] = situation;
+            }
+          });
+        }
+      }
+
+      currentNode = stack[stack.length - 1];
     });
 
-    return situations;
+    saxStream.on('text', (text) => {
+      currentNode.text = text;
+    });
+
+    saxStream.on('error', (error) => {
+      console.error('SAX parsing error:', error);
+      debugger;
+    });
+
+    saxStream.on('end', () => {
+      this.hasValidResponse = true;
+      TripsResponse.sortTrips(this.trips, this.tripRequestParams);
+
+      callback('TripRequest.DONE', true);
+    });
+
+    saxStream.write(responseXMLText);
+    saxStream.end();
   }
 
-  private static parseTrips(
-    responseXML: Document, 
-    contextLocations: Location[],
-    contextSituations: PtSituationElement[],
-    tripModeType: TripModeType, 
-    transportMode: IndividualTransportMode
-  ): Trip[] {
-    const trips: Trip[] = [];
+  private static sortTrips(trips: Trip[], tripRequestParams: TripsRequestParams | null = null) {
+    if (tripRequestParams === null) {
+      return;
+    }
 
-    const mapContextLocations: Record<string, Location> = {}
-    contextLocations.forEach(location => {
-      const stopPlaceRef = location.stopPlace?.stopPlaceRef
-      if (stopPlaceRef) {
-        mapContextLocations[stopPlaceRef] = location
-      }
-    });
+    const tripModeType = tripRequestParams.modeType;
+    const transportMode = tripRequestParams.transportMode;
 
-    const mapContextSituations: Record<string, PtSituationElement> = {}
-    contextSituations.forEach(situation => {
-      mapContextSituations[situation.situationNumber] = situation
-    });
-
-    const tripResultNodes = XPathOJP.queryNodes('//ojp:TripResult', responseXML);
-    tripResultNodes.forEach(tripResult => {
-      const trip = Trip.initFromTripResultNode(tripResult);
-      if (trip) {
-        trip.legs.forEach(leg => {
-          leg.patchLocations(mapContextLocations);
-          leg.patchSituations(mapContextSituations);
-        })
-        trips.push(trip);
-      }
-    });
-
-    TripsResponse.sortTrips(trips, tripModeType, transportMode)
-
-    return trips
-  }
-
-  private static sortTrips(trips: Trip[], tripModeType: TripModeType, transportMode: IndividualTransportMode) {
     if (tripModeType !== 'monomodal') {
       return;
     }
