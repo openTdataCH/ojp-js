@@ -33,7 +33,7 @@ export class TripsResponse {
     this.trips = [];
     this.parserTripsNo = 0;
 
-    const tripsNo = responseXMLText.split('<ojp:Trip>').length - 1;
+    const tripsNo = responseXMLText.split('<TripResult>').length - 1;
     this.parserTripsNo = tripsNo;
     callback('TripRequest.TripsNo', false);
 
@@ -48,7 +48,7 @@ export class TripsResponse {
     saxStream.on('closetag', (nodeName) => {
       stack.pop();
 
-      if (nodeName === 'ojp:Trip') {
+      if (nodeName === 'Trip' && currentNode.parentName === 'TripResult') {
         const trip = Trip.initFromTreeNode(currentNode);
         if (trip) {
           trip.legs.forEach(leg => {

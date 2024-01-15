@@ -36,7 +36,7 @@ export class LocationInformationResponse {
     saxStream.on('closetag', (nodeName) => {
       stack.pop();
 
-      if (nodeName === 'ojp:Location' && currentNode.parentName === 'ojp:OJPLocationInformationDelivery') {
+      if (nodeName === 'PlaceResult') {
         const location = Location.initWithLocationResultTreeNode(currentNode);
         if (location) {
           this.locations.push(location);
