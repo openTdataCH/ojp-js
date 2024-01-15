@@ -71,10 +71,10 @@ export class TripLeg {
     }
 
     if (!(stopPlaceRef in mapContextLocations)) {
-      console.error('TripLeg.patchLocation - no stopPlaceRef found in mapContextLocations');
-      console.log(location);
-      console.log('location.stopPlace?.stopPlaceRef :' + stopPlaceRef);
-      console.log(mapContextLocations);
+      // console.error('TripLeg.patchLocation - no stopPlaceRef found in mapContextLocations');
+      // console.log(location);
+      // console.log('location.stopPlace?.stopPlaceRef :' + stopPlaceRef);
+      // console.log(mapContextLocations);
       return;
     }
 
