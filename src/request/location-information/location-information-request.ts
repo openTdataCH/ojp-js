@@ -97,15 +97,15 @@ export class LocationInformationRequest extends OJPBaseRequest {
 
     const locationName = this.requestParams.locationName ?? null;
     if (locationName) {
-      initialInputNode.ele('ojp:LocationName', locationName);
       initialInputNode = requestNode.ele('InitialInput')
+      initialInputNode.ele('Name', locationName);
     }
 
     const stopPlaceRef = this.requestParams.stopPlaceRef ?? null;
     if (stopPlaceRef) {
-      requestPlaceRefNode.ele('ojp:LocationName').ele('ojp:Text', '');
       const requestPlaceRefNode = requestNode.ele('PlaceRef');
       requestPlaceRefNode.ele('StopPlaceRef', stopPlaceRef);
+      requestPlaceRefNode.ele('Name').ele('Text', '');
     }
 
     const bboxWest = this.requestParams.bboxWest ?? null;
