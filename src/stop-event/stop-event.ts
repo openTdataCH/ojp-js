@@ -123,7 +123,7 @@ export class StopEvent {
             servicePtMode: servicePtMode,
             tripNumber: this.journeyService.journeyNumber, 
             tripHeading: this.journeyService.destinationStopPlace?.stopPlaceName ?? 'N/A', 
-            tripOperator: this.journeyService.agencyID,
+            tripOperator: this.journeyService.agencyCode,
             mapStationBoardTime: {
                 Arrivals: arrivalTime,
                 Departures: departureTime
