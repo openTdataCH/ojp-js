@@ -23,23 +23,23 @@ export class Trip {
   }
 
   public static initFromTreeNode(treeNode: TreeNode): Trip | null {
-    const tripId = treeNode.findTextFromChildNamed('ojp:TripId');
+    const tripId = treeNode.findTextFromChildNamed('Id');
     if (tripId === null) {
       return null;
     }
 
-    const duration = Duration.initFromDurationText(treeNode.findTextFromChildNamed('ojp:Duration'));
+    const duration = Duration.initFromDurationText(treeNode.findTextFromChildNamed('Duration'));
     if (duration === null) {
       return null;
     }
 
-    const transfersNoS = treeNode.findTextFromChildNamed('ojp:Transfers');
+    const transfersNoS = treeNode.findTextFromChildNamed('Transfers');
     if (transfersNoS === null) {
       return null;
     }
 
-    const tripStartTimeS = treeNode.findTextFromChildNamed('ojp:StartTime');
-    const tripEndTimeS = treeNode.findTextFromChildNamed('ojp:EndTime');
+    const tripStartTimeS = treeNode.findTextFromChildNamed('StartTime');
+    const tripEndTimeS = treeNode.findTextFromChildNamed('EndTime');
     if (tripStartTimeS === null || tripEndTimeS === null) {
       return null;
     }
@@ -50,7 +50,7 @@ export class Trip {
     const legs: TripLeg[] = [];
     let tripLegsTotalDistance = 0;
 
-    const tripLegTreeNodes = treeNode.findChildrenNamed('ojp:TripLeg');
+    const tripLegTreeNodes = treeNode.findChildrenNamed('Leg');
     tripLegTreeNodes.forEach(tripLegTreeNode => {
       const tripLeg = TripLegFactory.initWithTreeNode(tripLegTreeNode);
       if (tripLeg === null) {

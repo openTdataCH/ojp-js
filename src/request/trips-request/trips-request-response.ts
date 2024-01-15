@@ -67,7 +67,7 @@ export class TripsResponse {
         if (placesTreeNode) {
           mapContextLocations = {};
               
-          const locationTreeNodes = placesTreeNode.findChildrenNamed('ojp:Location');
+          const locationTreeNodes = placesTreeNode.findChildrenNamed('Location');
           locationTreeNodes.forEach(locationTreeNode => {
             const location = Location.initWithTreeNode(locationTreeNode);
             const stopPlaceRef = location.stopPlace?.stopPlaceRef ?? null;

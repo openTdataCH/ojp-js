@@ -31,14 +31,14 @@ export class LegTrack {
   }
 
   public static initWithLegTreeNode(treeNode: TreeNode): LegTrack | null {
-    const legTrackTreeNode = treeNode.findChildNamed('ojp:LegTrack');
+    const legTrackTreeNode = treeNode.findChildNamed('LegTrack');
     if (legTrackTreeNode === null) {
       return null;
     }
 
     const trackSections: TrackSection[] = [];
     
-    const trackSectionTreeNodes = legTrackTreeNode.findChildrenNamed('ojp:TrackSection');
+    const trackSectionTreeNodes = legTrackTreeNode.findChildrenNamed('TrackSection');
     trackSectionTreeNodes.forEach(trackSectionTreeNode => {
       const trackSection = TrackSection.initWithTreeNode(trackSectionTreeNode);
       if (trackSection) {
@@ -96,8 +96,8 @@ class TrackSection {
   }
 
   public static initWithTreeNode(treeNode: TreeNode): TrackSection | null {
-    const trackStartTreeNode = treeNode.findChildNamed('ojp:TrackStart');
-    const trackEndTreeNode = treeNode.findChildNamed('ojp:TrackEnd');
+    const trackStartTreeNode = treeNode.findChildNamed('TrackStart');
+    const trackEndTreeNode = treeNode.findChildNamed('TrackEnd');
 
     if (!(trackStartTreeNode && trackEndTreeNode)) {
       return null;
@@ -115,7 +115,7 @@ class TrackSection {
     const trackSection = new TrackSection(fromLocation, toLocation);
     trackSection.duration = Duration.initWithTreeNode(treeNode);
 
-    const lengthS = treeNode.findTextFromChildNamed('ojp:Length');
+    const lengthS = treeNode.findTextFromChildNamed('Length');
     if (lengthS !== null) {
       trackSection.length = parseInt(lengthS, 10);
     }

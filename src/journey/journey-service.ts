@@ -32,16 +32,15 @@ export class JourneyService {
   }
 
   public static initWithTreeNode(treeNode: TreeNode): JourneyService | null {
-    const serviceTreeNode = treeNode.findChildNamed('ojp:Service');
+    const serviceTreeNode = treeNode.findChildNamed('Service');
     if (serviceTreeNode === null) {
       return null;
     }
 
-    const journeyRef = serviceTreeNode.findTextFromChildNamed('ojp:JourneyRef');
+    const journeyRef = serviceTreeNode.findTextFromChildNamed('JourneyRef');
     const ptMode = PublicTransportMode.initWithServiceTreeNode(serviceTreeNode);
 
-    const ojpAgencyId = serviceTreeNode.findTextFromChildNamed('ojp:OperatorRef');
-    const agencyID = ojpAgencyId?.replace('ojp:', '');
+    const agencyCode = serviceTreeNode.findTextFromChildNamed('siri:OperatorRef');
 
     if (!(journeyRef && ptMode && agencyID)) {
       return null;
@@ -56,7 +55,7 @@ export class JourneyService {
     legService.journeyNumber = treeNode.findTextFromChildNamed('ojp:Extension/ojp:PublishedJourneyNumber/ojp:Text');
 
     legService.siriSituationIds = [];
-    const situationFullRefTreeNodes = serviceTreeNode.findChildrenNamed('ojp:SituationFullRef');
+    const situationFullRefTreeNodes = serviceTreeNode.findChildrenNamed('SituationFullRef');
     situationFullRefTreeNodes.forEach(situationFullRefTreeNode => {
       const situationNumber = situationFullRefTreeNode.findTextFromChildNamed('siri:SituationNumber');
       if (situationNumber) {

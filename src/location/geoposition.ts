@@ -31,8 +31,8 @@ export class GeoPosition {
   }
 
   public static initWithLocationTreeNode(locationTreeNode: TreeNode): GeoPosition | null {
-    const longitudeS = locationTreeNode.findTextFromChildNamed('ojp:GeoPosition/siri:Longitude');
-    const latitudeS = locationTreeNode.findTextFromChildNamed('ojp:GeoPosition/siri:Latitude');
+    const longitudeS = locationTreeNode.findTextFromChildNamed('GeoPosition/siri:Longitude');
+    const latitudeS = locationTreeNode.findTextFromChildNamed('GeoPosition/siri:Latitude');
 
     const geoPosition = GeoPosition.initWithStringCoords(longitudeS, latitudeS);
     return geoPosition;

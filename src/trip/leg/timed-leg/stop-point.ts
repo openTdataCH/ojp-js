@@ -39,7 +39,7 @@ export class StopPoint {
 
   public static initWithTreeNode(treeNode: TreeNode, stopPointType: StopPointType): StopPoint | null {
     const stopPointRef = treeNode.findTextFromChildNamed('siri:StopPointRef');
-    const stopPointName = treeNode.findTextFromChildNamed('ojp:StopPointName/ojp:Text');
+    const stopPointName = treeNode.findTextFromChildNamed('StopPointName/Text');
     if (!(stopPointRef && stopPointName)) {
       return null;
     }
@@ -51,16 +51,16 @@ export class StopPoint {
     const departureData = StopPointTime.initWithParentTreeNode(treeNode, 'ServiceDeparture');
     const plannedPlatform = treeNode.findTextFromChildNamed('ojp:PlannedQuay/ojp:Text');
 
-    const sequenceOrderS = treeNode.findTextFromChildNamed('ojp:Order');
+    const sequenceOrderS = treeNode.findTextFromChildNamed('Order');
     const sequenceOrder = sequenceOrderS === null ? null : parseInt(sequenceOrderS, 10);
 
     const stopPoint = new StopPoint(stopPointType, location, arrivalData, departureData, plannedPlatform, sequenceOrder);
-    stopPoint.actualPlatform = treeNode.findTextFromChildNamed('ojp:EstimatedQuay/ojp:Text');
+    stopPoint.actualPlatform = treeNode.findTextFromChildNamed('EstimatedQuay/Text');
 
     stopPoint.siriSituationIds = [];
-    const situationFullRefTreeNodes = treeNode.findChildrenNamed('ojp:SituationFullRef');
+    const situationFullRefTreeNodes = treeNode.findChildrenNamed('SituationFullRef');
     situationFullRefTreeNodes.forEach(situationFullRefTreeNode => {
-      const situationNumber = situationFullRefTreeNode.findTextFromChildNamed('siri:SituationNumber');
+      const situationNumber = situationFullRefTreeNode.findTextFromChildNamed('SituationNumber');
       if (situationNumber) {
         stopPoint.siriSituationIds.push(situationNumber);
       }

@@ -88,24 +88,24 @@ export class LocationInformationRequest extends OJPBaseRequest {
   private buildRequestNode() {
     const now = new Date()
     const dateF = now.toISOString();
-    this.serviceRequestNode.ele('RequestTimestamp', dateF)
+    this.serviceRequestNode.ele('siri:RequestTimestamp', dateF)
 
-    const requestNode = this.serviceRequestNode.ele('ojp:OJPLocationInformationRequest');
-    requestNode.ele('RequestTimestamp', dateF)
+    const requestNode = this.serviceRequestNode.ele('OJPLocationInformationRequest');
+    requestNode.ele('siri:RequestTimestamp', dateF)
 
     let initialInputNode: xmlbuilder.XMLElement | null = null
 
     const locationName = this.requestParams.locationName ?? null;
     if (locationName) {
-      initialInputNode = requestNode.ele('ojp:InitialInput')
       initialInputNode.ele('ojp:LocationName', locationName);
+      initialInputNode = requestNode.ele('InitialInput')
     }
 
     const stopPlaceRef = this.requestParams.stopPlaceRef ?? null;
     if (stopPlaceRef) {
-      const requestPlaceRefNode = requestNode.ele('ojp:PlaceRef');
-      requestPlaceRefNode.ele('ojp:StopPlaceRef', stopPlaceRef);
       requestPlaceRefNode.ele('ojp:LocationName').ele('ojp:Text', '');
+      const requestPlaceRefNode = requestNode.ele('PlaceRef');
+      requestPlaceRefNode.ele('StopPlaceRef', stopPlaceRef);
     }
 
     const bboxWest = this.requestParams.bboxWest ?? null;
@@ -114,38 +114,38 @@ export class LocationInformationRequest extends OJPBaseRequest {
     const bboxSouth = this.requestParams.bboxSouth ?? null;
     if (bboxWest && bboxNorth && bboxEast && bboxSouth) {
       if (initialInputNode === null) {
-        initialInputNode = requestNode.ele('ojp:InitialInput')
+        initialInputNode = requestNode.ele('InitialInput')
       }
 
-      const rectangleNode = initialInputNode.ele('ojp:GeoRestriction').ele('ojp:Rectangle')
+      const rectangleNode = initialInputNode.ele('GeoRestriction').ele('Rectangle')
 
-      const upperLeftNode = rectangleNode.ele('ojp:UpperLeft')
-      upperLeftNode.ele('Longitude', bboxWest.toFixed(6))
-      upperLeftNode.ele('Latitude', bboxNorth.toFixed(6))
+      const upperLeftNode = rectangleNode.ele('UpperLeft')
+      upperLeftNode.ele('siri:Longitude', bboxWest.toFixed(6))
+      upperLeftNode.ele('siri:Latitude', bboxNorth.toFixed(6))
 
-      const lowerRightNode = rectangleNode.ele('ojp:LowerRight')
-      lowerRightNode.ele('Longitude', bboxEast.toFixed(6))
-      lowerRightNode.ele('Latitude', bboxSouth.toFixed(6))
+      const lowerRightNode = rectangleNode.ele('LowerRight')
+      lowerRightNode.ele('siri:Longitude', bboxEast.toFixed(6))
+      lowerRightNode.ele('siri:Latitude', bboxSouth.toFixed(6))
     }
 
-    const restrictionsNode = requestNode.ele('ojp:Restrictions');
+    const restrictionsNode = requestNode.ele('Restrictions');
 
     const numberOfResults = this.requestParams.numberOfResults ?? 10;
-    restrictionsNode.ele('ojp:NumberOfResults', numberOfResults);
+    restrictionsNode.ele('NumberOfResults', numberOfResults);
 
     const geoRestrictionTypeS = this.computeRestrictionType();
     if (geoRestrictionTypeS) {
-      restrictionsNode.ele('ojp:Type', geoRestrictionTypeS);
+      restrictionsNode.ele('Type', geoRestrictionTypeS);
 
       const isPoiRequest = this.requestParams.geoRestrictionType === 'poi_amenity' || this.requestParams.geoRestrictionType === 'poi_all';
       if (isPoiRequest && this.requestParams.poiOsmTags) {
-        const poiCategoryNode = restrictionsNode.ele('ojp:PointOfInterestFilter').ele('ojp:PointOfInterestCategory');
+        const poiCategoryNode = restrictionsNode.ele('PointOfInterestFilter').ele('PointOfInterestCategory');
         const poiOsmTagKey = this.requestParams.geoRestrictionType === 'poi_amenity' ? 'amenity' : 'POI'
         
         this.requestParams.poiOsmTags.forEach(poiOsmTag => {
-          const osmTagNode = poiCategoryNode.ele('ojp:OsmTag')
-          osmTagNode.ele('ojp:Tag', poiOsmTagKey)
-          osmTagNode.ele('ojp:Value', poiOsmTag)
+          const osmTagNode = poiCategoryNode.ele('OsmTag')
+          osmTagNode.ele('Tag', poiOsmTagKey)
+          osmTagNode.ele('Value', poiOsmTag)
         })
       }
     }

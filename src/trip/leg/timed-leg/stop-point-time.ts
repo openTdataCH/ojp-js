@@ -18,8 +18,7 @@ export class StopPointTime {
   }
 
   public static initWithParentTreeNode(parentTreeNode: TreeNode, stopTimeType: string): StopPointTime | null {
-    const stopTimeNodeName = 'ojp:' + stopTimeType;
-    const stopTimeTreeNode = parentTreeNode.findChildNamed(stopTimeNodeName);
+    const stopTimeTreeNode = parentTreeNode.findChildNamed(stopTimeType);
     if (stopTimeTreeNode === null) {
       return null
     }

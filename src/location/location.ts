@@ -63,7 +63,7 @@ export class Location {
 
     const location = Location.initWithTreeNode(locationTreeNode);
 
-    const probabilityS = locationResultTreeNode.findTextFromChildNamed('ojp:Probability');
+    const probabilityS = locationResultTreeNode.findTextFromChildNamed('Probability');
     if (probabilityS) {
       location.probability = parseFloat(probabilityS);
     }
