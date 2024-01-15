@@ -142,10 +142,13 @@ export class TripRequest extends OJPBaseRequest {
 
     const paramsNode = tripRequestNode.ele('ojp:Params');
 
-    const numberOfResults = this.computeNumberOfResultsParam();
-    if (numberOfResults !== null) {
-      const nodeName = this.requestParams.useNumberOfResultsAfter ? 'ojp:NumberOfResultsAfter' : 'ojp:NumberOfResults';
-      paramsNode.ele(nodeName, numberOfResults);
+    const numberOfResults = 5;
+    const nodeName = this.requestParams.useNumberOfResultsAfter ? 'ojp:NumberOfResultsAfter' : 'ojp:NumberOfResults';
+    paramsNode.ele(nodeName, numberOfResults);
+    if (this.requestParams.useNumberOfResultsAfter) {
+      // https://github.com/openTdataCH/ojp-demo-app-src/issues/108
+      // NumberOfResultsAfter and NumberOfResultsBefore are always used together
+      paramsNode.ele('ojp:NumberOfResultsBefore', 0);
     }
 
     paramsNode.ele('ojp:IncludeTrackSections', true)
@@ -196,9 +199,5 @@ export class TripRequest extends OJPBaseRequest {
         });
       }
     }
-  }
-
-  private computeNumberOfResultsParam(): number | null {
-    return 5;
   }
 }
