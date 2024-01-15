@@ -1,6 +1,7 @@
 import * as xmlbuilder from 'xmlbuilder';
 import { RequestErrorData } from './request-error'
 import { StageConfig } from '../types/stage-config';
+import { SDK_VERSION } from '../index'
 
 import fetch from 'cross-fetch';
 
@@ -44,8 +45,8 @@ export class OJPBaseRequest {
     ojpNode.att('xsi:schemaLocation', 'http://www.siri.org.uk/siri ../ojp-xsd-v1.0/OJP.xsd');
     ojpNode.att('version', '1.0');
 
-    serviceRequestNode.ele('RequestorRef', 'OJP SDK v1.0');
     const serviceRequestNode = ojpNode.ele('OJPRequest').ele('siri:ServiceRequest');
+    serviceRequestNode.ele('RequestorRef', 'OJP SDK v' + SDK_VERSION);
 
     return serviceRequestNode;
   }
