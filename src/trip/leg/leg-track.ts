@@ -115,12 +115,17 @@ class TrackSection {
     const trackSection = new TrackSection(fromLocation, toLocation);
     trackSection.duration = Duration.initWithTreeNode(treeNode);
 
+    const linkProjection = LinkProjection.initWithTreeNode(treeNode);
+    trackSection.linkProjection = linkProjection;
+    
     const lengthS = treeNode.findTextFromChildNamed('ojp:Length');
-    if (lengthS !== null) {
+    if (lengthS === null) {
+      if (linkProjection) {
+        trackSection.length = linkProjection.computeLength();
+      }
+    } else {
       trackSection.length = parseInt(lengthS, 10);
     }
-
-    trackSection.linkProjection = LinkProjection.initWithTreeNode(treeNode);
 
     return trackSection;
   }

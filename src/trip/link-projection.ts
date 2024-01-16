@@ -48,6 +48,21 @@ export class LinkProjection {
     return linkProjection;
   }
 
+  public computeLength(): number {
+    let distAB = 0;
+
+    this.coordinates.forEach((geoPositionB, idx) => {
+      if (idx === 0) {
+        return;
+      }
+
+      const geoPositionA = this.coordinates[idx - 1];
+      distAB += geoPositionB.distanceFrom(geoPositionA);
+    });
+
+    return distAB;
+  }
+
   asGeoJSONFeature(): GeoJSON.Feature<GeoJSON.LineString> {
     const feature: GeoJSON.Feature<GeoJSON.LineString> = {
       type: 'Feature',
