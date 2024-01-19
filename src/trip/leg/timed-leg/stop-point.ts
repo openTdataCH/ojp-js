@@ -49,7 +49,7 @@ export class StopPoint {
 
     const arrivalData = StopPointTime.initWithParentTreeNode(treeNode, 'ServiceArrival');
     const departureData = StopPointTime.initWithParentTreeNode(treeNode, 'ServiceDeparture');
-    const plannedPlatform = treeNode.findTextFromChildNamed('ojp:PlannedQuay/ojp:Text');
+    const plannedPlatform = treeNode.findTextFromChildNamed('PlannedQuay/Text');
 
     const sequenceOrderS = treeNode.findTextFromChildNamed('Order');
     const sequenceOrder = sequenceOrderS === null ? null : parseInt(sequenceOrderS, 10);
