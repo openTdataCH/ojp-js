@@ -1,98 +1,100 @@
-import * as xmlbuilder from 'xmlbuilder';
-import { RequestErrorData } from './request-error'
-import { StageConfig } from '../types/stage-config';
-import { SDK_VERSION } from '../index'
-
 import fetch from 'cross-fetch';
 
-export interface RequestData {
-  requestXmlS: string | null
-  requestDatetime: Date | null
-  responseXmlS: string | null
-  responseDatetime: Date | null
-}
+import { StageConfig } from '../types/stage-config';
+import { RequestInfo } from './types/request-info.type';
 
 export class OJPBaseRequest {
-  protected serviceRequestNode: xmlbuilder.XMLElement;
-  protected stageConfig: StageConfig
+  private stageConfig: StageConfig;
+
+  public requestInfo: RequestInfo;
 
   protected logRequests: boolean
-
-  public lastRequestData: RequestData
+  protected mockRequestXML: string | null;
+  protected mockResponseXML: string | null;
 
   constructor(stageConfig: StageConfig) {
-    this.stageConfig = stageConfig
-    this.serviceRequestNode = this.computeServiceRequestNode();
-    this.logRequests = false
-
-    this.lastRequestData = {
-      requestXmlS: null,
-      requestDatetime: null,
-      responseXmlS: null,
-      responseDatetime: null,
-    }
-  }
-
-  private computeServiceRequestNode(): xmlbuilder.XMLElement {
-    const ojpNode = xmlbuilder.create('OJP', {
-      encoding: 'utf-8',
-    });
-
-    ojpNode.att('xmlns', 'http://www.siri.org.uk/siri');
-    ojpNode.att('xmlns:xsi', 'http://www.w3.org/2001/XMLSchema-instance');
-    ojpNode.att('xmlns:xsd', 'http://www.w3.org/2001/XMLSchema');
-    ojpNode.att('xmlns:ojp', 'http://www.vdv.de/ojp');
-    ojpNode.att('xsi:schemaLocation', 'http://www.siri.org.uk/siri ../ojp-xsd-v1.0/OJP.xsd');
-    ojpNode.att('version', '1.0');
-
-    const serviceRequestNode = ojpNode.ele('OJPRequest').ele('ServiceRequest');
-    serviceRequestNode.ele('RequestorRef', 'OJP SDK v' + SDK_VERSION);
-
-    return serviceRequestNode;
-  }
-
-  public fetchOJPResponse(bodyXML_s: string, completion: (responseText: string, error: RequestErrorData | null) => void) {
-    const apiEndpoint = this.stageConfig.apiEndpoint
-    const requestHeaders = {
-      "Content-Type": "text/xml",
-      "Authorization": "Bearer " + this.stageConfig.authBearerKey,
+    this.stageConfig = stageConfig;
+    
+    this.requestInfo = {
+      requestDateTime: null,
+      requestXML: null,
+      responseDateTime: null,
+      responseXML: null,
+      parseDateTime: null,
+      error: null
     };
 
-    const responsePromise = fetch(apiEndpoint, {
-      headers: requestHeaders,
-      body: bodyXML_s,
-      method: 'POST'
-    });
+    this.logRequests = false;
+    this.mockRequestXML = null;
+    this.mockResponseXML = null;
+  }
+
+  protected buildRequestXML(): string {
+    // override
+    return '<override/>';
+  }
+
+  protected fetchOJPResponse(): Promise<RequestInfo> {
+    this.requestInfo.requestDateTime = new Date();
+
+    if (this.mockRequestXML) {
+      this.requestInfo.requestXML = this.mockRequestXML;
+    } else {
+      this.requestInfo.requestXML = this.buildRequestXML();
+    }
+
+    const apiEndpoint = this.stageConfig.apiEndpoint;
 
     if (this.logRequests) {
       console.log('OJP Request: /POST - ' + apiEndpoint);
-      console.log(bodyXML_s);
+      console.log(this.requestInfo.requestXML);
     }
 
-    this.lastRequestData.requestXmlS = bodyXML_s;
-    this.lastRequestData.requestDatetime = new Date();
-    this.lastRequestData.responseXmlS = null;
-    this.lastRequestData.responseDatetime = null;
+    const requestOptions: RequestInit = {
+      method: 'POST',
+      body: this.requestInfo.requestXML,
+      headers: {
+        "Content-Type": "text/xml",
+        "Authorization": "Bearer " + this.stageConfig.authBearerKey,
+      },
+    };
+    
+    const responsePromise = new Promise<RequestInfo>((resolve) => {
+      if (this.mockResponseXML) {
+        this.requestInfo.responseXML = this.mockResponseXML;
+        this.requestInfo.responseDateTime = new Date();
 
-    responsePromise.then(response => {
-      response.text().then(responseText => {
-        this.lastRequestData.responseXmlS = responseText;
-        this.lastRequestData.responseDatetime = new Date();
-
-        completion(responseText, null);
-      }).catch(reason => {
-        const errorData: RequestErrorData = {
-          error: 'ParseTextError',
-          message: reason
-        }
-        completion('', errorData);
-      })
-    }).catch(reason => {
-      const errorData: RequestErrorData = {
-        error: 'FetchError',
-        message: 'API Endpoint Error: ' + reason
+        resolve(this.requestInfo);
+        return;
       }
-      completion('', errorData);
-    })
+
+      fetch(apiEndpoint, requestOptions).then(response => {
+        if (!response.ok) {
+          this.requestInfo.error = {
+            error: 'FetchError',
+            message: 'HTTP ERROR - Status:' + response.status + ' - URL:' + apiEndpoint,
+          };
+          return null;
+        }
+        
+        return response.text();
+      }).then(responseText => {
+        if (responseText !== null) {
+          this.requestInfo.responseXML = responseText;
+          this.requestInfo.responseDateTime = new Date();
+        }
+
+        resolve(this.requestInfo);
+      }).catch(error => {
+        this.requestInfo.error = {
+          error: 'FetchError',
+          message: error,
+        };
+
+        resolve(this.requestInfo);
+      });
+    });
+
+    return responsePromise;
   }
 }
