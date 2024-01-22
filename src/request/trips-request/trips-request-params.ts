@@ -3,6 +3,7 @@ import { IndividualTransportMode } from "../../types/individual-mode.types";
 import { TripModeType } from "../../types/trip-mode-type";
 import { BaseRequestParams } from "../base-request-params";
 import { JourneyPointType } from '../../types/journey-points';
+import { Location } from "../../location/location";
 
 export class TripsRequestParams extends BaseRequestParams {
   public fromTripLocation: TripLocationPoint;
@@ -41,30 +42,30 @@ export class TripsRequestParams extends BaseRequestParams {
     return requestParams;
   }
 
-  public static initWithLocationsAndDate(
-    fromTripLocation: TripLocationPoint | null,
-    toTripLocation: TripLocationPoint | null,
+  public static initWithTripLocationsAndDate(
+    fromTripLocationPoint: TripLocationPoint | null,
+    toTripLocationPoint: TripLocationPoint | null,
     departureDate: Date
   ): TripsRequestParams | null {
-    if (fromTripLocation === null || toTripLocation === null) {
+    if (fromTripLocationPoint === null || toTripLocationPoint === null) {
       return null;
     }
 
     // Both locations should have a geoPosition OR stopPlace
     if (
       !(
-        (fromTripLocation.location.geoPosition ||
-          fromTripLocation.location.stopPlace) &&
-        (toTripLocation.location.geoPosition ||
-          toTripLocation.location.stopPlace)
+        (fromTripLocationPoint.location.geoPosition ||
+          fromTripLocationPoint.location.stopPlace) &&
+        (toTripLocationPoint.location.geoPosition ||
+          toTripLocationPoint.location.stopPlace)
       )
     ) {
       return null;
     }
 
     const tripRequestParams = new TripsRequestParams(
-      fromTripLocation,
-      toTripLocation,
+      fromTripLocationPoint,
+      toTripLocationPoint,
       departureDate
     );
     return tripRequestParams;

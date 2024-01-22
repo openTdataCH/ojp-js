@@ -37,7 +37,7 @@ export class JourneyRequest {
     const fromTripLocation = this.requestParams.tripLocations[journeyIDx]
     const toTripLocation = this.requestParams.tripLocations[journeyIDx + 1]
 
-    const tripRequestParams = TripsRequestParams.initWithLocationsAndDate(fromTripLocation, toTripLocation, tripDepartureDate)
+    const tripRequestParams = TripsRequestParams.initWithTripLocationsAndDate(fromTripLocation, toTripLocation, tripDepartureDate)
     if (tripRequestParams === null) {
       console.error('JourneyRequest - TripsRequestParams null for trip idx ' + journeyIDx)
       return

@@ -4,6 +4,7 @@ import { DEFAULT_STAGE, StageConfig } from '../../types/stage-config';
 import { TripRequest_Response, TripRequest_Callback } from '../types/trip-request.type';
 import { TripRequestParser } from './trip-request-parser';
 import { Trip, TripContinousLeg, TripLocationPoint } from '../../trip';
+import { Location } from '../../location/location';
 
 export class TripRequest extends OJPBaseRequest {
   private requestParams: TripsRequestParams
@@ -27,6 +28,24 @@ export class TripRequest extends OJPBaseRequest {
     const request = new TripRequest(DEFAULT_STAGE, emptyRequestParams);
     request.mockRequestXML = mockText;
     
+    return request;
+  }
+
+  public static initWithLocationsAndDate(stageConfig: StageConfig, fromLocation: Location, toLocation: Location, departureDate: Date) {
+    const requestParams = TripsRequestParams.initWithLocationsAndDate(fromLocation, toLocation, departureDate);
+    if (requestParams === null) {
+      return null;
+    }
+    const request = new TripRequest(stageConfig, requestParams);
+    return request;
+  }
+
+  public static initWithTripLocationsAndDate(stageConfig: StageConfig, fromTripLocation: TripLocationPoint | null, toTripLocation: TripLocationPoint | null, departureDate: Date) {
+    const requestParams = TripsRequestParams.initWithTripLocationsAndDate(fromTripLocation, toTripLocation, departureDate);
+    if (requestParams === null) {
+      return null;
+    }
+    const request = new TripRequest(stageConfig, requestParams);
     return request;
   }
 
