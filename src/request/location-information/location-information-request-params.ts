@@ -76,6 +76,8 @@ export class LocationInformationRequestParams extends BaseRequestParams {
   }
 
   protected buildRequestNode(): void {
+    super.buildRequestNode();
+
     const now = new Date();
     const dateF = now.toISOString();
     this.serviceRequestNode.ele("siri:RequestTimestamp", dateF);

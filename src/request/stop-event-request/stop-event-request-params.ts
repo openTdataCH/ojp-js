@@ -31,6 +31,8 @@ export class StopEventRequestParams extends BaseRequestParams {
     }
 
     protected buildRequestNode(): void {
+        super.buildRequestNode();
+
         const dateNowF = new Date().toISOString();
         const dateF = this.depArrTime.toISOString();
         
