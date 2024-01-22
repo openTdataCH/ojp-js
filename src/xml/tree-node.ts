@@ -1,14 +1,16 @@
+import * as sax from 'sax';
+
 export class TreeNode {
   public name: string;
   public parentName: string | null;
-  public attributes: Record<string, string>;
+  public attributes: { [key: string]: sax.QualifiedAttribute };
   public children: TreeNode[];
   public text: string | null;
 
   constructor(
     name: string,
     parentName: string | null,
-    attributes: Record<string, string>,
+    attributes: { [key: string]: sax.QualifiedAttribute },
     children: TreeNode[],
     text: string | null
   ) {
