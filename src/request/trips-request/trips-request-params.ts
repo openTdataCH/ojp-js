@@ -42,6 +42,19 @@ export class TripsRequestParams extends BaseRequestParams {
     return requestParams;
   }
 
+  public static initWithLocationsAndDate(fromLocation: Location | null, toLocation: Location | null,
+    departureDate: Date): TripsRequestParams | null {
+    if (fromLocation === null || toLocation === null) {
+      return null;
+    }
+
+    const fromTripLocationPoint = new TripLocationPoint(fromLocation);
+    const toTripLocationPoint = new TripLocationPoint(toLocation);
+
+    const requestParams = TripsRequestParams.initWithTripLocationsAndDate(fromTripLocationPoint, toTripLocationPoint, departureDate);
+    return requestParams;
+  }
+
   public static initWithTripLocationsAndDate(
     fromTripLocationPoint: TripLocationPoint | null,
     toTripLocationPoint: TripLocationPoint | null,
