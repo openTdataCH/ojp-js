@@ -1,40 +1,38 @@
-import * as xmlbuilder from 'xmlbuilder';
-
-import { StageConfig } from '../../types/stage-config'
-import { Location } from '../../location/location';
+import { DEFAULT_STAGE, StageConfig } from '../../types/stage-config'
 import { GeoRestrictionPoiOSMTag, GeoRestrictionType } from '../../types/geo-restriction.type';
 import { OJPBaseRequest } from '../base-request'
-import { LocationInformationRequestParams } from './location-information-request-params.interface'
-import { LocationInformationResponse } from './location-information-response';
+import { LocationInformationParser } from './location-information-parser';
+import { LIR_Response } from '../types/location-information-request.type';
+import { Location } from '../../location/location';
+import { LocationInformationRequestParams } from './location-information-request-params';
 
 export class LocationInformationRequest extends OJPBaseRequest {
-  public requestParams: LocationInformationRequestParams
+  private requestParams: LocationInformationRequestParams;
 
   constructor(stageConfig: StageConfig, requestParams: LocationInformationRequestParams) {
     super(stageConfig);
     this.requestParams = requestParams;
+    this.requestInfo.requestXML = this.buildRequestXML();
+  }
+
+  public static initWithResponseMock(mockText: string) {
+    const emptyRequestParams = new LocationInformationRequestParams();
+    const request = new LocationInformationRequest(DEFAULT_STAGE, emptyRequestParams);
+    request.mockResponseXML = mockText;
+    
+    return request;
   }
 
   public static initWithLocationName(stageConfig: StageConfig, locationName: string, geoRestrictionType: GeoRestrictionType | null = null): LocationInformationRequest {
-    const requestParams = <LocationInformationRequestParams>{
-      locationName: locationName
-    }
-
-    if (geoRestrictionType !== null) {
-      requestParams.geoRestrictionType = geoRestrictionType;
-    }
-
-    const locationInformationRequest = new LocationInformationRequest(stageConfig, requestParams);
-    return locationInformationRequest
+    const requestParams = LocationInformationRequestParams.initWithLocationName(locationName, geoRestrictionType);
+    const request = new LocationInformationRequest(stageConfig, requestParams);
+    return request;
   }
 
   public static initWithStopPlaceRef(stageConfig: StageConfig, stopPlaceRef: string): LocationInformationRequest {
-    const requestParams = <LocationInformationRequestParams>{
-      stopPlaceRef: stopPlaceRef
-    }
-
-    const locationInformationRequest = new LocationInformationRequest(stageConfig, requestParams);
-    return locationInformationRequest
+    const requestParams = LocationInformationRequestParams.initWithStopPlaceRef(stopPlaceRef);
+    const request = new LocationInformationRequest(stageConfig, requestParams);
+    return request;
   }
 
   public static initWithBBOXAndType(
@@ -47,126 +45,55 @@ export class LocationInformationRequest extends OJPBaseRequest {
     limit: number = 1000,
     poiOsmTags: GeoRestrictionPoiOSMTag[] | null = null
   ): LocationInformationRequest {
-    const requestParams = <LocationInformationRequestParams>{
-      bboxWest: bboxWest,
-      bboxNorth: bboxNorth,
-      bboxEast: bboxEast,
-      bboxSouth: bboxSouth,
-      numberOfResults: limit,
-      geoRestrictionType: geoRestrictionType,
-      poiOsmTags: poiOsmTags
-    }
-
-    const locationInformationRequest = new LocationInformationRequest(stageConfig, requestParams);
-    return locationInformationRequest
+    const requestParams = LocationInformationRequestParams.initWithBBOXAndType(bboxWest, bboxNorth, bboxEast, bboxSouth, geoRestrictionType, limit, poiOsmTags);
+    const request = new LocationInformationRequest(stageConfig, requestParams);
+    return request;
   }
 
-  public fetchResponse(): Promise<Location[]> {
-    this.buildRequestNode();
-    const bodyXML_s = this.serviceRequestNode.end({
-      pretty: true
-    });
-
-    const loadingPromise = new Promise<Location[]>((resolve, reject) => {
-      super.fetchOJPResponse(bodyXML_s, (responseText, errorData) => {
-        const locationInformationResponse = new LocationInformationResponse();
-        locationInformationResponse.parseXML(responseText, (locations, message) => {
-          if (message === 'LocationInformation.DONE') {
-            resolve(locations);
-          } else {
-            console.error('LocationInformationRequest.fetchResponse');
-            console.log(message);
-            reject(errorData);
-          }
-        });
-      });
-    });
-
-    return loadingPromise;
+  protected buildRequestXML(): string {
+    return this.requestParams.buildRequestXML();
   }
 
-  private buildRequestNode() {
-    const now = new Date()
-    const dateF = now.toISOString();
-    this.serviceRequestNode.ele('siri:RequestTimestamp', dateF)
+  public async fetchResponse(): Promise<LIR_Response> {
+    await this.fetchOJPResponse();
 
-    const requestNode = this.serviceRequestNode.ele('OJPLocationInformationRequest');
-    requestNode.ele('siri:RequestTimestamp', dateF)
-
-    let initialInputNode: xmlbuilder.XMLElement | null = null
-
-    const locationName = this.requestParams.locationName ?? null;
-    if (locationName) {
-      initialInputNode = requestNode.ele('InitialInput')
-      initialInputNode.ele('Name', locationName);
-    }
-
-    const stopPlaceRef = this.requestParams.stopPlaceRef ?? null;
-    if (stopPlaceRef) {
-      const requestPlaceRefNode = requestNode.ele('PlaceRef');
-      requestPlaceRefNode.ele('StopPlaceRef', stopPlaceRef);
-      requestPlaceRefNode.ele('Name').ele('Text', '');
-    }
-
-    const bboxWest = this.requestParams.bboxWest ?? null;
-    const bboxNorth = this.requestParams.bboxNorth ?? null;
-    const bboxEast = this.requestParams.bboxEast ?? null;
-    const bboxSouth = this.requestParams.bboxSouth ?? null;
-    if (bboxWest && bboxNorth && bboxEast && bboxSouth) {
-      if (initialInputNode === null) {
-        initialInputNode = requestNode.ele('InitialInput')
+    const promise = new Promise<LIR_Response>((resolve) => {
+      const response: LIR_Response = {
+        locations: [],
+        message: null,
+      }
+      
+      if (this.requestInfo.error !== null || this.requestInfo.responseXML === null) {
+        response.message = 'ERROR';
+        resolve(response);
+        return;
       }
 
-      const rectangleNode = initialInputNode.ele('GeoRestriction').ele('Rectangle')
+      const parser = new LocationInformationParser();
+      parser.callback = ({ locations, message }) => {
+        response.locations = locations;
+        response.message = message;
 
-      const upperLeftNode = rectangleNode.ele('UpperLeft')
-      upperLeftNode.ele('siri:Longitude', bboxWest.toFixed(6))
-      upperLeftNode.ele('siri:Latitude', bboxNorth.toFixed(6))
+        if (message === 'LocationInformation.DONE') {
+          this.requestInfo.parseDateTime = new Date();
+        }
 
-      const lowerRightNode = rectangleNode.ele('LowerRight')
-      lowerRightNode.ele('siri:Longitude', bboxEast.toFixed(6))
-      lowerRightNode.ele('siri:Latitude', bboxSouth.toFixed(6))
-    }
+        resolve(response);
+      };
+      parser.parseXML(this.requestInfo.responseXML);
+    });
 
-    const restrictionsNode = requestNode.ele('Restrictions');
-
-    const numberOfResults = this.requestParams.numberOfResults ?? 10;
-    restrictionsNode.ele('NumberOfResults', numberOfResults);
-
-    const geoRestrictionTypeS = this.computeRestrictionType();
-    if (geoRestrictionTypeS) {
-      restrictionsNode.ele('Type', geoRestrictionTypeS);
-
-      const isPoiRequest = this.requestParams.geoRestrictionType === 'poi_amenity' || this.requestParams.geoRestrictionType === 'poi_all';
-      if (isPoiRequest && this.requestParams.poiOsmTags) {
-        const poiCategoryNode = restrictionsNode.ele('PointOfInterestFilter').ele('PointOfInterestCategory');
-        const poiOsmTagKey = this.requestParams.geoRestrictionType === 'poi_amenity' ? 'amenity' : 'POI'
-        
-        this.requestParams.poiOsmTags.forEach(poiOsmTag => {
-          const osmTagNode = poiCategoryNode.ele('OsmTag')
-          osmTagNode.ele('Tag', poiOsmTagKey)
-          osmTagNode.ele('Value', poiOsmTag)
-        })
-      }
-    }
-
-    const extensionsNode = requestNode.ele('Extensions');
-    extensionsNode.ele('ParamsExtension').ele('PrivateModeFilter').ele('Exclude', 'false');
+    return promise;
   }
 
-  private computeRestrictionType(): string | null {
-    if (this.requestParams.geoRestrictionType === 'stop') {
-      return 'stop';
-    }
-
-    if (this.requestParams.geoRestrictionType === 'poi_all') {
-      return 'poi'
-    }
-
-    if (this.requestParams.geoRestrictionType === 'poi_amenity') {
-      return 'poi'
-    }
-
-    return this.requestParams.geoRestrictionType;
+  public async fetchLocations(): Promise<Location[]> {
+    const apiPromise = await this.fetchResponse();
+    const promise = new Promise<Location[]>((resolve) => {
+      if (apiPromise.message === 'LocationInformation.DONE') {
+        resolve(apiPromise.locations);
+      }
+    });
+    
+    return promise;
   }
 }
