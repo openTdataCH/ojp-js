@@ -30,7 +30,7 @@ export class BaseRequestParams {
   }
 
   protected buildRequestNode() {
-    // override
+    this.serviceRequestNode = this.computeBaseServiceRequestNode();
   }
 
   public buildRequestXML(): string {
