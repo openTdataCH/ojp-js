@@ -44,8 +44,8 @@ export class TripTimedLeg extends TripLeg {
       return null;
     }
 
-    const fromStopTreeNode = treeNode.findChildNamed('ojp:LegBoard');
-    const toStopTreeNode = treeNode.findChildNamed('ojp:LegAlight');
+    const fromStopTreeNode = treeNode.findChildNamed('LegBoard');
+    const toStopTreeNode = treeNode.findChildNamed('LegAlight');
     if (fromStopTreeNode === null || toStopTreeNode === null) {
       return null;
     }
@@ -57,7 +57,7 @@ export class TripTimedLeg extends TripLeg {
     }
 
     const intermediateStopPoints: StopPoint[] = []
-    const intermediaryStopTreeNodes: TreeNode[] = treeNode.findChildrenNamed('ojp:LegIntermediates');
+    const intermediaryStopTreeNodes: TreeNode[] = treeNode.findChildrenNamed('LegIntermediates');
     intermediaryStopTreeNodes.forEach(intermediaryStopTreeNode => {
       const stopPoint = StopPoint.initWithTreeNode(intermediaryStopTreeNode, 'Intermediate');
       if (stopPoint) {

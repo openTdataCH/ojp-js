@@ -5,13 +5,13 @@ import { TripTimedLeg } from "./trip-timed-leg";
 
 export class TripLegFactory {
   public static initWithTreeNode(treeNode: TreeNode): TripContinousLeg | TripTimedLeg | null {
-    const legID_string = treeNode.findTextFromChildNamed('ojp:LegId');
+    const legID_string = treeNode.findTextFromChildNamed('LegId');
     if (legID_string === null) {
       return null;
     }
     const legID = parseInt(legID_string, 10);
 
-    const transferLegTreeNode = treeNode.findChildNamed('ojp:TransferLeg');
+    const transferLegTreeNode = treeNode.findChildNamed('TransferLeg');
     if (transferLegTreeNode) {
       const transferLeg = TripContinousLeg.initWithTreeNode(legID, transferLegTreeNode, 'TransferLeg');
       if (transferLeg) {
@@ -19,7 +19,7 @@ export class TripLegFactory {
       }
     }
 
-    const timedLegTreeNode = treeNode.findChildNamed('ojp:TimedLeg');
+    const timedLegTreeNode = treeNode.findChildNamed('TimedLeg');
     if (timedLegTreeNode) {
       const timedLeg = TripTimedLeg.initWithTreeNode(legID, timedLegTreeNode);
       if (timedLeg) {
@@ -27,7 +27,7 @@ export class TripLegFactory {
       }
     }
 
-    const tripContinousLegTreeNode = treeNode.findChildNamed('ojp:ContinuousLeg');
+    const tripContinousLegTreeNode = treeNode.findChildNamed('ContinuousLeg');
     if (tripContinousLegTreeNode) {
       const tripContinousLeg = TripContinousLeg.initWithTreeNode(legID, tripContinousLegTreeNode, 'ContinousLeg');
       if (tripContinousLeg) {

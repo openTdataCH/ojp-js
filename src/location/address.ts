@@ -12,18 +12,18 @@ export class Address {
   }
 
   public static initWithLocationTreeNode(locationTreeNode: TreeNode): Address | null {
-    const addressTreeNode = locationTreeNode.findChildNamed('ojp:Address');
+    const addressTreeNode = locationTreeNode.findChildNamed('Address');
     if (addressTreeNode === null) {
       return null;
     }
 
-    const addressCode = addressTreeNode.findTextFromChildNamed('ojp:AddressCode');
+    const addressCode = addressTreeNode.findTextFromChildNamed('AddressCode');
     if (addressCode === null) {
       return null
     }
 
-    const addressName = addressTreeNode.findTextFromChildNamed('ojp:AddressName/ojp:Text')
-    const topographicPlaceRef = addressTreeNode.findTextFromChildNamed('ojp:TopographicPlaceRef')
+    const addressName = addressTreeNode.findTextFromChildNamed('AddressName/Text')
+    const topographicPlaceRef = addressTreeNode.findTextFromChildNamed('TopographicPlaceRef')
 
     const address = new Address(addressCode, addressName, topographicPlaceRef);
 
