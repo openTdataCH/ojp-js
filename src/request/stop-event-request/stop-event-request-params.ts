@@ -1,9 +1,8 @@
-import * as xmlbuilder from 'xmlbuilder';
-
 import { GeoPosition } from "../../location/geoposition"
 import { StopEventType } from "../../types/stop-event-type"
+import { BaseRequestParams } from '../base-request-params';
 
-export class StopEventRequestParams {
+export class StopEventRequestParams extends BaseRequestParams {
     public stopPlaceRef: string | null
     public geoPosition: GeoPosition | null
     public depArrTime: Date
@@ -14,6 +13,8 @@ export class StopEventRequestParams {
     public includeRealtimeData: boolean
 
     constructor(stopPlaceRef: string | null, geoPosition: GeoPosition | null, stopEventType: StopEventType, stopEventDate: Date) {
+        super();
+
         this.stopPlaceRef = stopPlaceRef;
         this.geoPosition = geoPosition;
         this.depArrTime = stopEventDate;
@@ -24,39 +25,38 @@ export class StopEventRequestParams {
         this.includeRealtimeData = true;
     }
 
-    public buildRequestXML(contextEl: xmlbuilder.XMLElement): string {
+    public static Empty(): StopEventRequestParams {
+        const stopEventRequestParams = new StopEventRequestParams(null, null, 'departure', new Date());
+        return stopEventRequestParams;
+    }
+
+    protected buildRequestNode(): void {
         const dateNowF = new Date().toISOString();
         const dateF = this.depArrTime.toISOString();
         
-        contextEl.ele('RequestTimestamp', dateNowF);
+        this.serviceRequestNode.ele('siri:RequestTimestamp', dateNowF);
 
-        const requestNode = contextEl.ele('ojp:OJPStopEventRequest');
-        requestNode.ele('RequestTimestamp', dateNowF);
+        const requestNode = this.serviceRequestNode.ele('OJPStopEventRequest');
+        requestNode.ele('siri:RequestTimestamp', dateNowF);
 
-        const locationNode = requestNode.ele('ojp:Location');
+        const locationNode = requestNode.ele('Location');
 
         if (this.stopPlaceRef) {
-            const requestPlaceRefNode = locationNode.ele('ojp:PlaceRef');
-            requestPlaceRefNode.ele('ojp:StopPlaceRef', this.stopPlaceRef);
-            requestPlaceRefNode.ele('ojp:LocationName').ele('ojp:Text', '');
+            const requestPlaceRefNode = locationNode.ele('PlaceRef');
+            requestPlaceRefNode.ele('StopPlaceRef', this.stopPlaceRef);
+            requestPlaceRefNode.ele('LocationName').ele('Text', '');
         }
 
-        locationNode.ele('ojp:DepArrTime', dateF);
+        locationNode.ele('DepArrTime', dateF);
 
-        const requestParamsNode = requestNode.ele('ojp:Params');
-        requestParamsNode.ele('ojp:NumberOfResults', this.numberOfResults);
-        requestParamsNode.ele('ojp:StopEventType', this.stopEventType);
-        requestParamsNode.ele('ojp:IncludePreviousCalls', this.includePreviousCalls);
-        requestParamsNode.ele('ojp:IncludeOnwardCalls', this.includeOnwardCalls);
-        requestParamsNode.ele('ojp:IncludeRealtimeData', this.includeRealtimeData);
+        const requestParamsNode = requestNode.ele('Params');
+        requestParamsNode.ele('NumberOfResults', this.numberOfResults);
+        requestParamsNode.ele('StopEventType', this.stopEventType);
+        requestParamsNode.ele('IncludePreviousCalls', this.includePreviousCalls);
+        requestParamsNode.ele('IncludeOnwardCalls', this.includeOnwardCalls);
+        requestParamsNode.ele('IncludeRealtimeData', this.includeRealtimeData);
 
         const extensionsNode = requestNode.ele('Extensions');
         extensionsNode.ele('ParamsExtension').ele('PrivateModeFilter').ele('Exclude', 'false');
-
-        const bodyXML_s = contextEl.end({
-            pretty: true
-        });
-
-        return bodyXML_s;
     }
 }
