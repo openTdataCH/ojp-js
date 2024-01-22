@@ -1,24 +1,28 @@
 export const SDK_VERSION = '0.9.24';
 
 export * from './config/map-colors'
+
 export * from './helpers/date-helpers'
 export * from './helpers/mapbox-layer-helpers'
 export * from './helpers/xml-helpers'
-export * from './request/journey-request/journey-request-response'
+
 export * from './location/location'
 export * from './location/geoposition-bbox'
 export * from './location/geoposition'
+
 export * from './shared/duration'
+
 export * from './situation/situation-element'
+
 export * from './stop-event/stop-event'
-export * from './request/stop-event-request/stop-event-response'
+
 export * from './request/index'
+
 export * from './trip/index'
-export * from './request/trips-request/trips-request-response'
+
 export * from './types/geo-restriction.type'
 export * from './types/individual-mode.types'
 export * from './types/journey-points'
 export * from './types/stage-config'
 export * from './types/stop-event-type'
 export * from './types/trip-mode-type'
-export * from './xml/tree-node'
