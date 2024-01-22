@@ -15,7 +15,7 @@ export class BaseRequestParams {
     });
 
     ojpNode.att("xmlns", "http://www.vdv.de/ojp");
-    ojpNode.att("xmlns:siri", "http:/2/www.siri.org.uk/siri");
+    ojpNode.att("xmlns:siri", "http://www.siri.org.uk/siri");
     ojpNode.att("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
     ojpNode.att("xmlns:xsd", "http://www.w3.org/2001/XMLSchema");
     ojpNode.att("xsi:schemaLocation", "http://www.vdv.de/ojp");
