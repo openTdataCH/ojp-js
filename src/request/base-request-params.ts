@@ -1,5 +1,4 @@
 import * as xmlbuilder from "xmlbuilder";
-import { SDK_VERSION } from "../index";
 
 export class BaseRequestParams {
   protected serviceRequestNode: xmlbuilder.XMLElement;
@@ -24,7 +23,6 @@ export class BaseRequestParams {
     const serviceRequestNode = ojpNode
       .ele("OJPRequest")
       .ele("siri:ServiceRequest");
-    serviceRequestNode.ele("siri:RequestorRef", "OJP SDK v" + SDK_VERSION);
 
     return serviceRequestNode;
   }
