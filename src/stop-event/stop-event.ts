@@ -48,12 +48,12 @@ export class StopEvent {
     }
 
     public static initWithTreeNode(treeNode: TreeNode): StopEvent | null {
-        const stopEventTreeNode = treeNode.findChildNamed('ojp:StopEvent');
+        const stopEventTreeNode = treeNode.findChildNamed('StopEvent');
         if (stopEventTreeNode === null) {
             return null;
         }
 
-        const currentStopTreeNode = stopEventTreeNode.findChildNamed('ojp:ThisCall/ojp:CallAtStop');
+        const currentStopTreeNode = stopEventTreeNode.findChildNamed('ThisCall/CallAtStop');
         if (currentStopTreeNode === null) {
             return null;
         }
@@ -75,9 +75,9 @@ export class StopEvent {
             const is_previous = tripNodeType === 'PreviousCall';
             const stopPointsRef = is_previous ? stopEvent.prevStopPoints : stopEvent.nextStopPoints;
 
-            const groupStopsTreeNodes = stopEventTreeNode.findChildrenNamed('ojp:' + tripNodeType);
+            const groupStopsTreeNodes = stopEventTreeNode.findChildrenNamed(tripNodeType);
             groupStopsTreeNodes.forEach(groupStopsTreeNode => {
-                const tripStopPointNode = groupStopsTreeNode.findChildNamed('ojp:CallAtStop');
+                const tripStopPointNode = groupStopsTreeNode.findChildNamed('CallAtStop');
                 if (tripStopPointNode === null) {
                     return;
                 }

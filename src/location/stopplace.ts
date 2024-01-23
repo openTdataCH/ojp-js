@@ -49,8 +49,8 @@ export class StopPlace {
   }
 
   public static initWithServiceTreeNode(treeNode: TreeNode, pointType: 'Origin' | 'Destination'): StopPlace | null {
-    const stopPlaceRef = treeNode.findTextFromChildNamed('ojp:' + pointType + 'StopPointRef');
-    const stopPlaceText = treeNode.findTextFromChildNamed('ojp:' + pointType + 'Text/ojp:Text');
+    const stopPlaceRef = treeNode.findTextFromChildNamed(pointType + 'StopPointRef');
+    const stopPlaceText = treeNode.findTextFromChildNamed(pointType + 'Text/Text');
 
     if (!(stopPlaceRef && stopPlaceText)) {
       return null;

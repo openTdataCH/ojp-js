@@ -15,14 +15,14 @@ export class LinkProjection {
   }
 
   public static initWithTreeNode(treeNode: TreeNode): LinkProjection | null {
-    const linkProjectionTreeNode = treeNode.findChildNamed('ojp:LinkProjection');
+    const linkProjectionTreeNode = treeNode.findChildNamed('LinkProjection');
     if (linkProjectionTreeNode === null) {
       return null;
     }
 
     const coordinates: GeoPosition[] = [];
 
-    const positionTreeNodes = linkProjectionTreeNode.findChildrenNamed('ojp:Position');
+    const positionTreeNodes = linkProjectionTreeNode.findChildrenNamed('Position');
     positionTreeNodes.forEach(positionTreeNode => {
       const longitudeS = positionTreeNode.findTextFromChildNamed('siri:Longitude');
       const latitudeS = positionTreeNode.findTextFromChildNamed('siri:Latitude');

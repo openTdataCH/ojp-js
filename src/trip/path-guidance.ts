@@ -9,14 +9,14 @@ export class PathGuidance {
   }
 
   public static initWithTreeNode(treeNode: TreeNode): PathGuidance | null {
-    const pathGuidanceTreeNode = treeNode.findChildNamed('ojp:PathGuidance');
+    const pathGuidanceTreeNode = treeNode.findChildNamed('PathGuidance');
     if (pathGuidanceTreeNode === null) {
       return null;
     }
 
     let sections: PathGuidanceSection[] = [];
 
-    const sectionTreeNodes = pathGuidanceTreeNode.findChildrenNamed('ojp:PathGuidanceSection');
+    const sectionTreeNodes = pathGuidanceTreeNode.findChildrenNamed('PathGuidanceSection');
     sectionTreeNodes.forEach(sectionTreeNode => {
       const pathGuidanceSection = PathGuidanceSection.initWithSectionTreeNode(sectionTreeNode);
       if (pathGuidanceSection) {
@@ -43,14 +43,14 @@ class PathGuidanceSection {
 
   public static initWithSectionTreeNode(sectionTreeNode: TreeNode): PathGuidanceSection {
     const pathGuidanceSection = new PathGuidanceSection();
-    const trackSectionTreeNode = sectionTreeNode.findChildNamed('ojp:TrackSection');
+    const trackSectionTreeNode = sectionTreeNode.findChildNamed('TrackSection');
 
     if (trackSectionTreeNode) {
       pathGuidanceSection.trackSection = TrackSection.initWithTrackSectionTreeNode(trackSectionTreeNode);
     }
 
-    pathGuidanceSection.guidanceAdvice = sectionTreeNode.findTextFromChildNamed('ojp:GuidanceAdvice');
-    pathGuidanceSection.turnAction = sectionTreeNode.findTextFromChildNamed('ojp:TurnAction');
+    pathGuidanceSection.guidanceAdvice = sectionTreeNode.findTextFromChildNamed('GuidanceAdvice');
+    pathGuidanceSection.turnAction = sectionTreeNode.findTextFromChildNamed('TurnAction');
 
     return pathGuidanceSection;
   }
@@ -73,10 +73,10 @@ class TrackSection {
     const trackSection = new TrackSection();
 
     trackSection.linkProjection = LinkProjection.initWithTreeNode(trackSectionTreeNode);
-    trackSection.roadName = trackSectionTreeNode.findTextFromChildNamed('ojp:RoadName');
-    trackSection.duration = trackSectionTreeNode.findTextFromChildNamed('ojp:Duration');
+    trackSection.roadName = trackSectionTreeNode.findTextFromChildNamed('RoadName');
+    trackSection.duration = trackSectionTreeNode.findTextFromChildNamed('Duration');
 
-    const lengthS = trackSectionTreeNode.findTextFromChildNamed('ojp:Length');
+    const lengthS = trackSectionTreeNode.findTextFromChildNamed('Length');
     if (lengthS !== null) {
       trackSection.length = parseInt(lengthS, 10);
     }

@@ -73,7 +73,7 @@ export class Trip {
 
     let distanceMeters = 0;
     let distanceSource: DistanceSource = 'trip';
-    const distanceS = treeNode.findTextFromChildNamed('ojp:Distance');
+    const distanceS = treeNode.findTextFromChildNamed('Distance');
     if (distanceS === null) {
       distanceSource = 'legs-sum';
       distanceMeters = tripLegsTotalDistance;

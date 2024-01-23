@@ -24,13 +24,13 @@ export class PointOfInterest {
   }
 
   public static initWithLocationTreeNode(locationTreeNode: TreeNode): PointOfInterest | null {
-    const treeNode = locationTreeNode.findChildNamed('ojp:PointOfInterest');
+    const treeNode = locationTreeNode.findChildNamed('PointOfInterest');
     if (treeNode === null) {
       return null;
     }
     
-    const code = treeNode.findTextFromChildNamed('ojp:PointOfInterestCode');
-    const name = treeNode.findTextFromChildNamed('ojp:PointOfInterestName/ojp:Text');
+    const code = treeNode.findTextFromChildNamed('PointOfInterestCode');
+    const name = treeNode.findTextFromChildNamed('PointOfInterestName/Text');
 
     if (!(code && name)) {
       return null;
@@ -40,14 +40,14 @@ export class PointOfInterest {
     let category: GeoRestrictionPoiOSMTag | null = null;
     let subCategory: string | null = null;
 
-    const categoryTreeNodes = treeNode.findChildrenNamed('ojp:PointOfInterestCategory');
+    const categoryTreeNodes = treeNode.findChildrenNamed('PointOfInterestCategory');
     categoryTreeNodes.forEach(categoryTreeNode => {
-      const tagValue = categoryTreeNode.findTextFromChildNamed('ojp:OsmTag/ojp:Value');
+      const tagValue = categoryTreeNode.findTextFromChildNamed('OsmTag/Value');
       if (tagValue) {
         categoryTags.push(tagValue);
       }
 
-      const tagKey = categoryTreeNode.findTextFromChildNamed('ojp:OsmTag/ojp:Tag');
+      const tagKey = categoryTreeNode.findTextFromChildNamed('OsmTag/Tag');
       if (tagKey === 'POI_0' || tagKey === 'amenity') {
         category = tagValue as GeoRestrictionPoiOSMTag;
       }

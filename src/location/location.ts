@@ -68,7 +68,7 @@ export class Location {
       location.probability = parseFloat(probabilityS);
     }
 
-    location.originSystem = locationResultTreeNode.findTextFromChildNamed('ojp:OriginSystem');
+    location.originSystem = locationResultTreeNode.findTextFromChildNamed('OriginSystem');
 
     return location;
   }
@@ -116,7 +116,7 @@ export class Location {
     //         <ojp:num_docks_available>0</ojp:num_docks_available>
     //     </ojp:LocationExtensionStructure>
     // </ojp:Extension>
-    const extensionAttributesTreeNode = treeNode.findChildNamed('ojp:Extension/ojp:LocationExtensionStructure');
+    const extensionAttributesTreeNode = treeNode.findChildNamed('siri:Extension/LocationExtensionStructure');
     if (extensionAttributesTreeNode) {
       extensionAttributesTreeNode.children.forEach(attributeTreeNode => {
         const nodeNameParts = attributeTreeNode.name.split(':');

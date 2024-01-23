@@ -14,12 +14,12 @@ export class ServiceBooking {
   }
 
   public static initWithLegTreeNode(legTreeNode: TreeNode): ServiceBooking | null {
-    const bookingArrangementsTreeNode = legTreeNode.findChildNamed('ojp:Service/ojp:BookingArrangements');
+    const bookingArrangementsTreeNode = legTreeNode.findChildNamed('Service/BookingArrangements');
     if (bookingArrangementsTreeNode === null) {
       return null;
     }
 
-    const bookingArrangementTreeNodes = bookingArrangementsTreeNode.findChildrenNamed('ojp:BookingArrangement');
+    const bookingArrangementTreeNodes = bookingArrangementsTreeNode.findChildrenNamed('BookingArrangement');
     if (bookingArrangementTreeNodes.length === 0) {
         console.error('ERROR - no BookingArrangements nodes found');
         return null;
@@ -27,8 +27,8 @@ export class ServiceBooking {
 
     const bookingArrangements: BookingArrangement[] = [];
     bookingArrangementTreeNodes.forEach(bookingArrangementTreeNode => {
-        const agencyCode = bookingArrangementTreeNode.findTextFromChildNamed('ojp:BookingAgencyName/ojp:Text');
-        let infoURL = bookingArrangementTreeNode.findTextFromChildNamed('ojp:InfoUrl');
+        const agencyCode = bookingArrangementTreeNode.findTextFromChildNamed('BookingAgencyName/Text');
+        let infoURL = bookingArrangementTreeNode.findTextFromChildNamed('InfoUrl');
 
         if ((agencyCode === null) || (infoURL === null)) {
             return;
