@@ -117,6 +117,8 @@ export class StopEvent {
         const arrivalTime = this.computeStopTimeData(this.stopPoint.arrivalData)
         const departureTime = this.computeStopTimeData(this.stopPoint.departureData)
 
+        const stopPlatformActual = this.stopPoint.plannedPlatform === this.stopPoint.actualPlatform ? null : this.stopPoint.actualPlatform;
+
         const model = <StationBoardModel>{
             stopEvent: this,
             serviceLineNumber: serviceLineNumber,
@@ -129,7 +131,7 @@ export class StopEvent {
                 Departures: departureTime
             },
             stopPlatform: this.stopPoint.plannedPlatform, 
-            stopPlatformActual: this.stopPoint.actualPlatform,
+            stopPlatformActual: stopPlatformActual,
             stopSituations: this.stopPoint.siriSituations,
         }
 
