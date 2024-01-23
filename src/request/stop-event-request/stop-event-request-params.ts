@@ -61,7 +61,7 @@ export class StopEventRequestParams extends BaseRequestParams {
         requestParamsNode.ele('IncludeOnwardCalls', this.includeOnwardCalls);
         requestParamsNode.ele('IncludeRealtimeData', this.includeRealtimeData);
 
-        const extensionsNode = requestNode.ele('Extensions');
+        const extensionsNode = requestNode.ele('siri:Extensions');
         extensionsNode.ele('ParamsExtension').ele('PrivateModeFilter').ele('Exclude', 'false');
     }
 }
