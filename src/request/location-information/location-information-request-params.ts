@@ -92,7 +92,7 @@ export class LocationInformationRequestParams extends BaseRequestParams {
     const locationName = this.locationName ?? null;
     if (locationName) {
       initialInputNode = requestNode.ele("InitialInput");
-      initialInputNode.ele("LocationName", locationName);
+      initialInputNode.ele("Name", locationName);
     }
 
     const stopPlaceRef = this.stopPlaceRef ?? null;
