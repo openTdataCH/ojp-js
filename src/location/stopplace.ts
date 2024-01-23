@@ -7,11 +7,11 @@ type StopType = 'StopPlace' | 'StopPoint'
 
 export class StopPlace {
   public stopPlaceRef: string
-  public stopPlaceName: string
+  public stopPlaceName: string | null
   public topographicPlaceRef: string | null
   public stopType: StopType
 
-  constructor(stopPlaceRef: string, stopPlaceName: string, topographicPlaceRef: string | null,  stopType: StopType = 'StopPlace') {
+  constructor(stopPlaceRef: string, stopPlaceName: string | null, topographicPlaceRef: string | null,  stopType: StopType = 'StopPlace') {
     this.stopPlaceRef = stopPlaceRef
     this.stopPlaceName = stopPlaceName
     this.topographicPlaceRef = topographicPlaceRef
@@ -22,21 +22,21 @@ export class StopPlace {
     let stopType: StopType = 'StopPlace';
 
     let stopPlaceRef = locationTreeNode.findTextFromChildNamed('StopPlace/StopPlaceRef');
-    let stopPlaceName = locationTreeNode.findTextFromChildNamed('StopPlace/StopPlaceName/Text') ?? '';
+    let stopPlaceName = locationTreeNode.findTextFromChildNamed('StopPlace/StopPlaceName/Text');
     let topographicPlaceRef = locationTreeNode.findTextFromChildNamed('StopPlace/TopographicPlaceRef');
 
     // Try to build the StopPlace from StopPoint
     if (stopPlaceRef === null) {
       stopType = 'StopPoint';
       stopPlaceRef = locationTreeNode.findTextFromChildNamed('StopPoint/StopPointRef');
-      stopPlaceName = locationTreeNode.findTextFromChildNamed('StopPoint/StopPointName/Text') ?? '';
+      stopPlaceName = locationTreeNode.findTextFromChildNamed('StopPoint/StopPointName/Text');
       topographicPlaceRef = locationTreeNode.findTextFromChildNamed('StopPoint/TopographicPlaceRef');
     }
 
     // Otherwise try to see if we have a single siri:StopPointRef node
     if (stopPlaceRef === null) {
       stopType = 'StopPoint';
-      stopPlaceRef = locationTreeNode.findTextFromChildNamed('StopPointRef');
+      stopPlaceRef = locationTreeNode.findTextFromChildNamed('siri:StopPointRef');
     }
 
     if (stopPlaceRef === null) {

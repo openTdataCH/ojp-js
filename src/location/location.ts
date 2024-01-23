@@ -245,7 +245,7 @@ export class Location {
   }
 
   public computeLocationName(includeLiteralCoords: boolean = true): string | null {
-    if (this.stopPlace) {
+    if (this.stopPlace?.stopPlaceName) {
       return this.stopPlace.stopPlaceName;
     }
 
