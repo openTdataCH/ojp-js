@@ -99,7 +99,7 @@ export class LocationInformationRequestParams extends BaseRequestParams {
     if (stopPlaceRef) {
       const requestPlaceRefNode = requestNode.ele("PlaceRef");
       requestPlaceRefNode.ele("StopPlaceRef", stopPlaceRef);
-      requestPlaceRefNode.ele("LocationName").ele("Text", "");
+      requestPlaceRefNode.ele("LocationName").ele("Text", "n/a");
     }
 
     const bboxWest = this.bboxWest ?? null;
