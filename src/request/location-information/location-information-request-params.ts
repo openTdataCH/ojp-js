@@ -154,7 +154,7 @@ export class LocationInformationRequestParams extends BaseRequestParams {
       }
     }
 
-    const extensionsNode = requestNode.ele("Extensions");
+    const extensionsNode = requestNode.ele("siri:Extensions");
     extensionsNode
       .ele("ParamsExtension")
       .ele("PrivateModeFilter")
