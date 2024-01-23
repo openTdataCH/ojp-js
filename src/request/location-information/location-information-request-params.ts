@@ -99,7 +99,7 @@ export class LocationInformationRequestParams extends BaseRequestParams {
     if (stopPlaceRef) {
       const requestPlaceRefNode = requestNode.ele("PlaceRef");
       requestPlaceRefNode.ele("siri:StopPointRef", stopPlaceRef);
-      requestPlaceRefNode.ele("Name").ele("Text", "");
+      requestPlaceRefNode.ele("Name").ele("Text", "n/a");
     }
 
     const bboxWest = this.bboxWest ?? null;
