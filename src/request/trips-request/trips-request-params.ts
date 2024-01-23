@@ -4,6 +4,7 @@ import { TripModeType } from "../../types/trip-mode-type";
 import { BaseRequestParams } from "../base-request-params";
 import { JourneyPointType } from '../../types/journey-points';
 import { Location } from "../../location/location";
+import { SDK_VERSION } from "../..";
 
 export class TripsRequestParams extends BaseRequestParams {
   public fromTripLocation: TripLocationPoint;
@@ -90,6 +91,8 @@ export class TripsRequestParams extends BaseRequestParams {
     const now = new Date();
     const dateF = now.toISOString();
     this.serviceRequestNode.ele("siri:RequestTimestamp", dateF);
+
+    this.serviceRequestNode.ele("siri:RequestorRef", "OJP_JS_SDK_v" + SDK_VERSION);
 
     const tripRequestNode = this.serviceRequestNode.ele("OJPTripRequest");
     tripRequestNode.ele("siri:RequestTimestamp", dateF);

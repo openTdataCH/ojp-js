@@ -1,3 +1,4 @@
+import { SDK_VERSION } from "../..";
 import { GeoPosition } from "../../location/geoposition"
 import { StopEventType } from "../../types/stop-event-type"
 import { BaseRequestParams } from '../base-request-params';
@@ -35,8 +36,10 @@ export class StopEventRequestParams extends BaseRequestParams {
 
         const dateNowF = new Date().toISOString();
         const dateF = this.depArrTime.toISOString();
-        
+       
         this.serviceRequestNode.ele('siri:RequestTimestamp', dateNowF);
+
+        this.serviceRequestNode.ele("siri:RequestorRef", "OJP_JS_SDK_v" + SDK_VERSION);
 
         const requestNode = this.serviceRequestNode.ele('OJPStopEventRequest');
         requestNode.ele('siri:RequestTimestamp', dateNowF);

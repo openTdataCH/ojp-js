@@ -5,6 +5,7 @@ import {
   GeoRestrictionPoiOSMTag,
 } from "../../types/geo-restriction.type";
 import { BaseRequestParams } from "../base-request-params";
+import { SDK_VERSION } from "../..";
 
 export class LocationInformationRequestParams extends BaseRequestParams {
   public locationName: string | null;
@@ -81,6 +82,8 @@ export class LocationInformationRequestParams extends BaseRequestParams {
     const now = new Date();
     const dateF = now.toISOString();
     this.serviceRequestNode.ele("siri:RequestTimestamp", dateF);
+
+    this.serviceRequestNode.ele("siri:RequestorRef", "OJP_JS_SDK_v" + SDK_VERSION);
 
     const requestNode = this.serviceRequestNode.ele(
       "OJPLocationInformationRequest"
