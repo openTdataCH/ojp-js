@@ -48,8 +48,8 @@ export class StopEventRequestParams extends BaseRequestParams {
 
         if (this.stopPlaceRef) {
             const requestPlaceRefNode = locationNode.ele('PlaceRef');
-            requestPlaceRefNode.ele('StopPlaceRef', this.stopPlaceRef);
-            requestPlaceRefNode.ele('LocationName').ele('Text', '');
+            requestPlaceRefNode.ele('siri:StopPointRef', this.stopPlaceRef);
+            requestPlaceRefNode.ele('Name').ele('Text', 'n/a');
         }
 
         locationNode.ele('DepArrTime', dateF);
