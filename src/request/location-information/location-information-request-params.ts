@@ -129,9 +129,6 @@ export class LocationInformationRequestParams extends BaseRequestParams {
 
     const restrictionsNode = requestNode.ele("Restrictions");
 
-    const numberOfResults = this.numberOfResults ?? 10;
-    restrictionsNode.ele("NumberOfResults", numberOfResults);
-
     const geoRestrictionTypeS = this.computeRestrictionType();
     if (geoRestrictionTypeS) {
       restrictionsNode.ele("Type", geoRestrictionTypeS);
@@ -153,6 +150,9 @@ export class LocationInformationRequestParams extends BaseRequestParams {
         });
       }
     }
+
+    const numberOfResults = this.numberOfResults ?? 10;
+    restrictionsNode.ele("NumberOfResults", numberOfResults);
 
     const extensionsNode = requestNode.ele("siri:Extensions");
     extensionsNode
