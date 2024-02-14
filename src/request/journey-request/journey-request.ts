@@ -84,11 +84,9 @@ export class JourneyRequest {
       if (tripRequestResponse.message === 'TripRequest.DONE') {
         const hasTrips = tripRequestResponse.trips.length > 0;
         if (!hasTrips) {
-          console.error('ERROR: no trips found for section ' + journeyIDx + ' MODE - ' + tripRequestParams.modeType + ' + ' + tripRequestParams.transportMode);
-          console.log(tripRequestResponse);
           callback({
             sections: this.sections,
-            message: tripRequestResponse.message,
+            message: 'JourneyRequest.DONE',
             error: null
           });
           
