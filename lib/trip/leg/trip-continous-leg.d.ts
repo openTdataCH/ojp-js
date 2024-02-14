@@ -1,0 +1,30 @@
+import * as GeoJSON from 'geojson';
+import { Location } from '../../location/location';
+import { PathGuidance } from '../path-guidance';
+import { TripLeg, LegType, LinePointData } from "./trip-leg";
+import { TripLegLineType } from '../../types/map-geometry-types';
+import { Duration } from '../../shared/duration';
+import { IndividualTransportMode } from '../../types/individual-mode.types';
+import { ServiceBooking } from './continous-leg/service-booking';
+import { TreeNode } from '../../xml/tree-node';
+export declare class TripContinousLeg extends TripLeg {
+    legTransportMode: IndividualTransportMode | null;
+    legDistance: number;
+    pathGuidance: PathGuidance | null;
+    walkDuration: Duration | null;
+    serviceBooking: ServiceBooking | null;
+    constructor(legType: LegType, legIDx: number, legDistance: number, fromLocation: Location, toLocation: Location);
+    static initWithTreeNode(legIDx: number, treeNode: TreeNode, legType: LegType): TripContinousLeg | null;
+    private computeLegTransportModeFromTreeNode;
+    private computeLegTransportModeFromString;
+    isDriveCarLeg(): boolean;
+    isSharedMobility(): boolean;
+    isWalking(): boolean;
+    isTaxi(): boolean;
+    protected computeSpecificJSONFeatures(): GeoJSON.Feature[];
+    protected computeLegLineType(): TripLegLineType;
+    protected computeLinePointsData(): LinePointData[];
+    computeLegColor(): string;
+    formatDistance(): string;
+    protected useBeeline(): boolean;
+}
