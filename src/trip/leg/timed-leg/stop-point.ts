@@ -80,7 +80,6 @@ export class StopPoint {
     return stopPoint;
   }
 
-  // Lookups from https://confluence.sbb.ch/pages/viewpage.action?pageId=2537067695
   private static computePlatformAssistance(treeNode: TreeNode): VehicleAccessType | null {
     const platformText = treeNode.findTextFromChildNamed('NameSuffix/Text');
     if (platformText === null) {
