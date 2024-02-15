@@ -28,7 +28,7 @@ export class StopPlace {
     // Try to build the StopPlace from StopPoint
     if (stopPlaceRef === null) {
       stopType = 'StopPoint';
-      stopPlaceRef = locationTreeNode.findTextFromChildNamed('StopPoint/StopPointRef');
+      stopPlaceRef = locationTreeNode.findTextFromChildNamed('StopPoint/siri:StopPointRef');
       stopPlaceName = locationTreeNode.findTextFromChildNamed('StopPoint/StopPointName/Text');
       topographicPlaceRef = locationTreeNode.findTextFromChildNamed('StopPoint/TopographicPlaceRef');
     }

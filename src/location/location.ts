@@ -97,7 +97,7 @@ export class Location {
     //   <ojp:Code>carvelo2go:1c741450-02ed-412e-ce4d-bfd470da7281</ojp:Code>
     //   <siri:HireFacility>cycleHire</siri:HireFacility>
     // </ojp:Attribute>
-    const attributeTreeNode = treeNode.findChildNamed('ojp:Attribute');
+    const attributeTreeNode = treeNode.findChildNamed('Attribute');
     if (attributeTreeNode) {
       attributeTreeNode.children.forEach(attributeTreeNode => {
         const nodeNameParts = attributeTreeNode.name.split(':');
@@ -116,7 +116,7 @@ export class Location {
     //         <ojp:num_docks_available>0</ojp:num_docks_available>
     //     </ojp:LocationExtensionStructure>
     // </ojp:Extension>
-    const extensionAttributesTreeNode = treeNode.findChildNamed('siri:Extension/LocationExtensionStructure');
+    const extensionAttributesTreeNode = treeNode.findChildNamed('Extension/LocationExtensionStructure');
     if (extensionAttributesTreeNode) {
       extensionAttributesTreeNode.children.forEach(attributeTreeNode => {
         const nodeNameParts = attributeTreeNode.name.split(':');
