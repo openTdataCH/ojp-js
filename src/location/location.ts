@@ -45,7 +45,7 @@ export class Location {
     
     location.address = Address.initWithLocationTreeNode(treeNode);
     location.geoPosition = GeoPosition.initWithLocationTreeNode(treeNode);
-    location.locationName = treeNode.findTextFromChildNamed('ojp:LocationName/ojp:Text');
+    location.locationName = treeNode.findTextFromChildNamed('LocationName/Text');
     location.poi = PointOfInterest.initWithLocationTreeNode(treeNode);
     location.stopPlace = StopPlace.initWithLocationTreeNode(treeNode);
     location.topographicPlace = TopographicPlace.initWithLocationTreeNode(treeNode);
@@ -56,19 +56,19 @@ export class Location {
   }
 
   public static initWithLocationResultTreeNode(locationResultTreeNode: TreeNode): Location | null {
-    const locationTreeNode = locationResultTreeNode.findChildNamed('ojp:Location');
+    const locationTreeNode = locationResultTreeNode.findChildNamed('Location');
     if (locationTreeNode === null) {
       return null;
     }
 
     const location = Location.initWithTreeNode(locationTreeNode);
 
-    const probabilityS = locationResultTreeNode.findTextFromChildNamed('ojp:Probability');
+    const probabilityS = locationResultTreeNode.findTextFromChildNamed('Probability');
     if (probabilityS) {
       location.probability = parseFloat(probabilityS);
     }
 
-    location.originSystem = locationResultTreeNode.findTextFromChildNamed('ojp:OriginSystem');
+    location.originSystem = locationResultTreeNode.findTextFromChildNamed('OriginSystem');
 
     return location;
   }
@@ -97,7 +97,7 @@ export class Location {
     //   <ojp:Code>carvelo2go:1c741450-02ed-412e-ce4d-bfd470da7281</ojp:Code>
     //   <siri:HireFacility>cycleHire</siri:HireFacility>
     // </ojp:Attribute>
-    const attributeTreeNode = treeNode.findChildNamed('ojp:Attribute');
+    const attributeTreeNode = treeNode.findChildNamed('Attribute');
     if (attributeTreeNode) {
       attributeTreeNode.children.forEach(attributeTreeNode => {
         const nodeNameParts = attributeTreeNode.name.split(':');
@@ -116,7 +116,7 @@ export class Location {
     //         <ojp:num_docks_available>0</ojp:num_docks_available>
     //     </ojp:LocationExtensionStructure>
     // </ojp:Extension>
-    const extensionAttributesTreeNode = treeNode.findChildNamed('ojp:Extension/ojp:LocationExtensionStructure');
+    const extensionAttributesTreeNode = treeNode.findChildNamed('Extension/LocationExtensionStructure');
     if (extensionAttributesTreeNode) {
       extensionAttributesTreeNode.children.forEach(attributeTreeNode => {
         const nodeNameParts = attributeTreeNode.name.split(':');
@@ -245,7 +245,7 @@ export class Location {
   }
 
   public computeLocationName(includeLiteralCoords: boolean = true): string | null {
-    if (this.stopPlace) {
+    if (this.stopPlace?.stopPlaceName) {
       return this.stopPlace.stopPlaceName;
     }
 

@@ -18,8 +18,7 @@ export class StopPointTime {
   }
 
   public static initWithParentTreeNode(parentTreeNode: TreeNode, stopTimeType: string): StopPointTime | null {
-    const stopTimeNodeName = 'ojp:' + stopTimeType;
-    const stopTimeTreeNode = parentTreeNode.findChildNamed(stopTimeNodeName);
+    const stopTimeTreeNode = parentTreeNode.findChildNamed(stopTimeType);
     if (stopTimeTreeNode === null) {
       return null
     }
@@ -29,7 +28,7 @@ export class StopPointTime {
   }
 
   private static initWithContextTreeNode(contextNode: TreeNode): StopPointTime | null {
-    const timetableTimeS = contextNode.findTextFromChildNamed('ojp:TimetabledTime');
+    const timetableTimeS = contextNode.findTextFromChildNamed('TimetabledTime');
     if (timetableTimeS === null) {
       return null;
     }
@@ -37,7 +36,7 @@ export class StopPointTime {
     const timetableTime = new Date(Date.parse(timetableTimeS));
 
     let estimatedTime: Date | null = null;
-    const estimatedTimeS = contextNode.findTextFromChildNamed('ojp:EstimatedTime');
+    const estimatedTimeS = contextNode.findTextFromChildNamed('EstimatedTime');
     if (estimatedTimeS) {
       estimatedTime = new Date(Date.parse(estimatedTimeS));
     }

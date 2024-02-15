@@ -16,16 +16,16 @@ export class PublicTransportMode {
   }
 
   public static initWithServiceTreeNode(serviceTreeNode: TreeNode): PublicTransportMode | null {
-    const ptMode = serviceTreeNode.findTextFromChildNamed('ojp:Mode/ojp:PtMode');
+    const ptMode = serviceTreeNode.findTextFromChildNamed('Mode/PtMode');
     if (ptMode === null) {
       return null;
     }
 
-    const name = serviceTreeNode.findTextFromChildNamed('ojp:Mode/ojp:Name/ojp:Text');
-    const shortName = serviceTreeNode.findTextFromChildNamed('ojp:Mode/ojp:ShortName/ojp:Text');
+    const name = serviceTreeNode.findTextFromChildNamed('Mode/Name/Text');
+    const shortName = serviceTreeNode.findTextFromChildNamed('Mode/ShortName/Text');
     const publicTransportMode = new PublicTransportMode(ptMode, name, shortName);
 
-    const busSubmode = serviceTreeNode.findTextFromChildNamed('ojp:Mode/siri:BusSubmode')
+    const busSubmode = serviceTreeNode.findTextFromChildNamed('Mode/siri:BusSubmode')
     // publicTransportMode.isDemandMode = busSubmode !== null;
     publicTransportMode.isDemandMode = (busSubmode === 'demandAndResponseBus' || busSubmode === 'unknown');
 

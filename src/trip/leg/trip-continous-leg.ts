@@ -32,8 +32,8 @@ export class TripContinousLeg extends TripLeg {
   }
 
   public static initWithTreeNode(legIDx: number, treeNode: TreeNode, legType: LegType): TripContinousLeg | null {
-    const legStartPlaceRefTreeNode = treeNode.findChildNamed('ojp:LegStart');
-    const legEndPlaceRefTreeNode = treeNode.findChildNamed('ojp:LegEnd');
+    const legStartPlaceRefTreeNode = treeNode.findChildNamed('LegStart');
+    const legEndPlaceRefTreeNode = treeNode.findChildNamed('LegEnd');
     if (legStartPlaceRefTreeNode === null || legEndPlaceRefTreeNode === null) {
       return null;
     }
@@ -44,7 +44,7 @@ export class TripContinousLeg extends TripLeg {
       return null;
     }
 
-    let distanceS = treeNode.findTextFromChildNamed('ojp:Length') ?? '0';
+    let distanceS = treeNode.findTextFromChildNamed('Length') ?? '0';
     const legDistance = parseInt(distanceS);
 
     const tripLeg = new TripContinousLeg(legType, legIDx, legDistance, legStartPlaceRef, legEndPlaceRef);
@@ -63,15 +63,15 @@ export class TripContinousLeg extends TripLeg {
     tripLeg.legTrack = LegTrack.initWithLegTreeNode(treeNode);
 
     if (legType === 'TransferLeg') {
-      tripLeg.walkDuration = Duration.initWithTreeNode(treeNode, 'ojp:WalkDuration');
+      tripLeg.walkDuration = Duration.initWithTreeNode(treeNode, 'WalkDuration');
     }
 
     return tripLeg;
   }
 
   private computeLegTransportModeFromTreeNode(treeNode: TreeNode): IndividualTransportMode | null {
-    const legModeS = treeNode.findTextFromChildNamed('ojp:Service/ojp:IndividualMode');
-    const firstBookingAgency = treeNode.findTextFromChildNamed('ojp:Service/ojp:BookingArrangements/ojp:BookingArrangement/ojp:BookingAgencyName/ojp:Text');
+    const legModeS = treeNode.findTextFromChildNamed('Service/IndividualMode');
+    const firstBookingAgency = treeNode.findTextFromChildNamed('Service/BookingArrangements/BookingArrangement/BookingAgencyName/Text');
     const legMode = this.computeLegTransportModeFromString(legModeS, firstBookingAgency);
 
     return legMode;

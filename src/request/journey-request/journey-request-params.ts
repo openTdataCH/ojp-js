@@ -10,9 +10,7 @@ export class JourneyRequestParams {
   includeLegProjection: boolean
   useNumberOfResultsAfter: boolean
 
-
   constructor(tripLocations: TripLocationPoint[], tripModeTypes: TripModeType[], transportModes: IndividualTransportMode[], departureDate: Date) {
-
     this.tripLocations = tripLocations;
     this.tripModeTypes = tripModeTypes
     this.transportModes = transportModes

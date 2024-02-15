@@ -10,8 +10,8 @@ export class TopographicPlace {
     }
 
     public static initWithLocationTreeNode(locationTreeNode: TreeNode): TopographicPlace | null {
-      const code = locationTreeNode.findTextFromChildNamed('ojp:TopographicPlace/ojp:TopographicPlaceCode');
-      const name = locationTreeNode.findTextFromChildNamed('ojp:TopographicPlace/ojp:TopographicPlaceName/ojp:Text');
+      const code = locationTreeNode.findTextFromChildNamed('TopographicPlace/TopographicPlaceCode');
+      const name = locationTreeNode.findTextFromChildNamed('TopographicPlace/TopographicPlaceName/Text');
     
       if (!(code && name)) {
         return null;

@@ -7,11 +7,11 @@ type StopType = 'StopPlace' | 'StopPoint'
 
 export class StopPlace {
   public stopPlaceRef: string
-  public stopPlaceName: string
+  public stopPlaceName: string | null
   public topographicPlaceRef: string | null
   public stopType: StopType
 
-  constructor(stopPlaceRef: string, stopPlaceName: string, topographicPlaceRef: string | null,  stopType: StopType = 'StopPlace') {
+  constructor(stopPlaceRef: string, stopPlaceName: string | null, topographicPlaceRef: string | null,  stopType: StopType = 'StopPlace') {
     this.stopPlaceRef = stopPlaceRef
     this.stopPlaceName = stopPlaceName
     this.topographicPlaceRef = topographicPlaceRef
@@ -21,16 +21,16 @@ export class StopPlace {
   public static initWithLocationTreeNode(locationTreeNode: TreeNode): StopPlace | null {
     let stopType: StopType = 'StopPlace';
 
-    let stopPlaceRef = locationTreeNode.findTextFromChildNamed('ojp:StopPlace/ojp:StopPlaceRef');
-    let stopPlaceName = locationTreeNode.findTextFromChildNamed('ojp:StopPlace/ojp:StopPlaceName/ojp:Text') ?? '';
-    let topographicPlaceRef = locationTreeNode.findTextFromChildNamed('ojp:StopPlace/ojp:TopographicPlaceRef');
+    let stopPlaceRef = locationTreeNode.findTextFromChildNamed('StopPlace/StopPlaceRef');
+    let stopPlaceName = locationTreeNode.findTextFromChildNamed('StopPlace/StopPlaceName/Text');
+    let topographicPlaceRef = locationTreeNode.findTextFromChildNamed('StopPlace/TopographicPlaceRef');
 
     // Try to build the StopPlace from StopPoint
     if (stopPlaceRef === null) {
       stopType = 'StopPoint';
-      stopPlaceRef = locationTreeNode.findTextFromChildNamed('ojp:StopPoint/siri:StopPointRef');
-      stopPlaceName = locationTreeNode.findTextFromChildNamed('ojp:StopPoint/ojp:StopPointName/ojp:Text') ?? '';
-      topographicPlaceRef = locationTreeNode.findTextFromChildNamed('ojp:StopPoint/ojp:TopographicPlaceRef');
+      stopPlaceRef = locationTreeNode.findTextFromChildNamed('StopPoint/siri:StopPointRef');
+      stopPlaceName = locationTreeNode.findTextFromChildNamed('StopPoint/StopPointName/Text');
+      topographicPlaceRef = locationTreeNode.findTextFromChildNamed('StopPoint/TopographicPlaceRef');
     }
 
     // Otherwise try to see if we have a single siri:StopPointRef node
@@ -49,8 +49,8 @@ export class StopPlace {
   }
 
   public static initWithServiceTreeNode(treeNode: TreeNode, pointType: 'Origin' | 'Destination'): StopPlace | null {
-    const stopPlaceRef = treeNode.findTextFromChildNamed('ojp:' + pointType + 'StopPointRef');
-    const stopPlaceText = treeNode.findTextFromChildNamed('ojp:' + pointType + 'Text/ojp:Text');
+    const stopPlaceRef = treeNode.findTextFromChildNamed(pointType + 'StopPointRef');
+    const stopPlaceText = treeNode.findTextFromChildNamed(pointType + 'Text/Text');
 
     if (!(stopPlaceRef && stopPlaceText)) {
       return null;

@@ -1,92 +1,109 @@
 import { StageConfig } from "../../types/stage-config";
-import { JourneySection } from "./journey-section";
-import { JourneyResponse } from "./journey-request-response";
-import { OJPBaseRequest } from "../base-request";
-import { TripRequest, TripRequestEvent } from "../trips-request/trips-request";
+import { TripRequest } from "../trips-request/trips-request";
 import { TripsRequestParams } from "../trips-request/trips-request-params";
 import { JourneyRequestParams } from "./journey-request-params";
-import { RequestErrorData } from "../request-error";
+import { RequestErrorData } from "../types/request-info.type";
+import { TripRequest_ParserMessage, TripRequest_Response } from "../types/trip-request.type";
 
-export type JourneyRequestEvent = 'JourneyRequest.DONE' | TripRequestEvent | 'ERROR';
-type JourneyRequestCallback = (response: JourneyResponse, isComplete: boolean, message: JourneyRequestEvent, error: RequestErrorData | null) => void;
-
-export class JourneyRequest extends OJPBaseRequest {
-  public requestParams: JourneyRequestParams
-  public lastJourneyResponse: JourneyResponse | null
+export type JourneyRequest_Message = 'JourneyRequest.DONE' | TripRequest_ParserMessage | 'ERROR';
+export type JourneyRequest_Response = {
+  sections: TripRequest_Response[]
+  message: JourneyRequest_Message,
+  error: RequestErrorData | null,
+}
+export type JourneyRequest_Callback = (response: JourneyRequest_Response) => void;
+export class JourneyRequest {
+  private stageConfig: StageConfig
+  private requestParams: JourneyRequestParams
+  public tripRequests: TripRequest[]
+  public sections: TripRequest_Response[]
 
   constructor(stageConfig: StageConfig, requestParams: JourneyRequestParams) {
-    super(stageConfig);
+    this.stageConfig = stageConfig;
     this.requestParams = requestParams;
-    this.lastJourneyResponse = null
+    this.tripRequests = [];
+    this.sections = [];
   }
 
-  public fetchResponse(callback: JourneyRequestCallback) {
-    const journeyResponse = new JourneyResponse([])
-    const tripDepartureDate = this.requestParams.departureDate
-    this.lastJourneyResponse = null
-    this.computeTripResponse(0, tripDepartureDate, journeyResponse, callback);
+  public fetchResponse(callback: JourneyRequest_Callback) {
+    const tripDepartureDate = this.requestParams.departureDate;
+    this.tripRequests = [];
+    this.computeTripResponse(0, tripDepartureDate, callback);
   }
 
-  private computeTripResponse(journeySectionIdx: number, tripDepartureDate: Date, journeyResponse: JourneyResponse, callback: JourneyRequestCallback) {
-    const isLastJourneySegment = journeySectionIdx === (this.requestParams.tripModeTypes.length - 1)
+  private computeTripResponse(journeyIDx: number, tripDepartureDate: Date, callback: JourneyRequest_Callback) {
+    const isLastJourneySegment = journeyIDx === (this.requestParams.tripModeTypes.length - 1)
 
-    const fromTripLocation = this.requestParams.tripLocations[journeySectionIdx]
-    const toTripLocation = this.requestParams.tripLocations[journeySectionIdx + 1]
+    const fromTripLocation = this.requestParams.tripLocations[journeyIDx]
+    const toTripLocation = this.requestParams.tripLocations[journeyIDx + 1]
 
-    const tripRequestParams = TripsRequestParams.initWithLocationsAndDate(fromTripLocation, toTripLocation, tripDepartureDate)
+    const tripRequestParams = TripsRequestParams.initWithTripLocationsAndDate(fromTripLocation, toTripLocation, tripDepartureDate)
     if (tripRequestParams === null) {
-      console.error('JourneyRequest - TripsRequestParams null for trip idx ' + journeySectionIdx)
+      console.error('JourneyRequest - TripsRequestParams null for trip idx ' + journeyIDx)
       return
     }
 
     tripRequestParams.includeLegProjection = this.requestParams.includeLegProjection
     tripRequestParams.useNumberOfResultsAfter = this.requestParams.useNumberOfResultsAfter
-    tripRequestParams.modeType = this.requestParams.tripModeTypes[journeySectionIdx];
-    tripRequestParams.transportMode = this.requestParams.transportModes[journeySectionIdx];
+    tripRequestParams.modeType = this.requestParams.tripModeTypes[journeyIDx];
+    tripRequestParams.transportMode = this.requestParams.transportModes[journeyIDx];
 
     const tripRequest = new TripRequest(this.stageConfig, tripRequestParams);
-    tripRequest.fetchResponse((tripsResponse, isComplete, tripsRequestStatus, error) => {
-      if (error) {
-        callback(journeyResponse, false, 'ERROR', error);
+    this.tripRequests.push(tripRequest);
+
+    tripRequest.fetchResponseWithCallback((tripRequestResponse) => {
+      if (tripRequestResponse.message === 'ERROR') {
+        callback({
+          sections: this.sections,
+          message: 'ERROR',
+          error: {
+            error: 'ParseTripsXMLError',
+            message: 'TODO - handle this'
+          },
+        });
+
         return;
       }
 
-      const journeySection = new JourneySection(
-        tripRequest.lastRequestData,
-        tripsResponse
-      );
+      // the callback is triggered several times
+      // => make sure we push to .sections array only once
+      if (journeyIDx > (this.sections.length - 1)) {
+        this.sections.push(tripRequestResponse);
+      }
+      // override current section
+      this.sections[journeyIDx] = tripRequestResponse;
       
-      // Reference the current section
-      if (journeySectionIdx > (journeyResponse.sections.length - 1)) {
-        journeyResponse.sections.push(journeySection);
-      }
-      journeyResponse.sections[journeySectionIdx] = journeySection;
-
-      if (tripsRequestStatus === 'TripRequest.TripsNo') {
-        callback(journeyResponse, false, tripsRequestStatus, error);
+      if (tripRequestResponse.message === 'TripRequest.TripsNo' || tripRequestResponse.message === 'TripRequest.Trip') {
+        callback({
+          sections: this.sections,
+          message: tripRequestResponse.message,
+          error: null
+        });
       }
 
-      if (tripsRequestStatus === 'TripRequest.Trip') {
-        callback(journeyResponse, false, tripsRequestStatus, error);
-      }
-
-      if (tripsRequestStatus === 'TripRequest.DONE') {
-        const hasTrips = tripsResponse.trips.length > 0;
+      if (tripRequestResponse.message === 'TripRequest.DONE') {
+        const hasTrips = tripRequestResponse.trips.length > 0;
         if (!hasTrips) {
-          console.error('ERROR: no trips found for section ' + journeySectionIdx + ' MODE - ' + tripRequestParams.modeType + ' + ' + tripRequestParams.transportMode);
-          console.log(tripsResponse);
-          callback(journeyResponse, true, tripsRequestStatus, error);
+          callback({
+            sections: this.sections,
+            message: 'JourneyRequest.DONE',
+            error: null
+          });
+          
           return;
         }
   
         if (isLastJourneySegment) {
-          this.lastJourneyResponse = journeyResponse;
-          callback(journeyResponse, true, tripsRequestStatus, null);
+          callback({
+            sections: this.sections,
+            message: 'JourneyRequest.DONE',
+            error: null
+          });
         } else {
-          const firstTrip = tripsResponse.trips[0];
+          const firstTrip = tripRequestResponse.trips[0];
           tripDepartureDate = firstTrip.stats.endDatetime;
   
-          this.computeTripResponse(journeySectionIdx + 1, tripDepartureDate, journeyResponse, callback);
+          this.computeTripResponse(journeyIDx + 1, tripDepartureDate, callback);
         }
       }
     });

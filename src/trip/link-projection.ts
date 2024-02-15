@@ -15,14 +15,14 @@ export class LinkProjection {
   }
 
   public static initWithTreeNode(treeNode: TreeNode): LinkProjection | null {
-    const linkProjectionTreeNode = treeNode.findChildNamed('ojp:LinkProjection');
+    const linkProjectionTreeNode = treeNode.findChildNamed('LinkProjection');
     if (linkProjectionTreeNode === null) {
       return null;
     }
 
     const coordinates: GeoPosition[] = [];
 
-    const positionTreeNodes = linkProjectionTreeNode.findChildrenNamed('ojp:Position');
+    const positionTreeNodes = linkProjectionTreeNode.findChildrenNamed('Position');
     positionTreeNodes.forEach(positionTreeNode => {
       const longitudeS = positionTreeNode.findTextFromChildNamed('siri:Longitude');
       const latitudeS = positionTreeNode.findTextFromChildNamed('siri:Latitude');
@@ -46,6 +46,21 @@ export class LinkProjection {
     const linkProjection = new LinkProjection(coordinates, bbox);
     
     return linkProjection;
+  }
+
+  public computeLength(): number {
+    let distAB = 0;
+
+    this.coordinates.forEach((geoPositionB, idx) => {
+      if (idx === 0) {
+        return;
+      }
+
+      const geoPositionA = this.coordinates[idx - 1];
+      distAB += geoPositionB.distanceFrom(geoPositionA);
+    });
+
+    return distAB;
   }
 
   asGeoJSONFeature(): GeoJSON.Feature<GeoJSON.LineString> {

@@ -18,4 +18,10 @@ export class TripLocationPoint {
         this.maxDistance = 20000
         this.customTransportMode = null
     }
+
+    public static Empty(): TripLocationPoint {
+        const location = new Location();
+        const locationPoint = new TripLocationPoint(location);
+        return locationPoint;
+    }
 }

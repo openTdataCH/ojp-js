@@ -11,7 +11,7 @@ export class Duration {
     this.totalMinutes = hours * 60 + minutes
   }
 
-  public static initWithTreeNode(parentTreeNode: TreeNode, nodeName: string = 'ojp:Duration'): Duration | null {
+  public static initWithTreeNode(parentTreeNode: TreeNode, nodeName: string = 'Duration'): Duration | null {
     const durationS = parentTreeNode.findTextFromChildNamed(nodeName);
     if (durationS === null) {
       return null;
