@@ -8,7 +8,7 @@ import { TreeNode } from '../xml/tree-node';
 export class JourneyService {
   public journeyRef: string;
   public ptMode: PublicTransportMode;
-  public agencyID: string;
+  public agencyCode: string;
   public originStopPlace: StopPlace | null;
   public destinationStopPlace: StopPlace | null;
   public serviceLineNumber: string | null
@@ -17,10 +17,10 @@ export class JourneyService {
   public siriSituationIds: string[]
   public siriSituations: PtSituationElement[]
 
-  constructor(journeyRef: string, ptMode: PublicTransportMode, agencyID: string) {
+  constructor(journeyRef: string, ptMode: PublicTransportMode, agencyCode: string) {
     this.journeyRef = journeyRef;
     this.ptMode = ptMode;
-    this.agencyID = agencyID;
+    this.agencyCode = agencyCode;
     
     this.originStopPlace = null;
     this.destinationStopPlace = null;
@@ -40,20 +40,23 @@ export class JourneyService {
     const journeyRef = serviceTreeNode.findTextFromChildNamed('JourneyRef');
     const ptMode = PublicTransportMode.initWithServiceTreeNode(serviceTreeNode);
 
-    const ojpAgencyId = serviceTreeNode.findTextFromChildNamed('OperatorRef');
-    const agencyID = ojpAgencyId?.replace('ojp:', '');
+    // TODO - this should be renamed to code
+    // <siri:LineRef>ojp:91036:A:H</siri:LineRef>
+    // <siri:OperatorRef>SBB</siri:OperatorRef>
+    // <PublicCode>InterRegio</PublicCode>
+    const agencyCode = serviceTreeNode.findTextFromChildNamed('siri:OperatorRef');
 
-    if (!(journeyRef && ptMode && agencyID)) {
+    if (!(journeyRef && ptMode && agencyCode)) {
       return null;
     }
 
-    const legService = new JourneyService(journeyRef, ptMode, agencyID);
+    const legService = new JourneyService(journeyRef, ptMode, agencyCode);
 
     legService.originStopPlace = StopPlace.initWithServiceTreeNode(serviceTreeNode, 'Origin');
     legService.destinationStopPlace = StopPlace.initWithServiceTreeNode(serviceTreeNode, 'Destination');
 
-    legService.serviceLineNumber = serviceTreeNode.findTextFromChildNamed('PublishedLineName/Text');
-    legService.journeyNumber = treeNode.findTextFromChildNamed('Extension/PublishedJourneyNumber/Text');
+    legService.serviceLineNumber = serviceTreeNode.findTextFromChildNamed('PublishedServiceName/Text');
+    legService.journeyNumber = treeNode.findTextFromChildNamed('TrainNumber');
 
     legService.siriSituationIds = [];
     const situationFullRefTreeNodes = serviceTreeNode.findChildrenNamed('SituationFullRef');
@@ -68,7 +71,7 @@ export class JourneyService {
   }
 
   public computeLegLineType(): TripLegLineType {
-    const isPostAuto = this.agencyID === '801'
+    const isPostAuto = this.agencyCode === '801'
     if (isPostAuto) {
       return 'PostAuto'
     }
@@ -102,7 +105,7 @@ export class JourneyService {
       nameParts.push(this.ptMode.shortName ?? this.ptMode.ptMode)
     }
 
-    nameParts.push('(' + this.agencyID + ')')
+    nameParts.push('(' + this.agencyCode + ')')
 
     return nameParts.join(' ')
   }

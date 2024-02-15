@@ -23,7 +23,7 @@ export class Trip {
   }
 
   public static initFromTreeNode(treeNode: TreeNode): Trip | null {
-    const tripId = treeNode.findTextFromChildNamed('TripId');
+    const tripId = treeNode.findTextFromChildNamed('Id');
     if (tripId === null) {
       return null;
     }
@@ -50,7 +50,7 @@ export class Trip {
     const legs: TripLeg[] = [];
     let tripLegsTotalDistance = 0;
 
-    const tripLegTreeNodes = treeNode.findChildrenNamed('TripLeg');
+    const tripLegTreeNodes = treeNode.findChildrenNamed('Leg');
     tripLegTreeNodes.forEach(tripLegTreeNode => {
       const tripLeg = TripLegFactory.initWithTreeNode(tripLegTreeNode);
       if (tripLeg === null) {
