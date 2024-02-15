@@ -1,7 +1,7 @@
 # CHANGELOG
 
 ## 0.9.24 - 15.01.2024
-- improve OJP APIs parser
+- improve OJP APIs parser - [PR #43](https://github.com/openTdataCH/ojp-js/pull/43)
 
 ## 0.9.24 - 14.01.2024
 - migrate to a SAX-based parser for handling OJP API responses - [PR #41](https://github.com/openTdataCH/ojp-js/pull/41)
