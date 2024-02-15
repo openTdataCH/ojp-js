@@ -1,81 +1,61 @@
-import * as sax from "sax";
-
+import { BaseParser } from "../request/base-parser";
 import { TreeNode } from "../xml/tree-node";
 
-type FareResponseMessage = "Fare.DONE" | "ERROR";
-type TravelClass = "first" | "second";
-
-export type FareResponseCallback = (
-  fareResults: FareResult[],
-  message: FareResponseMessage
-) => void;
-
-export class FareResponse {
+type NovaFare_ParserMessage = "NovaFares.DONE" | "ERROR";
+export type NovaFare_Response = {
   fareResults: FareResult[];
+  message: NovaFare_ParserMessage | null;
+};
+export type NovaFare_Callback = (response: NovaFare_Response) => void;
+
+export class NovaFareParser extends BaseParser {
+  public callback: NovaFare_Callback | null = null;
+  public fareResults: FareResult[];
 
   constructor() {
+    super();
     this.fareResults = [];
   }
 
-  public parseXML(responseXMLText: string, callback: FareResponseCallback) {
-    const saxStream = sax.createStream(true, { trim: true });
-    const rootNode = new TreeNode("root", null, {}, [], null);
-
-    let currentNode: TreeNode = rootNode;
-    const stack: TreeNode[] = [rootNode];
-
+  public parseXML(responseXMLText: string): void {
     this.fareResults = [];
+    super.parseXML(responseXMLText);
+  }
 
-    saxStream.on("opentag", (node) => {
-      const newNode = new TreeNode(
-        node.name,
-        currentNode.name,
-        node.attributes as Record<string, string>,
-        [],
-        null
+  protected onCloseTag(nodeName: string): void {
+    if (nodeName === "FareResult") {
+      const fareResult = FareResult.initWithFareResultTreeNode(
+        this.currentNode
       );
-
-      currentNode.children.push(newNode);
-      stack.push(newNode);
-      currentNode = newNode;
-    });
-
-    saxStream.on("closetag", (nodeName) => {
-      stack.pop();
-
-      if (nodeName === "ojp:FareResult") {
-        const fareResult = FareResult.initWithFareResultTreeNode(currentNode);
-        if (fareResult) {
-          this.fareResults.push(fareResult);
-        }
+      if (fareResult) {
+        this.fareResults.push(fareResult);
       }
+    }
+  }
 
-      currentNode = stack[stack.length - 1];
-    });
+  protected onError(saxError: any): void {
+    console.error("ERROR: SAX parser");
+    console.log(saxError);
 
-    saxStream.on("text", (text) => {
-      currentNode.text = text;
-    });
+    if (this.callback) {
+      this.callback({
+        fareResults: this.fareResults,
+        message: "ERROR",
+      });
+    }
+  }
 
-    saxStream.on("error", (error) => {
-      console.error("SAX parsing error:", error);
-      callback(this.fareResults, "ERROR");
-    });
-
-    saxStream.on("end", () => {
-      callback(this.fareResults, "Fare.DONE");
-    });
-
-    saxStream.write(responseXMLText);
-    saxStream.end();
+  protected onEnd(): void {
+    if (this.callback) {
+      this.callback({
+        fareResults: this.fareResults,
+        message: "NovaFares.DONE",
+      });
+    }
   }
 }
 
-export interface TripFareResult {
-  fromTripLegIdRef: number;
-  toTripLegIdRef: number;
-  fareProduct: FareProduct;
-}
+type TravelClass = "first" | "second";
 
 class FareProduct {
   fareProductId: string;
@@ -95,17 +75,15 @@ class FareProduct {
     this.travelClass = travelClass;
   }
 
-  public static initWithFareProductTreeNode(
-    fareProductTreeNode: TreeNode
+  public static initFromFareProductNode(
+    fareProductNode: TreeNode
   ): FareProduct | null {
     const fareProductId =
-      fareProductTreeNode.findTextFromChildNamed("ojp:FareProductId");
-    const fareAuthorityRef = fareProductTreeNode.findTextFromChildNamed(
-      "ojp:FareAuthorityRef"
-    );
-    const priceS = fareProductTreeNode.findTextFromChildNamed("ojp:Price");
-    const travelClassS =
-      fareProductTreeNode.findTextFromChildNamed("ojp:TravelClass");
+      fareProductNode.findTextFromChildNamed("FareProductId");
+    const fareAuthorityRef =
+      fareProductNode.findTextFromChildNamed("FareAuthorityRef");
+    const priceS = fareProductNode.findTextFromChildNamed("Price");
+    const travelClassS = fareProductNode.findTextFromChildNamed("TravelClass");
 
     if (
       fareProductId === null ||
@@ -125,9 +103,14 @@ class FareProduct {
       price,
       travelClass
     );
-
     return fareProduct;
   }
+}
+
+export interface TripFareResult {
+  fromTripLegIdRef: number;
+  toTripLegIdRef: number;
+  fareProduct: FareProduct;
 }
 
 export class FareResult {
@@ -142,21 +125,20 @@ export class FareResult {
   public static initWithFareResultTreeNode(
     fareResultTreeNode: TreeNode
   ): FareResult | null {
-    const tripId = fareResultTreeNode.findTextFromChildNamed("ojp:ResultId");
+    const tripId = fareResultTreeNode.findTextFromChildNamed("ResultId");
     if (tripId === null) {
       return null;
     }
 
-    const tripFareResultTreeNodes =
-      fareResultTreeNode.findChildrenNamed("ojp:TripFareResult");
+    const tripFareResultNodes =
+      fareResultTreeNode.findChildrenNamed("TripFareResult");
 
     const tripFareResults: TripFareResult[] = [];
-    tripFareResultTreeNodes.forEach((tripFareResultNode) => {
-      const fromTripLegIdRefS = tripFareResultNode.findTextFromChildNamed(
-        "ojp:FromTripLegIdRef"
-      );
+    tripFareResultNodes.forEach((tripFareResultNode) => {
+      const fromTripLegIdRefS =
+        tripFareResultNode.findTextFromChildNamed("FromTripLegIdRef");
       const toTripLegIdRefS =
-        tripFareResultNode.findTextFromChildNamed("ojp:ToTripLegIdRef");
+        tripFareResultNode.findTextFromChildNamed("ToTripLegIdRef");
 
       if (fromTripLegIdRefS === null || toTripLegIdRefS === null) {
         return;
@@ -165,14 +147,12 @@ export class FareResult {
       const fromTripLegIdRef = parseInt(fromTripLegIdRefS, 10);
       const toTripLegIdRef = parseInt(toTripLegIdRefS, 10);
 
-      const fareProductTreeNode =
-        tripFareResultNode.findChildNamed("ojp:FareProduct");
-      if (fareProductTreeNode === null) {
+      const fareProductNode = tripFareResultNode.findChildNamed("FareProduct");
+      if (fareProductNode === null) {
         return;
       }
 
-      const fareProduct =
-        FareProduct.initWithFareProductTreeNode(fareProductTreeNode);
+      const fareProduct = FareProduct.initFromFareProductNode(fareProductNode);
       if (fareProduct === null) {
         return;
       }
