@@ -5,6 +5,11 @@ import { PtSituationElement } from "../../../situation/situation-element"
 import { TreeNode } from "../../../xml/tree-node"
 import { StopPlace } from "../../../location/stopplace"
 
+
+type VehicleAccessType = 
+  'PLATFORM_ACCESS_WITHOUT_ASSISTANCE' | 'PLATFORM_ACCESS_WITH_ASSISTANCE' | 'PLATFORM_ACCESS_WITH_ASSISTANCE_WHEN_NOTIFIED' 
+  | 'PLATFORM_NOT_WHEELCHAIR_ACCESSIBLE' | 'NO_DATA';
+
 export class StopPoint {
   public stopPointType: StopPointType
   
@@ -17,6 +22,8 @@ export class StopPoint {
 
   public siriSituationIds: string[]
   public siriSituations: PtSituationElement[]
+
+  public vehicleAccessType: VehicleAccessType | null
 
   constructor(
     stopPointType: StopPointType, 
@@ -35,6 +42,8 @@ export class StopPoint {
 
     this.siriSituationIds = [];
     this.siriSituations = [];
+
+    this.vehicleAccessType = null;
   }
 
   public static initWithTreeNode(treeNode: TreeNode, stopPointType: StopPointType): StopPoint | null {
@@ -66,7 +75,38 @@ export class StopPoint {
       }
     });
 
+    stopPoint.vehicleAccessType = StopPoint.computePlatformAssistance(treeNode);
+
     return stopPoint;
+  }
+
+  private static computePlatformAssistance(treeNode: TreeNode): VehicleAccessType | null {
+    const platformText = treeNode.findTextFromChildNamed('NameSuffix/Text');
+    if (platformText === null) {
+      return null;
+    }
+
+    if (platformText === 'PLATFORM_ACCESS_WITH_ASSISTANCE') {
+      return 'PLATFORM_ACCESS_WITH_ASSISTANCE';
+    }
+
+    if (platformText === 'PLATFORM_ACCESS_WITH_ASSISTANCE_WHEN_NOTIFIED') {
+      return 'PLATFORM_ACCESS_WITH_ASSISTANCE_WHEN_NOTIFIED';
+    }
+
+    if (platformText === 'PLATFORM_NOT_WHEELCHAIR_ACCESSIBLE') {
+      return 'PLATFORM_NOT_WHEELCHAIR_ACCESSIBLE';
+    }
+
+    if (platformText === 'PLATFORM_ACCESS_WITHOUT_ASSISTANCE') {
+      return 'PLATFORM_ACCESS_WITHOUT_ASSISTANCE';
+    }
+
+    if (platformText === 'NO_DATA') {
+      return 'NO_DATA';
+    }
+
+    return null;
   }
 
   public patchSituations(mapContextSituations: Record<string, PtSituationElement>) {
