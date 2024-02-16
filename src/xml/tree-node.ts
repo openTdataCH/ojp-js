@@ -1,4 +1,4 @@
-import sax from 'sax';
+import * as sax from 'sax';
 
 export class TreeNode {
   public name: string;
