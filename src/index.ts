@@ -1,4 +1,4 @@
-export const SDK_VERSION = '0.9.26';
+export const SDK_VERSION = '0.9.27';
 
 export * from './config/map-colors'
 
