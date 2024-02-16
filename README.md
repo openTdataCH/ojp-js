@@ -14,7 +14,7 @@ The OJP Javascript SDK is the client used for communication with [OJP APIs](http
 
 ```
   "dependencies": {
-    "ojp-sdk": "0.9.25"
+    "ojp-sdk": "0.9.26"
   }
 ```
 

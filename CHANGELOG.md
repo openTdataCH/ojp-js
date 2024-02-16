@@ -1,7 +1,8 @@
 # CHANGELOG
 
-## 0.9.25 - 16.02.2024
+## 0.9.26 - 16.02.2024
 - fix `sax` lib import - [PR #46](https://github.com/openTdataCH/ojp-js/pull/46)
+- updates SDK version to `0.9.26`
 
 ## 0.9.25 - 15.02.2024
 - improve OJP APIs parser - [PR #43](https://github.com/openTdataCH/ojp-js/pull/43)
