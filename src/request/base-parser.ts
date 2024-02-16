@@ -1,4 +1,4 @@
-import * as sax from 'sax';
+import sax from 'sax';
 
 import { TreeNode } from "../xml/tree-node";
 
