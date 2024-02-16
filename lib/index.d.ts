@@ -1,4 +1,4 @@
-export declare const SDK_VERSION = "0.9.24";
+export declare const SDK_VERSION = "0.9.25";
 export * from './config/map-colors';
 export * from './helpers/date-helpers';
 export * from './helpers/mapbox-layer-helpers';
