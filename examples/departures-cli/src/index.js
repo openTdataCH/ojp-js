@@ -108,11 +108,11 @@ function main() {
 
   const request = OJP.StopEventRequest.initWithStopPlaceRef(OJP.DEFAULT_STAGE, stopRef, 'departure', new Date());
   console.log('FETCH departures for ' + stopRef + ' ...');
-  request.fetchResponse().then(stopEvents => {
+  request.fetchResponse().then(response => {
     console.log('--------------------------------------------------------------------------------------');
     console.log('| Service     | Heading                                     | Departure | Delay      |');
     console.log('--------------------------------------------------------------------------------------');
-    stopEvents.forEach(stopEvent => {
+    response.stopEvents.forEach(stopEvent => {
       const departureRow = computeDepartureRow(stopEvent);
       const serviceCell = (departureRow.service.line + ' ' + departureRow.journey.number).padEnd(11, ' ');
       const headingCell = departureRow.journey.headingText.padEnd(43, ' ');

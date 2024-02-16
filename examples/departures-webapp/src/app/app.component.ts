@@ -52,20 +52,20 @@ export class AppComponent {
     const stopRef = this.queryParams.get('stop_id') ?? mapStopRefs.BERN_BAHNHOF;
 
     const locationRequest = OJP.LocationInformationRequest.initWithStopPlaceRef(OJP.DEFAULT_STAGE, stopRef);
-    locationRequest.fetchResponse().then(locations => {
-      if (locations.length === 0) {
+    locationRequest.fetchResponse().then(response => {
+      if (response.locations.length === 0) {
         console.log('ERROR - fetching locations for ' + stopRef);
         return;
       }
       
-      const stopPlace = locations[0].stopPlace;
+      const stopPlace = response.locations[0].stopPlace;
       if (stopPlace === null) {
         return;
       }
 
       this.renderModel.stop = {
         id: stopPlace.stopPlaceRef,
-        name: stopPlace.stopPlaceName,
+        name: stopPlace.stopPlaceName ?? 'n/a',
       }
     })
     
@@ -78,10 +78,9 @@ export class AppComponent {
   private fetchLatestDepartures(stopRef: string) {
     const request = OJP.StopEventRequest.initWithStopPlaceRef(OJP.DEFAULT_STAGE, stopRef, 'departure', new Date());
     console.log('FETCH departures for ' + stopRef + ' ...');
-    request.fetchResponse().then(stopEvents => {
-      console.log(stopEvents);
+    request.fetchResponse().then(response => {
       this.renderModel.departures = []
-      stopEvents.forEach(stopEvent => {
+      response.stopEvents.forEach(stopEvent => {
         const departureRow = this.computeDepartureRow(stopEvent)
         this.renderModel.departures.push(departureRow);
       });
@@ -114,7 +113,7 @@ export class AppComponent {
       const lineParts: string[] = [];
 
       if (journeyService.destinationStopPlace) {
-        lineParts.push(journeyService.destinationStopPlace.stopPlaceName);
+        lineParts.push(journeyService.destinationStopPlace.stopPlaceName ?? 'n/a');
       }
 
       return lineParts.join('');
@@ -128,7 +127,7 @@ export class AppComponent {
           return;
         }
 
-        lineParts.push(stopPlace.stopPlaceName);
+        lineParts.push(stopPlace.stopPlaceName ?? 'n/a');
       });
 
       return ' - ' + lineParts.join(' - ');
