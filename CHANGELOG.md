@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 0.9.27 - 16.02.2024
+- cleanup `lib` files
+
 ## 0.9.26 - 16.02.2024
 - fix `sax` lib import - [PR #46](https://github.com/openTdataCH/ojp-js/pull/46)
 - updates SDK version to `0.9.26` - [PR #47](https://github.com/openTdataCH/ojp-js/pull/47)
