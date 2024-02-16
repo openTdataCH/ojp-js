@@ -1,6 +1,7 @@
-import sax from 'sax';
+import * as sax from 'sax';
 
 import { TreeNode } from "../xml/tree-node";
+import { IS_NODE_CLI } from '..';
 
 export class BaseParser {
   private rootNode: TreeNode;
@@ -25,8 +26,22 @@ export class BaseParser {
   }
 
   public parseXML(responseXMLText: string) {
+    if (IS_NODE_CLI) {
+      // 'sax' doesnt have a default export 
+      //    and "import * as sax from 'sax';" 
+      //    will fail for node CLI apps
+      import('sax').then((module) => {
+        const stream = module.default.createStream(true, { trim: true, xmlns: true });  
+        this._parseXML(responseXMLText, stream);
+      });
+    } else {
+      const stream = sax.createStream(true, { trim: true, xmlns: true });
+      this._parseXML(responseXMLText, stream);
+    }
+  }
+
+  private _parseXML(responseXMLText: string, saxStream: sax.SAXStream) {
     this.resetNodes();
-    const saxStream = sax.createStream(true, { trim: true, xmlns: true });
 
     saxStream.on('opentag', (node: sax.QualifiedTag) => {
       this.onOpenTag(node);
