@@ -7,6 +7,7 @@ export declare class BaseParser {
     constructor();
     private resetNodes;
     parseXML(responseXMLText: string): void;
+    private _parseXML;
     private onOpenTag;
     private onText;
     private onSaxCloseTag;
