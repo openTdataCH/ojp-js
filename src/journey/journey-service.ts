@@ -5,6 +5,12 @@ import { StopPlace } from '../location/stopplace';
 import { PtSituationElement } from '../situation/situation-element';
 import { TreeNode } from '../xml/tree-node';
 
+interface ServiceAttribute {
+  code: string
+  text: string
+  extra: Record<string, string>
+}
+
 export class JourneyService {
   public journeyRef: string;
   public ptMode: PublicTransportMode;
@@ -16,6 +22,8 @@ export class JourneyService {
   
   public siriSituationIds: string[]
   public siriSituations: PtSituationElement[]
+
+  public serviceAttributes: Record<string, ServiceAttribute>
 
   constructor(journeyRef: string, ptMode: PublicTransportMode, agencyCode: string) {
     this.journeyRef = journeyRef;
@@ -29,6 +37,8 @@ export class JourneyService {
 
     this.siriSituationIds = [];
     this.siriSituations = [];
+
+    this.serviceAttributes = {};
   }
 
   public static initWithTreeNode(treeNode: TreeNode): JourneyService | null {
@@ -65,6 +75,54 @@ export class JourneyService {
       if (situationNumber) {
         legService.siriSituationIds.push(situationNumber);
       }
+    });
+
+    legService.serviceAttributes = {};
+    serviceTreeNode.findChildrenNamed('Attribute').forEach(attributeTreeNode => {
+      let code = attributeTreeNode.findTextFromChildNamed('Code');
+      if (code === null) {
+        console.error('ERROR - cant find code for Attribute');
+        console.log(attributeTreeNode);
+        return;
+      }
+
+      if (code.startsWith('A_')) {
+        // normalize HRDF *A attributes, strip A__ chars
+        code = code.replace(/A_*/, '');
+      }
+
+      const text = attributeTreeNode.findTextFromChildNamed('Text/Text');
+
+      if (text === null) {
+        console.error('ERROR - cant find code/text for Attribute');
+        console.log(attributeTreeNode);
+        return;
+      }
+
+      const serviceAttribute: ServiceAttribute = {
+        code: code,
+        text: text,
+        extra: {},
+      };
+      
+      attributeTreeNode.children.forEach(childTreeNode => {
+        if (childTreeNode.name.startsWith('siri:')) {
+          const extraAttributeParts = childTreeNode.name.split('siri:');
+          if (extraAttributeParts.length !== 2) {
+            return;
+          }
+          const extraAttributeKey = extraAttributeParts[1];
+          const extraAttributeValue = childTreeNode.text;
+
+          if (extraAttributeValue === null) {
+            return;
+          }
+
+          serviceAttribute.extra[extraAttributeKey] = extraAttributeValue;
+        }
+      });
+
+      legService.serviceAttributes[code] = serviceAttribute;
     });
 
     return legService;
