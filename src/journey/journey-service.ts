@@ -91,7 +91,7 @@ export class JourneyService {
         code = code.replace(/A_*/, '');
       }
 
-      const text = attributeTreeNode.findTextFromChildNamed('Text/Text');
+      const text = attributeTreeNode.findTextFromChildNamed('UserText/Text');
 
       if (text === null) {
         console.error('ERROR - cant find code/text for Attribute');
