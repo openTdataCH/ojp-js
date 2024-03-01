@@ -6,6 +6,8 @@ import { TripRequestParser } from './trip-request-parser';
 import { Trip, TripContinousLeg, TripLocationPoint } from '../../trip';
 import { Location } from '../../location/location';
 
+export type TripRequestBoardingType = 'Dep' | 'Arr'
+
 export class TripRequest extends OJPBaseRequest {
   private requestParams: TripsRequestParams
 
