@@ -4,6 +4,7 @@ import { StageConfig } from '../../types/stage-config';
 import { TripRequest_Response, TripRequest_Callback } from '../types/trip-request.type';
 import { TripLocationPoint } from '../../trip';
 import { Location } from '../../location/location';
+export type TripRequestBoardingType = 'Dep' | 'Arr';
 export declare class TripRequest extends OJPBaseRequest {
     private requestParams;
     constructor(stageConfig: StageConfig, requestParams: TripsRequestParams);
