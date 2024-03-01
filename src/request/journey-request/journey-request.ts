@@ -1,6 +1,6 @@
 import { StageConfig } from "../../types/stage-config";
 import { TripRequest } from "../trips-request/trips-request";
-import { TripsRequestParams } from "../trips-request/trips-request-params";
+import { TripDateType, TripsRequestParams } from "../trips-request/trips-request-params";
 import { JourneyRequestParams } from "./journey-request-params";
 import { RequestErrorData } from "../types/request-info.type";
 import { TripRequest_ParserMessage, TripRequest_Response } from "../types/trip-request.type";
@@ -26,18 +26,17 @@ export class JourneyRequest {
   }
 
   public fetchResponse(callback: JourneyRequest_Callback) {
-    const tripDepartureDate = this.requestParams.departureDate;
     this.tripRequests = [];
-    this.computeTripResponse(0, tripDepartureDate, callback);
+    this.computeTripResponse(0, this.requestParams.depArrDate, this.requestParams.dateType, callback);
   }
 
-  private computeTripResponse(journeyIDx: number, tripDepartureDate: Date, callback: JourneyRequest_Callback) {
+  private computeTripResponse(journeyIDx: number, depArrDate: Date, dateType: TripDateType, callback: JourneyRequest_Callback) {
     const isLastJourneySegment = journeyIDx === (this.requestParams.tripModeTypes.length - 1)
 
     const fromTripLocation = this.requestParams.tripLocations[journeyIDx]
     const toTripLocation = this.requestParams.tripLocations[journeyIDx + 1]
 
-    const tripRequestParams = TripsRequestParams.initWithTripLocationsAndDate(fromTripLocation, toTripLocation, tripDepartureDate)
+    const tripRequestParams = TripsRequestParams.initWithTripLocationsAndDate(fromTripLocation, toTripLocation, depArrDate, dateType)
     if (tripRequestParams === null) {
       console.error('JourneyRequest - TripsRequestParams null for trip idx ' + journeyIDx)
       return
@@ -47,6 +46,7 @@ export class JourneyRequest {
     tripRequestParams.useNumberOfResultsAfter = this.requestParams.useNumberOfResultsAfter
     tripRequestParams.modeType = this.requestParams.tripModeTypes[journeyIDx];
     tripRequestParams.transportMode = this.requestParams.transportModes[journeyIDx];
+    tripRequestParams.dateType = this.requestParams.dateType;
 
     const tripRequest = new TripRequest(this.stageConfig, tripRequestParams);
     this.tripRequests.push(tripRequest);
@@ -101,9 +101,9 @@ export class JourneyRequest {
           });
         } else {
           const firstTrip = tripRequestResponse.trips[0];
-          tripDepartureDate = firstTrip.stats.endDatetime;
+          depArrDate = firstTrip.stats.endDatetime;
   
-          this.computeTripResponse(journeyIDx + 1, tripDepartureDate, callback);
+          this.computeTripResponse(journeyIDx + 1, depArrDate, dateType, callback);
         }
       }
     });

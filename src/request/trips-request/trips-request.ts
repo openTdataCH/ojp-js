@@ -1,5 +1,5 @@
 import { OJPBaseRequest } from '../base-request';
-import { TripsRequestParams } from './trips-request-params';
+import { TripDateType, TripsRequestParams } from './trips-request-params';
 import { DEFAULT_STAGE, StageConfig } from '../../types/stage-config';
 import { TripRequest_Response, TripRequest_Callback } from '../types/trip-request.type';
 import { TripRequestParser } from './trip-request-parser';
@@ -31,8 +31,8 @@ export class TripRequest extends OJPBaseRequest {
     return request;
   }
 
-  public static initWithLocationsAndDate(stageConfig: StageConfig, fromLocation: Location, toLocation: Location, departureDate: Date) {
-    const requestParams = TripsRequestParams.initWithLocationsAndDate(fromLocation, toLocation, departureDate);
+  public static initWithLocationsAndDate(stageConfig: StageConfig, fromLocation: Location, toLocation: Location, departureDate: Date, dateType?: TripDateType) {
+    const requestParams = TripsRequestParams.initWithLocationsAndDate(fromLocation, toLocation, departureDate, dateType);
     if (requestParams === null) {
       return null;
     }
@@ -40,8 +40,8 @@ export class TripRequest extends OJPBaseRequest {
     return request;
   }
 
-  public static initWithTripLocationsAndDate(stageConfig: StageConfig, fromTripLocation: TripLocationPoint | null, toTripLocation: TripLocationPoint | null, departureDate: Date) {
-    const requestParams = TripsRequestParams.initWithTripLocationsAndDate(fromTripLocation, toTripLocation, departureDate);
+  public static initWithTripLocationsAndDate(stageConfig: StageConfig, fromTripLocation: TripLocationPoint | null, toTripLocation: TripLocationPoint | null, departureDate: Date, dateType?: TripDateType) {
+    const requestParams = TripsRequestParams.initWithTripLocationsAndDate(fromTripLocation, toTripLocation, departureDate, dateType);
     if (requestParams === null) {
       return null;
     }

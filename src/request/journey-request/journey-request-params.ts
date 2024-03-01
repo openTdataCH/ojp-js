@@ -1,20 +1,23 @@
 import { TripLocationPoint } from "../../trip";
 import { IndividualTransportMode } from "../../types/individual-mode.types";
 import { TripModeType } from "../../types/trip-mode-type";
+import { TripDateType } from "../trips-request/trips-request-params";
 
 export class JourneyRequestParams {
   tripLocations: TripLocationPoint[]
   tripModeTypes: TripModeType[]
   transportModes: IndividualTransportMode[]
-  departureDate: Date
+  depArrDate: Date
+  dateType: TripDateType
   includeLegProjection: boolean
   useNumberOfResultsAfter: boolean
 
-  constructor(tripLocations: TripLocationPoint[], tripModeTypes: TripModeType[], transportModes: IndividualTransportMode[], departureDate: Date) {
+  constructor(tripLocations: TripLocationPoint[], tripModeTypes: TripModeType[], transportModes: IndividualTransportMode[], depArrDate: Date, dateType?: TripDateType) {
     this.tripLocations = tripLocations;
     this.tripModeTypes = tripModeTypes
     this.transportModes = transportModes
-    this.departureDate = departureDate
+    this.depArrDate = depArrDate
+    this.dateType = dateType ?? 'Departure'
     this.includeLegProjection = true
     this.useNumberOfResultsAfter = true
   }
@@ -25,7 +28,8 @@ export class JourneyRequestParams {
     viaTripLocations: TripLocationPoint[],
     tripModeTypes: TripModeType[],
     transportModes: IndividualTransportMode[],
-    departureDate: Date
+    depArrDate: Date,
+    dateType?: TripDateType
   ): JourneyRequestParams | null {
     if ((fromTripLocation === null) || (toTripLocation === null)) {
       return null;
@@ -64,7 +68,7 @@ export class JourneyRequestParams {
     tripLocations = tripLocations.concat(viaTripLocations);
     tripLocations.push(toTripLocation);
 
-    const requestParams = new JourneyRequestParams(tripLocations, tripModeTypes, transportModes, departureDate)
+    const requestParams = new JourneyRequestParams(tripLocations, tripModeTypes, transportModes, depArrDate, dateType)
 
     return requestParams
   }

@@ -1,4 +1,4 @@
-import { TripLocationPoint } from "../../trip";
+import { Trip, TripLocationPoint } from "../../trip";
 import { IndividualTransportMode } from "../../types/individual-mode.types";
 import { TripModeType } from "../../types/trip-mode-type";
 import { BaseRequestParams } from "../base-request-params";
@@ -6,10 +6,13 @@ import { JourneyPointType } from '../../types/journey-points';
 import { Location } from "../../location/location";
 import { SDK_VERSION } from "../..";
 
+export type TripDateType = 'Departure' | 'Arrival';
+
 export class TripsRequestParams extends BaseRequestParams {
   public fromTripLocation: TripLocationPoint;
   public toTripLocation: TripLocationPoint;
-  public departureDate: Date;
+  public depArrDate: Date;
+  public dateType: TripDateType;
   public modeType: TripModeType;
   public transportMode: IndividualTransportMode;
   public includeLegProjection: boolean;
@@ -18,13 +21,15 @@ export class TripsRequestParams extends BaseRequestParams {
   constructor(
     fromTripLocation: TripLocationPoint,
     toTripLocation: TripLocationPoint,
-    departureDate: Date
+    depArrTime: Date,
+    dateType?: TripDateType,
   ) {
     super();
 
     this.fromTripLocation = fromTripLocation;
     this.toTripLocation = toTripLocation;
-    this.departureDate = departureDate;
+    this.depArrDate = depArrTime;
+    this.dateType = dateType ?? 'Departure';
 
     this.modeType = "monomodal";
     this.transportMode = "public_transport";
@@ -44,7 +49,7 @@ export class TripsRequestParams extends BaseRequestParams {
   }
 
   public static initWithLocationsAndDate(fromLocation: Location | null, toLocation: Location | null,
-    departureDate: Date): TripsRequestParams | null {
+    depArrDate: Date, dateType?: TripDateType): TripsRequestParams | null {
     if (fromLocation === null || toLocation === null) {
       return null;
     }
@@ -52,14 +57,15 @@ export class TripsRequestParams extends BaseRequestParams {
     const fromTripLocationPoint = new TripLocationPoint(fromLocation);
     const toTripLocationPoint = new TripLocationPoint(toLocation);
 
-    const requestParams = TripsRequestParams.initWithTripLocationsAndDate(fromTripLocationPoint, toTripLocationPoint, departureDate);
+    const requestParams = TripsRequestParams.initWithTripLocationsAndDate(fromTripLocationPoint, toTripLocationPoint, depArrDate, dateType);
     return requestParams;
   }
 
   public static initWithTripLocationsAndDate(
     fromTripLocationPoint: TripLocationPoint | null,
     toTripLocationPoint: TripLocationPoint | null,
-    departureDate: Date
+    departureDate: Date,
+    dateType?: TripDateType
   ): TripsRequestParams | null {
     if (fromTripLocationPoint === null || toTripLocationPoint === null) {
       return null;
@@ -80,7 +86,8 @@ export class TripsRequestParams extends BaseRequestParams {
     const tripRequestParams = new TripsRequestParams(
       fromTripLocationPoint,
       toTripLocationPoint,
-      departureDate
+      departureDate,
+      dateType
     );
     return tripRequestParams;
   }
@@ -133,8 +140,10 @@ export class TripsRequestParams extends BaseRequestParams {
         }
       }
 
-      if (isFrom) {
-        const dateF = this.departureDate.toISOString();
+      const dateF = this.depArrDate.toISOString();
+      if (isFrom && this.dateType === 'Departure') {
+        endPointNode.ele("DepArrTime", dateF);
+      } else if (!isFrom && this.dateType === 'Arrival') {
         endPointNode.ele("DepArrTime", dateF);
       }
 
