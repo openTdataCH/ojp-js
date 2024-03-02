@@ -2,6 +2,7 @@
 
 ## 0.9.xx - xx.03.2024
 - expose `JourneyService` attributes - [PR #53](https://github.com/openTdataCH/ojp-js/pull/53)
+- adds `Dep/Arr` option for TripRequest requests - [PR #54](https://github.com/openTdataCH/ojp-js/pull/54)
 
 ## 0.9.28 - 16.02.2024
 - fix `sax` lib import - [PR #49](https://github.com/openTdataCH/ojp-js/pull/49)
