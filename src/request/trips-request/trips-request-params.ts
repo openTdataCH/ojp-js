@@ -5,6 +5,7 @@ import { BaseRequestParams } from "../base-request-params";
 import { JourneyPointType } from '../../types/journey-points';
 import { Location } from "../../location/location";
 import { SDK_VERSION } from "../..";
+import { TripRequestBoardingType } from './trips-request'
 
 export class TripsRequestParams extends BaseRequestParams {
   public fromTripLocation: TripLocationPoint;
@@ -14,17 +15,20 @@ export class TripsRequestParams extends BaseRequestParams {
   public transportMode: IndividualTransportMode;
   public includeLegProjection: boolean;
   public useNumberOfResultsAfter: boolean;
+  public tripRequestBoardingType: TripRequestBoardingType
 
   constructor(
     fromTripLocation: TripLocationPoint,
     toTripLocation: TripLocationPoint,
-    departureDate: Date
+    departureDate: Date = new Date(),
+    tripRequestBoardingType: TripRequestBoardingType = 'Dep'
   ) {
     super();
 
     this.fromTripLocation = fromTripLocation;
     this.toTripLocation = toTripLocation;
     this.departureDate = departureDate;
+    this.tripRequestBoardingType = tripRequestBoardingType;
 
     this.modeType = "monomodal";
     this.transportMode = "public_transport";
@@ -38,13 +42,18 @@ export class TripsRequestParams extends BaseRequestParams {
     const requestParams = new TripsRequestParams(
       emptyTripLocationPoint,
       emptyTripLocationPoint,
-      new Date()
+      new Date(),
+      'Dep'
     );
     return requestParams;
   }
 
-  public static initWithLocationsAndDate(fromLocation: Location | null, toLocation: Location | null,
-    departureDate: Date): TripsRequestParams | null {
+  public static initWithLocationsAndDate(
+    fromLocation: Location | null, 
+    toLocation: Location | null,
+    departureDate: Date = new Date(),
+    tripRequestBoardingType: TripRequestBoardingType = 'Dep'
+  ): TripsRequestParams | null {
     if (fromLocation === null || toLocation === null) {
       return null;
     }
@@ -52,14 +61,15 @@ export class TripsRequestParams extends BaseRequestParams {
     const fromTripLocationPoint = new TripLocationPoint(fromLocation);
     const toTripLocationPoint = new TripLocationPoint(toLocation);
 
-    const requestParams = TripsRequestParams.initWithTripLocationsAndDate(fromTripLocationPoint, toTripLocationPoint, departureDate);
+    const requestParams = TripsRequestParams.initWithTripLocationsAndDate(fromTripLocationPoint, toTripLocationPoint, departureDate, tripRequestBoardingType);
     return requestParams;
   }
 
   public static initWithTripLocationsAndDate(
     fromTripLocationPoint: TripLocationPoint | null,
     toTripLocationPoint: TripLocationPoint | null,
-    departureDate: Date
+    departureDate: Date = new Date(),
+    tripRequestBoardingType: TripRequestBoardingType = 'Dep'
   ): TripsRequestParams | null {
     if (fromTripLocationPoint === null || toTripLocationPoint === null) {
       return null;
@@ -80,7 +90,8 @@ export class TripsRequestParams extends BaseRequestParams {
     const tripRequestParams = new TripsRequestParams(
       fromTripLocationPoint,
       toTripLocationPoint,
-      departureDate
+      departureDate,
+      tripRequestBoardingType
     );
     return tripRequestParams;
   }
@@ -133,9 +144,15 @@ export class TripsRequestParams extends BaseRequestParams {
         }
       }
 
+      const dateF = this.departureDate.toISOString();
       if (isFrom) {
-        const dateF = this.departureDate.toISOString();
-        endPointNode.ele("DepArrTime", dateF);
+        if (this.tripRequestBoardingType === 'Dep') {
+          endPointNode.ele("DepArrTime", dateF);
+        }
+      } else {
+        if (this.tripRequestBoardingType === 'Arr') {
+          endPointNode.ele("DepArrTime", dateF);
+        }
       }
 
       if (isMonomodal) {
@@ -209,14 +226,26 @@ export class TripsRequestParams extends BaseRequestParams {
     const paramsNode = tripRequestNode.ele("Params");
 
     const numberOfResults = 5;
-    const nodeName = this.useNumberOfResultsAfter
-      ? "NumberOfResultsAfter"
-      : "NumberOfResults";
+    const nodeName: string = (() => {
+      if (this.useNumberOfResultsAfter && this.tripRequestBoardingType === 'Dep') {
+        return 'NumberOfResultsAfter'
+      }
+      
+      if (this.useNumberOfResultsAfter && this.tripRequestBoardingType === 'Arr') {
+        return 'NumberOfResultsBefore'
+      }
+
+      return 'NumberOfResults';
+    })();
     paramsNode.ele(nodeName, numberOfResults);
-    if (this.useNumberOfResultsAfter) {
-      // https://github.com/openTdataCH/ojp-demo-app-src/issues/108
-      // NumberOfResultsAfter and NumberOfResultsBefore are always used together
+
+    // https://github.com/openTdataCH/ojp-demo-app-src/issues/108
+    // NumberOfResultsAfter and NumberOfResultsBefore are always used together
+    if (nodeName === 'NumberOfResultsAfter') {
       paramsNode.ele("NumberOfResultsBefore", 0);
+    }
+    if (nodeName === 'NumberOfResultsBefore') {
+      paramsNode.ele("NumberOfResultsAfter", 0);
     }
 
     paramsNode.ele("IncludeTrackSections", true);

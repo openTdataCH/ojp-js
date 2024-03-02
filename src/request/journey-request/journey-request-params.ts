@@ -1,6 +1,7 @@
 import { TripLocationPoint } from "../../trip";
 import { IndividualTransportMode } from "../../types/individual-mode.types";
 import { TripModeType } from "../../types/trip-mode-type";
+import { TripRequestBoardingType } from '../trips-request/trips-request'
 
 export class JourneyRequestParams {
   tripLocations: TripLocationPoint[]
@@ -9,14 +10,22 @@ export class JourneyRequestParams {
   departureDate: Date
   includeLegProjection: boolean
   useNumberOfResultsAfter: boolean
+  public tripRequestBoardingType: TripRequestBoardingType
 
-  constructor(tripLocations: TripLocationPoint[], tripModeTypes: TripModeType[], transportModes: IndividualTransportMode[], departureDate: Date) {
+  constructor(
+    tripLocations: TripLocationPoint[], 
+    tripModeTypes: TripModeType[], 
+    transportModes: IndividualTransportMode[], 
+    departureDate: Date, 
+    tripRequestBoardingType: TripRequestBoardingType,
+  ) {
     this.tripLocations = tripLocations;
     this.tripModeTypes = tripModeTypes
     this.transportModes = transportModes
     this.departureDate = departureDate
     this.includeLegProjection = true
     this.useNumberOfResultsAfter = true
+    this.tripRequestBoardingType = tripRequestBoardingType
   }
 
   public static initWithLocationsAndDate(
@@ -25,7 +34,8 @@ export class JourneyRequestParams {
     viaTripLocations: TripLocationPoint[],
     tripModeTypes: TripModeType[],
     transportModes: IndividualTransportMode[],
-    departureDate: Date
+    departureDate: Date,
+    tripRequestBoardingType: TripRequestBoardingType,
   ): JourneyRequestParams | null {
     if ((fromTripLocation === null) || (toTripLocation === null)) {
       return null;
@@ -64,7 +74,7 @@ export class JourneyRequestParams {
     tripLocations = tripLocations.concat(viaTripLocations);
     tripLocations.push(toTripLocation);
 
-    const requestParams = new JourneyRequestParams(tripLocations, tripModeTypes, transportModes, departureDate)
+    const requestParams = new JourneyRequestParams(tripLocations, tripModeTypes, transportModes, departureDate, tripRequestBoardingType)
 
     return requestParams
   }
