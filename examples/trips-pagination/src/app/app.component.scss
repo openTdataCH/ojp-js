@@ -1,0 +1,24 @@
+table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 4px;
+}
+
+th.trip-info {
+  min-width: 400px;
+}
+
+.results-wrapper > * {
+  margin: 8px;
+}
+
+.page_separator {
+  border-bottom: 2px solid black;
+}
+
+.form-group {
+  margin: 4px;
+}
