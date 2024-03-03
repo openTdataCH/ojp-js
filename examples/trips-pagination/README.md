@@ -6,7 +6,7 @@ The app demonstrates pagination for the same TripRequest `from`/`to` endpoints
 - for the initial request the current date is used
 - for the next requests (pages) the last departure time is used
 - TripRequest results which are duplicated can be discarded using a hash function for Trip/TripLeg components
-example: see [app.component.ts > computeTripHash](./src/app/app.component.ts) method
+example: see [app.component.ts > computeTripHash](./src/app/app.component.ts#L190-L213) method
 
 Example: 
 - results 1, 2 from 2nd page are duplicated (they match the results 5, 6 in first page)
