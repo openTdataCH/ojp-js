@@ -37,6 +37,7 @@ describe('LIR POI', () => {
     const response = await request.fetchResponse();
     const location = response.locations[0];
 
+    // Find the location having a POI with num_vehicles_available attribute
     const locationPOIs = response.locations.filter(location => {
       return location.poi?.code === 'coord:828397:6066636:MRCV:Publibike Bundesgasse'
     });
