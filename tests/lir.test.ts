@@ -26,3 +26,23 @@ describe('OJP Test Namespaces', () => {
     expect(location.stopPlace?.stopPlaceRef).toBe('8507000');
   });
 });
+
+
+describe('LIR POI', () => {
+  test('Test Shared Mobility', async () => {
+    const mockPath = path.join(__dirname, '/ojp-fixtures/lir-poi-be-mobility.xml');
+    const mockXML = fs.readFileSync(mockPath, { encoding: 'utf8' });
+    const request = OJP.LocationInformationRequest.initWithResponseMock(mockXML);
+    
+    const response = await request.fetchResponse();
+    const location = response.locations[0];
+
+    const locationPOIs = response.locations.filter(location => {
+      return location.poi?.code === 'coord:828397:6066636:MRCV:Publibike Bundesgasse'
+    });
+
+    expect(locationPOIs).toHaveLength(1);
+
+    expect(locationPOIs[0].attributes['num_vehicles_available']).toBe('2');
+  });
+})
