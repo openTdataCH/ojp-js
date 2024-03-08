@@ -33,10 +33,10 @@ export class TripRequest extends OJPBaseRequest {
     return request;
   }
 
-  public static initWithStopRefs(stageConfig: StageConfig, fromStopRef: string, toStopRef: string, departureDate: Date = new Date()) {
+  public static initWithStopRefs(stageConfig: StageConfig, fromStopRef: string, toStopRef: string, departureDate: Date = new Date(), tripRequestBoardingType: TripRequestBoardingType = 'Dep') {
     const fromLocation = Location.initWithStopPlaceRef(fromStopRef);
     const toLocation = Location.initWithStopPlaceRef(toStopRef);
-    const requestParams = TripsRequestParams.initWithLocationsAndDate(fromLocation, toLocation, departureDate);
+    const requestParams = TripsRequestParams.initWithLocationsAndDate(fromLocation, toLocation, departureDate, tripRequestBoardingType);
     if (requestParams === null) {
       return null;
     }
@@ -45,8 +45,8 @@ export class TripRequest extends OJPBaseRequest {
     return request;
   }
 
-  public static initWithLocationsAndDate(stageConfig: StageConfig, fromLocation: Location, toLocation: Location, departureDate: Date) {
-    const requestParams = TripsRequestParams.initWithLocationsAndDate(fromLocation, toLocation, departureDate);
+  public static initWithLocationsAndDate(stageConfig: StageConfig, fromLocation: Location, toLocation: Location, departureDate: Date, tripRequestBoardingType: TripRequestBoardingType = 'Dep') {
+    const requestParams = TripsRequestParams.initWithLocationsAndDate(fromLocation, toLocation, departureDate, tripRequestBoardingType);
     if (requestParams === null) {
       return null;
     }
@@ -54,8 +54,8 @@ export class TripRequest extends OJPBaseRequest {
     return request;
   }
 
-  public static initWithTripLocationsAndDate(stageConfig: StageConfig, fromTripLocation: TripLocationPoint | null, toTripLocation: TripLocationPoint | null, departureDate: Date) {
-    const requestParams = TripsRequestParams.initWithTripLocationsAndDate(fromTripLocation, toTripLocation, departureDate);
+  public static initWithTripLocationsAndDate(stageConfig: StageConfig, fromTripLocation: TripLocationPoint | null, toTripLocation: TripLocationPoint | null, departureDate: Date, tripRequestBoardingType: TripRequestBoardingType = 'Dep') {
+    const requestParams = TripsRequestParams.initWithTripLocationsAndDate(fromTripLocation, toTripLocation, departureDate, tripRequestBoardingType);
     if (requestParams === null) {
       return null;
     }
