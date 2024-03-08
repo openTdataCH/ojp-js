@@ -1,12 +1,10 @@
-import * as OJP from '../src/index'
+import { FileHelpers } from './helpers/file-helpers';
 
-const fs = require('fs');
-const path = require('path');
+import * as OJP from '../src/index'
 
 describe('OJP Test Namespaces', () => {
   test('Test LIR with ojp: siri: namespaces', async () => {
-    const mockPath = path.join(__dirname, '/ojp-fixtures/lir-be.xml');
-    const mockXML = fs.readFileSync(mockPath, { encoding: 'utf8' });
+    const mockXML = FileHelpers.loadMockXML('lir-be.xml')
     const request = OJP.LocationInformationRequest.initWithResponseMock(mockXML);
     
     const response = await request.fetchResponse();
@@ -16,8 +14,7 @@ describe('OJP Test Namespaces', () => {
   });
 
   test('Test LIR with ojp default namespace + siri: namespaces', async () => {
-    const mockPath = path.join(__dirname, '/ojp-fixtures/lir-be-ns-ojp.xml');
-    const mockXML = fs.readFileSync(mockPath, { encoding: 'utf8' });
+    const mockXML = FileHelpers.loadMockXML('lir-be-ns-ojp.xml');
     const request = OJP.LocationInformationRequest.initWithResponseMock(mockXML);
     
     const response = await request.fetchResponse();
@@ -30,8 +27,7 @@ describe('OJP Test Namespaces', () => {
 
 describe('LIR POI', () => {
   test('Test Shared Mobility', async () => {
-    const mockPath = path.join(__dirname, '/ojp-fixtures/lir-poi-be-mobility.xml');
-    const mockXML = fs.readFileSync(mockPath, { encoding: 'utf8' });
+    const mockXML = FileHelpers.loadMockXML('lir-poi-be-mobility.xml');
     const request = OJP.LocationInformationRequest.initWithResponseMock(mockXML);
     
     const response = await request.fetchResponse();
