@@ -3,6 +3,8 @@ export const IS_NODE_CLI = typeof process !== 'undefined' && process.versions &&
 
 export * from './config/map-colors'
 
+export * from './fare/fare'
+
 export * from './helpers/date-helpers'
 export * from './helpers/mapbox-layer-helpers'
 export * from './helpers/xml-helpers'

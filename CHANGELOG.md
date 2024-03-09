@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.9.xx - xx.03.2024
+- adds OJP Fare Support - [OJP Fare Support #57](https://github.com/openTdataCH/ojp-js/issues/57) - [PR #57](https://github.com/openTdataCH/ojp-js/pull/57)
+- adds PoC for TripRequest pagination - [Create PoC exmaple for TripRequest pagination](https://github.com/openTdataCH/ojp-js/issues/59) - [PR #56](https://github.com/openTdataCH/ojp-js/pull/56)
+
 ## 0.9.29 - 02.03.2024
 - expose `JourneyService` attributes - [PR #53](https://github.com/openTdataCH/ojp-js/pull/53)
 - adds `Dep/Arr` option for TripRequest requests - [PR #54](https://github.com/openTdataCH/ojp-js/pull/54)
