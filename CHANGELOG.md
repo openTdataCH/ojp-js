@@ -1,7 +1,7 @@
 # CHANGELOG
 
 ## 0.9.xx - xx.03.2024
-- fix `Location.POI` shared mobility attributes - [issue #60](https://github.com/openTdataCH/ojp-js/issues/60)
+- fix `Location.POI` shared mobility attributes - [issue #60](https://github.com/openTdataCH/ojp-js/issues/60) - [PR #61](https://github.com/openTdataCH/ojp-js/pull/61)
 - adds OJP Fare Support - [OJP Fare Support #57](https://github.com/openTdataCH/ojp-js/issues/57) - [PR #57](https://github.com/openTdataCH/ojp-js/pull/57)
 - adds PoC for TripRequest pagination - [Create PoC exmaple for TripRequest pagination](https://github.com/openTdataCH/ojp-js/issues/59) - [PR #56](https://github.com/openTdataCH/ojp-js/pull/56)
 
