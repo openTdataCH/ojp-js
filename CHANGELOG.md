@@ -1,6 +1,7 @@
 # CHANGELOG
 
-## 0.9.xx - xx.03.2024
+## 0.9.30 - 09.03.2024
+- updates SDK version to `0.9.30` - [PR #64](https://github.com/openTdataCH/ojp-js/pull/64)
 - updates `TripRequest` API - [PR #62](https://github.com/openTdataCH/ojp-js/pull/62)
 - fix `Location.POI` shared mobility attributes - [issue #60](https://github.com/openTdataCH/ojp-js/issues/60) - [PR #61](https://github.com/openTdataCH/ojp-js/pull/61)
 - adds OJP Fare Support - [OJP Fare Support #57](https://github.com/openTdataCH/ojp-js/issues/57) - [PR #57](https://github.com/openTdataCH/ojp-js/pull/57)
