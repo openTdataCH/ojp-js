@@ -9,15 +9,32 @@
 
 The constructor takes `StageConfig` and `TripsRequestParams` params but usually one of the static constructors are used
 
+### TripRequest with stop refs
 ```
-const fromLocation = OJP.Location.initWithStopPlaceRef('8507000'); // Bern
-const toLocation = OJP.Location.initWithStopPlaceRef('8503000'); // Zürich
+const fromStopRef = '8507000';  // Bern
+const toStopRef = '8503000';    // Zürich
 
-const request1 = OJP.TripRequest.initWithLocationsAndDate(OJP.DEFAULT_STAGE, fromLocation, toLocation, new Date());
+const fromLocation = OJP.Location.initWithStopPlaceRef(fromStopRef); 
+const toLocation = OJP.Location.initWithStopPlaceRef(toStopRef); 
+
+const request1 = OJP.TripRequest.initWithLocationsAndDate(OJP.DEFAULT_STAGE, fromLocation, toLocation, new Date(), 'Dep');
 if (request1 === null) {
     // handle invalid requests
     return;
 }
+
+// This is equivalent with request1
+const request1_B = OJP.TripRequest.initWithStopRefs(OJP.DEFAULT_STAGE, fromStopRef, toStopRef, new Date(), 'Dep');
+```
+
+### TripRequest with coords
+```
+// Request with long/lat coordinates
+// https://opentdatach.github.io/ojp-demo-app/search?from=46.957522,7.431170&to=46.931849,7.485132
+const fromLocationCoords = OJP.Location.initWithLngLat(7.431170, 46.957522);
+const toLocationCoords = OJP.Location.initWithLngLat(7.485132, 46.931849);
+
+const request2 = OJP.TripRequest.initWithLocationsAndDate(OJP.DEFAULT_STAGE, fromLocationCoords, toLocationCoords, new Date(), 'Dep');
 ```
 
 ## Parsing response
