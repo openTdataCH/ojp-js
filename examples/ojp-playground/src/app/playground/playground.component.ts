@@ -86,6 +86,7 @@ export class PlaygroundComponent {
     const request1_B = OJP.TripRequest.initWithStopRefs(OJP.DEFAULT_STAGE, fromStopRef, toStopRef, new Date(), 'Dep');
 
     // Request with long/lat coordinates
+    // https://opentdatach.github.io/ojp-demo-app/search?from=46.957522,7.431170&to=46.931849,7.485132
     const fromLocationCoords = OJP.Location.initWithLngLat(7.431170, 46.957522);
     const toLocationCoords = OJP.Location.initWithLngLat(7.485132, 46.931849);
     const request2 = OJP.TripRequest.initWithLocationsAndDate(OJP.DEFAULT_STAGE, fromLocationCoords, toLocationCoords, new Date(), 'Dep');
