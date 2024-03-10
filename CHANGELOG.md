@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.9.xx - xx.03.2024
+- add tests  - [Add tests #67](https://github.com/openTdataCH/ojp-js/pull/67)
+- update docs  - [Adds docs SDK, update APIs #63](https://github.com/openTdataCH/ojp-js/pull/63) - [PR #65](https://github.com/openTdataCH/ojp-js/pull/65)
+
 ## 0.9.30 - 09.03.2024
 - updates SDK version to `0.9.30` - [PR #64](https://github.com/openTdataCH/ojp-js/pull/64)
 - updates `TripRequest` API - [PR #62](https://github.com/openTdataCH/ojp-js/pull/62)
