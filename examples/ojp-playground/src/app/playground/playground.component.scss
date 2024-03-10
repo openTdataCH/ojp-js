@@ -1,0 +1,48 @@
+.stop-info {
+  font-size: 20px;
+  margin-bottom: 16px;
+}
+
+table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 4px;
+}
+
+td.service {
+  text-align: center;
+}
+
+.service-line {
+  font-size: 20px;
+}
+
+th.description {
+  min-width: 400px;
+}
+
+.journey-from-to {
+  font-size: 18px;
+  margin-bottom: 8px;
+}
+
+.journey-stops {
+  font-size: 14px;
+  color: grey;
+}
+
+.time-cell {
+  text-align: center;
+}
+
+.stop-time {
+  font-size: 24px;
+}
+
+.delay-text {
+  color: rgba(219, 84, 5, 0.904);
+  font-size: 14px;
+}

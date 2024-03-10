@@ -26,11 +26,11 @@ type RenderModel = {
 }
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  selector: 'departures-webapp',
+  templateUrl: './departures.component.html',
+  styleUrls: ['./departures.component.scss']
 })
-export class AppComponent {
+export class DeparturesComponent {
   public renderModel: RenderModel
   private queryParams: URLSearchParams
   
