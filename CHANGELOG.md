@@ -1,7 +1,7 @@
 # CHANGELOG
 
 ## 0.9.xx - xx.03.2024
-- add tests  - [Add tests #67](https://github.com/openTdataCH/ojp-js/pull/67)
+- add tests  - [Add tests #67](https://github.com/openTdataCH/ojp-js/pull/67) - [PR #66](https://github.com/openTdataCH/ojp-js/pull/66)
 - update docs  - [Adds docs SDK, update APIs #63](https://github.com/openTdataCH/ojp-js/pull/63) - [PR #65](https://github.com/openTdataCH/ojp-js/pull/65)
 
 ## 0.9.30 - 09.03.2024
