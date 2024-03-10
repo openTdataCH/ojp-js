@@ -1,0 +1,68 @@
+<h1>TripRequest Pagination</h1>
+
+<form>
+  <div class="form-group">
+    <label for="fromStopRef">From</label>
+    <input type="text" class="form-control" id="fromStopRef" name="fromStopRef" [(ngModel)]="this.fromStopRef" />
+  </div>
+  <div class="form-group">
+    <label for="toStopRef">To</label>
+    <input type="text" class="form-control" id="toStopRef" name="toStopRef" [(ngModel)]="this.toStopRef" />
+  </div>
+  <div>
+    <input type="button" value="Search" (click)="searchNewTrips()" [disabled]="this.isSearching" />
+  </div>
+</form>
+
+<h2>Results</h2>
+
+<div 
+  *ngIf="this.pageModel.tripResults.length > 0"
+  class="results-wrapper">
+  <table>
+    <tr>
+      <th>Page</th>
+      <th>Idx</th>
+      <th>Trip.Id</th>
+      <th>DepTime</th>
+      <th class="trip-info">Legs</th>
+      <th>ArrTime</th>
+    </tr>
+    <tr 
+      *ngFor="let tripResult of this.pageModel.tripResults; index as idx"
+      [ngClass]="{'page_separator': tripResult.isLast === true}"
+      >
+      <td>
+        {{ tripResult.pageIdx }}
+      </td>
+      <td>
+        {{ tripResult.tripIdx }}
+      </td>
+      <td>
+        {{ tripResult.trip.id }}
+      </td>
+      <td>
+        {{ tripResult.fromDate.toLocaleTimeString() }}
+      </td>
+      <td>
+        <ul>
+          <li *ngFor="let tripLegInfo of tripResult.legs">
+            {{ tripLegInfo.legType }}: {{ tripLegInfo.legInfo }}
+          </li>
+        </ul>
+      </td>
+      <td>
+        {{ tripResult.toDate.toLocaleTimeString() }}
+      </td>
+    </tr>
+  </table>
+
+  <div>
+    <input type="button" value="NextPage" (click)="searchTripsNextPage()" [disabled]="this.isSearching" /> 
+    Dep = {{ this.pageModel.nextPageDate?.toLocaleTimeString() }}
+  </div>
+  <div>
+    <input type="checkbox" [(ngModel)]="this.removeDuplicates" /> Remove duplicates
+  </div>
+</div>
+

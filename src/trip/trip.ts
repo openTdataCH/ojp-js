@@ -10,16 +10,19 @@ import { Location } from '../location/location';
 import { GeoPositionBBOX } from '../location/geoposition-bbox'
 import { GeoPosition } from '../location/geoposition'
 import { TreeNode } from '../xml/tree-node'
+import { TripFareResult } from '../fare/fare'
 
 export class Trip {
   public id: string
   public legs: TripLeg[]
   public stats: TripStats
+  public tripFareResults: TripFareResult[]
 
   constructor(tripID: string, legs: TripLeg[], tripStats: TripStats) {
     this.id = tripID;
     this.legs = legs;
     this.stats = tripStats
+    this.tripFareResults = []
   }
 
   public static initFromTreeNode(treeNode: TreeNode): Trip | null {

@@ -1,5 +1,17 @@
 # CHANGELOG
 
+## 0.9.31 - 10.03.2024
+- updates SDK version to `0.9.31` - [PR #68](https://github.com/openTdataCH/ojp-js/pull/68)
+- add tests  - [Add tests #67](https://github.com/openTdataCH/ojp-js/pull/67) - [PR #66](https://github.com/openTdataCH/ojp-js/pull/66)
+- update docs  - [Adds docs SDK, update APIs #63](https://github.com/openTdataCH/ojp-js/pull/63) - [PR #65](https://github.com/openTdataCH/ojp-js/pull/65)
+
+## 0.9.30 - 09.03.2024
+- updates SDK version to `0.9.30` - [PR #64](https://github.com/openTdataCH/ojp-js/pull/64)
+- updates `TripRequest` API - [PR #62](https://github.com/openTdataCH/ojp-js/pull/62)
+- fix `Location.POI` shared mobility attributes - [issue #60](https://github.com/openTdataCH/ojp-js/issues/60) - [PR #61](https://github.com/openTdataCH/ojp-js/pull/61)
+- adds OJP Fare Support - [OJP Fare Support #57](https://github.com/openTdataCH/ojp-js/issues/57) - [PR #57](https://github.com/openTdataCH/ojp-js/pull/57)
+- adds PoC for TripRequest pagination - [Create PoC exmaple for TripRequest pagination](https://github.com/openTdataCH/ojp-js/issues/59) - [PR #56](https://github.com/openTdataCH/ojp-js/pull/56)
+
 ## 0.9.29 - 02.03.2024
 - expose `JourneyService` attributes - [PR #53](https://github.com/openTdataCH/ojp-js/pull/53)
 - adds `Dep/Arr` option for TripRequest requests - [PR #54](https://github.com/openTdataCH/ojp-js/pull/54)

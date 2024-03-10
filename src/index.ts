@@ -1,7 +1,9 @@
-export const SDK_VERSION = '0.9.29';
+export const SDK_VERSION = '0.9.31';
 export const IS_NODE_CLI = typeof process !== 'undefined' && process.versions && process.versions.node;
 
 export * from './config/map-colors'
+
+export * from './fare/fare'
 
 export * from './helpers/date-helpers'
 export * from './helpers/mapbox-layer-helpers'
