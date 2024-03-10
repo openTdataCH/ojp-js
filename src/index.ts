@@ -1,4 +1,4 @@
-export const SDK_VERSION = '0.9.30';
+export const SDK_VERSION = '0.9.31';
 export const IS_NODE_CLI = typeof process !== 'undefined' && process.versions && process.versions.node;
 
 export * from './config/map-colors'
