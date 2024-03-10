@@ -68,14 +68,22 @@ export class PlaygroundComponent {
     console.log('TR Requests');
     console.log('======================');
 
-    const fromLocation = OJP.Location.initWithStopPlaceRef('8507000'); // Bern
-    const toLocation = OJP.Location.initWithStopPlaceRef('8503000'); // Zürich
+    // Building request
 
-    const request1 = OJP.TripRequest.initWithLocationsAndDate(OJP.DEFAULT_STAGE, fromLocation, toLocation, new Date());
+    const fromStopRef = '8507000';  // Bern
+    const toStopRef = '8503000';    // Zürich
+
+    const fromLocation = OJP.Location.initWithStopPlaceRef(fromStopRef); 
+    const toLocation = OJP.Location.initWithStopPlaceRef(toStopRef); 
+
+    const request1 = OJP.TripRequest.initWithLocationsAndDate(OJP.DEFAULT_STAGE, fromLocation, toLocation, new Date(), 'Dep');
     if (request1 === null) {
       // handle invalid requests
       return;
     }
+
+    // This is equivalent with request1
+    const request1_B = OJP.TripRequest.initWithStopRefs(OJP.DEFAULT_STAGE, fromStopRef, toStopRef, new Date(), 'Dep');
     
     // a) using await/async
     const response1 = await request1.fetchResponse();
