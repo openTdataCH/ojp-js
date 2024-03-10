@@ -84,6 +84,13 @@ export class PlaygroundComponent {
 
     // This is equivalent with request1
     const request1_B = OJP.TripRequest.initWithStopRefs(OJP.DEFAULT_STAGE, fromStopRef, toStopRef, new Date(), 'Dep');
+
+    // Request with long/lat coordinates
+    const fromLocationCoords = OJP.Location.initWithLngLat(7.431170, 46.957522);
+    const toLocationCoords = OJP.Location.initWithLngLat(7.485132, 46.931849);
+    const request2 = OJP.TripRequest.initWithLocationsAndDate(OJP.DEFAULT_STAGE, fromLocationCoords, toLocationCoords, new Date(), 'Dep');
+    
+    // Handling response
     
     // a) using await/async
     const response1 = await request1.fetchResponse();
@@ -114,6 +121,11 @@ export class PlaygroundComponent {
           // console.log(response);
         }
       }
+    });
+
+    request2?.fetchResponse().then(response => {
+      console.log('TR with coordinates');
+      console.log(response);
     });
   }
 
