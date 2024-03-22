@@ -25,9 +25,9 @@ export class TripRequest extends OJPBaseRequest {
     return request;
   }
 
-  public static initWithRequestMock(mockText: string) {
+  public static initWithRequestMock(mockText: string, stageConfig: StageConfig = DEFAULT_STAGE) {
     const emptyRequestParams = TripsRequestParams.Empty();
-    const request = new TripRequest(DEFAULT_STAGE, emptyRequestParams);
+    const request = new TripRequest(stageConfig, emptyRequestParams);
     request.mockRequestXML = mockText;
     
     return request;

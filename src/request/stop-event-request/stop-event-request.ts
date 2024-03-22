@@ -20,9 +20,9 @@ export class StopEventRequest extends OJPBaseRequest {
         this.requestInfo.requestXML = this.buildRequestXML();
     }
 
-    public static Empty(): StopEventRequest {
+    public static Empty(stageConfig: StageConfig = DEFAULT_STAGE): StopEventRequest {
         const emptyRequestParams = StopEventRequestParams.Empty();
-        const request = new StopEventRequest(DEFAULT_STAGE, emptyRequestParams);
+        const request = new StopEventRequest(stageConfig, emptyRequestParams);
 
         return request;
     }
@@ -34,8 +34,8 @@ export class StopEventRequest extends OJPBaseRequest {
         return request;
     }
 
-    public static initWithRequestMock(mockText: string) {
-        const request = StopEventRequest.Empty();
+    public static initWithRequestMock(mockText: string, stageConfig: StageConfig = DEFAULT_STAGE) {
+        const request = StopEventRequest.Empty(stageConfig);
         request.mockRequestXML = mockText;
         
         return request;
