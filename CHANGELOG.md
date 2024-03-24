@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.9.32 - 24.03.2024
+- updates SDK version to `0.9.32` - [PR #70](https://github.com/openTdataCH/ojp-js/pull/70)
+- allow `StageConfig` to be passed to mock requests - [PR #69](https://github.com/openTdataCH/ojp-js/pull/69)
+
 ## 0.9.31 - 10.03.2024
 - updates SDK version to `0.9.31` - [PR #68](https://github.com/openTdataCH/ojp-js/pull/68)
 - add tests  - [Add tests #67](https://github.com/openTdataCH/ojp-js/pull/67) - [PR #66](https://github.com/openTdataCH/ojp-js/pull/66)
