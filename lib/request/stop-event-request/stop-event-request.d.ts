@@ -6,9 +6,9 @@ import { StopEventRequest_Response } from '../types/stop-event-request.type';
 export declare class StopEventRequest extends OJPBaseRequest {
     requestParams: StopEventRequestParams;
     constructor(stageConfig: StageConfig, requestParams: StopEventRequestParams);
-    static Empty(): StopEventRequest;
+    static Empty(stageConfig?: StageConfig): StopEventRequest;
     static initWithMock(mockText: string): StopEventRequest;
-    static initWithRequestMock(mockText: string): StopEventRequest;
+    static initWithRequestMock(mockText: string, stageConfig?: StageConfig): StopEventRequest;
     static initWithStopPlaceRef(stageConfig: StageConfig, stopPlaceRef: string, stopEventType: StopEventType, stopEventDate: Date): StopEventRequest;
     protected buildRequestXML(): string;
     fetchResponse(): Promise<StopEventRequest_Response>;

@@ -9,7 +9,7 @@ export declare class TripRequest extends OJPBaseRequest {
     private requestParams;
     constructor(stageConfig: StageConfig, requestParams: TripsRequestParams);
     static initWithResponseMock(mockText: string): TripRequest;
-    static initWithRequestMock(mockText: string): TripRequest;
+    static initWithRequestMock(mockText: string, stageConfig?: StageConfig): TripRequest;
     static initWithStopRefs(stageConfig: StageConfig, fromStopRef: string, toStopRef: string, departureDate?: Date, tripRequestBoardingType?: TripRequestBoardingType): TripRequest | null;
     static initWithLocationsAndDate(stageConfig: StageConfig, fromLocation: Location, toLocation: Location, departureDate: Date, tripRequestBoardingType?: TripRequestBoardingType): TripRequest | null;
     static initWithTripLocationsAndDate(stageConfig: StageConfig, fromTripLocation: TripLocationPoint | null, toTripLocation: TripLocationPoint | null, departureDate: Date, tripRequestBoardingType?: TripRequestBoardingType): TripRequest | null;
