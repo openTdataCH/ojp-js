@@ -150,9 +150,9 @@ export class Location {
 
     const addressCode = attrs['addressCode'];
     if (addressCode) {
-      const addressName = attrs['addressName'] ?? null;
-      const topographicPlaceRef = attrs['topographicPlaceRef'] ?? null;
-      location.address = new Address(addressCode, addressName, topographicPlaceRef)
+      const address = new Address(addressCode);
+      address.addressName = attrs['addressName'] ?? null;
+      address.topographicPlaceRef = attrs['topographicPlaceRef'] ?? null;
     }
 
     return location
