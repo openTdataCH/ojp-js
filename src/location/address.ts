@@ -17,13 +17,13 @@ export class Address {
       return null;
     }
 
-    const addressCode = addressTreeNode.findTextFromChildNamed('AddressCode');
+    const addressCode = addressTreeNode.findTextFromChildNamed('PublicCode');
     if (addressCode === null) {
       return null
     }
 
-    const addressName = addressTreeNode.findTextFromChildNamed('AddressName/Text')
     const topographicPlaceRef = addressTreeNode.findTextFromChildNamed('TopographicPlaceRef')
+    const addressName = addressTreeNode.findTextFromChildNamed('Name/Text')
 
     const address = new Address(addressCode, addressName, topographicPlaceRef);
 
