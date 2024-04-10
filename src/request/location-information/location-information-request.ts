@@ -25,6 +25,14 @@ export class LocationInformationRequest extends OJPBaseRequest {
 
   public static initWithLocationName(stageConfig: StageConfig, locationName: string, geoRestrictionType: GeoRestrictionType | null = null): LocationInformationRequest {
     const requestParams = LocationInformationRequestParams.initWithLocationName(locationName, geoRestrictionType);
+  public static initWithRequestMock(mockText: string, stageConfig: StageConfig = DEFAULT_STAGE) {
+    const emptyRequestParams = new LocationInformationRequestParams();
+    const request = new LocationInformationRequest(stageConfig, emptyRequestParams);
+    request.mockRequestXML = mockText;
+    
+    return request;
+  }
+
     const request = new LocationInformationRequest(stageConfig, requestParams);
     return request;
   }
