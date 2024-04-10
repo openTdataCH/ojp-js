@@ -1,5 +1,5 @@
 import { DEFAULT_STAGE, StageConfig } from '../../types/stage-config'
-import { GeoRestrictionPoiOSMTag, GeoRestrictionType } from '../../types/geo-restriction.type';
+import { POI_Restriction, RestrictionType } from '../../types/lir-restrictions.type';
 import { OJPBaseRequest } from '../base-request'
 import { LocationInformationParser } from './location-information-parser';
 import { LIR_Response } from '../types/location-information-request.type';
@@ -23,8 +23,6 @@ export class LocationInformationRequest extends OJPBaseRequest {
     return request;
   }
 
-  public static initWithLocationName(stageConfig: StageConfig, locationName: string, geoRestrictionType: GeoRestrictionType | null = null): LocationInformationRequest {
-    const requestParams = LocationInformationRequestParams.initWithLocationName(locationName, geoRestrictionType);
   public static initWithRequestMock(mockText: string, stageConfig: StageConfig = DEFAULT_STAGE) {
     const emptyRequestParams = new LocationInformationRequestParams();
     const request = new LocationInformationRequest(stageConfig, emptyRequestParams);
@@ -33,6 +31,8 @@ export class LocationInformationRequest extends OJPBaseRequest {
     return request;
   }
 
+  public static initWithLocationName(stageConfig: StageConfig, locationName: string, restrictionTypes: RestrictionType[], limit: number = 10): LocationInformationRequest {
+    const requestParams = LocationInformationRequestParams.initWithLocationName(locationName, restrictionTypes, limit);
     const request = new LocationInformationRequest(stageConfig, requestParams);
     return request;
   }
@@ -49,11 +49,11 @@ export class LocationInformationRequest extends OJPBaseRequest {
     bboxNorth: number,
     bboxEast: number,
     bboxSouth: number,
-    geoRestrictionType: GeoRestrictionType,
+    restrictionTypes: RestrictionType[],
     limit: number = 1000,
-    poiOsmTags: GeoRestrictionPoiOSMTag[] | null = null
+    poiRestriction: POI_Restriction | null = null,
   ): LocationInformationRequest {
-    const requestParams = LocationInformationRequestParams.initWithBBOXAndType(bboxWest, bboxNorth, bboxEast, bboxSouth, geoRestrictionType, limit, poiOsmTags);
+    const requestParams = LocationInformationRequestParams.initWithBBOXAndType(bboxWest, bboxNorth, bboxEast, bboxSouth, restrictionTypes, limit, poiRestriction);
     const request = new LocationInformationRequest(stageConfig, requestParams);
     return request;
   }
