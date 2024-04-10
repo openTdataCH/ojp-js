@@ -1,16 +1,15 @@
 import * as xmlbuilder from "xmlbuilder";
 
-import {
-  GeoRestrictionType,
-  GeoRestrictionPoiOSMTag,
-} from "../../types/geo-restriction.type";
+import { RestrictionType, POI_Restriction } from "../../types/lir-restrictions.type";
 import { BaseRequestParams } from "../base-request-params";
 
 export class LocationInformationRequestParams extends BaseRequestParams {
   public locationName: string | null;
   public stopPlaceRef: string | null;
-  public geoRestrictionType: GeoRestrictionType | null;
-  public poiOsmTags: GeoRestrictionPoiOSMTag[] | null;
+  
+  public restrictionTypes: RestrictionType[];
+  public poiRestriction: POI_Restriction | null;
+  
   public numberOfResults: number | null;
   public bboxWest: number | null;
   public bboxNorth: number | null;
@@ -22,8 +21,8 @@ export class LocationInformationRequestParams extends BaseRequestParams {
 
     this.locationName = null;
     this.stopPlaceRef = null;
-    this.geoRestrictionType = null;
-    this.poiOsmTags = null;
+    this.restrictionTypes = [];
+    this.poiRestriction = null;
     this.numberOfResults = null;
     this.bboxWest = null;
     this.bboxNorth = null;
@@ -33,13 +32,15 @@ export class LocationInformationRequestParams extends BaseRequestParams {
 
   public static initWithLocationName(
     locationName: string,
-    geoRestrictionType: GeoRestrictionType | null = null
+    restrictionTypes: RestrictionType[] | null = null,
+    limit: number = 10,
   ): LocationInformationRequestParams {
     const requestParams = new LocationInformationRequestParams();
     requestParams.locationName = locationName;
+    requestParams.numberOfResults = limit;
 
-    if (geoRestrictionType !== null) {
-      requestParams.geoRestrictionType = geoRestrictionType;
+    if (restrictionTypes !== null) {
+      requestParams.restrictionTypes = restrictionTypes;
     }
 
     return requestParams;
@@ -59,9 +60,9 @@ export class LocationInformationRequestParams extends BaseRequestParams {
     bboxNorth: number,
     bboxEast: number,
     bboxSouth: number,
-    geoRestrictionType: GeoRestrictionType,
+    restrictionTypes: RestrictionType[],
     limit: number = 1000,
-    poiOsmTags: GeoRestrictionPoiOSMTag[] | null = null
+    poiRestriction: POI_Restriction | null = null 
   ): LocationInformationRequestParams {
     const requestParams = new LocationInformationRequestParams();
     requestParams.bboxWest = bboxWest;
@@ -69,8 +70,8 @@ export class LocationInformationRequestParams extends BaseRequestParams {
     requestParams.bboxEast = bboxEast;
     requestParams.bboxSouth = bboxSouth;
     requestParams.numberOfResults = limit;
-    requestParams.geoRestrictionType = geoRestrictionType;
-    requestParams.poiOsmTags = poiOsmTags;
+    requestParams.restrictionTypes = restrictionTypes;
+    requestParams.poiRestriction = poiRestriction;
 
     return requestParams;
   }
@@ -128,27 +129,22 @@ export class LocationInformationRequestParams extends BaseRequestParams {
 
     const restrictionsNode = requestNode.ele("Restrictions");
 
-    const geoRestrictionTypeS = this.computeRestrictionType();
-    if (geoRestrictionTypeS) {
-      restrictionsNode.ele("Type", geoRestrictionTypeS);
+    this.restrictionTypes.forEach(restrictionType => {
+      restrictionsNode.ele("Type", restrictionType);
 
-      const isPoiRequest =
-        this.geoRestrictionType === "poi_amenity" ||
-        this.geoRestrictionType === "poi_all";
-      if (isPoiRequest && this.poiOsmTags) {
-        const poiCategoryNode = restrictionsNode
-          .ele("PointOfInterestFilter")
-          .ele("PointOfInterestCategory");
-        const poiOsmTagKey =
-          this.geoRestrictionType === "poi_amenity" ? "amenity" : "POI";
+      const isPOI = restrictionType === 'poi';
+      if (isPOI && this.poiRestriction) {
+        const poiCategoryNode = restrictionsNode.ele("PointOfInterestFilter").ele("PointOfInterestCategory");
 
-        this.poiOsmTags.forEach((poiOsmTag) => {
+        const isSharedMobility = this.poiRestriction.poiType === 'shared_mobility';
+        const poiOsmTagKey = isSharedMobility ? 'amenity' : 'POI';
+        this.poiRestriction.tags.forEach((poiOsmTag) => {
           const osmTagNode = poiCategoryNode.ele("OsmTag");
           osmTagNode.ele("Tag", poiOsmTagKey);
           osmTagNode.ele("Value", poiOsmTag);
         });
       }
-    }
+    });
 
     const numberOfResults = this.numberOfResults ?? 10;
     restrictionsNode.ele("NumberOfResults", numberOfResults);
@@ -158,21 +154,5 @@ export class LocationInformationRequestParams extends BaseRequestParams {
       .ele("ParamsExtension")
       .ele("PrivateModeFilter")
       .ele("Exclude", "false");
-  }
-
-  private computeRestrictionType(): string | null {
-    if (this.geoRestrictionType === "stop") {
-      return "stop";
-    }
-
-    if (this.geoRestrictionType === "poi_all") {
-      return "poi";
-    }
-
-    if (this.geoRestrictionType === "poi_amenity") {
-      return "poi";
-    }
-
-    return this.geoRestrictionType;
   }
 }

@@ -23,7 +23,7 @@ export * from './request/index'
 
 export * from './trip/index'
 
-export * from './types/geo-restriction.type'
+export * from './types/lir-restrictions.type'
 export * from './types/individual-mode.types'
 export * from './types/journey-points'
 export * from './types/stage-config'
