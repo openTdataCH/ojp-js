@@ -1,19 +1,18 @@
-import { GeoRestrictionType, GeoRestrictionPoiOSMTag } from "../../types/geo-restriction.type";
+import { RestrictionType, POI_Restriction } from "../../types/lir-restrictions.type";
 import { BaseRequestParams } from "../base-request-params";
 export declare class LocationInformationRequestParams extends BaseRequestParams {
     locationName: string | null;
     stopPlaceRef: string | null;
-    geoRestrictionType: GeoRestrictionType | null;
-    poiOsmTags: GeoRestrictionPoiOSMTag[] | null;
+    restrictionTypes: RestrictionType[];
+    poiRestriction: POI_Restriction | null;
     numberOfResults: number | null;
     bboxWest: number | null;
     bboxNorth: number | null;
     bboxEast: number | null;
     bboxSouth: number | null;
     constructor();
-    static initWithLocationName(locationName: string, geoRestrictionType?: GeoRestrictionType | null): LocationInformationRequestParams;
+    static initWithLocationName(locationName: string, restrictionTypes?: RestrictionType[] | null, limit?: number): LocationInformationRequestParams;
     static initWithStopPlaceRef(stopPlaceRef: string): LocationInformationRequestParams;
-    static initWithBBOXAndType(bboxWest: number, bboxNorth: number, bboxEast: number, bboxSouth: number, geoRestrictionType: GeoRestrictionType, limit?: number, poiOsmTags?: GeoRestrictionPoiOSMTag[] | null): LocationInformationRequestParams;
+    static initWithBBOXAndType(bboxWest: number, bboxNorth: number, bboxEast: number, bboxSouth: number, restrictionTypes: RestrictionType[], limit?: number, poiRestriction?: POI_Restriction | null): LocationInformationRequestParams;
     protected buildRequestNode(): void;
-    private computeRestrictionType;
 }
