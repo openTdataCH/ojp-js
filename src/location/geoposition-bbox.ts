@@ -3,20 +3,30 @@ import { GeoPosition } from "./geoposition";
 export class GeoPositionBBOX {
   public southWest: GeoPosition
   public northEast: GeoPosition
+  public center: GeoPosition
+
+  public minLongitude: number
+  public minLatitude: number
+  public maxLongitude: number
+  public maxLatitude: number
 
   constructor(geoPositions: GeoPosition | GeoPosition[]) {
     if (!Array.isArray(geoPositions)) {
       geoPositions = [geoPositions];
     }
 
-    const minLongitude = Math.min.apply(null, geoPositions.map(gp => gp.longitude));
-    const minLatitude = Math.min.apply(null, geoPositions.map(gp => gp.latitude));
+    this.minLongitude = Math.min.apply(null, geoPositions.map(gp => gp.longitude));
+    this.minLatitude = Math.min.apply(null, geoPositions.map(gp => gp.latitude));
 
-    const maxLongitude = Math.max.apply(null, geoPositions.map(gp => gp.longitude));
-    const maxLatitude = Math.max.apply(null, geoPositions.map(gp => gp.latitude));
+    this.maxLongitude = Math.max.apply(null, geoPositions.map(gp => gp.longitude));
+    this.maxLatitude = Math.max.apply(null, geoPositions.map(gp => gp.latitude));
 
-    this.southWest = new GeoPosition(minLongitude, minLatitude);
-    this.northEast = new GeoPosition(maxLongitude, maxLatitude);
+    this.southWest = new GeoPosition(this.minLongitude, this.minLatitude);
+    this.northEast = new GeoPosition(this.maxLongitude, this.maxLatitude);
+
+    const centerX = (this.southWest.longitude + this.northEast.longitude) / 2;
+    const centerY = (this.southWest.latitude + this.northEast.latitude) / 2;
+    this.center = new GeoPosition(centerX, centerY);
   }
 
   public static initFromGeoPosition(geoPosition: GeoPosition, width_x_meters: number, width_y_meters: number): GeoPositionBBOX {
@@ -45,7 +55,16 @@ export class GeoPositionBBOX {
 
       this.southWest = new GeoPosition(southWestLongitude, southWestLatitude);
       this.northEast = new GeoPosition(northEastLongitude, northEastLatitude);
-    })
+    });
+
+    const centerX = (this.southWest.longitude + this.northEast.longitude) / 2;
+    const centerY = (this.southWest.latitude + this.northEast.latitude) / 2;
+    this.center = new GeoPosition(centerX, centerY);
+
+    this.minLongitude = this.southWest.longitude;
+    this.minLatitude = this.southWest.latitude;
+    this.maxLongitude = this.northEast.longitude;
+    this.maxLatitude = this.northEast.latitude;
   }
 
   asFeatureBBOX(): [number, number, number, number] {
