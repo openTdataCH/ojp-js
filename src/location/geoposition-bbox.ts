@@ -86,4 +86,26 @@ export class GeoPositionBBOX {
 
     return true
   }
+
+  public computeWidth(): number {
+    const northWest = new GeoPosition(this.southWest.longitude, this.northEast.latitude);
+    const southEast = new GeoPosition(this.northEast.longitude, this.southWest.latitude);
+
+    const distLongitude1 = southEast.distanceFrom(this.southWest);
+    const distLongitude2 = this.northEast.distanceFrom(northWest);
+    const distance = (distLongitude1 + distLongitude2) / 2;
+    
+    return distance;
+  }
+
+  public computeHeight(): number {
+    const northWest = new GeoPosition(this.southWest.longitude, this.northEast.latitude);
+    const southEast = new GeoPosition(this.northEast.longitude, this.southWest.latitude);
+
+    const distLatitude1 = southEast.distanceFrom(this.northEast);
+    const distLatitude2 = this.southWest.distanceFrom(northWest);
+    const distance = (distLatitude1 + distLatitude2) / 2;
+    
+    return distance;
+  }
 }
