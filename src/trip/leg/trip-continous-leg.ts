@@ -70,7 +70,26 @@ export class TripContinousLeg extends TripLeg {
   }
 
   private computeLegTransportModeFromTreeNode(treeNode: TreeNode): IndividualTransportMode | null {
-    const legModeS = treeNode.findTextFromChildNamed('Service/IndividualMode');
+    let legModeS = treeNode.findTextFromChildNamed('Service/IndividualMode');
+    if (legModeS === null) {
+      const personalModeParts: string[] = [];
+
+      const personalNodePaths: string[] = [
+        'Service/PersonalMode',
+        'Service/PersonalModeOfOperation',
+        'Service/Mode/siri:RailSubmode',
+      ];
+
+      personalNodePaths.forEach(personalNodePath => {
+        const personalNodeValue = treeNode.findTextFromChildNamed(personalNodePath);
+        if (personalNodeValue !== null) {
+          personalModeParts.push(personalNodeValue);
+        }
+      });
+
+      legModeS = personalModeParts.join('.');
+    }
+
     const firstBookingAgency = treeNode.findTextFromChildNamed('Service/BookingArrangements/BookingArrangement/BookingAgencyName/Text');
     const legMode = this.computeLegTransportModeFromString(legModeS, firstBookingAgency);
 
@@ -101,6 +120,16 @@ export class TripContinousLeg extends TripLeg {
       }
       return 'taxi'
     }
+
+    if (legModeS === 'car.own') {
+      return 'self-drive-car';
+    }
+
+    if (legModeS === 'car.own.vehicleTunnelTransportRailService') {
+      return 'car-shuttle-train';
+    }
+
+    console.log('ERROR: computeLegTransportModeFromString unhandled: ' + legModeS);
 
     return null
   }
