@@ -1,5 +1,7 @@
 import { GeoPosition } from "./geoposition";
 
+import { Polygon } from 'geojson'
+
 export class GeoPositionBBOX {
   public southWest: GeoPosition
   public northEast: GeoPosition
@@ -126,5 +128,29 @@ export class GeoPositionBBOX {
     const distance = (distLatitude1 + distLatitude2) / 2;
     
     return distance;
+  }
+
+  public asPolygon(): Polygon {
+    const bboxSW = this.southWest;
+    const bboxNW = new GeoPosition(this.southWest.longitude, this.northEast.latitude);
+    const bboxNE = this.northEast;
+    const bboxSE = new GeoPosition(this.northEast.longitude, this.southWest.latitude);
+    
+    const coords: GeoJSON.Position[] = [
+      bboxSW.asPosition(),
+      bboxNW.asPosition(),
+      bboxNE.asPosition(),
+      bboxSE.asPosition(),
+      bboxSW.asPosition(),
+    ];
+
+    const polygon: GeoJSON.Polygon = {
+      type: "Polygon",
+      coordinates: [
+        coords
+      ]
+    };
+
+    return polygon;
   }
 }
