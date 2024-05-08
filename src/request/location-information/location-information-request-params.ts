@@ -1,5 +1,3 @@
-import * as xmlbuilder from "xmlbuilder";
-
 import { RestrictionType, POI_Restriction } from "../../types/lir-restrictions.type";
 import { BaseRequestParams } from "../base-request-params";
 
