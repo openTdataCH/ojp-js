@@ -43,6 +43,18 @@ export class LocationInformationRequest extends OJPBaseRequest {
     return request;
   }
 
+  public static initWithCircleLngLatRadius(stageConfig: StageConfig, 
+    circleLongitude: number, 
+    circleLatitude: number,
+    circleRadius: number,
+    restrictionTypes: RestrictionType[] = [],
+    numberOfResults: number = 1000
+  ): LocationInformationRequest {
+    const requestParams = LocationInformationRequestParams.initWithCircleLngLatRadius(circleLongitude, circleLatitude, circleRadius, restrictionTypes, numberOfResults);
+    const request = new LocationInformationRequest(stageConfig, requestParams);
+    return request;
+  }
+
   public static initWithBBOXAndType(
     stageConfig: StageConfig,
     bboxWest: number,
