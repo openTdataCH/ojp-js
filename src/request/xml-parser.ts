@@ -1,8 +1,10 @@
+import { TreeNode } from "../xml/tree-node";
 import { BaseParser } from "./base-parser";
 
 type XMLParserMessage = "DONE" | "ERROR";
 export type XMLParserResponse = {
     message: XMLParserMessage | null
+    rootNode: TreeNode
 }
 export type XMLParserCallback = (response: XMLParserResponse) => void;
 
@@ -20,6 +22,7 @@ export class XMLParser extends BaseParser {
     if (this.callback) {
       this.callback({
         message: 'ERROR',
+        rootNode: this.rootNode,
       });
     }
   }
@@ -28,6 +31,7 @@ export class XMLParser extends BaseParser {
     if (this.callback) {
       this.callback({
         message: 'DONE',
+        rootNode: this.rootNode,
       });
     }
   }
