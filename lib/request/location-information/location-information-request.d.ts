@@ -11,6 +11,7 @@ export declare class LocationInformationRequest extends OJPBaseRequest {
     static initWithRequestMock(mockText: string, stageConfig?: StageConfig): LocationInformationRequest;
     static initWithLocationName(stageConfig: StageConfig, locationName: string, restrictionTypes: RestrictionType[], limit?: number): LocationInformationRequest;
     static initWithStopPlaceRef(stageConfig: StageConfig, stopPlaceRef: string): LocationInformationRequest;
+    static initWithCircleLngLatRadius(stageConfig: StageConfig, circleLongitude: number, circleLatitude: number, circleRadius: number, restrictionTypes?: RestrictionType[], numberOfResults?: number): LocationInformationRequest;
     static initWithBBOXAndType(stageConfig: StageConfig, bboxWest: number, bboxNorth: number, bboxEast: number, bboxSouth: number, restrictionTypes: RestrictionType[], limit?: number, poiRestriction?: POI_Restriction | null): LocationInformationRequest;
     protected buildRequestXML(): string;
     fetchResponse(): Promise<LIR_Response>;

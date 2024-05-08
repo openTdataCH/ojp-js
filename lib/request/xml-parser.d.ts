@@ -1,7 +1,9 @@
+import { TreeNode } from "../xml/tree-node";
 import { BaseParser } from "./base-parser";
 type XMLParserMessage = "DONE" | "ERROR";
 export type XMLParserResponse = {
     message: XMLParserMessage | null;
+    rootNode: TreeNode;
 };
 export type XMLParserCallback = (response: XMLParserResponse) => void;
 export declare class XMLParser extends BaseParser {

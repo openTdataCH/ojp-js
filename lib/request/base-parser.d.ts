@@ -1,6 +1,6 @@
 import { TreeNode } from "../xml/tree-node";
 export declare class BaseParser {
-    private rootNode;
+    protected rootNode: TreeNode;
     protected currentNode: TreeNode;
     protected stack: TreeNode[];
     private mapUriNS;
