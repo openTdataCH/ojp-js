@@ -2,6 +2,7 @@
 
 ## 0.9.xx - xx.05.2024
 - improve `Location/Address` - [PR #71](https://github.com/openTdataCH/ojp-js/pull/71)
+- improve requests: allow LIR requests to use mocked XMLs, adds generic `XMLParser`, adds center min, max long/lat members for GeoPositionBBOX - [PR #72](https://github.com/openTdataCH/ojp-js/pull/72)
 
 ## 0.9.32 - 24.03.2024
 - updates SDK version to `0.9.32` - [PR #70](https://github.com/openTdataCH/ojp-js/pull/70)
