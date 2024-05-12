@@ -1,6 +1,7 @@
 # CHANGELOG
 
 ## 0.9.xx - xx.05.2024
+- **BREAKING CHANGE**: change restriction type in `LocationInformationRequest`: update types and use an array for restriction types (i.e. [`stop`, `address`]) - [PR #73](https://github.com/openTdataCH/ojp-js/pull/73)
 - improve `Location/Address` - [PR #71](https://github.com/openTdataCH/ojp-js/pull/71)
 - improve requests: allow LIR requests to use mocked XMLs, adds generic `XMLParser`, adds center min, max long/lat members for GeoPositionBBOX - [PR #72](https://github.com/openTdataCH/ojp-js/pull/72)
 
