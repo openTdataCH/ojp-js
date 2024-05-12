@@ -3,12 +3,23 @@ import { TreeNode } from "../xml/tree-node";
 export class Address {
   public addressCode: string
   public addressName: string | null
-  public topographicPlaceRef: string | null
 
-  constructor(addressCode: string, addressName: string | null, topographicPlaceRef: string | null) {
+  public topographicPlaceRef: string | null
+  public topographicPlaceName: string | null
+
+  public street: string | null
+  public houseNumber: string | null
+  public postCode: string | null
+
+  constructor(addressCode: string) {
     this.addressCode = addressCode
-    this.addressName = addressName
-    this.topographicPlaceRef = topographicPlaceRef
+    
+    this.addressName = null;
+    this.topographicPlaceRef = null;
+    this.topographicPlaceName = null;
+    this.street = null;
+    this.houseNumber = null;
+    this.postCode = null;
   }
 
   public static initWithLocationTreeNode(locationTreeNode: TreeNode): Address | null {
@@ -22,10 +33,16 @@ export class Address {
       return null
     }
 
-    const addressName = addressTreeNode.findTextFromChildNamed('AddressName/Text')
-    const topographicPlaceRef = addressTreeNode.findTextFromChildNamed('TopographicPlaceRef')
+    const address = new Address(addressCode);
 
-    const address = new Address(addressCode, addressName, topographicPlaceRef);
+    address.addressName = addressTreeNode.findTextFromChildNamed('AddressName/Text')
+
+    address.topographicPlaceRef = addressTreeNode.findTextFromChildNamed('TopographicPlaceRef');
+    address.topographicPlaceName = addressTreeNode.findTextFromChildNamed('TopographicPlaceName');
+    
+    address.street = addressTreeNode.findTextFromChildNamed('Street');
+    address.houseNumber = addressTreeNode.findTextFromChildNamed('HouseNumber');
+    address.postCode = addressTreeNode.findTextFromChildNamed('PostCode');    
 
     return address;
   }
