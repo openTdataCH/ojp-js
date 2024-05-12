@@ -4,7 +4,7 @@ import { TreeNode } from "../xml/tree-node";
 import { IS_NODE_CLI } from '..';
 
 export class BaseParser {
-  private rootNode: TreeNode;
+  protected rootNode: TreeNode;
   protected currentNode: TreeNode;
   protected stack: TreeNode[];
 
