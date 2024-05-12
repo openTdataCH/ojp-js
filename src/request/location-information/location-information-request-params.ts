@@ -1,5 +1,6 @@
 import { RestrictionType, POI_Restriction } from "../../types/lir-restrictions.type";
 import { BaseRequestParams } from "../base-request-params";
+import { GeoPosition } from "../../location/geoposition";
 
 export class LocationInformationRequestParams extends BaseRequestParams {
   public locationName: string | null;
@@ -14,6 +15,9 @@ export class LocationInformationRequestParams extends BaseRequestParams {
   public bboxEast: number | null;
   public bboxSouth: number | null;
 
+  public circleCenter: GeoPosition | null;
+  public circleRadius: number | null;
+
   constructor() {
     super();
 
@@ -26,6 +30,8 @@ export class LocationInformationRequestParams extends BaseRequestParams {
     this.bboxNorth = null;
     this.bboxEast = null;
     this.bboxSouth = null;
+    this.circleCenter = null;
+    this.circleRadius = null;
   }
 
   public static initWithLocationName(
@@ -74,6 +80,23 @@ export class LocationInformationRequestParams extends BaseRequestParams {
     return requestParams;
   }
 
+  public static initWithCircleLngLatRadius(
+    circleLongitude: number, 
+    circleLatitude: number,
+    circleRadius: number,
+    restrictionTypes: RestrictionType[] = [],
+    numberOfResults: number = 1000
+  ): LocationInformationRequestParams {
+    const requestParams = new LocationInformationRequestParams();
+
+    requestParams.circleCenter = new GeoPosition(circleLongitude, circleLatitude);
+    requestParams.circleRadius = circleRadius;
+    requestParams.restrictionTypes = restrictionTypes;
+    requestParams.numberOfResults = numberOfResults;
+
+    return requestParams;
+  }
+
   protected buildRequestNode(): void {
     super.buildRequestNode();
 
@@ -88,12 +111,9 @@ export class LocationInformationRequestParams extends BaseRequestParams {
     );
     requestNode.ele("siri:RequestTimestamp", dateF);
 
-    let initialInputNode: xmlbuilder.XMLElement | null = null;
-
     const locationName = this.locationName ?? null;
-    if (locationName) {
-      initialInputNode = requestNode.ele("InitialInput");
-      initialInputNode.ele("LocationName", locationName);
+    if (locationName !== null) {
+      requestNode.ele('InitialInput').ele('LocationName', locationName);
     }
 
     const stopPlaceRef = this.stopPlaceRef ?? null;
@@ -108,11 +128,7 @@ export class LocationInformationRequestParams extends BaseRequestParams {
     const bboxEast = this.bboxEast ?? null;
     const bboxSouth = this.bboxSouth ?? null;
     if (bboxWest && bboxNorth && bboxEast && bboxSouth) {
-      if (initialInputNode === null) {
-        initialInputNode = requestNode.ele("InitialInput");
-      }
-
-      const rectangleNode = initialInputNode
+      const rectangleNode = requestNode.ele('InitialInput')
         .ele("GeoRestriction")
         .ele("Rectangle");
 
@@ -123,6 +139,18 @@ export class LocationInformationRequestParams extends BaseRequestParams {
       const lowerRightNode = rectangleNode.ele("LowerRight");
       lowerRightNode.ele("siri:Longitude", bboxEast.toFixed(6));
       lowerRightNode.ele("siri:Latitude", bboxSouth.toFixed(6));
+    }
+
+    if (this.circleCenter !== null && this.circleRadius !== null) {
+      const circleNode = requestNode.ele('InitialInput')
+        .ele("GeoRestriction")
+        .ele("Circle");
+
+      const centerNode = circleNode.ele('Center');
+      centerNode.ele('siri:Longitude', this.circleCenter.longitude.toFixed(6));
+      centerNode.ele('siri:Latitude', this.circleCenter.latitude.toFixed(6));
+
+      circleNode.ele('Radius', this.circleRadius);
     }
 
     const restrictionsNode = requestNode.ele("Restrictions");
