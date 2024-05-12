@@ -1,7 +1,7 @@
-import { GeoRestrictionPoiOSMTag } from "../types/geo-restriction.type"
+import { RestrictionPoiOSMTag } from "../types/lir-restrictions.type"
 import { TreeNode } from "../xml/tree-node"
 
-const mapPoiSubCategoryIcons = <Record<GeoRestrictionPoiOSMTag, string[]>>{
+const mapPoiSubCategoryIcons = <Record<RestrictionPoiOSMTag, string[]>>{
   service: ['atm', 'hairdresser'],
   shopping: ['all', 'clothes', 'optician'],
   catering: ['all'],
@@ -11,11 +11,11 @@ const mapPoiSubCategoryIcons = <Record<GeoRestrictionPoiOSMTag, string[]>>{
 export class PointOfInterest {
   public code: string
   public name: string
-  public category: GeoRestrictionPoiOSMTag
+  public category: RestrictionPoiOSMTag
   public subCategory: string | null
   public categoryTags: string[]
 
-  constructor(code: string, name: string, category: GeoRestrictionPoiOSMTag, subCategory: string | null, categoryTags: string[]) {
+  constructor(code: string, name: string, category: RestrictionPoiOSMTag, subCategory: string | null, categoryTags: string[]) {
     this.code = code
     this.name = name
     this.category = category
@@ -37,7 +37,7 @@ export class PointOfInterest {
     }
 
     const categoryTags: string[] = [];
-    let category: GeoRestrictionPoiOSMTag | null = null;
+    let category: RestrictionPoiOSMTag | null = null;
     let subCategory: string | null = null;
 
     const categoryTreeNodes = treeNode.findChildrenNamed('PointOfInterestCategory');
@@ -49,7 +49,7 @@ export class PointOfInterest {
 
       const tagKey = categoryTreeNode.findTextFromChildNamed('OsmTag/Tag');
       if (tagKey === 'POI_0' || tagKey === 'amenity') {
-        category = tagValue as GeoRestrictionPoiOSMTag;
+        category = tagValue as RestrictionPoiOSMTag;
       }
 
       if (tagKey === 'POI_1') {
