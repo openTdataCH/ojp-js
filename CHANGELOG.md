@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 0.9.xx - xx.05.2024
+- **BREAKING CHANGE**: change restriction type in `LocationInformationRequest`: update types and use an array for restriction types (i.e. [`stop`, `address`]) - [PR #73](https://github.com/openTdataCH/ojp-js/pull/73)
+- adds `GeoRestriction/Circle` to LIR - [PR #74](https://github.com/openTdataCH/ojp-js/pull/74)
+- adds support for car-shuttle-train (Autoverladezug) - [PR #75](https://github.com/openTdataCH/ojp-js/pull/75)
+- improve `Location/Address` - [PR #71](https://github.com/openTdataCH/ojp-js/pull/71)
+- improve requests: allow LIR requests to use mocked XMLs, adds generic `XMLParser`, adds center min, max long/lat members for GeoPositionBBOX - [PR #72](https://github.com/openTdataCH/ojp-js/pull/72)
+
 ## 0.9.32 - 24.03.2024
 - updates SDK version to `0.9.32` - [PR #70](https://github.com/openTdataCH/ojp-js/pull/70)
 - allow `StageConfig` to be passed to mock requests - [PR #69](https://github.com/openTdataCH/ojp-js/pull/69)

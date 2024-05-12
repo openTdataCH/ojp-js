@@ -33,7 +33,6 @@ export class Address {
       return null
     }
 
-    const addressName = addressTreeNode.findTextFromChildNamed('Name/Text')
     const address = new Address(addressCode);
 
     address.addressName = addressTreeNode.findTextFromChildNamed('Name/Text')
