@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 0.9.xx - xx.05.2024
+- improve `Location/Address` - [PR #71](https://github.com/openTdataCH/ojp-js/pull/71)
+
 ## 0.9.32 - 24.03.2024
 - updates SDK version to `0.9.32` - [PR #70](https://github.com/openTdataCH/ojp-js/pull/70)
 - allow `StageConfig` to be passed to mock requests - [PR #69](https://github.com/openTdataCH/ojp-js/pull/69)
