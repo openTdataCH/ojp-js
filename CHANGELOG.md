@@ -1,6 +1,7 @@
 # CHANGELOG
 
-## 0.9.xx - xx.05.2024
+## 0.9.33 - 17.05.2024
+- updates SDK version to `0.9.33` - [PR #77](https://github.com/openTdataCH/ojp-js/pull/77)
 - **BREAKING CHANGE**: change restriction type in `LocationInformationRequest`: update types and use an array for restriction types (i.e. [`stop`, `address`]) - [PR #73](https://github.com/openTdataCH/ojp-js/pull/73)
 - adds `GeoRestriction/Circle` to LIR - [PR #74](https://github.com/openTdataCH/ojp-js/pull/74)
 - adds support for car-shuttle-train (Autoverladezug) - [PR #75](https://github.com/openTdataCH/ojp-js/pull/75)
