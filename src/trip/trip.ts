@@ -26,10 +26,11 @@ export class Trip {
   }
 
   public static initFromTreeNode(treeNode: TreeNode): Trip | null {
-    const tripId = treeNode.findTextFromChildNamed('Id');
-    if (tripId === null) {
-      return null;
-    }
+    // Hack for solution demo
+    const tripId = treeNode.findTextFromChildNamed('Id') ?? 'RandomTripId';
+    // if (tripId === null) {
+    //   return null;
+    // }
 
     const duration = Duration.initFromDurationText(treeNode.findTextFromChildNamed('Duration'));
     if (duration === null) {
