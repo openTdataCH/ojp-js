@@ -278,8 +278,7 @@ export class TripsRequestParams extends BaseRequestParams {
         paramsExtensionNode.ele("ItModesToCover", transportMode);
       }
 
-      
-      if (transportMode === 'car') {
+      if (transportMode === 'car' || transportMode === 'car-shuttle-train') {
         // TODO: find out why does it work without seting this 
         paramsNode.ele('ItModesToCover', transportMode);
         paramsNode.ele('ModeAndModeOfOperationFilter').ele('siri:WaterSubmode', 'localCarFerry');
