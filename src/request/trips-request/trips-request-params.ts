@@ -277,6 +277,13 @@ export class TripsRequestParams extends BaseRequestParams {
         const paramsExtensionNode = paramsNode.ele("Extension");
         paramsExtensionNode.ele("ItModesToCover", transportMode);
       }
+
+      
+      if (transportMode === 'car') {
+        // TODO: find out why does it work without seting this 
+        paramsNode.ele('ItModesToCover', transportMode);
+        paramsNode.ele('ModeAndModeOfOperationFilter').ele('siri:WaterSubmode', 'localCarFerry');
+      }
     } else {
       const isOthersDriveCar =
         transportMode === "taxi" || transportMode === "others-drive-car";
