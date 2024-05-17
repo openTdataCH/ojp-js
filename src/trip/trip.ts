@@ -26,7 +26,8 @@ export class Trip {
   }
 
   public static initFromTreeNode(treeNode: TreeNode): Trip | null {
-    // Hack for solution demo
+    // HACK for solution demo, backend sometimes delivers Trip with empty Id
+    // TODO: revert when backend is ready, DONT merge to main
     const tripId = treeNode.findTextFromChildNamed('Id') ?? 'RandomTripId';
     // if (tripId === null) {
     //   return null;
