@@ -52,7 +52,7 @@ export class TripContinousLeg extends TripLeg {
 
     tripLeg.pathGuidance = PathGuidance.initWithTreeNode(treeNode);
     
-    tripLeg.legTransportMode = tripLeg.computeLegTransportModeFromTreeNode(treeNode);
+    tripLeg.legTransportMode = tripLeg.computeLegTransportModeFromTreeNode(treeNode, legType);
 
     const isOthersDriveCar = tripLeg.legTransportMode === 'taxi' || tripLeg.legTransportMode === 'others-drive-car';
     
@@ -69,26 +69,35 @@ export class TripContinousLeg extends TripLeg {
     return tripLeg;
   }
 
-  private computeLegTransportModeFromTreeNode(treeNode: TreeNode): IndividualTransportMode | null {
-    let legModeS = treeNode.findTextFromChildNamed('Service/IndividualMode');
-    if (legModeS === null) {
-      const personalModeParts: string[] = [];
+  private computeLegTransportModeFromTreeNode(treeNode: TreeNode, legType: LegType): IndividualTransportMode | null {
+    let legModeS: string | null = null;
 
-      const personalNodePaths: string[] = [
-        'Service/PersonalMode',
-        'Service/PersonalModeOfOperation',
-        'Service/Mode/siri:RailSubmode',
-      ];
-
-      personalNodePaths.forEach(personalNodePath => {
-        const personalNodeValue = treeNode.findTextFromChildNamed(personalNodePath);
-        if (personalNodeValue !== null) {
-          personalModeParts.push(personalNodeValue);
-        }
-      });
-
-      legModeS = personalModeParts.join('.');
+    if (legType === 'TimedLeg') {
+      legModeS = treeNode.findTextFromChildNamed('Service/IndividualMode');
+      if (legModeS === null) {
+        const personalModeParts: string[] = [];
+  
+        const personalNodePaths: string[] = [
+          'Service/PersonalMode',
+          'Service/PersonalModeOfOperation',
+          'Service/Mode/siri:RailSubmode',
+        ];
+  
+        personalNodePaths.forEach(personalNodePath => {
+          const personalNodeValue = treeNode.findTextFromChildNamed(personalNodePath);
+          if (personalNodeValue !== null) {
+            personalModeParts.push(personalNodeValue);
+          }
+        });
+  
+        legModeS = personalModeParts.join('.');
+      }
     }
+
+    if (legType === 'TransferLeg') {
+      legModeS = treeNode.findTextFromChildNamed('TransferType');
+    }
+    
 
     const firstBookingAgency = treeNode.findTextFromChildNamed('Service/BookingArrangements/BookingArrangement/BookingAgencyName/Text');
     const legMode = this.computeLegTransportModeFromString(legModeS, firstBookingAgency);
