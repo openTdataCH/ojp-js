@@ -238,15 +238,6 @@ export class TripsRequestParams extends BaseRequestParams {
     })();
     paramsNode.ele(nodeName, numberOfResults);
 
-    // https://github.com/openTdataCH/ojp-demo-app-src/issues/108
-    // NumberOfResultsAfter and NumberOfResultsBefore are always used together
-    if (nodeName === 'NumberOfResultsAfter') {
-      paramsNode.ele("NumberOfResultsBefore", 0);
-    }
-    if (nodeName === 'NumberOfResultsBefore') {
-      paramsNode.ele("NumberOfResultsAfter", 0);
-    }
-
     paramsNode.ele("IncludeTrackSections", true);
     paramsNode.ele(
       "IncludeLegProjection",
