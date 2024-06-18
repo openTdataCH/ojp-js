@@ -72,7 +72,7 @@ export class TripContinousLeg extends TripLeg {
   private computeLegTransportModeFromTreeNode(treeNode: TreeNode, legType: LegType): IndividualTransportMode | null {
     let legModeS: string | null = null;
 
-    if (legType === 'TimedLeg') {
+    if (legType === 'TimedLeg' || legType === 'ContinousLeg') {
       legModeS = treeNode.findTextFromChildNamed('Service/IndividualMode');
       if (legModeS === null) {
         const personalModeParts: string[] = [];
@@ -97,7 +97,6 @@ export class TripContinousLeg extends TripLeg {
     if (legType === 'TransferLeg') {
       legModeS = treeNode.findTextFromChildNamed('TransferType');
     }
-    
 
     const firstBookingAgency = treeNode.findTextFromChildNamed('Service/BookingArrangements/BookingArrangement/BookingAgencyName/Text');
     const legMode = this.computeLegTransportModeFromString(legModeS, firstBookingAgency);
