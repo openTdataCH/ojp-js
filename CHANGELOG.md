@@ -1,6 +1,7 @@
 # CHANGELOG
 
 ## 0.9.34 - 21.06.2024
+- updates SDK version to `0.9.34` - [PR #79](https://github.com/openTdataCH/ojp-js/pull/79)
 - add support for `TransferMode`, improve `LegTransportMode` - [PR #78](https://github.com/openTdataCH/ojp-js/pull/78)
 
 ## 0.9.33 - 17.05.2024
