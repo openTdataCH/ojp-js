@@ -10,7 +10,7 @@ import { TripLeg, LegType, LinePointData } from "./trip-leg"
 import { TripLegPropertiesEnum, TripLegDrawType, TripLegLineType } from '../../types/map-geometry-types'
 import { MapLegLineTypeColor } from '../../config/map-colors'
 import { Duration } from '../../shared/duration'
-import { IndividualTransportMode } from '../../types/individual-mode.types'
+import { IndividualTransportMode, TransferMode } from '../../types/individual-mode.types'
 import { ServiceBooking } from './continous-leg/service-booking'
 import { TreeNode } from '../../xml/tree-node'
 
@@ -20,6 +20,7 @@ export class TripContinousLeg extends TripLeg {
   public pathGuidance: PathGuidance | null
   public walkDuration: Duration | null
   public serviceBooking: ServiceBooking | null;
+  public transferMode: TransferMode | null
 
   constructor(legType: LegType, legIDx: number, legDistance: number, fromLocation: Location, toLocation: Location) {
     super(legType, legIDx, fromLocation, toLocation)
@@ -29,6 +30,7 @@ export class TripContinousLeg extends TripLeg {
     this.pathGuidance = null
     this.walkDuration = null;
     this.serviceBooking = null;
+    this.transferMode = null;
   }
 
   public static initWithTreeNode(legIDx: number, treeNode: TreeNode, legType: LegType): TripContinousLeg | null {
@@ -53,6 +55,7 @@ export class TripContinousLeg extends TripLeg {
     tripLeg.pathGuidance = PathGuidance.initWithTreeNode(treeNode);
     
     tripLeg.legTransportMode = tripLeg.computeLegTransportModeFromTreeNode(treeNode, legType);
+    tripLeg.transferMode = tripLeg.computeLegTransferModeFromTreeNode(treeNode);
 
     const isOthersDriveCar = tripLeg.legTransportMode === 'taxi' || tripLeg.legTransportMode === 'others-drive-car';
     
@@ -102,6 +105,24 @@ export class TripContinousLeg extends TripLeg {
     const legMode = this.computeLegTransportModeFromString(legModeS, firstBookingAgency);
 
     return legMode;
+  }
+
+  private computeLegTransferModeFromTreeNode(treeNode: TreeNode): TransferMode | null {
+    const transferModeS = treeNode.findTextFromChildNamed('TransferMode');
+    if (transferModeS === null) {
+      return null;
+    }
+
+    if (transferModeS === 'walk') {
+      return 'walk'
+    }
+    if (transferModeS === 'remainInVehicle') {
+      return 'remainInVehicle'
+    }
+
+    console.error('CANT map TransferMode from ==' + transferModeS + '==');
+
+    return null;
   }
 
   private computeLegTransportModeFromString(legModeS: string | null, firstBookingAgency: string | null = null): IndividualTransportMode | null {
