@@ -158,8 +158,6 @@ export class TripContinousLeg extends TripLeg {
       return 'car-shuttle-train';
     }
 
-    console.log('ERROR: computeLegTransportModeFromString unhandled: ' + legModeS);
-
     return null
   }
 
