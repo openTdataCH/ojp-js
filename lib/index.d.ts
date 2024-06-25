@@ -1,4 +1,4 @@
-export declare const SDK_VERSION = "0.9.33";
+export declare const SDK_VERSION = "0.9.34";
 export declare const IS_NODE_CLI: string | false;
 export * from './config/map-colors';
 export * from './fare/fare';

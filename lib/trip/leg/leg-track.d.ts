@@ -8,6 +8,7 @@ export declare class LegTrack {
     hasGeoData: boolean;
     duration: Duration | null;
     constructor(trackSections: TrackSection[]);
+    plus(otherLegTrack: LegTrack): LegTrack;
     static initWithLegTreeNode(treeNode: TreeNode): LegTrack | null;
     fromGeoPosition(): GeoPosition | null;
     toGeoPosition(): GeoPosition | null;

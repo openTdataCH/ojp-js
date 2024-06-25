@@ -4,7 +4,7 @@ import { PathGuidance } from '../path-guidance';
 import { TripLeg, LegType, LinePointData } from "./trip-leg";
 import { TripLegLineType } from '../../types/map-geometry-types';
 import { Duration } from '../../shared/duration';
-import { IndividualTransportMode } from '../../types/individual-mode.types';
+import { IndividualTransportMode, TransferMode } from '../../types/individual-mode.types';
 import { ServiceBooking } from './continous-leg/service-booking';
 import { TreeNode } from '../../xml/tree-node';
 export declare class TripContinousLeg extends TripLeg {
@@ -13,9 +13,11 @@ export declare class TripContinousLeg extends TripLeg {
     pathGuidance: PathGuidance | null;
     walkDuration: Duration | null;
     serviceBooking: ServiceBooking | null;
+    transferMode: TransferMode | null;
     constructor(legType: LegType, legIDx: number, legDistance: number, fromLocation: Location, toLocation: Location);
     static initWithTreeNode(legIDx: number, treeNode: TreeNode, legType: LegType): TripContinousLeg | null;
     private computeLegTransportModeFromTreeNode;
+    private computeLegTransferModeFromTreeNode;
     private computeLegTransportModeFromString;
     isDriveCarLeg(): boolean;
     isSharedMobility(): boolean;
