@@ -83,7 +83,9 @@ export class TripContinousLeg extends TripLeg {
         const personalNodePaths: string[] = [
           'Service/PersonalMode',
           'Service/PersonalModeOfOperation',
+          'Service/Mode/PtMode',
           'Service/Mode/siri:RailSubmode',
+          'Service/Mode/siri:WaterSubmode',
         ];
   
         personalNodePaths.forEach(personalNodePath => {
@@ -154,8 +156,12 @@ export class TripContinousLeg extends TripLeg {
       return 'self-drive-car';
     }
 
-    if (legModeS === 'car.own.vehicleTunnelTransportRailService') {
+    if (legModeS === 'car.own.rail.vehicleTunnelTransportRailService') {
       return 'car-shuttle-train';
+    }
+
+    if (legModeS === 'car.own.water.localCarFerry') {
+      return 'car-ferry'
     }
 
     return null
@@ -239,6 +245,10 @@ export class TripContinousLeg extends TripLeg {
       return 'Transfer'
     }
 
+    if (this.legTransportMode === 'car-ferry') {
+      return 'Water';
+    }
+
     return 'Walk'
   }
 
@@ -268,6 +278,10 @@ export class TripContinousLeg extends TripLeg {
 
     if (this.isTaxi()) {
       return MapLegLineTypeColor.OnDemand;
+    }
+
+    if (this.legTransportMode === 'car-ferry') {
+      return MapLegLineTypeColor.Water;
     }
 
     return MapLegLineTypeColor.Walk;
