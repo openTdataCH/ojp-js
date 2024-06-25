@@ -30,6 +30,16 @@ export class LegTrack {
     }
   }
 
+  public plus(otherLegTrack: LegTrack): LegTrack {
+    if (this.duration !== null && otherLegTrack.duration !== null) {
+      this.duration = this.duration.plus(otherLegTrack.duration);
+    }
+
+    this.trackSections = this.trackSections.concat(otherLegTrack.trackSections);
+
+    return this;
+  }
+
   public static initWithLegTreeNode(treeNode: TreeNode): LegTrack | null {
     const legTrackTreeNode = treeNode.findChildNamed('LegTrack');
     if (legTrackTreeNode === null) {
