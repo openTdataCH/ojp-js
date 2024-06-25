@@ -83,6 +83,7 @@ export class TripContinousLeg extends TripLeg {
         const personalNodePaths: string[] = [
           'Service/PersonalMode',
           'Service/PersonalModeOfOperation',
+          'Service/Mode/PtMode',
           'Service/Mode/siri:RailSubmode',
         ];
   
@@ -154,7 +155,7 @@ export class TripContinousLeg extends TripLeg {
       return 'self-drive-car';
     }
 
-    if (legModeS === 'car.own.vehicleTunnelTransportRailService') {
+    if (legModeS === 'car.own.rail.vehicleTunnelTransportRailService') {
       return 'car-shuttle-train';
     }
 
