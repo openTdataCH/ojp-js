@@ -267,6 +267,11 @@ export class TripsRequestParams extends BaseRequestParams {
         paramsNode.ele("ItModesToCover", transportMode);
       }
 
+      const carTransportModes: IndividualTransportMode[] = ['car', 'car-ferry', 'car-shuttle-train', 'car_sharing', 'self-drive-car', 'others-drive-car'];
+      if (carTransportModes.includes(transportMode)) {
+        paramsNode.ele('ModeAndModeOfOperationFilter').ele('siri:WaterSubmode', 'localCarFerry');
+      }
+
       const sharingModes: IndividualTransportMode[] = [
         "bicycle_rental",
         "car_sharing",
@@ -276,12 +281,6 @@ export class TripsRequestParams extends BaseRequestParams {
       if (isExtension) {
         const paramsExtensionNode = paramsNode.ele("Extension");
         paramsExtensionNode.ele("ItModesToCover", transportMode);
-      }
-
-      if (transportMode === 'car' || transportMode === 'car-shuttle-train') {
-        // TODO: find out why does it work without seting this 
-        paramsNode.ele('ItModesToCover', transportMode);
-        paramsNode.ele('ModeAndModeOfOperationFilter').ele('siri:WaterSubmode', 'localCarFerry');
       }
     } else {
       const isOthersDriveCar =
