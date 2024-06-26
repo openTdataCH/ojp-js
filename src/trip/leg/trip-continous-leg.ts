@@ -110,7 +110,7 @@ export class TripContinousLeg extends TripLeg {
   }
 
   private computeLegTransferModeFromTreeNode(treeNode: TreeNode): TransferMode | null {
-    const transferModeS = treeNode.findTextFromChildNamed('TransferMode');
+    const transferModeS = treeNode.findTextFromChildNamed('TransferType');
     if (transferModeS === null) {
       return null;
     }
