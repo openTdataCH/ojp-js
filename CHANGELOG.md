@@ -2,6 +2,7 @@
 
 ## 0.9.xx - xx.xx.xxxx
 - adds support for car water-ferry / car-shuttle train - [PR #80](https://github.com/openTdataCH/ojp-js/pull/80), [PR #82](https://github.com/openTdataCH/ojp-js/pull/80)
+- remove sorting of trips for special cases, should be done in the integrators - [PR #83](https://github.com/openTdataCH/ojp-js/pull/83)
 
 ## 0.9.34 - 21.06.2024
 - updates SDK version to `0.9.34` - [PR #79](https://github.com/openTdataCH/ojp-js/pull/79)
