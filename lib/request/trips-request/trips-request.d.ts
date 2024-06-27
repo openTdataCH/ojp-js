@@ -17,5 +17,4 @@ export declare class TripRequest extends OJPBaseRequest {
     fetchResponse(): Promise<TripRequest_Response>;
     fetchResponseWithCallback(callback: TripRequest_Callback): void;
     private parseTripRequestResponse;
-    private sortTrips;
 }
