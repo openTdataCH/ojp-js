@@ -1,7 +1,7 @@
 import * as sax from 'sax';
 
 import { TreeNode } from "../xml/tree-node";
-import { IS_NODE_CLI } from '..';
+import { IS_NODE_CLI } from '../constants';
 
 export class BaseParser {
   protected rootNode: TreeNode;
