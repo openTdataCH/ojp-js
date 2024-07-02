@@ -1,3 +1,5 @@
+export * from './constants'
+
 export * from './config/map-colors'
 
 export * from './fare/fare'
