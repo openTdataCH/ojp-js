@@ -1,6 +1,6 @@
 import * as xmlbuilder from "xmlbuilder";
 
-import { SDK_VERSION } from "../constants";
+import { SDK_VERSION } from '../constants';
 
 export class BaseRequestParams {
   protected serviceRequestNode: xmlbuilder.XMLElement;
