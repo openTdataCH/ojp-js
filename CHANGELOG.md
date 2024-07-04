@@ -2,7 +2,7 @@
 
 ## 0.9.xx - xx.xx.2024
 - fix circular dependency - [PR #85](https://github.com/openTdataCH/ojp-js/pull/85)
-- adds `NumberOfResultsType` to handle previous / next `TripResult` connections
+- adds `NumberOfResultsType` to handle previous / next `TripResult` connections - [PR #86](https://github.com/openTdataCH/ojp-js/pull/86)
 
 ## 0.9.35 - 27.06.2024
 - updates SDK version to `0.9.35` - [PR #84](https://github.com/openTdataCH/ojp-js/pull/84)
