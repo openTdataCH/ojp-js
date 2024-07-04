@@ -2,6 +2,7 @@ import { TripLocationPoint } from "../../trip";
 import { IndividualTransportMode } from "../../types/individual-mode.types";
 import { TripModeType } from "../../types/trip-mode-type";
 import { TripRequestBoardingType } from '../trips-request/trips-request'
+import { NumberOfResultsType } from "../types/trip-request.type";
 
 export class JourneyRequestParams {
   tripLocations: TripLocationPoint[]
@@ -9,8 +10,8 @@ export class JourneyRequestParams {
   transportModes: IndividualTransportMode[]
   departureDate: Date
   includeLegProjection: boolean
-  useNumberOfResultsAfter: boolean
   public tripRequestBoardingType: TripRequestBoardingType
+  numberOfResultsType: NumberOfResultsType
 
   constructor(
     tripLocations: TripLocationPoint[], 
@@ -18,15 +19,16 @@ export class JourneyRequestParams {
     transportModes: IndividualTransportMode[], 
     departureDate: Date, 
     tripRequestBoardingType: TripRequestBoardingType,
+    numberOfResultsType: NumberOfResultsType,
   ) {
     this.tripLocations = tripLocations;
     this.tripModeTypes = tripModeTypes
     this.transportModes = transportModes
     this.departureDate = departureDate
     this.includeLegProjection = true
-    this.useNumberOfResultsAfter = true
     this.tripRequestBoardingType = tripRequestBoardingType
-  }
+    this.numberOfResultsType = numberOfResultsType
+  } 
 
   public static initWithLocationsAndDate(
     fromTripLocation: TripLocationPoint | null,
@@ -36,6 +38,7 @@ export class JourneyRequestParams {
     transportModes: IndividualTransportMode[],
     departureDate: Date,
     tripRequestBoardingType: TripRequestBoardingType,
+    numberOfResultsType: NumberOfResultsType,
   ): JourneyRequestParams | null {
     if ((fromTripLocation === null) || (toTripLocation === null)) {
       return null;
@@ -74,7 +77,7 @@ export class JourneyRequestParams {
     tripLocations = tripLocations.concat(viaTripLocations);
     tripLocations.push(toTripLocation);
 
-    const requestParams = new JourneyRequestParams(tripLocations, tripModeTypes, transportModes, departureDate, tripRequestBoardingType)
+    const requestParams = new JourneyRequestParams(tripLocations, tripModeTypes, transportModes, departureDate, tripRequestBoardingType, numberOfResultsType)
 
     return requestParams
   }
