@@ -44,7 +44,7 @@ export class JourneyRequest {
     }
 
     tripRequestParams.includeLegProjection = this.requestParams.includeLegProjection
-    tripRequestParams.useNumberOfResultsAfter = this.requestParams.useNumberOfResultsAfter
+    tripRequestParams.numberOfResultsType = this.requestParams.numberOfResultsType
     tripRequestParams.modeType = this.requestParams.tripModeTypes[journeyIDx];
     tripRequestParams.transportMode = this.requestParams.transportModes[journeyIDx];
 

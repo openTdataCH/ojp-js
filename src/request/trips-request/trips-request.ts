@@ -1,7 +1,7 @@
 import { OJPBaseRequest } from '../base-request';
 import { TripsRequestParams } from './trips-request-params';
 import { DEFAULT_STAGE, StageConfig } from '../../types/stage-config';
-import { TripRequest_Response, TripRequest_Callback } from '../types/trip-request.type';
+import { TripRequest_Response, TripRequest_Callback, NumberOfResultsType } from '../types/trip-request.type';
 import { TripRequestParser } from './trip-request-parser';
 import { Trip, TripContinousLeg, TripLocationPoint } from '../../trip';
 import { Location } from '../../location/location';
@@ -54,8 +54,8 @@ export class TripRequest extends OJPBaseRequest {
     return request;
   }
 
-  public static initWithTripLocationsAndDate(stageConfig: StageConfig, fromTripLocation: TripLocationPoint | null, toTripLocation: TripLocationPoint | null, departureDate: Date, tripRequestBoardingType: TripRequestBoardingType = 'Dep') {
-    const requestParams = TripsRequestParams.initWithTripLocationsAndDate(fromTripLocation, toTripLocation, departureDate, tripRequestBoardingType);
+  public static initWithTripLocationsAndDate(stageConfig: StageConfig, fromTripLocation: TripLocationPoint | null, toTripLocation: TripLocationPoint | null, departureDate: Date, tripRequestBoardingType: TripRequestBoardingType = 'Dep', numberOfResultsType: NumberOfResultsType = 'NumberOfResults') {
+    const requestParams = TripsRequestParams.initWithTripLocationsAndDate(fromTripLocation, toTripLocation, departureDate, tripRequestBoardingType, numberOfResultsType);
     if (requestParams === null) {
       return null;
     }
