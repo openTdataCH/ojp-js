@@ -3,7 +3,7 @@ import { TripsRequestParams } from './trips-request-params';
 import { DEFAULT_STAGE, StageConfig } from '../../types/stage-config';
 import { TripRequest_Response, TripRequest_Callback, NumberOfResultsType } from '../types/trip-request.type';
 import { TripRequestParser } from './trip-request-parser';
-import { Trip, TripContinousLeg, TripLocationPoint } from '../../trip';
+import { TripLocationPoint } from '../../trip';
 import { Location } from '../../location/location';
 
 export type TripRequestBoardingType = 'Dep' | 'Arr'
