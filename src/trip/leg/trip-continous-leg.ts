@@ -170,6 +170,10 @@ export class TripContinousLeg extends TripLeg {
       return 'car-ferry'
     }
 
+    if (legModeS === 'foot.own') {
+      return 'walk';
+    }
+
     return null
   }
 
