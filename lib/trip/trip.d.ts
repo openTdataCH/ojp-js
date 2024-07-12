@@ -18,4 +18,5 @@ export declare class Trip {
     computeFromLocation(): Location | null;
     computeToLocation(): Location | null;
     computeBBOX(): GeoPositionBBOX;
+    private patchLegEndpointCoords;
 }
