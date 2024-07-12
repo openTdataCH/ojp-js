@@ -22,7 +22,9 @@ export class Trip {
     this.id = tripID;
     this.legs = legs;
     this.stats = tripStats
-    this.tripFareResults = []
+    this.tripFareResults = [];
+
+    this.patchLegEndpointCoords();
   }
 
   public static initFromTreeNode(treeNode: TreeNode): Trip | null {
@@ -204,5 +206,37 @@ export class Trip {
     });
 
     return bbox;
+  }
+
+  private patchLegEndpointCoords() {
+    this.legs.forEach((leg, legIdx) => {
+      if (leg.legType !== 'TimedLeg') {
+        return;
+      }
+
+      const timedLeg = leg as TripTimedLeg;
+      
+      // Check if we have a START geoPosition
+      // - use it for prev leg END geoPosition
+      const fromGeoPosition = timedLeg.legTrack?.fromGeoPosition() ?? null;
+      if (legIdx > 0 && fromGeoPosition !== null) {
+        const prevLeg = this.legs[legIdx - 1];
+        if (prevLeg.toLocation.geoPosition === null) {
+          console.log('SDK HACK - patchLegEndpointCoords - use legTrack.fromGeoPosition for prevLeg.toLocation.geoPosition');
+          prevLeg.toLocation.geoPosition = fromGeoPosition;
+        }
+      }
+
+      // Check if we have a END geoPosition
+      // - use it for next leg START geoPosition
+      const toGeoPosition = timedLeg.legTrack?.toGeoPosition() ?? null;
+      if (legIdx < (this.legs.length - 1) && toGeoPosition !== null) {
+        const nextLeg = this.legs[legIdx + 1];
+        if (nextLeg.fromLocation.geoPosition === null) {
+          console.log('SDK HACK - patchLegEndpointCoords - use legTrack.toGeoPosition for nextLeg.fromLocation.geoPosition');
+          nextLeg.fromLocation.geoPosition = toGeoPosition;
+        }
+      }
+    });
   }
 }
