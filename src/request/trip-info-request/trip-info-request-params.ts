@@ -31,7 +31,7 @@ export class TripInfoRequestParams extends BaseRequestParams {
         requestNode.ele('OperatingDayRef', this.operatingDayRef);
 
         const paramsNode = requestNode.ele('Params');
-        // paramsNode.ele('IncludeCalls', true);
-        paramsNode.ele('IncludeService', false);
+        paramsNode.ele('IncludeCalls', true);
+        paramsNode.ele('IncludeService', true);
     }
 }
