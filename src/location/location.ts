@@ -309,4 +309,10 @@ export class Location {
 
     return null
   }
+
+  public patchWithAnotherLocation(anotherLocation: Location) {
+    this.locationName = anotherLocation.locationName;
+    this.stopPlace = anotherLocation.stopPlace;
+    this.geoPosition = anotherLocation.geoPosition;
+  }
 }
