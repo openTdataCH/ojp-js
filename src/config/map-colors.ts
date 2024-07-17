@@ -11,8 +11,8 @@ export const MapLegTypes: LegType[] = ['ContinousLeg', 'TimedLeg', 'TransferLeg'
 export const MapLegLineTypeColor: Record<TripLegLineType, string> = {
   Unknown: '#ffafcc',
   LongDistanceRail: '#D04D44',
-  SBahn: '#3D69CA',
-  Bus: '#5F8EF4',
+  SBahn: '#0d6efd',
+  Bus: '#0d6efd',
   PostAuto: '#EBBE24',
   OnDemand: '#D77D00',
   Aerial: '#8B4513',
