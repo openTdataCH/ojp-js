@@ -1,6 +1,6 @@
-import { GeoPosition } from "./geoposition";
+import * as GeoJSON from 'geojson'
 
-import { Polygon } from 'geojson'
+import { GeoPosition } from "./geoposition";
 
 export class GeoPositionBBOX {
   public southWest: GeoPosition
@@ -130,7 +130,7 @@ export class GeoPositionBBOX {
     return distance;
   }
 
-  public asPolygon(): Polygon {
+  public asPolygon(): GeoJSON.Polygon {
     const bboxSW = this.southWest;
     const bboxNW = new GeoPosition(this.southWest.longitude, this.northEast.latitude);
     const bboxNE = this.northEast;
