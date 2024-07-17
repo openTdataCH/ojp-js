@@ -106,6 +106,12 @@ export class TripContinousLeg extends TripLeg {
     const firstBookingAgency = treeNode.findTextFromChildNamed('Service/BookingArrangements/BookingArrangement/BookingAgencyName/Text');
     const legMode = this.computeLegTransportModeFromString(legModeS, firstBookingAgency);
 
+    if (legMode === null) {
+      console.error('ERROR computeLegTransportModeFromString');
+      console.log('=> CANT handle mode --' + legModeS + '--');
+      console.log(treeNode);
+    }
+
     return legMode;
   }
 
