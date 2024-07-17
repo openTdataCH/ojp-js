@@ -66,7 +66,7 @@ export class JourneyService {
     legService.destinationStopPlace = StopPlace.initWithServiceTreeNode(serviceTreeNode, 'Destination');
 
     legService.serviceLineNumber = serviceTreeNode.findTextFromChildNamed('PublishedServiceName/Text');
-    legService.journeyNumber = treeNode.findTextFromChildNamed('TrainNumber');
+    legService.journeyNumber = serviceTreeNode.findTextFromChildNamed('TrainNumber');
 
     legService.siriSituationIds = [];
     const situationFullRefTreeNodes = serviceTreeNode.findChildrenNamed('SituationFullRef');
