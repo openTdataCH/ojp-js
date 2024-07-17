@@ -1,7 +1,7 @@
 import { StopPoint } from '../trip/leg/timed-leg/stop-point'
 import { JourneyService } from '../journey/journey-service'
 import { Location } from '../location/location';
-import { StopPointTime } from '../trip';
+import { StopPointTime } from '../trip/leg/timed-leg/stop-point-time';
 import { DateHelpers } from '../helpers/date-helpers';
 import { PtSituationElement } from '../situation/situation-element';
 import { TreeNode } from '../xml/tree-node';
