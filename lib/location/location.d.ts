@@ -32,5 +32,6 @@ export declare class Location {
     computeLocationName(includeLiteralCoords?: boolean): string | null;
     findClosestLocation(otherLocations: Location[]): NearbyLocation | null;
     getLocationType(): LocationType | null;
+    patchWithAnotherLocation(anotherLocation: Location): void;
 }
 export {};

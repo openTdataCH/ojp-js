@@ -4,6 +4,7 @@ export * from './fare/fare';
 export * from './helpers/date-helpers';
 export * from './helpers/mapbox-layer-helpers';
 export * from './helpers/xml-helpers';
+export * from './journey/journey-service';
 export * from './location/location';
 export * from './location/geoposition-bbox';
 export * from './location/geoposition';
