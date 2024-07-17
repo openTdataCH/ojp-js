@@ -1,6 +1,6 @@
-import { GeoPosition } from "./geoposition";
+import * as GeoJSON from 'geojson'
 
-import { Polygon } from 'geojson'
+import { GeoPosition } from "./geoposition";
 
 export class GeoPositionBBOX {
   public southWest: GeoPosition
@@ -41,6 +41,31 @@ export class GeoPositionBBOX {
     const northEast = new GeoPosition(geoPosition.longitude + spanLongitude / 2, geoPosition.latitude + spanLatitude / 2);
 
     const bbox = new GeoPositionBBOX([southWest, northEast]);
+    return bbox;
+  }
+
+  public static initFromGeoJSONFeatures(features: GeoJSON.Feature[]): GeoPositionBBOX {
+    const bbox = new GeoPositionBBOX([])
+    
+    features.forEach(feature => {
+      const featureBBOX = feature.bbox ?? null;
+      if (featureBBOX) {
+        const bboxSW = new GeoPosition(featureBBOX[0], featureBBOX[1])
+        bbox.extend(bboxSW)
+
+        const bboxNE = new GeoPosition(featureBBOX[2], featureBBOX[3])
+        bbox.extend(bboxNE)
+      } else {
+        if (feature.geometry.type === 'LineString') {
+          const points = feature.geometry as GeoJSON.LineString;
+          points.coordinates.forEach(pointCoords => {
+            const geoPosition = new GeoPosition(pointCoords[0], pointCoords[1]);
+            bbox.extend(geoPosition);
+          });
+        }
+      }
+    })
+
     return bbox;
   }
 
@@ -130,7 +155,7 @@ export class GeoPositionBBOX {
     return distance;
   }
 
-  public asPolygon(): Polygon {
+  public asPolygon(): GeoJSON.Polygon {
     const bboxSW = this.southWest;
     const bboxNW = new GeoPosition(this.southWest.longitude, this.northEast.latitude);
     const bboxNE = this.northEast;

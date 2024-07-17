@@ -80,9 +80,7 @@ export class TripLeg {
 
     const contextLocation = mapContextLocations[stopPlaceRef];
 
-    location.locationName = contextLocation.locationName;
-    location.stopPlace = contextLocation.stopPlace;
-    location.geoPosition = contextLocation.geoPosition;
+    location.patchWithAnotherLocation(contextLocation);
   }
 
   public computeGeoJSONFeatures(): GeoJSON.Feature[] {
