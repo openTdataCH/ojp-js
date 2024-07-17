@@ -76,9 +76,9 @@ export class TripInfoResult {
             }
 
             if (!(stopPlaceRef in mapContextLocations)) {
-                console.error('TripInfoResult.patchLocations - no stopPlaceRef found in mapContextLocations');
-                console.log(stopPoint);
-                console.log(mapContextLocations);
+                // console.error('TripInfoResult.patchLocations - no stopPlaceRef found in mapContextLocations');
+                // console.log(stopPoint);
+                // console.log(mapContextLocations);
                 return;
             }
 
