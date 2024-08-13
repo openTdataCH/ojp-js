@@ -12,6 +12,8 @@ import { GeoPosition } from '../location/geoposition'
 import { TreeNode } from '../xml/tree-node'
 import { TripFareResult } from '../fare/fare'
 
+import { XMLElement } from 'xmlbuilder'
+
 export class Trip {
   public id: string
   public legs: TripLeg[]
@@ -202,5 +204,20 @@ export class Trip {
     });
 
     return bbox;
+  }
+
+  public addToXMLNode(parentNode: XMLElement) {
+    const tripNode = parentNode.ele('ojp:Trip');
+    
+    tripNode.ele('ojp:TripId', this.id);
+    tripNode.ele('ojp:Duration', this.stats.duration.asOJPFormattedText());
+    tripNode.ele('ojp:StartTime', this.stats.startDatetime.toISOString());
+    tripNode.ele('ojp:EndTime', this.stats.endDatetime.toISOString());
+    tripNode.ele('ojp:Transfers', this.stats.transferNo);
+    tripNode.ele('ojp:Distance', this.stats.distanceMeters);
+
+    this.legs.forEach(leg => {
+      leg.addToXMLNode(tripNode);
+    });
   }
 }

@@ -69,4 +69,14 @@ export class Duration {
   public plus(otherDuration: Duration): Duration {
     return Duration.initFromTotalMinutes(this.totalMinutes + otherDuration.totalMinutes)
   }
+
+  public asOJPFormattedText(): string {
+    const parts: string[] = [];
+
+    parts.push('PT');
+    parts.push('' + this.hours + 'H');
+    parts.push('' + this.minutes + 'M');
+
+    return parts.join('');
+  }
 }

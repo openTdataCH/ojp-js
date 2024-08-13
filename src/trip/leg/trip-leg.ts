@@ -1,4 +1,5 @@
 import * as GeoJSON from 'geojson'
+import { XMLElement } from 'xmlbuilder'
 
 import { Location } from '../../location/location'
 import { LegTrack } from './leg-track'
@@ -259,6 +260,11 @@ export class TripLeg {
     });
 
     return geoPositions
+  }
+
+  public addToXMLNode(parentNode: XMLElement) {
+    // override
+    debugger;
   }
 
 }

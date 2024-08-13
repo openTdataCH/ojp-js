@@ -1,3 +1,5 @@
+import { XMLElement } from 'xmlbuilder';
+
 import { PublicTransportMode } from './public-transport-mode'
 import { TripLegLineType } from "../types/map-geometry-types";
 
@@ -172,5 +174,31 @@ export class JourneyService {
     nameParts.push('(' + this.agencyID + ')')
 
     return nameParts.join(' ')
+  }
+
+  public addToXMLNode(parentNode: XMLElement) {
+    const serviceNode = parentNode.ele('ojp:Service');
+    
+    serviceNode.ele('ojp:JourneyRef', this.journeyRef);
+
+    if (this.lineRef) {
+      serviceNode.ele('siri:LineRef', this.lineRef);
+    }
+    if (this.directionRef) {
+      serviceNode.ele('siri:DirectionRef', this.directionRef);
+    }
+    
+    this.ptMode.addToXMLNode(serviceNode);
+
+    if (this.serviceLineNumber) {
+      serviceNode.ele('ojp:PublishedLineName').ele('ojp:Text', this.serviceLineNumber);
+    }
+
+    let agencyID_s = this.agencyID;
+    if (!agencyID_s.startsWith('ojp:')) {
+      agencyID_s = 'ojp:' + agencyID_s;
+    }
+
+    serviceNode.ele('ojp:OperatorRef', agencyID_s);
   }
 }
