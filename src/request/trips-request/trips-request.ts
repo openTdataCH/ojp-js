@@ -10,10 +10,12 @@ export type TripRequestBoardingType = 'Dep' | 'Arr'
 
 export class TripRequest extends OJPBaseRequest {
   private requestParams: TripsRequestParams
+  public response: TripRequest_Response | null
 
   constructor(stageConfig: StageConfig, requestParams: TripsRequestParams) {
     super(stageConfig);
     this.requestParams = requestParams;
+    this.response = null;
     this.requestInfo.requestXML = this.buildRequestXML();
   }
 
@@ -85,6 +87,8 @@ export class TripRequest extends OJPBaseRequest {
   }
 
   private parseTripRequestResponse(callback: TripRequest_Callback) {
+    this.response = null;
+
     if (this.requestInfo.error !== null || this.requestInfo.responseXML === null) {
       const errorResponse: TripRequest_Response = {
         tripsNo: 0,
@@ -102,6 +106,8 @@ export class TripRequest extends OJPBaseRequest {
       if (parserResponse.message === 'TripRequest.Trip' && parserResponse.trips.length === 1) {
         this.requestInfo.parseDateTime = new Date();
       }
+
+      this.response = parserResponse;
 
       callback(parserResponse);
     };
