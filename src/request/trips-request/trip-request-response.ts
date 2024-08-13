@@ -2,6 +2,8 @@ import * as xmlbuilder from "xmlbuilder";
 
 import { Trip } from "../../trip";
 
+// This is different than `TripRequest_Response` 
+//    because of the XML serialisation which is done here
 export class TripRequestResponse {
   public trips: Trip[]
 
