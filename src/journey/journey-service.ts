@@ -13,6 +13,9 @@ interface ServiceAttribute {
 
 export class JourneyService {
   public journeyRef: string;
+  public lineRef: string | null;
+  public directionRef: string | null;
+
   public ptMode: PublicTransportMode;
   public agencyID: string;
   public originStopPlace: StopPlace | null;
@@ -27,6 +30,9 @@ export class JourneyService {
 
   constructor(journeyRef: string, ptMode: PublicTransportMode, agencyID: string) {
     this.journeyRef = journeyRef;
+    this.lineRef = null;
+    this.directionRef = null;
+
     this.ptMode = ptMode;
     this.agencyID = agencyID;
     
@@ -58,6 +64,9 @@ export class JourneyService {
     }
 
     const legService = new JourneyService(journeyRef, ptMode, agencyID);
+
+    legService.lineRef = serviceTreeNode.findTextFromChildNamed('siri:LineRef');
+    legService.directionRef = serviceTreeNode.findTextFromChildNamed('siri:DirectionRef');
 
     legService.originStopPlace = StopPlace.initWithServiceTreeNode(serviceTreeNode, 'Origin');
     legService.destinationStopPlace = StopPlace.initWithServiceTreeNode(serviceTreeNode, 'Destination');
