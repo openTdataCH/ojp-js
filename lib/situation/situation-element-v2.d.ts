@@ -5,11 +5,19 @@ interface TimeInterval {
     endDate: Date;
 }
 type ScopeType = 'line' | 'stopPlace' | 'vehicleJourney';
+type TextualContentSizeEnum = 'small' | 'medium' | 'large';
+type LangEnum = 'de' | 'fr' | 'it' | 'en';
+type TextualPropertyContent = Record<LangEnum, string | null>;
+interface TextualContent {
+    summary: TextualPropertyContent;
+    mapTextData: Record<string, TextualPropertyContent[]>;
+}
+type MapTextualContent = Record<TextualContentSizeEnum, TextualContent>;
 interface PassengerInformationAction {
-    actionRef: string | null;
+    actionRef: string;
     ownerRef: string | null;
     perspectives: string[];
-    mapTextualContent: Record<string, string[]>;
+    mapTextualContent: MapTextualContent;
 }
 interface StopPlace {
     stopPlaceRef: string;
@@ -51,6 +59,7 @@ interface PublishingActionAffect {
     affect: StopPlace | LineNetwork | AffectedLineNetworkWithStops | AffectedVehicleJourney;
 }
 interface PublishingAction {
+    scopeType: ScopeType;
     passengerInformation: PassengerInformationAction;
     affects: PublishingActionAffect[];
 }
@@ -65,18 +74,19 @@ export declare class PtSituationElement {
     validityPeriods: TimeInterval[];
     alertCause: string;
     priority: number;
-    scopeType: ScopeType;
     publishingActions: PublishingAction[];
     isPlanned: boolean;
     treeNode: TreeNode | null;
-    constructor(situationNumber: string, creationTime: Date, countryRef: string, participantRef: string, version: number, source: PtSituationSource, progress: string, validityPeriods: TimeInterval[], alertCause: string, priority: number, scopeType: ScopeType, publishingActions: PublishingAction[], isPlanned: boolean);
-    static initWithSituationTreeNode(treeNode: TreeNode): PtSituationElement | null;
+    constructor(situationNumber: string, creationTime: Date, countryRef: string, participantRef: string, version: number, source: PtSituationSource, progress: string, validityPeriods: TimeInterval[], alertCause: string, priority: number, publishingActions: PublishingAction[], isPlanned: boolean);
+    static initFromSituationNode(treeNode: TreeNode): PtSituationElement | null;
     private static computePublishingActionsFromSituationNode;
     private static computePublishingAction;
     private static computeAffects;
     private static computeLineNetwork;
     private static computeAffectedStopPlaces;
     private static computeAffectedJourneys;
+    private static computeTextualContent;
+    private static computeTextualPropertyContent;
     isActive(date?: Date): boolean;
 }
 export {};

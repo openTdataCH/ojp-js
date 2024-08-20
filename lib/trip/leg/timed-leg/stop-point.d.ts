@@ -12,6 +12,7 @@ export declare class StopPoint {
     plannedPlatform: string | null;
     actualPlatform: string | null;
     sequenceOrder: number | null;
+    isNotServicedStop: boolean | null;
     siriSituationIds: string[];
     siriSituations: PtSituationElement[];
     vehicleAccessType: VehicleAccessType | null;

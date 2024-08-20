@@ -1,7 +1,6 @@
 import { StopPoint } from '../trip/leg/timed-leg/stop-point';
 import { JourneyService } from '../journey/journey-service';
 import { Location } from '../location/location';
-import { PtSituationElement } from '../situation/situation-element';
 import { TreeNode } from '../xml/tree-node';
 export type StationBoardType = 'Departures' | 'Arrivals';
 interface StationBoardTime {
@@ -10,6 +9,11 @@ interface StationBoardTime {
     stopDelayText: string | null;
     hasDelay: boolean;
     hasDelayDifferentTime: boolean;
+}
+interface SituationData {
+    summary: string;
+    description: string;
+    details: string[];
 }
 export interface StationBoardModel {
     stopEvent: StopEvent;
@@ -21,7 +25,7 @@ export interface StationBoardModel {
     mapStationBoardTime: Record<StationBoardType, StationBoardTime>;
     stopPlatform: string | null;
     stopPlatformActual: string | null;
-    stopSituations: PtSituationElement[];
+    stopSituations: SituationData[];
 }
 export declare class StopEvent {
     journeyService: JourneyService;

@@ -7,4 +7,6 @@ export interface TripStats {
     transferNo: number;
     startDatetime: Date;
     endDatetime: Date;
+    isCancelled: boolean | null;
+    isInfeasable: boolean | null;
 }
