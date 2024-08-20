@@ -198,10 +198,17 @@ export class Trip {
     const fromGeoPosition = this.computeFromLocation()?.geoPosition;
     if (fromGeoPosition) {
       bbox.extend(fromGeoPosition);
+    } else {
+      console.error('Trip.computeBBOX - cant computeFromLocation');
+      console.log(this);
     }
+    
     const toGeoPosition = this.computeToLocation()?.geoPosition;
     if (toGeoPosition) {
       bbox.extend(toGeoPosition);
+    } else {
+      console.error('Trip.computeBBOX - cant computeToLocation');
+      console.log(this);
     }
 
     this.legs.forEach(leg => {
