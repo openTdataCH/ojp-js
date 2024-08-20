@@ -316,5 +316,7 @@ export class TripsRequestParams extends BaseRequestParams {
         });
       }
     }
+
+    paramsNode.ele("UseRealtimeData", 'explanatory');
   }
 }
