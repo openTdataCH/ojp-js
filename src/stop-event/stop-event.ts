@@ -17,6 +17,12 @@ interface StationBoardTime {
     hasDelayDifferentTime: boolean
 }
 
+interface SituationData {
+    summary: string
+    description: string
+    details: string[]
+}
+
 export interface StationBoardModel {
     stopEvent: StopEvent
 
@@ -31,7 +37,7 @@ export interface StationBoardModel {
     stopPlatform: string | null
     stopPlatformActual: string | null
 
-    stopSituations: PtSituationElement[]
+    stopSituations: SituationData[]
 }
 
 export class StopEvent {
@@ -132,8 +138,42 @@ export class StopEvent {
             },
             stopPlatform: this.stopPoint.plannedPlatform, 
             stopPlatformActual: stopPlatformActual,
-            stopSituations: this.stopPoint.siriSituations,
+            stopSituations: [],
         }
+
+        // TODO - share the logic with OJP GUI 
+        //  => src/app/journey/journey-result-row/result-trip-leg/result-trip-leg.component.ts
+        model.stopSituations = (() => {
+            const situationsData: SituationData[] = [];
+
+            this.stopPoint.siriSituations.forEach(situation => {
+                situation.publishingActions.forEach(publishingAction => {
+                    const mapTextualContent = publishingAction.passengerInformation.mapTextualContent;
+          
+                    const situationData = <SituationData>{};
+          
+                    if ('Summary' in mapTextualContent) {
+                      situationData.summary = mapTextualContent['Summary'].join('. ');
+                    }
+          
+                    if ('Description' in mapTextualContent) {
+                      situationData.description = mapTextualContent['Description'].join('. ');
+                    }
+          
+                    situationData.details = [];
+                    const detailKeys = ['Consequence', 'Duration', 'Reason', 'Recommendation', 'Remark'];
+                    detailKeys.forEach(detailKey => {
+                      if (detailKey in mapTextualContent) {
+                        situationData.details = situationData.details.concat(mapTextualContent[detailKey]);
+                      }
+                    });
+          
+                    situationsData.push(situationData);
+                  });
+            });
+
+            return situationsData;
+        })();
 
         return model;
     }
