@@ -23,6 +23,7 @@ interface SituationData {
     details: string[]
 }
 
+// TODO - this should be in the integrator (i.e. OJP GUI)
 export interface StationBoardModel {
     stopEvent: StopEvent
 
