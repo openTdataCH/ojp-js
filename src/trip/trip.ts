@@ -95,6 +95,18 @@ export class Trip {
       transferNo: parseInt(transfersNoS),
       startDatetime: tripStartTime,
       endDatetime: tripEndTime,
+
+      isCancelled: null,
+      isInfeasable: null,
+    };
+
+    const cancelledNode = treeNode.findChildNamed('Cancelled');
+    if (cancelledNode) {
+      tripStats.isCancelled = cancelledNode.text === 'true';
+    }
+    const infeasableNode = treeNode.findChildNamed('Infeasible');
+    if (infeasableNode) {
+      tripStats.isInfeasable = infeasableNode.text === 'true';
     }
 
     const trip = new Trip(tripId, legs, tripStats);
