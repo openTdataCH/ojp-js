@@ -1,6 +1,7 @@
 import { RestrictionType, POI_Restriction } from "../../types/lir-restrictions.type";
 import { BaseRequestParams } from "../base-request-params";
 import { GeoPosition } from "../../location/geoposition";
+import { Language } from "../../types/language-type";
 
 export class LocationInformationRequestParams extends BaseRequestParams {
   public locationName: string | null;
@@ -18,8 +19,8 @@ export class LocationInformationRequestParams extends BaseRequestParams {
   public circleCenter: GeoPosition | null;
   public circleRadius: number | null;
 
-  constructor() {
-    super();
+  constructor(language: Language) {
+    super(language);
 
     this.locationName = null;
     this.stopPlaceRef = null;
@@ -35,11 +36,13 @@ export class LocationInformationRequestParams extends BaseRequestParams {
   }
 
   public static initWithLocationName(
+    language: Language,
     locationName: string,
     restrictionTypes: RestrictionType[] | null = null,
     limit: number = 10,
   ): LocationInformationRequestParams {
-    const requestParams = new LocationInformationRequestParams();
+    const requestParams = new LocationInformationRequestParams(language);
+    
     requestParams.locationName = locationName;
     requestParams.numberOfResults = limit;
 
@@ -51,24 +54,27 @@ export class LocationInformationRequestParams extends BaseRequestParams {
   }
 
   public static initWithStopPlaceRef(
-    stopPlaceRef: string
+    language: Language,
+    stopPlaceRef: string,
   ): LocationInformationRequestParams {
-    const requestParams = new LocationInformationRequestParams();
+    const requestParams = new LocationInformationRequestParams(language);
     requestParams.stopPlaceRef = stopPlaceRef;
 
     return requestParams;
   }
 
   public static initWithBBOXAndType(
+    language: Language,
     bboxWest: number,
     bboxNorth: number,
     bboxEast: number,
     bboxSouth: number,
     restrictionTypes: RestrictionType[],
     limit: number = 1000,
-    poiRestriction: POI_Restriction | null = null 
+    poiRestriction: POI_Restriction | null = null,
   ): LocationInformationRequestParams {
-    const requestParams = new LocationInformationRequestParams();
+    const requestParams = new LocationInformationRequestParams(language);
+    
     requestParams.bboxWest = bboxWest;
     requestParams.bboxNorth = bboxNorth;
     requestParams.bboxEast = bboxEast;
@@ -81,13 +87,14 @@ export class LocationInformationRequestParams extends BaseRequestParams {
   }
 
   public static initWithCircleLngLatRadius(
+    language: Language,
     circleLongitude: number, 
     circleLatitude: number,
     circleRadius: number,
     restrictionTypes: RestrictionType[] = [],
-    numberOfResults: number = 1000
+    numberOfResults: number = 1000,
   ): LocationInformationRequestParams {
-    const requestParams = new LocationInformationRequestParams();
+    const requestParams = new LocationInformationRequestParams(language);
 
     requestParams.circleCenter = new GeoPosition(circleLongitude, circleLatitude);
     requestParams.circleRadius = circleRadius;
