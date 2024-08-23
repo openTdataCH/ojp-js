@@ -1,11 +1,14 @@
 import * as xmlbuilder from "xmlbuilder";
 
 import { SDK_VERSION } from '../constants';
+import { Language } from "../types/language-type";
 
 export class BaseRequestParams {
+  private language: Language;
   protected serviceRequestNode: xmlbuilder.XMLElement;
 
-  constructor() {
+  constructor(language: Language) {
+    this.language = language
     this.serviceRequestNode = this.computeBaseServiceRequestNode();
   }
   
@@ -25,6 +28,8 @@ export class BaseRequestParams {
     const serviceRequestNode = ojpNode
       .ele("OJPRequest")
       .ele("siri:ServiceRequest");
+
+    serviceRequestNode.ele('siri:ServiceRequestContext').ele('siri:Language', this.language);
 
     return serviceRequestNode;
   }
