@@ -5,6 +5,7 @@ import { TripRequest_Response, TripRequest_Callback, NumberOfResultsType } from 
 import { TripRequestParser } from './trip-request-parser';
 import { TripLocationPoint } from '../../trip';
 import { Location } from '../../location/location';
+import { Language } from '../../types/language-type';
 
 export type TripRequestBoardingType = 'Dep' | 'Arr'
 
@@ -35,10 +36,10 @@ export class TripRequest extends OJPBaseRequest {
     return request;
   }
 
-  public static initWithStopRefs(stageConfig: StageConfig, fromStopRef: string, toStopRef: string, departureDate: Date = new Date(), tripRequestBoardingType: TripRequestBoardingType = 'Dep') {
+  public static initWithStopRefs(stageConfig: StageConfig, language: Language, fromStopRef: string, toStopRef: string, departureDate: Date = new Date(), tripRequestBoardingType: TripRequestBoardingType = 'Dep') {
     const fromLocation = Location.initWithStopPlaceRef(fromStopRef);
     const toLocation = Location.initWithStopPlaceRef(toStopRef);
-    const requestParams = TripsRequestParams.initWithLocationsAndDate(fromLocation, toLocation, departureDate, tripRequestBoardingType);
+    const requestParams = TripsRequestParams.initWithLocationsAndDate(language, fromLocation, toLocation, departureDate, tripRequestBoardingType);
     if (requestParams === null) {
       return null;
     }
@@ -47,8 +48,8 @@ export class TripRequest extends OJPBaseRequest {
     return request;
   }
 
-  public static initWithLocationsAndDate(stageConfig: StageConfig, fromLocation: Location, toLocation: Location, departureDate: Date, tripRequestBoardingType: TripRequestBoardingType = 'Dep') {
-    const requestParams = TripsRequestParams.initWithLocationsAndDate(fromLocation, toLocation, departureDate, tripRequestBoardingType);
+  public static initWithLocationsAndDate(stageConfig: StageConfig, language: Language, fromLocation: Location, toLocation: Location, departureDate: Date, tripRequestBoardingType: TripRequestBoardingType = 'Dep') {
+    const requestParams = TripsRequestParams.initWithLocationsAndDate(language, fromLocation, toLocation, departureDate, tripRequestBoardingType);
     if (requestParams === null) {
       return null;
     }
@@ -56,8 +57,8 @@ export class TripRequest extends OJPBaseRequest {
     return request;
   }
 
-  public static initWithTripLocationsAndDate(stageConfig: StageConfig, fromTripLocation: TripLocationPoint | null, toTripLocation: TripLocationPoint | null, departureDate: Date, tripRequestBoardingType: TripRequestBoardingType = 'Dep', numberOfResultsType: NumberOfResultsType = 'NumberOfResults') {
-    const requestParams = TripsRequestParams.initWithTripLocationsAndDate(fromTripLocation, toTripLocation, departureDate, tripRequestBoardingType, numberOfResultsType);
+  public static initWithTripLocationsAndDate(stageConfig: StageConfig, language: Language, fromTripLocation: TripLocationPoint | null, toTripLocation: TripLocationPoint | null, departureDate: Date, tripRequestBoardingType: TripRequestBoardingType = 'Dep', numberOfResultsType: NumberOfResultsType = 'NumberOfResults') {
+    const requestParams = TripsRequestParams.initWithTripLocationsAndDate(language, fromTripLocation, toTripLocation, departureDate, tripRequestBoardingType, numberOfResultsType);
     if (requestParams === null) {
       return null;
     }

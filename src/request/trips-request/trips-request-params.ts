@@ -6,6 +6,7 @@ import { JourneyPointType } from '../../types/journey-points';
 import { Location } from "../../location/location";
 import { TripRequestBoardingType } from './trips-request'
 import { NumberOfResultsType } from "../types/trip-request.type";
+import { Language } from "../../types/language-type";
 
 export class TripsRequestParams extends BaseRequestParams {
   public fromTripLocation: TripLocationPoint;
@@ -19,13 +20,14 @@ export class TripsRequestParams extends BaseRequestParams {
   public includeLegProjection: boolean;
 
   constructor(
+    language: Language,
     fromTripLocation: TripLocationPoint,
     toTripLocation: TripLocationPoint,
     departureDate: Date = new Date(),
     tripRequestBoardingType: TripRequestBoardingType = 'Dep',
     numberOfResultsType: NumberOfResultsType = 'NumberOfResults',
   ) {
-    super();
+    super(language);
 
     this.fromTripLocation = fromTripLocation;
     this.toTripLocation = toTripLocation;
@@ -42,6 +44,7 @@ export class TripsRequestParams extends BaseRequestParams {
   public static Empty(): TripsRequestParams {
     const emptyTripLocationPoint = TripLocationPoint.Empty();
     const requestParams = new TripsRequestParams(
+      'en',
       emptyTripLocationPoint,
       emptyTripLocationPoint,
       new Date(),
@@ -52,6 +55,7 @@ export class TripsRequestParams extends BaseRequestParams {
   }
 
   public static initWithLocationsAndDate(
+    language: Language,
     fromLocation: Location | null, 
     toLocation: Location | null,
     departureDate: Date = new Date(),
@@ -66,16 +70,18 @@ export class TripsRequestParams extends BaseRequestParams {
     const toTripLocationPoint = new TripLocationPoint(toLocation);
 
     const requestParams = TripsRequestParams.initWithTripLocationsAndDate(
+      language,
       fromTripLocationPoint, 
       toTripLocationPoint, 
       departureDate, 
       tripRequestBoardingType,
-      numberOfResultsType
+      numberOfResultsType,
     );
     return requestParams;
   }
 
   public static initWithTripLocationsAndDate(
+    language: Language,
     fromTripLocationPoint: TripLocationPoint | null,
     toTripLocationPoint: TripLocationPoint | null,
     departureDate: Date = new Date(),
@@ -99,6 +105,7 @@ export class TripsRequestParams extends BaseRequestParams {
     }
 
     const tripRequestParams = new TripsRequestParams(
+      language,
       fromTripLocationPoint,
       toTripLocationPoint,
       departureDate,
