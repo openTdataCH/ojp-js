@@ -5,6 +5,7 @@ import { TripInfoRequestParams } from './trip-info-request-params';
 
 import { TripInfoRequest_Response } from '../types/trip-info-request.type';
 import { TripInfoRequestParser } from './trip-info-request-parser';
+import { Language } from '../../types/language-type';
 
 export class TripInfoRequest extends OJPBaseRequest {
     public requestParams: TripInfoRequestParams
@@ -37,13 +38,13 @@ export class TripInfoRequest extends OJPBaseRequest {
         return request;
       }
 
-    public static initWithJourneyRef(stageConfig: StageConfig, journeyRef: string, operatingDayRef: string | null = null): TripInfoRequest {
+    public static initWithJourneyRef(stageConfig: StageConfig, language: Language, journeyRef: string, operatingDayRef: string | null = null): TripInfoRequest {
         if (operatingDayRef === null) {
             const dateNowF = new Date().toISOString();
             operatingDayRef = dateNowF.substring(0, 10);
         }
         
-        const requestParams = new TripInfoRequestParams(journeyRef, operatingDayRef);
+        const requestParams = new TripInfoRequestParams(language, journeyRef, operatingDayRef);
         const request = new TripInfoRequest(stageConfig, requestParams);
         
         return request;
