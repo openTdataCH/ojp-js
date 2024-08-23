@@ -1,5 +1,6 @@
 import { TripLocationPoint } from "../../trip";
 import { IndividualTransportMode } from "../../types/individual-mode.types";
+import { Language } from "../../types/language-type";
 import { TripModeType } from "../../types/trip-mode-type";
 import { TripRequestBoardingType } from '../trips-request/trips-request'
 import { NumberOfResultsType } from "../types/trip-request.type";
@@ -12,8 +13,10 @@ export class JourneyRequestParams {
   includeLegProjection: boolean
   public tripRequestBoardingType: TripRequestBoardingType
   numberOfResultsType: NumberOfResultsType
+  language: Language
 
   constructor(
+    language: Language,
     tripLocations: TripLocationPoint[], 
     tripModeTypes: TripModeType[], 
     transportModes: IndividualTransportMode[], 
@@ -28,9 +31,11 @@ export class JourneyRequestParams {
     this.includeLegProjection = true
     this.tripRequestBoardingType = tripRequestBoardingType
     this.numberOfResultsType = numberOfResultsType
+    this.language = language
   } 
 
   public static initWithLocationsAndDate(
+    language: Language,
     fromTripLocation: TripLocationPoint | null,
     toTripLocation: TripLocationPoint | null,
     viaTripLocations: TripLocationPoint[],
@@ -77,7 +82,15 @@ export class JourneyRequestParams {
     tripLocations = tripLocations.concat(viaTripLocations);
     tripLocations.push(toTripLocation);
 
-    const requestParams = new JourneyRequestParams(tripLocations, tripModeTypes, transportModes, departureDate, tripRequestBoardingType, numberOfResultsType)
+    const requestParams = new JourneyRequestParams(
+      language,
+      tripLocations, 
+      tripModeTypes, 
+      transportModes, 
+      departureDate, 
+      tripRequestBoardingType, 
+      numberOfResultsType, 
+    )
 
     return requestParams
   }

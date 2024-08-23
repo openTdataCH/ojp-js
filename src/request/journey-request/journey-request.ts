@@ -4,6 +4,7 @@ import { TripsRequestParams } from "../trips-request/trips-request-params";
 import { JourneyRequestParams } from "./journey-request-params";
 import { RequestErrorData } from "../types/request-info.type";
 import { TripRequest_ParserMessage, TripRequest_Response } from "../types/trip-request.type";
+import { Language } from "../../types/language-type";
 
 export type JourneyRequest_Message = 'JourneyRequest.DONE' | TripRequest_ParserMessage | 'ERROR';
 export type JourneyRequest_Response = {
@@ -34,10 +35,17 @@ export class JourneyRequest {
   private computeTripResponse(journeyIDx: number, tripDepartureDate: Date, callback: JourneyRequest_Callback) {
     const isLastJourneySegment = journeyIDx === (this.requestParams.tripModeTypes.length - 1)
 
-    const fromTripLocation = this.requestParams.tripLocations[journeyIDx]
-    const toTripLocation = this.requestParams.tripLocations[journeyIDx + 1]
+    const fromTripLocation = this.requestParams.tripLocations[journeyIDx];
+    const toTripLocation = this.requestParams.tripLocations[journeyIDx + 1];
 
-    const tripRequestParams = TripsRequestParams.initWithTripLocationsAndDate(fromTripLocation, toTripLocation, tripDepartureDate, this.requestParams.tripRequestBoardingType);
+    const tripRequestParams = TripsRequestParams.initWithTripLocationsAndDate(
+      this.requestParams.language,
+      fromTripLocation, 
+      toTripLocation, 
+      tripDepartureDate, 
+      this.requestParams.tripRequestBoardingType
+    );
+    
     if (tripRequestParams === null) {
       console.error('JourneyRequest - TripsRequestParams null for trip idx ' + journeyIDx)
       return
