@@ -1,18 +1,19 @@
+import { Language } from '../../types/language-type';
 import { BaseRequestParams } from '../base-request-params';
 
 export class TripInfoRequestParams extends BaseRequestParams {
     public journeyRef: string
     public operatingDayRef: string
 
-    constructor(journeyRef: string, operatingDayRef: string) {
-        super();
+    constructor(language: Language, journeyRef: string, operatingDayRef: string) {
+        super(language);
 
         this.journeyRef = journeyRef;
         this.operatingDayRef = operatingDayRef;
     }
 
     public static Empty(): TripInfoRequestParams {
-        const requestParams = new TripInfoRequestParams('n/a', 'n/a');
+        const requestParams = new TripInfoRequestParams('en', 'n/a', 'n/a');
         return requestParams;
     }
 
