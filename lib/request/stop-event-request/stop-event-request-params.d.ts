@@ -1,4 +1,5 @@
 import { GeoPosition } from "../../location/geoposition";
+import { Language } from "../../types/language-type";
 import { StopEventType } from "../../types/stop-event-type";
 import { BaseRequestParams } from '../base-request-params';
 export declare class StopEventRequestParams extends BaseRequestParams {
@@ -10,7 +11,7 @@ export declare class StopEventRequestParams extends BaseRequestParams {
     includePreviousCalls: boolean;
     includeOnwardCalls: boolean;
     includeRealtimeData: boolean;
-    constructor(stopPlaceRef: string | null, geoPosition: GeoPosition | null, stopEventType: StopEventType, stopEventDate: Date);
+    constructor(language: Language, stopPlaceRef: string | null, geoPosition: GeoPosition | null, stopEventType: StopEventType, stopEventDate: Date);
     static Empty(): StopEventRequestParams;
     protected buildRequestNode(): void;
 }
