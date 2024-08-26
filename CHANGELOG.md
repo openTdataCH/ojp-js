@@ -1,10 +1,11 @@
 # CHANGELOG
 
-## 0.9.xx - xx.xx.2024
-- fix circular dependency - [PR #85](https://github.com/openTdataCH/ojp-js/pull/85)
-- adds `NumberOfResultsType` to handle previous / next `TripResult` connections - [PR #86](https://github.com/openTdataCH/ojp-js/pull/86)
+## 0.9.36 - 26.08.2024
+- updates SDK version to `0.9.36` - [PR #90](https://github.com/openTdataCH/ojp-js/pull/90)
 - adds `TripInfoRequest` support - [PR #87](https://github.com/openTdataCH/ojp-js/pull/87)
+- adds `NumberOfResultsType` to handle previous / next `TripResult` connections - [PR #86](https://github.com/openTdataCH/ojp-js/pull/86)
 - adds `Trip` and `TripRequestResponse` XML serialization support- [PR #89](https://github.com/openTdataCH/ojp-js/pull/89)
+- fix circular dependency - [PR #85](https://github.com/openTdataCH/ojp-js/pull/85)
 
 ## 0.9.35 - 27.06.2024
 - updates SDK version to `0.9.35` - [PR #84](https://github.com/openTdataCH/ojp-js/pull/84)
