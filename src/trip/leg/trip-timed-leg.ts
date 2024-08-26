@@ -15,6 +15,9 @@ import { GeoPosition } from '../../location/geoposition';
 import { Location } from '../../location/location';
 import { PtSituationElement } from '../../situation/situation-element'
 import { TreeNode } from '../../xml/tree-node'
+import { XMLElement } from 'xmlbuilder'
+import { StopPointType } from '../../types/stop-point-type'
+import { TripRequestBoardingType } from '../../request'
 
 export class TripTimedLeg extends TripLeg {
   public service: JourneyService
@@ -186,5 +189,53 @@ export class TripTimedLeg extends TripLeg {
         this.service.siriSituations.push(siriSituation)
       }
     })
+  }
+
+  public addToXMLNode(parentNode: XMLElement) {
+    const tripLegNode = parentNode.ele('ojp:TripLeg');
+    tripLegNode.ele('ojp:LegId', this.legID);
+    
+    const timedLeg = tripLegNode.ele('ojp:TimedLeg');
+    
+    const boardingTypes: TripRequestBoardingType[] = ['Arr', 'Dep'];
+
+    const addStopPoint = (stopPoint: StopPoint, stopPointType: StopPointType) => {
+      const legEndpointName: string = (() => {
+        if (stopPointType === 'From') {
+          return 'ojp:LegBoard';
+        }
+        if (stopPointType === 'To') {
+          return 'ojp:LegAlight';
+        }
+
+        return 'ojp:LegIntermediates';
+      })();
+
+      const legEndpoint = timedLeg.ele(legEndpointName);
+
+      const stopPlace = stopPoint.location.stopPlace;
+      if (stopPlace) {
+        legEndpoint.ele('siri:StopPointRef', stopPlace.stopPlaceRef);
+        legEndpoint.ele('ojp:StopPointName').ele('ojp:Text', stopPlace.stopPlaceName ?? 'n/a');
+      }
+
+      boardingTypes.forEach(boardingType => {
+        const isArrival = boardingType === 'Arr';
+        const serviceDepArrData = isArrival ? stopPoint.arrivalData : stopPoint.departureData;
+
+        if (serviceDepArrData) {
+          const serviceDepArrName = isArrival ? 'ojp:ServiceArrival' : 'ojp:ServiceDeparture';
+          legEndpoint.ele(serviceDepArrName).ele('ojp:TimetabledTime', serviceDepArrData.timetableTime.toISOString());
+        }
+      });
+    };
+
+    addStopPoint(this.fromStopPoint, 'From');
+    this.intermediateStopPoints.forEach(stopPoint => {
+      addStopPoint(stopPoint, 'Intermediate');
+    });
+    addStopPoint(this.toStopPoint, 'To');
+
+    this.service.addToXMLNode(timedLeg);
   }
 }
