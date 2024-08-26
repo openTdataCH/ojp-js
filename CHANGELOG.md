@@ -1,6 +1,7 @@
 # CHANGELOG
 
-## 0.9.xx - xx.xx.2024
+## 0.9.36 - 26.08.2024
+- updates SDK version to `0.9.36`
 - adds `TripInfoRequest` support - [PR #87](https://github.com/openTdataCH/ojp-js/pull/87)
 - adds `NumberOfResultsType` to handle previous / next `TripResult` connections - [PR #86](https://github.com/openTdataCH/ojp-js/pull/86)
 - adds `Trip` and `TripRequestResponse` XML serialization support- [PR #89](https://github.com/openTdataCH/ojp-js/pull/89)
