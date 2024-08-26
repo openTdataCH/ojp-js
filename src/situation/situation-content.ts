@@ -2,36 +2,21 @@ import { TreeNode } from "../xml/tree-node"
 
 export class SituationContent {
   public summary: string
-  public descriptions: string[]
+  public description: string
   public details: string[]
 
-  constructor(summary: string, descriptions: string[], details: string[]) {
+  constructor(summary: string, description: string, details: string[]) {
     this.summary = summary
-    this.descriptions = descriptions
+    this.description = description
     this.details = details
   }
 
   public static initWithSituationTreeNode(treeNode: TreeNode): SituationContent | null {
     const summary = treeNode.findTextFromChildNamed('siri:Summary');
+    const description = treeNode.findTextFromChildNamed('siri:Description');
 
-    if (summary === null) {
-      console.error('ERROR: SituationContent.initFromSituationNode - empty summary');
-      console.log(treeNode);
-
-      return null;
-    }
-
-    const descriptions: string[] = []
-    const descriptionNodes = treeNode.findChildrenNamed('siri:Description');
-    descriptionNodes.forEach(descriptionTreeNode => {
-      const descriptionText = descriptionTreeNode.text;
-      if (descriptionText) {
-        descriptions.push(descriptionText);
-      }
-    });
-
-    if (descriptions.length === 0) {
-      console.error('ERROR: SituationContent.initFromSituationNode - empty description');
+    if (!(summary && description)) {
+      console.error('ERROR: SituationContent.initFromSituationNode - cant init');
       console.log(treeNode);
 
       return null;
@@ -53,7 +38,7 @@ export class SituationContent {
       return null;
     }
 
-    const situationContent = new SituationContent(summary, descriptions, details);
+    const situationContent = new SituationContent(summary, description, details);
     return situationContent;
   }
 }
