@@ -27,8 +27,8 @@ export class TripInfoRequestParams extends BaseRequestParams {
         const requestNode = this.serviceRequestNode.ele('OJPTripInfoRequest');
         requestNode.ele('siri:RequestTimestamp', dateNowF);
 
-        requestNode.ele('JourneyRef', this.journeyRef);
-        requestNode.ele('OperatingDayRef', this.operatingDayRef);
+        requestNode.ele('siri:JourneyRef', this.journeyRef);
+        requestNode.ele('siri:OperatingDayRef', this.operatingDayRef);
 
         const paramsNode = requestNode.ele('Params');
         paramsNode.ele('IncludeCalls', true);
