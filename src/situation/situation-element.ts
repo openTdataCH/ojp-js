@@ -68,6 +68,13 @@ interface PublishingAction {
     affects: PublishingActionAffect[]
 }
 
+// Support also the v1 model with Description/Detail in the root level of the <PtSituation>
+interface SituationContentV1 {
+    summary: string
+    descriptions: string[]
+    details: string[]  
+}
+
 export class PtSituationElement {
     public situationNumber: string
     public creationTime: Date 
@@ -82,6 +89,9 @@ export class PtSituationElement {
     public scopeType: ScopeType
     public publishingActions: PublishingAction[]
     public isPlanned: boolean
+
+    // Support also the v1 model with Description/Detail in the root level of the <PtSituation>
+    public situationContentV1: SituationContentV1 | null
     
     public treeNode: TreeNode | null
 
@@ -113,6 +123,8 @@ export class PtSituationElement {
         this.scopeType = scopeType
         this.publishingActions = publishingActions
         this.isPlanned = isPlanned
+        
+        this.situationContentV1 = null;
         
         this.treeNode = null;
     }
@@ -220,6 +232,15 @@ export class PtSituationElement {
             isPlanned,
         );
         situationElement.treeNode = treeNode;
+
+        situationElement.situationContentV1 = this.computeSituationContentV1(treeNode);
+
+        if ((situationElement.publishingActions.length === 0) && (situationElement.situationContentV1 === null)) {
+            console.error('PtSituationElement.initWithSituationTreeNode: empty actions, no metadata found');
+            console.log(treeNode);
+            
+            // return null;
+        }
 
         return situationElement;
     }
@@ -509,4 +530,56 @@ export class PtSituationElement {
 
         return activePeriod !== null;
     }
+
+    public static computeSituationContentV1(treeNode: TreeNode): SituationContentV1 | null {
+        const summary = treeNode.findTextFromChildNamed('siri:Summary');
+    
+        if (summary === null) {
+          console.error('ERROR: SituationContent.initFromSituationNode - empty summary');
+          console.log(treeNode);
+    
+          return null;
+        }
+    
+        const descriptions: string[] = []
+        const descriptionNodes = treeNode.findChildrenNamed('siri:Description');
+        descriptionNodes.forEach(descriptionTreeNode => {
+          const descriptionText = descriptionTreeNode.text;
+          if (descriptionText) {
+            descriptions.push(descriptionText);
+          }
+        });
+    
+        if (descriptions.length === 0) {
+          console.error('ERROR: SituationContent.initFromSituationNode - empty description');
+          console.log(treeNode);
+    
+          return null;
+        }
+    
+        const details: string[] = []
+        const detailNodes = treeNode.findChildrenNamed('siri:Detail');
+        detailNodes.forEach(detailTreeNode => {
+          const detailText = detailTreeNode.text;
+          if (detailText) {
+            details.push(detailText);
+          }
+        });
+    
+        if (details.length === 0) {
+          console.error('ERROR: SituationContent.initFromSituationNode - empty details');
+          console.log(treeNode);
+    
+          return null;
+        }
+    
+        const situationContent: SituationContentV1 = {
+            summary: summary,
+            descriptions: descriptions,
+            details: details
+        };
+
+        return situationContent;
+    }
+    
 }
