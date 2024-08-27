@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 0.10.1 - 27.08.2024
+- [Updates situations/traffic/real-time info #91](https://github.com/openTdataCH/ojp-js/pull/91)
+  - BREAKING CHANGE - SIRI-SX situations model changed
+  - BREAKING CHANGE  - `StationBoardModel` is removed from the SDK, should be implemented in the integrator
+  - for TR send `UseRealtimeData`=`explanatory` to capture real-time info
+  - adds support for trips with `Cancelled`, `Infeasable` Trip status
+  - adds support for `NotServicedStop` property for TimedLeg points
+
 ## 0.9.36 - 26.08.2024
 - updates SDK version to `0.9.36` - [PR #90](https://github.com/openTdataCH/ojp-js/pull/90)
 - adds `TripInfoRequest` support - [PR #87](https://github.com/openTdataCH/ojp-js/pull/87)
