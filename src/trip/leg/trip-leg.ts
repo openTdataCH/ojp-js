@@ -1,6 +1,8 @@
 import * as GeoJSON from 'geojson'
 import { XMLElement } from 'xmlbuilder'
 
+import { DataHelpers } from '../../helpers/data-helpers'
+
 import { Location } from '../../location/location'
 import { LegTrack } from './leg-track'
 
@@ -64,22 +66,28 @@ export class TripLeg {
       return
     }
 
-    const stopPlaceRef = location.stopPlace?.stopPlaceRef ?? null;
-    if (stopPlaceRef === null) {
+    let stopRef = location.stopPlace?.stopPlaceRef ?? null;
+    if (stopRef === null) {
       console.error('TripLeg.patchLocation - no stopPlaceRef found in location');
       console.log(location);
       return;
     }
 
-    if (!(stopPlaceRef in mapContextLocations)) {
+    if (!(stopRef in mapContextLocations)) {
+      // For StopPoint try to get the StopPlace
+      // see https://github.com/openTdataCH/ojp-sdk/issues/97
+      stopRef = DataHelpers.convertStopPointToStopPlace(stopRef);
+    }
+    
+    if (!(stopRef in mapContextLocations)) {
       console.error('TripLeg.patchLocation - no stopPlaceRef found in mapContextLocations');
       console.log(location);
-      console.log('location.stopPlace?.stopPlaceRef :' + stopPlaceRef);
+      console.log('location.stopPlace?.stopPlaceRef :' + stopRef);
       console.log(mapContextLocations);
       return;
     }
 
-    const contextLocation = mapContextLocations[stopPlaceRef];
+    const contextLocation = mapContextLocations[stopRef];
 
     location.patchWithAnotherLocation(contextLocation);
   }

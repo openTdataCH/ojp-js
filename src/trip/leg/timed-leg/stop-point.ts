@@ -19,6 +19,7 @@ export class StopPoint {
   public plannedPlatform: string | null
   public actualPlatform: string | null
   public sequenceOrder: number | null
+  public isNotServicedStop: boolean | null
 
   public siriSituationIds: string[]
   public siriSituations: PtSituationElement[]
@@ -38,7 +39,8 @@ export class StopPoint {
     this.departureData = departureData
     this.plannedPlatform = plannedPlatform
     this.actualPlatform = null
-    this.sequenceOrder =  sequenceOrder
+    this.sequenceOrder = sequenceOrder
+    this.isNotServicedStop = null;
 
     this.siriSituationIds = [];
     this.siriSituations = [];
@@ -64,7 +66,13 @@ export class StopPoint {
     const sequenceOrder = sequenceOrderS === null ? null : parseInt(sequenceOrderS, 10);
 
     const stopPoint = new StopPoint(stopPointType, location, arrivalData, departureData, plannedPlatform, sequenceOrder);
+    
     stopPoint.actualPlatform = treeNode.findTextFromChildNamed('EstimatedQuay/Text');
+
+    const notServicedStopNode = treeNode.findChildNamed('NotServicedStop');
+    if (notServicedStopNode) {
+      stopPoint.isNotServicedStop = notServicedStopNode.text === 'true';
+    }
 
     stopPoint.siriSituationIds = [];
     const situationFullRefTreeNodes = treeNode.findChildrenNamed('SituationFullRef');
