@@ -77,16 +77,13 @@ export class JourneyService {
     legService.journeyNumber = treeNode.findTextFromChildNamed('Extension/PublishedJourneyNumber/Text');
 
     legService.siriSituationIds = [];
-    const situationsContainerNode = serviceTreeNode.findChildNamed('SituationFullRefs');
-    if (situationsContainerNode) {
-      const situationFullRefTreeNodes = situationsContainerNode.findChildrenNamed('SituationFullRef');
-      situationFullRefTreeNodes.forEach(situationFullRefTreeNode => {
-        const situationNumber = situationFullRefTreeNode.findTextFromChildNamed('siri:SituationNumber');
-        if (situationNumber) {
-          legService.siriSituationIds.push(situationNumber);
-        }
-      });  
-    }
+    const situationFullRefTreeNodes = serviceTreeNode.findChildrenNamed('SituationFullRef');
+    situationFullRefTreeNodes.forEach(situationFullRefTreeNode => {
+      const situationNumber = situationFullRefTreeNode.findTextFromChildNamed('siri:SituationNumber');
+      if (situationNumber) {
+        legService.siriSituationIds.push(situationNumber);
+      }
+    }); 
 
     legService.serviceAttributes = {};
     serviceTreeNode.findChildrenNamed('Attribute').forEach(attributeTreeNode => {
