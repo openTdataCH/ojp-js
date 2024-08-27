@@ -8,6 +8,7 @@
 - Fix situations parser - [PR #94](https://github.com/openTdataCH/ojp-js/pull/94)
   - In v1 there is no `<SituationFullRefs>` container
   - validate situations on DEBUG stages
+  - allow situations with empty description / detail
 - Fix TripInfoRequest params - [PR #93](https://github.com/openTdataCH/ojp-js/pull/93)
 
 ## 0.10.1 - 27.08.2024
