@@ -165,7 +165,7 @@ export class PtSituationElement {
             return null;            
         }
 
-        const alertCause = treeNode.findTextFromChildNamed('siri:AlertCause');
+        const alertCause = treeNode.findTextFromChildNamed('siri:AlertCause') ?? 'n/a AlertCause';
         
         const situationPriorityS = treeNode.findTextFromChildNamed('siri:Priority');
         if (situationPriorityS === null) {
