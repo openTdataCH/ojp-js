@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 0.10.2 - 27.08.2024
+- Fix situations parser - [PR #94](https://github.com/openTdataCH/ojp-js/pull/94)
+  - In v1 there is no `<SituationFullRefs>` container
+  - validate situations on DEBUG stages
+- Fix TripInfoRequest params - [PR #93](https://github.com/openTdataCH/ojp-js/pull/93)
+
 ## 0.10.1 - 27.08.2024
 - [Updates situations/traffic/real-time info #91](https://github.com/openTdataCH/ojp-js/pull/91)
   - BREAKING CHANGE - SIRI-SX situations model changed
