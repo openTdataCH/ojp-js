@@ -550,13 +550,6 @@ export class PtSituationElement {
           }
         });
     
-        if (descriptions.length === 0) {
-          console.error('ERROR: SituationContent.initFromSituationNode - empty description');
-          console.log(treeNode);
-    
-          return null;
-        }
-    
         const details: string[] = []
         const detailNodes = treeNode.findChildrenNamed('siri:Detail');
         detailNodes.forEach(detailTreeNode => {
@@ -565,13 +558,6 @@ export class PtSituationElement {
             details.push(detailText);
           }
         });
-    
-        if (details.length === 0) {
-          console.error('ERROR: SituationContent.initFromSituationNode - empty details');
-          console.log(treeNode);
-    
-          return null;
-        }
     
         const situationContent: SituationContentV1 = {
             summary: summary,
