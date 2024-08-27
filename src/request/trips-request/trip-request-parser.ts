@@ -1,6 +1,6 @@
 import { Location } from "../../location/location";
 import { PtSituationElement } from "../../situation/situation-element";
-import { Trip } from "../../trip";
+import { Trip, TripTimedLeg } from "../../trip";
 import { BaseParser } from "../base-parser";
 import { TripRequest_Callback as ParserCallback } from "../types/trip-request.type";
 
@@ -99,12 +99,51 @@ export class TripRequestParser extends BaseParser {
   }
 
   protected onEnd(): void {
+    this.validateSituations();
+
     if (this.callback) {
       this.callback({
         tripsNo: this.tripsNo,
         trips: this.trips,
         message: 'TripRequest.DONE',
       });
+    }
+  }
+
+  private validateSituations() {
+    const contextSituations = Object.values(this.mapContextSituations);
+    if (contextSituations.length === 0) {
+      return;
+    }
+
+    const mapExpectedSituationIDs: Record<string, boolean> = {};
+    contextSituations.forEach(situation => {
+      mapExpectedSituationIDs[situation.situationNumber] = false;
+    });
+    
+    this.trips.forEach(trip => {
+      trip.legs.forEach(leg => {
+        if (leg.legType === 'TimedLeg') {
+          const timedLeg = leg as TripTimedLeg;
+          timedLeg.service.siriSituations.forEach(serviceSituation => {
+            if (!(serviceSituation.situationNumber in mapExpectedSituationIDs)) {
+              console.error('TimedLeg has situation which can be found in context');
+              console.log(serviceSituation.situationNumber);
+              console.log(this.mapContextSituations);
+            } else {
+              mapExpectedSituationIDs[serviceSituation.situationNumber] = true;
+            }
+          });
+        }
+      });
+    });
+
+    for (const situationNumber in mapExpectedSituationIDs) {
+      if (mapExpectedSituationIDs[situationNumber] === false) {
+        console.error('Situation ' + situationNumber + ' cant be map to any of the trips');
+        console.log(this.mapContextSituations[situationNumber]);
+        console.log(this.trips);
+      }
     }
   }
 }
