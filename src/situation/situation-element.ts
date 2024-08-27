@@ -178,7 +178,7 @@ export class PtSituationElement {
         const scopeType: ScopeType | null = (() => {
             const scopeTypeS = treeNode.findTextFromChildNamed('siri:ScopeType');
             
-            if (scopeTypeS === 'line') {
+            if (scopeTypeS === 'line' || scopeTypeS === 'route') {
                 return 'line'
             };
 
