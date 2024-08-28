@@ -3,6 +3,7 @@
 ## 0.11.1 - 28.08.2024
 - OJP localization support - [PR #96](https://github.com/openTdataCH/ojp-js/pull/96)
   - BREAKING CHANGE - adds language param to all request API calls
+- log OJP requests for `DEBUG` envs - [PR #98](https://github.com/openTdataCH/ojp-js/pull/98)
 
 ## 0.10.2 - 27.08.2024
 - Fix situations parser - [PR #94](https://github.com/openTdataCH/ojp-js/pull/94)
