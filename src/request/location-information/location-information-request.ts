@@ -5,6 +5,7 @@ import { LocationInformationParser } from './location-information-parser';
 import { LIR_Response } from '../types/location-information-request.type';
 import { Location } from '../../location/location';
 import { LocationInformationRequestParams } from './location-information-request-params';
+import { Language } from '../../types/language-type';
 
 export class LocationInformationRequest extends OJPBaseRequest {
   private requestParams: LocationInformationRequestParams;
@@ -16,7 +17,7 @@ export class LocationInformationRequest extends OJPBaseRequest {
   }
 
   public static initWithResponseMock(mockText: string) {
-    const emptyRequestParams = new LocationInformationRequestParams();
+    const emptyRequestParams = new LocationInformationRequestParams('en');
     const request = new LocationInformationRequest(DEFAULT_STAGE, emptyRequestParams);
     request.mockResponseXML = mockText;
     
@@ -24,39 +25,42 @@ export class LocationInformationRequest extends OJPBaseRequest {
   }
 
   public static initWithRequestMock(mockText: string, stageConfig: StageConfig = DEFAULT_STAGE) {
-    const emptyRequestParams = new LocationInformationRequestParams();
+    const emptyRequestParams = new LocationInformationRequestParams('en');
     const request = new LocationInformationRequest(stageConfig, emptyRequestParams);
     request.mockRequestXML = mockText;
     
     return request;
   }
 
-  public static initWithLocationName(stageConfig: StageConfig, locationName: string, restrictionTypes: RestrictionType[], limit: number = 10): LocationInformationRequest {
-    const requestParams = LocationInformationRequestParams.initWithLocationName(locationName, restrictionTypes, limit);
+  public static initWithLocationName(stageConfig: StageConfig, language: Language, locationName: string, restrictionTypes: RestrictionType[], limit: number = 10): LocationInformationRequest {
+    const requestParams = LocationInformationRequestParams.initWithLocationName(language, locationName, restrictionTypes, limit);
     const request = new LocationInformationRequest(stageConfig, requestParams);
     return request;
   }
 
-  public static initWithStopPlaceRef(stageConfig: StageConfig, stopPlaceRef: string): LocationInformationRequest {
-    const requestParams = LocationInformationRequestParams.initWithStopPlaceRef(stopPlaceRef);
+  public static initWithStopPlaceRef(stageConfig: StageConfig, language: Language, stopPlaceRef: string): LocationInformationRequest {
+    const requestParams = LocationInformationRequestParams.initWithStopPlaceRef(language, stopPlaceRef);
     const request = new LocationInformationRequest(stageConfig, requestParams);
     return request;
   }
 
-  public static initWithCircleLngLatRadius(stageConfig: StageConfig, 
+  public static initWithCircleLngLatRadius(
+    stageConfig: StageConfig,
+    language: Language, 
     circleLongitude: number, 
     circleLatitude: number,
     circleRadius: number,
     restrictionTypes: RestrictionType[] = [],
     numberOfResults: number = 1000
   ): LocationInformationRequest {
-    const requestParams = LocationInformationRequestParams.initWithCircleLngLatRadius(circleLongitude, circleLatitude, circleRadius, restrictionTypes, numberOfResults);
+    const requestParams = LocationInformationRequestParams.initWithCircleLngLatRadius(language, circleLongitude, circleLatitude, circleRadius, restrictionTypes, numberOfResults);
     const request = new LocationInformationRequest(stageConfig, requestParams);
     return request;
   }
 
   public static initWithBBOXAndType(
     stageConfig: StageConfig,
+    language: Language, 
     bboxWest: number,
     bboxNorth: number,
     bboxEast: number,
@@ -65,7 +69,7 @@ export class LocationInformationRequest extends OJPBaseRequest {
     limit: number = 1000,
     poiRestriction: POI_Restriction | null = null,
   ): LocationInformationRequest {
-    const requestParams = LocationInformationRequestParams.initWithBBOXAndType(bboxWest, bboxNorth, bboxEast, bboxSouth, restrictionTypes, limit, poiRestriction);
+    const requestParams = LocationInformationRequestParams.initWithBBOXAndType(language, bboxWest, bboxNorth, bboxEast, bboxSouth, restrictionTypes, limit, poiRestriction);
     const request = new LocationInformationRequest(stageConfig, requestParams);
     return request;
   }

@@ -6,6 +6,7 @@ import { StopEventType } from '../../types/stop-event-type';
 
 import { StopEventRequest_Response } from '../types/stop-event-request.type';
 import { StopEventRequestParser } from './stop-event-request-parser';
+import { Language } from '../../types/language-type';
 
 export class StopEventRequest extends OJPBaseRequest {
     public requestParams: StopEventRequestParams
@@ -41,8 +42,8 @@ export class StopEventRequest extends OJPBaseRequest {
         return request;
       }
 
-    public static initWithStopPlaceRef(stageConfig: StageConfig, stopPlaceRef: string, stopEventType: StopEventType, stopEventDate: Date): StopEventRequest {
-        const stopEventRequestParams = new StopEventRequestParams(stopPlaceRef, null, stopEventType, stopEventDate);
+    public static initWithStopPlaceRef(stageConfig: StageConfig, language: Language, stopPlaceRef: string, stopEventType: StopEventType, stopEventDate: Date): StopEventRequest {
+        const stopEventRequestParams = new StopEventRequestParams(language, stopPlaceRef, null, stopEventType, stopEventDate);
         const stopEventRequest = new StopEventRequest(stageConfig, stopEventRequestParams);
         return stopEventRequest;
     }
