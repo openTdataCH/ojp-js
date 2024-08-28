@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.11.1 - 28.08.2024
+- OJP localization support - [PR #96](https://github.com/openTdataCH/ojp-js/pull/96)
+  - BREAKING CHANGE - adds language param to all request API calls
+
 ## 0.10.2 - 27.08.2024
 - Fix situations parser - [PR #94](https://github.com/openTdataCH/ojp-js/pull/94)
   - In v1 there is no `<SituationFullRefs>` container
