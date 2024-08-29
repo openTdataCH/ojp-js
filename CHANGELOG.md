@@ -1,8 +1,31 @@
 # CHANGELOG
 
-## 0.9.xx - xx.xx.2024
-- fix circular dependency - [PR #85](https://github.com/openTdataCH/ojp-js/pull/85)
+## 0.11.1 - 28.08.2024
+- OJP localization support - [PR #96](https://github.com/openTdataCH/ojp-js/pull/96)
+  - BREAKING CHANGE - adds language param to all request API calls
+- log OJP requests for `DEBUG` envs - [PR #98](https://github.com/openTdataCH/ojp-js/pull/98)
+
+## 0.10.2 - 27.08.2024
+- Fix situations parser - [PR #94](https://github.com/openTdataCH/ojp-js/pull/94)
+  - In v1 there is no `<SituationFullRefs>` container
+  - validate situations on DEBUG stages
+  - allow situations with empty description / detail
+- Fix TripInfoRequest params - [PR #93](https://github.com/openTdataCH/ojp-js/pull/93)
+
+## 0.10.1 - 27.08.2024
+- [Updates situations/traffic/real-time info #91](https://github.com/openTdataCH/ojp-js/pull/91)
+  - BREAKING CHANGE - SIRI-SX situations model changed
+  - BREAKING CHANGE  - `StationBoardModel` is removed from the SDK, should be implemented in the integrator
+  - for TR send `UseRealtimeData`=`explanatory` to capture real-time info
+  - adds support for trips with `Cancelled`, `Infeasable` Trip status
+  - adds support for `NotServicedStop` property for TimedLeg points
+
+## 0.9.36 - 26.08.2024
+- updates SDK version to `0.9.36` - [PR #90](https://github.com/openTdataCH/ojp-js/pull/90)
+- adds `TripInfoRequest` support - [PR #87](https://github.com/openTdataCH/ojp-js/pull/87)
 - adds `NumberOfResultsType` to handle previous / next `TripResult` connections - [PR #86](https://github.com/openTdataCH/ojp-js/pull/86)
+- adds `Trip` and `TripRequestResponse` XML serialization support- [PR #89](https://github.com/openTdataCH/ojp-js/pull/89)
+- fix circular dependency - [PR #85](https://github.com/openTdataCH/ojp-js/pull/85)
 
 ## 0.9.35 - 27.06.2024
 - updates SDK version to `0.9.35` - [PR #84](https://github.com/openTdataCH/ojp-js/pull/84)

@@ -12,6 +12,8 @@ import { GeoPosition } from '../location/geoposition'
 import { TreeNode } from '../xml/tree-node'
 import { TripFareResult } from '../fare/fare'
 
+import { XMLElement } from 'xmlbuilder'
+
 export class Trip {
   public id: string
   public legs: TripLeg[]
@@ -23,8 +25,6 @@ export class Trip {
     this.legs = legs;
     this.stats = tripStats
     this.tripFareResults = [];
-
-    this.patchLegEndpointCoords();
   }
 
   public static initFromTreeNode(treeNode: TreeNode): Trip | null {
@@ -227,35 +227,18 @@ export class Trip {
     return bbox;
   }
 
-  private patchLegEndpointCoords() {
-    this.legs.forEach((leg, legIdx) => {
-      if (leg.legType !== 'TimedLeg') {
-        return;
-      }
+  public addToXMLNode(parentNode: XMLElement) {
+    const tripNode = parentNode.ele('ojp:Trip');
+    
+    tripNode.ele('ojp:TripId', this.id);
+    tripNode.ele('ojp:Duration', this.stats.duration.asOJPFormattedText());
+    tripNode.ele('ojp:StartTime', this.stats.startDatetime.toISOString());
+    tripNode.ele('ojp:EndTime', this.stats.endDatetime.toISOString());
+    tripNode.ele('ojp:Transfers', this.stats.transferNo);
+    tripNode.ele('ojp:Distance', this.stats.distanceMeters);
 
-      const timedLeg = leg as TripTimedLeg;
-      
-      // Check if we have a START geoPosition
-      // - use it for prev leg END geoPosition
-      const fromGeoPosition = timedLeg.legTrack?.fromGeoPosition() ?? null;
-      if (legIdx > 0 && fromGeoPosition !== null) {
-        const prevLeg = this.legs[legIdx - 1];
-        if (prevLeg.toLocation.geoPosition === null) {
-          console.log('SDK HACK - patchLegEndpointCoords - use legTrack.fromGeoPosition for prevLeg.toLocation.geoPosition');
-          prevLeg.toLocation.geoPosition = fromGeoPosition;
-        }
-      }
-
-      // Check if we have a END geoPosition
-      // - use it for next leg START geoPosition
-      const toGeoPosition = timedLeg.legTrack?.toGeoPosition() ?? null;
-      if (legIdx < (this.legs.length - 1) && toGeoPosition !== null) {
-        const nextLeg = this.legs[legIdx + 1];
-        if (nextLeg.fromLocation.geoPosition === null) {
-          console.log('SDK HACK - patchLegEndpointCoords - use legTrack.toGeoPosition for nextLeg.fromLocation.geoPosition');
-          nextLeg.fromLocation.geoPosition = toGeoPosition;
-        }
-      }
+    this.legs.forEach(leg => {
+      leg.addToXMLNode(tripNode);
     });
   }
 }

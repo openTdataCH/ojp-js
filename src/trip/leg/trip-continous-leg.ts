@@ -13,6 +13,7 @@ import { Duration } from '../../shared/duration'
 import { IndividualTransportMode, TransferMode } from '../../types/individual-mode.types'
 import { ServiceBooking } from './continous-leg/service-booking'
 import { TreeNode } from '../../xml/tree-node'
+import { XMLElement } from 'xmlbuilder'
 
 export class TripContinousLeg extends TripLeg {
   public legTransportMode: IndividualTransportMode | null
@@ -323,5 +324,11 @@ export class TripContinousLeg extends TripLeg {
     }
 
     return super.useBeeline();
+  }
+
+  public addToXMLNode(parentNode: XMLElement) {
+    const tripLegNode = parentNode.ele('ojp:TripLeg');
+    tripLegNode.ele('ojp:LegId', this.legID);
+    tripLegNode.ele('ojp:' + this.legType);
   }
 }

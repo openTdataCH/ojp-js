@@ -1,3 +1,5 @@
+import { XMLElement } from 'xmlbuilder';
+
 import { TreeNode } from '../xml/tree-node';
 
 type PublicTransportPictogram = 'picto-bus' | 'picto-railway' | 'picto-tram' | 'picto-rack-railway' | 'picto-funicular' | 'picto-cablecar' | 'picto-gondola' | 'picto-chairlift' | 'picto-boat' | 'car-sharing' | 'picto-bus-fallback';
@@ -96,5 +98,18 @@ export class PublicTransportMode {
     }
 
     return 'picto-bus-fallback';
+  }
+
+  public addToXMLNode(parentNode: XMLElement) {
+    const modeNode = parentNode.ele('ojp:Mode');
+    modeNode.ele('ojp:PtMode', this.ptMode);
+    
+    if (this.name) {
+      modeNode.ele('ojp:Name').ele('ojp:Text', this.name);
+    }
+
+    if (this.shortName) {
+      modeNode.ele('ojp:ShortName').ele('ojp:Text', this.shortName);
+    }
   }
 }

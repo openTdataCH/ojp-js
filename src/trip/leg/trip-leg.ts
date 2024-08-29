@@ -1,4 +1,5 @@
 import * as GeoJSON from 'geojson'
+import { XMLElement } from 'xmlbuilder'
 
 import { DataHelpers } from '../../helpers/data-helpers'
 
@@ -267,6 +268,11 @@ export class TripLeg {
     });
 
     return geoPositions
+  }
+
+  public addToXMLNode(parentNode: XMLElement) {
+    // override
+    debugger;
   }
 
 }

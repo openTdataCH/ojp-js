@@ -2,6 +2,7 @@ import fetch from 'cross-fetch';
 
 import { StageConfig } from '../types/stage-config';
 import { RequestInfo } from './types/request-info.type';
+import { DEBUG_LEVEL } from '../constants';
 
 export class OJPBaseRequest {
   private stageConfig: StageConfig;
@@ -24,7 +25,7 @@ export class OJPBaseRequest {
       error: null
     };
 
-    this.logRequests = false;
+    this.logRequests = DEBUG_LEVEL === 'DEBUG';
     this.mockRequestXML = null;
     this.mockResponseXML = null;
   }
