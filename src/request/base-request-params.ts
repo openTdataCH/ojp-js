@@ -13,7 +13,7 @@ export class BaseRequestParams {
   }
   
   private computeBaseServiceRequestNode(): xmlbuilder.XMLElement {
-    const ojpNode = xmlbuilder.create("siri:OJP", {
+    const ojpNode = xmlbuilder.create("OJP", {
       version: "1.0",
       encoding: "utf-8",
     });
@@ -23,10 +23,10 @@ export class BaseRequestParams {
     ojpNode.att("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
     ojpNode.att("xmlns:xsd", "http://www.w3.org/2001/XMLSchema");
     ojpNode.att("xsi:schemaLocation", "http://www.vdv.de/ojp");
-    ojpNode.att("version", "1.0");
+    ojpNode.att("version", "2.0");
 
     const serviceRequestNode = ojpNode
-      .ele("siri:OJPRequest")
+      .ele("OJPRequest")
       .ele("siri:ServiceRequest");
 
     serviceRequestNode.ele('siri:ServiceRequestContext').ele('siri:Language', this.language);

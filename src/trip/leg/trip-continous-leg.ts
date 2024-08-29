@@ -117,7 +117,7 @@ export class TripContinousLeg extends TripLeg {
   }
 
   private computeLegTransferModeFromTreeNode(treeNode: TreeNode): TransferMode | null {
-    const transferModeS = treeNode.findTextFromChildNamed('TransferMode');
+    const transferModeS = treeNode.findTextFromChildNamed('TransferType');
     if (transferModeS === null) {
       return null;
     }
@@ -169,6 +169,10 @@ export class TripContinousLeg extends TripLeg {
 
     if (legModeS === 'car.own.water.localCarFerry') {
       return 'car-ferry'
+    }
+
+    if (legModeS === 'foot.own') {
+      return 'walk';
     }
 
     return null

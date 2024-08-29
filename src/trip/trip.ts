@@ -24,14 +24,16 @@ export class Trip {
     this.id = tripID;
     this.legs = legs;
     this.stats = tripStats
-    this.tripFareResults = []
+    this.tripFareResults = [];
   }
 
   public static initFromTreeNode(treeNode: TreeNode): Trip | null {
-    const tripId = treeNode.findTextFromChildNamed('TripId');
-    if (tripId === null) {
-      return null;
-    }
+    // HACK for solution demo, backend sometimes delivers Trip with empty Id
+    // TODO: revert when backend is ready, DONT merge to main
+    const tripId = treeNode.findTextFromChildNamed('Id') ?? 'RandomTripId';
+    // if (tripId === null) {
+    //   return null;
+    // }
 
     const duration = Duration.initFromDurationText(treeNode.findTextFromChildNamed('Duration'));
     if (duration === null) {
@@ -55,7 +57,7 @@ export class Trip {
     const legs: TripLeg[] = [];
     let tripLegsTotalDistance = 0;
 
-    const tripLegTreeNodes = treeNode.findChildrenNamed('TripLeg');
+    const tripLegTreeNodes = treeNode.findChildrenNamed('Leg');
     tripLegTreeNodes.forEach(tripLegTreeNode => {
       const tripLeg = TripLegFactory.initWithTreeNode(tripLegTreeNode);
       if (tripLeg === null) {

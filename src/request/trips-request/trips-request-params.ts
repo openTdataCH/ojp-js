@@ -151,7 +151,7 @@ export class TripsRequestParams extends BaseRequestParams {
         let stopPlaceRef = location.stopPlace?.stopPlaceRef ?? "";
 
         placeRefNode.ele("StopPlaceRef", stopPlaceRef);
-        placeRefNode.ele("LocationName").ele("Text", locationName);
+        placeRefNode.ele("Name").ele("Text", locationName);
       } else {
         if (location.geoPosition) {
           const geoPositionNode = placeRefNode.ele("GeoPosition");
@@ -159,7 +159,7 @@ export class TripsRequestParams extends BaseRequestParams {
           geoPositionNode.ele("siri:Latitude", location.geoPosition.latitude);
 
           const locationName = location.geoPosition.asLatLngString();
-          placeRefNode.ele("LocationName").ele("Text", locationName);
+          placeRefNode.ele("Name").ele("Text", locationName);
         }
       }
 
