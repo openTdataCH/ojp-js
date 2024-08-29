@@ -5,6 +5,7 @@ import { Location } from '../location/location';
 import { GeoPositionBBOX } from '../location/geoposition-bbox';
 import { TreeNode } from '../xml/tree-node';
 import { TripFareResult } from '../fare/fare';
+import { XMLElement } from 'xmlbuilder';
 export declare class Trip {
     id: string;
     legs: TripLeg[];
@@ -18,5 +19,5 @@ export declare class Trip {
     computeFromLocation(): Location | null;
     computeToLocation(): Location | null;
     computeBBOX(): GeoPositionBBOX;
-    private patchLegEndpointCoords;
+    addToXMLNode(parentNode: XMLElement): void;
 }

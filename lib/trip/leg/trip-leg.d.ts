@@ -1,4 +1,5 @@
 import * as GeoJSON from 'geojson';
+import { XMLElement } from 'xmlbuilder';
 import { Location } from '../../location/location';
 import { LegTrack } from './leg-track';
 import { TripLegLineType } from '../../types/map-geometry-types';
@@ -32,4 +33,5 @@ export declare class TripLeg {
     protected computeLegLineType(): TripLegLineType;
     private computeBeelineFeature;
     protected computeBeelineGeoPositions(): GeoPosition[];
+    addToXMLNode(parentNode: XMLElement): void;
 }

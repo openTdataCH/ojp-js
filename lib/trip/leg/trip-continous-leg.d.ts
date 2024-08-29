@@ -7,6 +7,7 @@ import { Duration } from '../../shared/duration';
 import { IndividualTransportMode, TransferMode } from '../../types/individual-mode.types';
 import { ServiceBooking } from './continous-leg/service-booking';
 import { TreeNode } from '../../xml/tree-node';
+import { XMLElement } from 'xmlbuilder';
 export declare class TripContinousLeg extends TripLeg {
     legTransportMode: IndividualTransportMode | null;
     legDistance: number;
@@ -29,4 +30,5 @@ export declare class TripContinousLeg extends TripLeg {
     computeLegColor(): string;
     formatDistance(): string;
     protected useBeeline(): boolean;
+    addToXMLNode(parentNode: XMLElement): void;
 }

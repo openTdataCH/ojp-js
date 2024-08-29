@@ -11,4 +11,5 @@ export declare class StopEventRequestParser extends BaseParser {
     parseXML(responseXMLText: string): void;
     protected onCloseTag(nodeName: string): void;
     protected onEnd(): void;
+    private validateSituations;
 }

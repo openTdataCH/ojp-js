@@ -8,6 +8,7 @@ import { Language } from '../../types/language-type';
 export type TripRequestBoardingType = 'Dep' | 'Arr';
 export declare class TripRequest extends OJPBaseRequest {
     private requestParams;
+    response: TripRequest_Response | null;
     constructor(stageConfig: StageConfig, requestParams: TripsRequestParams);
     static initWithResponseMock(mockText: string): TripRequest;
     static initWithRequestMock(mockText: string, stageConfig?: StageConfig): TripRequest;

@@ -7,6 +7,7 @@ import { GeoPosition } from '../../location/geoposition';
 import { Location } from '../../location/location';
 import { PtSituationElement } from '../../situation/situation-element';
 import { TreeNode } from '../../xml/tree-node';
+import { XMLElement } from 'xmlbuilder';
 export declare class TripTimedLeg extends TripLeg {
     service: JourneyService;
     fromStopPoint: StopPoint;
@@ -25,4 +26,5 @@ export declare class TripTimedLeg extends TripLeg {
     protected computeBeelineGeoPositions(): GeoPosition[];
     protected useBeeline(): boolean;
     patchSituations(mapContextSituations: Record<string, PtSituationElement>): void;
+    addToXMLNode(parentNode: XMLElement): void;
 }

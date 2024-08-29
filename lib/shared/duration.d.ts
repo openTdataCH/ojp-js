@@ -9,4 +9,5 @@ export declare class Duration {
     static initFromTotalMinutes(totalMinutes: number): Duration;
     formatDuration(): string;
     plus(otherDuration: Duration): Duration;
+    asOJPFormattedText(): string;
 }

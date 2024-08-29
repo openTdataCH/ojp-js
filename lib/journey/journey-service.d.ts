@@ -1,3 +1,4 @@
+import { XMLElement } from 'xmlbuilder';
 import { PublicTransportMode } from './public-transport-mode';
 import { TripLegLineType } from "../types/map-geometry-types";
 import { StopPlace } from '../location/stopplace';
@@ -10,6 +11,8 @@ interface ServiceAttribute {
 }
 export declare class JourneyService {
     journeyRef: string;
+    lineRef: string | null;
+    directionRef: string | null;
     ptMode: PublicTransportMode;
     agencyCode: string;
     originStopPlace: StopPlace | null;
@@ -23,5 +26,6 @@ export declare class JourneyService {
     static initWithTreeNode(treeNode: TreeNode): JourneyService | null;
     computeLegLineType(): TripLegLineType;
     formatServiceName(): string;
+    addToXMLNode(parentNode: XMLElement): void;
 }
 export {};
