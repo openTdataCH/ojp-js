@@ -13,6 +13,7 @@ import { TreeNode } from '../xml/tree-node'
 import { TripFareResult } from '../fare/fare'
 
 import { XMLElement } from 'xmlbuilder'
+import { DEBUG_LEVEL } from '../constants'
 
 export class Trip {
   public id: string
@@ -28,12 +29,18 @@ export class Trip {
   }
 
   public static initFromTreeNode(treeNode: TreeNode): Trip | null {
+    let tripId = treeNode.findTextFromChildNamed('Id');
+
     // HACK for solution demo, backend sometimes delivers Trip with empty Id
     // TODO: revert when backend is ready, DONT merge to main
-    const tripId = treeNode.findTextFromChildNamed('Id') ?? 'RandomTripId';
-    // if (tripId === null) {
-    //   return null;
-    // }
+    if (tripId === null) {
+      tripId = 'RandomTripId';
+      if (DEBUG_LEVEL === 'DEBUG') {
+        console.error('Trip.initFromTreeNode: No Id node found for trip, assigning a random one');
+        console.log(treeNode);
+        console.log('=======================================');
+      }
+    }
 
     const duration = Duration.initFromDurationText(treeNode.findTextFromChildNamed('Duration'));
     if (duration === null) {
