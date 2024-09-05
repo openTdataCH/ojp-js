@@ -54,6 +54,11 @@ interface PublishingAction {
     passengerInformation: PassengerInformationAction;
     affects: PublishingActionAffect[];
 }
+export interface SituationContent {
+    summary: string;
+    descriptions: string[];
+    details: string[];
+}
 export declare class PtSituationElement {
     situationNumber: string;
     creationTime: Date;
@@ -68,6 +73,7 @@ export declare class PtSituationElement {
     scopeType: ScopeType;
     publishingActions: PublishingAction[];
     isPlanned: boolean;
+    situationContent: SituationContent | null;
     treeNode: TreeNode | null;
     constructor(situationNumber: string, creationTime: Date, countryRef: string, participantRef: string, version: number, source: PtSituationSource, progress: string, validityPeriods: TimeInterval[], alertCause: string, priority: number, scopeType: ScopeType, publishingActions: PublishingAction[], isPlanned: boolean);
     static initWithSituationTreeNode(treeNode: TreeNode): PtSituationElement | null;
@@ -78,5 +84,6 @@ export declare class PtSituationElement {
     private static computeAffectedStopPlaces;
     private static computeAffectedJourneys;
     isActive(date?: Date): boolean;
+    static computeSituationContent(treeNode: TreeNode): SituationContent | null;
 }
 export {};
