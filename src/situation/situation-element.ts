@@ -68,6 +68,13 @@ interface PublishingAction {
     affects: PublishingActionAffect[]
 }
 
+// Support also the v1 model with Description/Detail in the root level of the <PtSituation>
+export interface SituationContent {
+    summary: string
+    descriptions: string[]
+    details: string[]  
+}
+
 export class PtSituationElement {
     public situationNumber: string
     public creationTime: Date 
@@ -82,6 +89,8 @@ export class PtSituationElement {
     public scopeType: ScopeType
     public publishingActions: PublishingAction[]
     public isPlanned: boolean
+
+    public situationContent: SituationContent | null
 
     public treeNode: TreeNode | null
 
@@ -113,6 +122,8 @@ export class PtSituationElement {
         this.scopeType = scopeType
         this.publishingActions = publishingActions
         this.isPlanned = isPlanned
+
+        this.situationContent = null
         
         this.treeNode = null;
     }
@@ -220,12 +231,10 @@ export class PtSituationElement {
             isPlanned,
         );
         situationElement.treeNode = treeNode;
+        situationElement.situationContent = this.computeSituationContent(treeNode);
 
-        if (situationElement.publishingActions.length === 0) {
-            console.error('PtSituationElement.initWithSituationTreeNode: empty actions');
-            console.log(treeNode);
-            
-            // return null;
+        if ((situationElement.publishingActions.length === 0) && (situationElement.situationContent === null)) {
+            console.error('PtSituationElement.initFromSituationNode: NO publishing action found and also situationContent is null')
         }
 
         return situationElement;
@@ -516,4 +525,40 @@ export class PtSituationElement {
 
         return activePeriod !== null;
     }
+
+
+    public static computeSituationContent(treeNode: TreeNode): SituationContent | null {
+        const summary = treeNode.findTextFromChildNamed('siri:Summary');
+    
+        if (summary === null) {
+          return null;
+        }
+    
+        const descriptions: string[] = []
+        const descriptionNodes = treeNode.findChildrenNamed('siri:Description');
+        descriptionNodes.forEach(descriptionTreeNode => {
+          const descriptionText = descriptionTreeNode.text;
+          if (descriptionText) {
+            descriptions.push(descriptionText);
+          }
+        });
+    
+        const details: string[] = []
+        const detailNodes = treeNode.findChildrenNamed('siri:Detail');
+        detailNodes.forEach(detailTreeNode => {
+          const detailText = detailTreeNode.text;
+          if (detailText) {
+            details.push(detailText);
+          }
+        });
+    
+        const situationContent: SituationContent = {
+            summary: summary,
+            descriptions: descriptions,
+            details: details
+        };
+
+        return situationContent;
+    }    
+
 }
