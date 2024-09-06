@@ -105,6 +105,7 @@ export class Trip {
 
       isCancelled: null,
       isInfeasable: null,
+      isUnplanned: null,
     };
 
     const cancelledNode = treeNode.findChildNamed('Cancelled');
@@ -114,6 +115,10 @@ export class Trip {
     const infeasableNode = treeNode.findChildNamed('Infeasible');
     if (infeasableNode) {
       tripStats.isInfeasable = infeasableNode.text === 'true';
+    }
+    const unplannedNode = treeNode.findChildNamed('Unplanned');
+    if (unplannedNode) {
+      tripStats.isUnplanned = unplannedNode.text === 'true';
     }
 
     const trip = new Trip(tripId, legs, tripStats);
