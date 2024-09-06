@@ -22,6 +22,9 @@ export declare class JourneyService {
     siriSituationIds: string[];
     siriSituations: PtSituationElement[];
     serviceAttributes: Record<string, ServiceAttribute>;
+    hasCancellation: boolean | null;
+    hasDeviation: boolean | null;
+    isUnplanned: boolean | null;
     constructor(journeyRef: string, ptMode: PublicTransportMode, agencyCode: string);
     static initWithTreeNode(treeNode: TreeNode): JourneyService | null;
     computeLegLineType(): TripLegLineType;

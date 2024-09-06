@@ -9,4 +9,5 @@ export interface TripStats {
     endDatetime: Date;
     isCancelled: boolean | null;
     isInfeasable: boolean | null;
+    isUnplanned: boolean | null;
 }
