@@ -71,6 +71,7 @@ export class TripRequest extends OJPBaseRequest {
     includeLegProjection: boolean = false,
     modeType: TripModeType = 'monomodal',
     transportMode: IndividualTransportMode  = 'public_transport',
+    viaTripLocations: TripLocationPoint[] = [],
   ) {
     const requestParams = TripsRequestParams.initWithTripLocationsAndDate(
       language, 
@@ -82,6 +83,7 @@ export class TripRequest extends OJPBaseRequest {
       includeLegProjection,
       modeType,
       transportMode,
+      viaTripLocations,
     );
     if (requestParams === null) {
       return null;
