@@ -5,6 +5,8 @@ import { TripRequest_Response, TripRequest_Callback, NumberOfResultsType } from 
 import { TripLocationPoint } from '../../trip';
 import { Location } from '../../location/location';
 import { Language } from '../../types/language-type';
+import { TripModeType } from '../../types/trip-mode-type';
+import { IndividualTransportMode } from '../../types/individual-mode.types';
 export type TripRequestBoardingType = 'Dep' | 'Arr';
 export declare class TripRequest extends OJPBaseRequest {
     private requestParams;
@@ -14,7 +16,7 @@ export declare class TripRequest extends OJPBaseRequest {
     static initWithRequestMock(mockText: string, stageConfig?: StageConfig): TripRequest;
     static initWithStopRefs(stageConfig: StageConfig, language: Language, fromStopRef: string, toStopRef: string, departureDate?: Date, tripRequestBoardingType?: TripRequestBoardingType): TripRequest | null;
     static initWithLocationsAndDate(stageConfig: StageConfig, language: Language, fromLocation: Location, toLocation: Location, departureDate: Date, tripRequestBoardingType?: TripRequestBoardingType): TripRequest | null;
-    static initWithTripLocationsAndDate(stageConfig: StageConfig, language: Language, fromTripLocation: TripLocationPoint | null, toTripLocation: TripLocationPoint | null, departureDate: Date, tripRequestBoardingType?: TripRequestBoardingType, numberOfResultsType?: NumberOfResultsType): TripRequest | null;
+    static initWithTripLocationsAndDate(stageConfig: StageConfig, language: Language, fromTripLocation: TripLocationPoint | null, toTripLocation: TripLocationPoint | null, departureDate: Date, tripRequestBoardingType?: TripRequestBoardingType, numberOfResultsType?: NumberOfResultsType, includeLegProjection?: boolean, modeType?: TripModeType, transportMode?: IndividualTransportMode, viaTripLocations?: TripLocationPoint[]): TripRequest | null;
     protected buildRequestXML(): string;
     fetchResponse(): Promise<TripRequest_Response>;
     fetchResponseWithCallback(callback: TripRequest_Callback): void;

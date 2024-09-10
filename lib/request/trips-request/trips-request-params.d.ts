@@ -15,9 +15,10 @@ export declare class TripsRequestParams extends BaseRequestParams {
     modeType: TripModeType;
     transportMode: IndividualTransportMode;
     includeLegProjection: boolean;
+    viaLocations: TripLocationPoint[];
     constructor(language: Language, fromTripLocation: TripLocationPoint, toTripLocation: TripLocationPoint, departureDate?: Date, tripRequestBoardingType?: TripRequestBoardingType, numberOfResultsType?: NumberOfResultsType);
     static Empty(): TripsRequestParams;
     static initWithLocationsAndDate(language: Language, fromLocation: Location | null, toLocation: Location | null, departureDate?: Date, tripRequestBoardingType?: TripRequestBoardingType, numberOfResultsType?: NumberOfResultsType): TripsRequestParams | null;
-    static initWithTripLocationsAndDate(language: Language, fromTripLocationPoint: TripLocationPoint | null, toTripLocationPoint: TripLocationPoint | null, departureDate?: Date, tripRequestBoardingType?: TripRequestBoardingType, numberOfResultsType?: NumberOfResultsType): TripsRequestParams | null;
+    static initWithTripLocationsAndDate(language: Language, fromTripLocationPoint: TripLocationPoint | null, toTripLocationPoint: TripLocationPoint | null, departureDate?: Date, tripRequestBoardingType?: TripRequestBoardingType, numberOfResultsType?: NumberOfResultsType, includeLegProjection?: boolean, modeType?: TripModeType, transportMode?: IndividualTransportMode, viaTripLocations?: TripLocationPoint[]): TripsRequestParams | null;
     protected buildRequestNode(): void;
 }
