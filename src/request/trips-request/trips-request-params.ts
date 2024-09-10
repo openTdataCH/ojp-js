@@ -87,6 +87,9 @@ export class TripsRequestParams extends BaseRequestParams {
     departureDate: Date = new Date(),
     tripRequestBoardingType: TripRequestBoardingType = 'Dep',
     numberOfResultsType: NumberOfResultsType = 'NumberOfResults',
+    includeLegProjection: boolean = false,
+    modeType: TripModeType = 'monomodal',
+    transportMode: IndividualTransportMode  = 'public_transport',
   ): TripsRequestParams | null {
     if (fromTripLocationPoint === null || toTripLocationPoint === null) {
       return null;
@@ -112,6 +115,11 @@ export class TripsRequestParams extends BaseRequestParams {
       tripRequestBoardingType,
       numberOfResultsType,
     );
+
+    tripRequestParams.includeLegProjection = includeLegProjection;
+    tripRequestParams.modeType = modeType;
+    tripRequestParams.transportMode = transportMode;
+
     return tripRequestParams;
   }
 
