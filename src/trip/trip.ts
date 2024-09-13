@@ -36,9 +36,9 @@ export class Trip {
     }
 
     const distanceS = XPathOJP.queryText('ojp:Trip/ojp:Distance', tripResultNode)
-    if (distanceS === null) {
-      return null;
-    }
+    // if (distanceS === null) {
+    //   return null;
+    // }
 
     const transfersNoS = XPathOJP.queryText('ojp:Trip/ojp:Transfers', tripResultNode)
     if (transfersNoS === null) {
@@ -55,9 +55,11 @@ export class Trip {
     const tripStartTime = new Date(Date.parse(tripStartTimeS));
     const tripEndTime = new Date(Date.parse(tripEndTimeS));
 
+    const distanceMeters = distanceS === null ? 0 : parseInt(distanceS);
+
     const tripStats = <TripStats>{
       duration: duration,
-      distanceMeters: parseInt(distanceS),
+      distanceMeters: distanceMeters,
       transferNo: parseInt(transfersNoS),
       startDatetime: tripStartTime,
       endDatetime: tripEndTime,
