@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## 0.11.2 - xx.09.2024
+## 0.12.1 - xx.09.2024
 - Update `StopEvent` situations: use also line/route situations from Service - [PR #100](https://github.com/openTdataCH/ojp-js/pull/100)
 - adds adds Cancelled, Deviation, Unplanned support for Service - [PR #101](https://github.com/openTdataCH/ojp-js/pull/101)
 - BREAKING CHANGE - updates situations model - [PR #101](https://github.com/openTdataCH/ojp-js/pull/101)
