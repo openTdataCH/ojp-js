@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## 0.12.1 - xx.09.2024
+## 0.12.1 - 16.09.2024
 - Adds support for Via locations - [PR #102](https://github.com/openTdataCH/ojp-js/pull/102)
 - Complete the `TripRequest.initWithTripLocationsAndDate` constructor to use all params - [PR #102](https://github.com/openTdataCH/ojp-js/pull/102)
 - BREAKING CHANGE - remove JourneyRequest API, no more need for this, was added to support via using multiple `TripRequest` requests - [PR #102](https://github.com/openTdataCH/ojp-js/pull/102)
