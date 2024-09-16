@@ -2,6 +2,7 @@ import { StopPoint } from '../trip/leg/timed-leg/stop-point'
 import { JourneyService } from '../journey/journey-service'
 import { Location } from '../location/location';
 import { TreeNode } from '../xml/tree-node';
+import { PtSituationElement } from '../situation/situation-element';
 
 export type StationBoardType = 'Departures' | 'Arrivals'
 
@@ -77,6 +78,18 @@ export class StopEvent {
             const stopPointRef = stopPoint.location.stopPlace?.stopPlaceRef;
             if (stopPointRef && (stopPointRef in mapContextLocations)) {
                 stopPoint.location = mapContextLocations[stopPointRef];
+            }
+        });
+    }
+
+    public patchSituations(mapContextSituations: Record<string, PtSituationElement>) {
+        this.stopPoint.siriSituations = [];
+
+        const siriSituationIds = this.stopPoint.siriSituationIds.concat(this.journeyService.siriSituationIds);
+        siriSituationIds.forEach(siriSituationId => {
+            const siriSituation = mapContextSituations[siriSituationId] ?? null;
+            if (siriSituation) {
+                this.stopPoint.siriSituations.push(siriSituation)
             }
         });
     }

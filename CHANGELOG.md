@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 0.11.2 - xx.09.2024
+- Update `StopEvent` situations: use also line/route situations from Service - [PR #100](https://github.com/openTdataCH/ojp-js/pull/100)
+
 ## 0.11.1 - 28.08.2024
 - OJP localization support - [PR #96](https://github.com/openTdataCH/ojp-js/pull/96)
   - BREAKING CHANGE - adds language param to all request API calls
