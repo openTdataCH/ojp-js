@@ -7,6 +7,9 @@ import { TripLocationPoint } from '../../trip';
 import { Location } from '../../location/location';
 import { Language } from '../../types/language-type';
 
+import { TripModeType } from '../../types/trip-mode-type';
+import { IndividualTransportMode } from '../../types/individual-mode.types';
+
 export type TripRequestBoardingType = 'Dep' | 'Arr'
 
 export class TripRequest extends OJPBaseRequest {
@@ -57,11 +60,35 @@ export class TripRequest extends OJPBaseRequest {
     return request;
   }
 
-  public static initWithTripLocationsAndDate(stageConfig: StageConfig, language: Language, fromTripLocation: TripLocationPoint | null, toTripLocation: TripLocationPoint | null, departureDate: Date, tripRequestBoardingType: TripRequestBoardingType = 'Dep', numberOfResultsType: NumberOfResultsType = 'NumberOfResults') {
-    const requestParams = TripsRequestParams.initWithTripLocationsAndDate(language, fromTripLocation, toTripLocation, departureDate, tripRequestBoardingType, numberOfResultsType);
+  public static initWithTripLocationsAndDate(
+    stageConfig: StageConfig, 
+    language: Language, 
+    fromTripLocation: TripLocationPoint | null, 
+    toTripLocation: TripLocationPoint | null, 
+    departureDate: Date, 
+    tripRequestBoardingType: TripRequestBoardingType = 'Dep', 
+    numberOfResultsType: NumberOfResultsType = 'NumberOfResults', 
+    includeLegProjection: boolean = false,
+    modeType: TripModeType = 'monomodal',
+    transportMode: IndividualTransportMode  = 'public_transport',
+    viaTripLocations: TripLocationPoint[] = [],
+  ) {
+    const requestParams = TripsRequestParams.initWithTripLocationsAndDate(
+      language, 
+      fromTripLocation, 
+      toTripLocation, 
+      departureDate, 
+      tripRequestBoardingType,
+      numberOfResultsType,
+      includeLegProjection,
+      modeType,
+      transportMode,
+      viaTripLocations,
+    );
     if (requestParams === null) {
       return null;
     }
+    
     const request = new TripRequest(stageConfig, requestParams);
     return request;
   }

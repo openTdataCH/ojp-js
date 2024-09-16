@@ -19,6 +19,8 @@ export class TripsRequestParams extends BaseRequestParams {
   public transportMode: IndividualTransportMode;
   public includeLegProjection: boolean;
 
+  public viaLocations: TripLocationPoint[]
+
   constructor(
     language: Language,
     fromTripLocation: TripLocationPoint,
@@ -39,6 +41,8 @@ export class TripsRequestParams extends BaseRequestParams {
     this.transportMode = "public_transport";
 
     this.includeLegProjection = true;
+
+    this.viaLocations = [];
   }
 
   public static Empty(): TripsRequestParams {
@@ -87,6 +91,10 @@ export class TripsRequestParams extends BaseRequestParams {
     departureDate: Date = new Date(),
     tripRequestBoardingType: TripRequestBoardingType = 'Dep',
     numberOfResultsType: NumberOfResultsType = 'NumberOfResults',
+    includeLegProjection: boolean = false,
+    modeType: TripModeType = 'monomodal',
+    transportMode: IndividualTransportMode  = 'public_transport',
+    viaTripLocations: TripLocationPoint[] = []
   ): TripsRequestParams | null {
     if (fromTripLocationPoint === null || toTripLocationPoint === null) {
       return null;
@@ -112,6 +120,12 @@ export class TripsRequestParams extends BaseRequestParams {
       tripRequestBoardingType,
       numberOfResultsType,
     );
+
+    tripRequestParams.includeLegProjection = includeLegProjection;
+    tripRequestParams.modeType = modeType;
+    tripRequestParams.transportMode = transportMode;
+    tripRequestParams.viaLocations = viaTripLocations;
+
     return tripRequestParams;
   }
 
@@ -239,6 +253,24 @@ export class TripsRequestParams extends BaseRequestParams {
             );
           }
         }
+      }
+    });
+
+    this.viaLocations.forEach(viaLocation => {
+      const viaPointNode = tripRequestNode.ele('Via').ele('ViaPoint');
+      const stopPlace = viaLocation.location.stopPlace;
+      if (stopPlace === null) {
+        const geoPosition = viaLocation.location.geoPosition;
+        if (geoPosition !== null) {
+          const geoPositionNode = viaPointNode.ele('GeoPosition');
+          geoPositionNode.ele('siri:Longitude', geoPosition.longitude);
+          geoPositionNode.ele('siri:Latitude', geoPosition.latitude);
+
+          viaPointNode.ele('Name').ele('Text', viaLocation.location.computeLocationName() ?? 'n/a');
+        }
+      } else {
+        viaPointNode.ele('StopPlaceRef', stopPlace.stopPlaceRef);
+        viaPointNode.ele('Name').ele('Text', stopPlace.stopPlaceName ?? (viaLocation.location.computeLocationName() ?? 'n/a'));
       }
     });
 

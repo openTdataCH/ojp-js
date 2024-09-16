@@ -1,6 +1,3 @@
-export * from './journey-request/journey-request'
-export * from './journey-request/journey-request-params'
-
 export * from './location-information/location-information-request'
 export * from './stop-event-request/stop-event-request'
 export * from './trip-info-request/trip-info-request'
