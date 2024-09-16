@@ -69,7 +69,7 @@ interface PublishingAction {
 }
 
 // Support also the v1 model with Description/Detail in the root level of the <PtSituation>
-interface SituationContentV1 {
+export interface SituationContent {
     summary: string
     descriptions: string[]
     details: string[]  
@@ -90,9 +90,8 @@ export class PtSituationElement {
     public publishingActions: PublishingAction[]
     public isPlanned: boolean
 
-    // Support also the v1 model with Description/Detail in the root level of the <PtSituation>
-    public situationContentV1: SituationContentV1 | null
-    
+    public situationContent: SituationContent | null
+
     public treeNode: TreeNode | null
 
     constructor(
@@ -123,8 +122,8 @@ export class PtSituationElement {
         this.scopeType = scopeType
         this.publishingActions = publishingActions
         this.isPlanned = isPlanned
-        
-        this.situationContentV1 = null;
+
+        this.situationContent = null
         
         this.treeNode = null;
     }
@@ -232,14 +231,10 @@ export class PtSituationElement {
             isPlanned,
         );
         situationElement.treeNode = treeNode;
+        situationElement.situationContent = this.computeSituationContent(treeNode);
 
-        situationElement.situationContentV1 = this.computeSituationContentV1(treeNode);
-
-        if ((situationElement.publishingActions.length === 0) && (situationElement.situationContentV1 === null)) {
-            console.error('PtSituationElement.initWithSituationTreeNode: empty actions, no metadata found');
-            console.log(treeNode);
-            
-            // return null;
+        if ((situationElement.publishingActions.length === 0) && (situationElement.situationContent === null)) {
+            console.error('PtSituationElement.initFromSituationNode: NO publishing action found and also situationContent is null')
         }
 
         return situationElement;
@@ -531,13 +526,11 @@ export class PtSituationElement {
         return activePeriod !== null;
     }
 
-    public static computeSituationContentV1(treeNode: TreeNode): SituationContentV1 | null {
+
+    public static computeSituationContent(treeNode: TreeNode): SituationContent | null {
         const summary = treeNode.findTextFromChildNamed('siri:Summary');
     
         if (summary === null) {
-          console.error('ERROR: SituationContent.initFromSituationNode - empty summary');
-          console.log(treeNode);
-    
           return null;
         }
     
@@ -559,13 +552,13 @@ export class PtSituationElement {
           }
         });
     
-        const situationContent: SituationContentV1 = {
+        const situationContent: SituationContent = {
             summary: summary,
             descriptions: descriptions,
             details: details
         };
 
         return situationContent;
-    }
-    
+    }    
+
 }

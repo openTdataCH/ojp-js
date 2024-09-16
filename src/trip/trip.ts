@@ -13,6 +13,7 @@ import { TreeNode } from '../xml/tree-node'
 import { TripFareResult } from '../fare/fare'
 
 import { XMLElement } from 'xmlbuilder'
+import { DEBUG_LEVEL } from '../constants'
 
 export class Trip {
   public id: string
@@ -28,9 +29,17 @@ export class Trip {
   }
 
   public static initFromTreeNode(treeNode: TreeNode): Trip | null {
-    const tripId = treeNode.findTextFromChildNamed('TripId');
+    let tripId = treeNode.findTextFromChildNamed('TripId');
+
+    // HACK for solution demo, backend sometimes delivers Trip with empty Id
+    // TODO: revert when backend is ready, DONT merge to main
     if (tripId === null) {
-      return null;
+      tripId = 'RandomTripId';
+      if (DEBUG_LEVEL === 'DEBUG') {
+        console.error('Trip.initFromTreeNode: No Id node found for trip, assigning a random one');
+        console.log(treeNode);
+        console.log('=======================================');
+      }
     }
 
     const duration = Duration.initFromDurationText(treeNode.findTextFromChildNamed('Duration'));
@@ -96,6 +105,7 @@ export class Trip {
 
       isCancelled: null,
       isInfeasable: null,
+      isUnplanned: null,
     };
 
     const cancelledNode = treeNode.findChildNamed('Cancelled');
@@ -105,6 +115,10 @@ export class Trip {
     const infeasableNode = treeNode.findChildNamed('Infeasible');
     if (infeasableNode) {
       tripStats.isInfeasable = infeasableNode.text === 'true';
+    }
+    const unplannedNode = treeNode.findChildNamed('Unplanned');
+    if (unplannedNode) {
+      tripStats.isUnplanned = unplannedNode.text === 'true';
     }
 
     const trip = new Trip(tripId, legs, tripStats);

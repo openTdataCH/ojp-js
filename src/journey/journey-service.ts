@@ -30,6 +30,10 @@ export class JourneyService {
 
   public serviceAttributes: Record<string, ServiceAttribute>
 
+  public hasCancellation: boolean | null
+  public hasDeviation: boolean | null
+  public isUnplanned: boolean | null
+
   constructor(journeyRef: string, ptMode: PublicTransportMode, agencyID: string) {
     this.journeyRef = journeyRef;
     this.lineRef = null;
@@ -47,6 +51,10 @@ export class JourneyService {
     this.siriSituations = [];
 
     this.serviceAttributes = {};
+
+    this.hasCancellation = null;
+    this.hasDeviation = null;
+    this.isUnplanned = null;
   }
 
   public static initWithTreeNode(treeNode: TreeNode): JourneyService | null {
@@ -132,6 +140,21 @@ export class JourneyService {
 
       legService.serviceAttributes[code] = serviceAttribute;
     });
+
+    const cancelledNode = serviceTreeNode.findChildNamed('Cancelled');
+    if (cancelledNode) {
+      legService.hasCancellation = true;
+    }
+
+    const deviationNode = serviceTreeNode.findChildNamed('Deviation');
+    if (deviationNode) {
+      legService.hasDeviation = true;
+    }
+
+    const unplannedNode = serviceTreeNode.findChildNamed('Unplanned');
+    if (unplannedNode) {
+      legService.isUnplanned = true;
+    }
 
     return legService;
   }
