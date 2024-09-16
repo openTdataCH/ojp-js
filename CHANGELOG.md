@@ -1,9 +1,12 @@
 # CHANGELOG
 
 ## 0.12.1 - xx.09.2024
-- Update `StopEvent` situations: use also line/route situations from Service - [PR #100](https://github.com/openTdataCH/ojp-js/pull/100)
-- adds adds Cancelled, Deviation, Unplanned support for Service - [PR #101](https://github.com/openTdataCH/ojp-js/pull/101)
+- Adds support for Via locations - [PR #102](https://github.com/openTdataCH/ojp-js/pull/102)
+- Complete the `TripRequest.initWithTripLocationsAndDate` constructor to use all params - [PR #102](https://github.com/openTdataCH/ojp-js/pull/102)
+- BREAKING CHANGE - remove JourneyRequest API, no more need for this, was added to support via using multiple `TripRequest` requests - [PR #102](https://github.com/openTdataCH/ojp-js/pull/102)
+- Adds Cancelled, Deviation, Unplanned support for Service - [PR #101](https://github.com/openTdataCH/ojp-js/pull/101)
 - BREAKING CHANGE - updates situations model - [PR #101](https://github.com/openTdataCH/ojp-js/pull/101)
+- Update `StopEvent` situations: use also line/route situations from Service - [PR #100](https://github.com/openTdataCH/ojp-js/pull/100)
 
 ## 0.11.1 - 28.08.2024
 - OJP localization support - [PR #96](https://github.com/openTdataCH/ojp-js/pull/96)
