@@ -300,11 +300,6 @@ export class TripsRequestParams extends BaseRequestParams {
         paramsNode.ele("ItModesToCover", transportMode);
       }
 
-      const carTransportModes: IndividualTransportMode[] = ['car', 'car-ferry', 'car-shuttle-train', 'car_sharing', 'self-drive-car', 'others-drive-car'];
-      if (carTransportModes.includes(transportMode)) {
-        paramsNode.ele('ModeAndModeOfOperationFilter').ele('siri:WaterSubmode', 'localCarFerry');
-      }
-
       const sharingModes: IndividualTransportMode[] = [
         "bicycle_rental",
         "car_sharing",
