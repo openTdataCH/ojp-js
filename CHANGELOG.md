@@ -1,6 +1,7 @@
 # CHANGELOG
 
 ## 0.12.3 - 17.09.2024
+- Customize `NumberOfResults` - [PR #108](https://github.com/openTdataCH/ojp-js/pull/108) 
 - Remove `ModeAndModeOfOperationFilter/siri:WaterSubmode` which is for OJP2 - [PR #106](https://github.com/openTdataCH/ojp-js/pull/106) 
 
 ## 0.12.2 - 17.09.2024
