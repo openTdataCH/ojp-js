@@ -270,7 +270,7 @@ export class TripsRequestParams extends BaseRequestParams {
         }
       } else {
         viaPointNode.ele('StopPlaceRef', stopPlace.stopPlaceRef);
-        viaPointNode.ele('Name').ele('Text', stopPlace.stopPlaceName ?? (viaLocation.location.computeLocationName() ?? 'n/a'));
+        viaPointNode.ele('LocationName').ele('Text', stopPlace.stopPlaceName ?? (viaLocation.location.computeLocationName() ?? 'n/a'));
       }
     });
 
