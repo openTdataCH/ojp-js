@@ -299,7 +299,11 @@ export class TripsRequestParams extends BaseRequestParams {
     paramsNode.ele("IncludeTrackSections", true);
     paramsNode.ele("IncludeLegProjection", this.includeLegProjection);
     paramsNode.ele("IncludeTurnDescription", true);
-    paramsNode.ele("IncludeIntermediateStops", true);
+
+    const isPublicTransport = this.transportMode === 'public_transport';
+    if (isPublicTransport) {
+      paramsNode.ele("IncludeIntermediateStops", true);
+    }
 
     if (isMonomodal) {
       const standardModes: IndividualTransportMode[] = [
