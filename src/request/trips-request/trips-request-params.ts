@@ -297,10 +297,7 @@ export class TripsRequestParams extends BaseRequestParams {
     }
 
     paramsNode.ele("IncludeTrackSections", true);
-    paramsNode.ele(
-      "IncludeLegProjection",
-      this.includeLegProjection
-    );
+    paramsNode.ele("IncludeLegProjection", this.includeLegProjection);
     paramsNode.ele("IncludeTurnDescription", true);
     paramsNode.ele("IncludeIntermediateStops", true);
 
