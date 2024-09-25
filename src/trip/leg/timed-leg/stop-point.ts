@@ -116,14 +116,4 @@ export class StopPoint {
 
     return null;
   }
-
-  public patchSituations(mapContextSituations: Record<string, PtSituationElement>) {
-    this.siriSituations = [];
-    this.siriSituationIds.forEach(siriSituationId => {
-      const siriSituation = mapContextSituations[siriSituationId] ?? null;
-      if (siriSituation) {
-        this.siriSituations.push(siriSituation)
-      }
-    })
-  }
 }

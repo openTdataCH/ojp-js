@@ -14,6 +14,7 @@ export class TripsRequestParams extends BaseRequestParams {
   public departureDate: Date;
   public tripRequestBoardingType: TripRequestBoardingType
   public numberOfResultsType: NumberOfResultsType
+  public numberOfResults: number | null
   
   public modeType: TripModeType;
   public transportMode: IndividualTransportMode;
@@ -28,6 +29,7 @@ export class TripsRequestParams extends BaseRequestParams {
     departureDate: Date = new Date(),
     tripRequestBoardingType: TripRequestBoardingType = 'Dep',
     numberOfResultsType: NumberOfResultsType = 'NumberOfResults',
+    numberOfResults: number | null = null,
   ) {
     super(language);
 
@@ -36,6 +38,7 @@ export class TripsRequestParams extends BaseRequestParams {
     this.departureDate = departureDate;
     this.tripRequestBoardingType = tripRequestBoardingType;
     this.numberOfResultsType = numberOfResultsType;
+    this.numberOfResults = numberOfResults;
 
     this.modeType = "monomodal";
     this.transportMode = "public_transport";
@@ -65,6 +68,11 @@ export class TripsRequestParams extends BaseRequestParams {
     departureDate: Date = new Date(),
     tripRequestBoardingType: TripRequestBoardingType = 'Dep',
     numberOfResultsType: NumberOfResultsType = 'NumberOfResults',
+    includeLegProjection: boolean = false,
+    modeType: TripModeType = 'monomodal',
+    transportMode: IndividualTransportMode  = 'public_transport',
+    viaTripLocations: TripLocationPoint[] = [],
+    numberOfResults: number | null = null,
   ): TripsRequestParams | null {
     if (fromLocation === null || toLocation === null) {
       return null;
@@ -80,6 +88,11 @@ export class TripsRequestParams extends BaseRequestParams {
       departureDate, 
       tripRequestBoardingType,
       numberOfResultsType,
+      includeLegProjection,
+      modeType,
+      transportMode,
+      viaTripLocations,
+      numberOfResults,
     );
     return requestParams;
   }
@@ -94,7 +107,8 @@ export class TripsRequestParams extends BaseRequestParams {
     includeLegProjection: boolean = false,
     modeType: TripModeType = 'monomodal',
     transportMode: IndividualTransportMode  = 'public_transport',
-    viaTripLocations: TripLocationPoint[] = []
+    viaTripLocations: TripLocationPoint[] = [],
+    numberOfResults: number | null = null,
   ): TripsRequestParams | null {
     if (fromTripLocationPoint === null || toTripLocationPoint === null) {
       return null;
@@ -119,6 +133,7 @@ export class TripsRequestParams extends BaseRequestParams {
       departureDate,
       tripRequestBoardingType,
       numberOfResultsType,
+      numberOfResults,
     );
 
     tripRequestParams.includeLegProjection = includeLegProjection;
@@ -276,17 +291,19 @@ export class TripsRequestParams extends BaseRequestParams {
 
     const paramsNode = tripRequestNode.ele("Params");
 
-    const numberOfResults = 5;
-    const nodeName = this.numberOfResultsType;
-    paramsNode.ele(nodeName, numberOfResults);
+    if (this.numberOfResults !== null) {
+      const nodeName = this.numberOfResultsType;
+      paramsNode.ele(nodeName, this.numberOfResults);
+    }
 
     paramsNode.ele("IncludeTrackSections", true);
-    paramsNode.ele(
-      "IncludeLegProjection",
-      this.includeLegProjection
-    );
+    paramsNode.ele("IncludeLegProjection", this.includeLegProjection);
     paramsNode.ele("IncludeTurnDescription", true);
-    paramsNode.ele("IncludeIntermediateStops", true);
+
+    const isPublicTransport = this.transportMode === 'public_transport';
+    if (isPublicTransport) {
+      paramsNode.ele("IncludeIntermediateStops", true);
+    }
 
     if (isMonomodal) {
       const standardModes: IndividualTransportMode[] = [
