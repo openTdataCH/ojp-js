@@ -16,7 +16,7 @@ export declare class TripRequest extends OJPBaseRequest {
     static initWithRequestMock(mockText: string, stageConfig?: StageConfig): TripRequest;
     static initWithStopRefs(stageConfig: StageConfig, language: Language, fromStopRef: string, toStopRef: string, departureDate?: Date, tripRequestBoardingType?: TripRequestBoardingType): TripRequest | null;
     static initWithLocationsAndDate(stageConfig: StageConfig, language: Language, fromLocation: Location, toLocation: Location, departureDate: Date, tripRequestBoardingType?: TripRequestBoardingType): TripRequest | null;
-    static initWithTripLocationsAndDate(stageConfig: StageConfig, language: Language, fromTripLocation: TripLocationPoint | null, toTripLocation: TripLocationPoint | null, departureDate: Date, tripRequestBoardingType?: TripRequestBoardingType, numberOfResultsType?: NumberOfResultsType, includeLegProjection?: boolean, modeType?: TripModeType, transportMode?: IndividualTransportMode, viaTripLocations?: TripLocationPoint[]): TripRequest | null;
+    static initWithTripLocationsAndDate(stageConfig: StageConfig, language: Language, fromTripLocation: TripLocationPoint | null, toTripLocation: TripLocationPoint | null, departureDate: Date, tripRequestBoardingType?: TripRequestBoardingType, numberOfResultsType?: NumberOfResultsType, includeLegProjection?: boolean, modeType?: TripModeType, transportMode?: IndividualTransportMode, viaTripLocations?: TripLocationPoint[], numberOfResults?: number | null): TripRequest | null;
     protected buildRequestXML(): string;
     fetchResponse(): Promise<TripRequest_Response>;
     fetchResponseWithCallback(callback: TripRequest_Callback): void;

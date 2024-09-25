@@ -19,6 +19,5 @@ export declare class StopPoint {
     constructor(stopPointType: StopPointType, location: Location, arrivalData: StopPointTime | null, departureData: StopPointTime | null, plannedPlatform: string | null, sequenceOrder: number | null);
     static initWithTreeNode(treeNode: TreeNode, stopPointType: StopPointType): StopPoint | null;
     private static computePlatformAssistance;
-    patchSituations(mapContextSituations: Record<string, PtSituationElement>): void;
 }
 export {};
