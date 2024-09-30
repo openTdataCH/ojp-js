@@ -272,7 +272,8 @@ export class TripsRequestParams extends BaseRequestParams {
     });
 
     this.viaLocations.forEach(viaLocation => {
-      const viaPointNode = tripRequestNode.ele('Via').ele('ViaPoint');
+      const viaNode = tripRequestNode.ele('Via');
+      const viaPointNode = viaNode.ele('ViaPoint');
       const stopPlace = viaLocation.location.stopPlace;
       if (stopPlace === null) {
         const geoPosition = viaLocation.location.geoPosition;
@@ -286,6 +287,10 @@ export class TripsRequestParams extends BaseRequestParams {
       } else {
         viaPointNode.ele('StopPlaceRef', stopPlace.stopPlaceRef);
         viaPointNode.ele('Name').ele('Text', stopPlace.stopPlaceName ?? (viaLocation.location.computeLocationName() ?? 'n/a'));
+      }
+
+      if (viaLocation.dwellTimeMinutes !== null) {
+        viaNode.ele('DwellTime', 'PT' + viaLocation.dwellTimeMinutes.toString() + 'M');
       }
     });
 
