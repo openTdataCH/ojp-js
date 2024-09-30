@@ -10,6 +10,8 @@ export class TripLocationPoint {
 
     public customTransportMode?: IndividualTransportMode | null
 
+    public dwellTimeMinutes: number | null
+
     constructor(location: Location) {
         this.location = location
         this.minDuration = 2
@@ -17,6 +19,7 @@ export class TripLocationPoint {
         this.minDistance = 100
         this.maxDistance = 20000
         this.customTransportMode = null
+        this.dwellTimeMinutes = null;
     }
 
     public static Empty(): TripLocationPoint {
