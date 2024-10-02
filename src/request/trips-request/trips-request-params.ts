@@ -319,7 +319,7 @@ export class TripsRequestParams extends BaseRequestParams {
         "others-drive-car",
       ];
       if (standardModes.indexOf(transportMode) !== -1) {
-        paramsNode.ele("ItModesToCover", transportMode);
+        paramsNode.ele("ItModeToCover").ele('PersonalMode', transportMode);
       }
 
       const carTransportModes: IndividualTransportMode[] = ['car', 'car-ferry', 'car-shuttle-train', 'car_sharing', 'self-drive-car', 'others-drive-car'];
