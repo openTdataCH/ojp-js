@@ -327,6 +327,7 @@ export class TripsRequestParams extends BaseRequestParams {
         paramsNode.ele('ModeAndModeOfOperationFilter').ele('siri:WaterSubmode', 'localCarFerry');
       }
 
+      // This is OJP v1
       const sharingModes: IndividualTransportMode[] = [
         "bicycle_rental",
         "car_sharing",
