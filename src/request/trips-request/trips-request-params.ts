@@ -358,6 +358,10 @@ export class TripsRequestParams extends BaseRequestParams {
             ? this.fromTripLocation
             : this.toTripLocation;
 
+          if ((tripLocation.minDistance === null) || (tripLocation.maxDistance === null)) {
+            return;
+          }
+
           let tagName = isFrom ? "Origin" : "Destination";
           const endpointNode = paramsExtensionNode.ele(tagName);
 
