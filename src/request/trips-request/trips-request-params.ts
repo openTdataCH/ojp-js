@@ -312,6 +312,7 @@ export class TripsRequestParams extends BaseRequestParams {
 
     if (isMonomodal) {
       const standardModes: IndividualTransportMode[] = [
+        "foot",
         "walk",
         "self-drive-car",
         "cycle",
