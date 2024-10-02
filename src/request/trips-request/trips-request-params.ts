@@ -1,3 +1,5 @@
+import * as xmlbuilder from "xmlbuilder";
+
 import { TripLocationPoint } from "../../trip";
 import { IndividualTransportMode } from "../../types/individual-mode.types";
 import { TripModeType } from "../../types/trip-mode-type";
@@ -203,71 +205,8 @@ export class TripsRequestParams extends BaseRequestParams {
         }
       }
 
-      if (isMonomodal) {
-        if (isFrom) {
-          // https://github.com/openTdataCH/ojp-demo-app-src/issues/64
-          // Allow maxduration for more than 40m for walking / cycle monomodal routes
-          const modesWithOptions: IndividualTransportMode[] = ["walk", "cycle"];
-          if (modesWithOptions.indexOf(transportMode) !== -1) {
-            const transportModeOptionsNode = endPointNode.ele(
-              "IndividualTransportOptions"
-            );
-            transportModeOptionsNode.ele("Mode", transportMode);
-
-            if (transportMode === "walk") {
-              transportModeOptionsNode.ele("MaxDuration", "PT3000M");
-            }
-            if (transportMode === "cycle") {
-              transportModeOptionsNode.ele("MaxDuration", "PT600M");
-            }
-          }
-        }
-      } else {
-        const isOthersDriveCar =
-          transportMode === "taxi" || transportMode === "others-drive-car";
-        if (isOthersDriveCar) {
-          const hasExtension: boolean = (() => {
-            if (isFrom && this.modeType === "mode_at_end") {
-              return false;
-            }
-
-            if (!isFrom && this.modeType === "mode_at_start") {
-              return false;
-            }
-
-            return true;
-          })();
-
-          if (hasExtension) {
-            // TODO - in a method
-            const transportModeOptionsNode = endPointNode.ele(
-              "IndividualTransportOptions"
-            );
-            if (tripLocation.customTransportMode) {
-              transportModeOptionsNode.ele(
-                "Mode",
-                tripLocation.customTransportMode
-              );
-            }
-
-            transportModeOptionsNode.ele(
-              "MinDuration",
-              "PT" + tripLocation.minDuration + "M"
-            );
-            transportModeOptionsNode.ele(
-              "MaxDuration",
-              "PT" + tripLocation.maxDuration + "M"
-            );
-            transportModeOptionsNode.ele(
-              "MinDistance",
-              tripLocation.minDistance
-            );
-            transportModeOptionsNode.ele(
-              "MaxDistance",
-              tripLocation.maxDistance
-            );
-          }
-        }
+      if (isFrom) {
+        this.addAdditionalRestrictions(endPointNode, tripLocation);
       }
     });
 
@@ -385,5 +324,30 @@ export class TripsRequestParams extends BaseRequestParams {
     }
 
     paramsNode.ele("UseRealtimeData", 'explanatory');
+  }
+  
+  private addAdditionalRestrictions(nodeEl: xmlbuilder.XMLElement, tripLocation: TripLocationPoint) {
+    const hasAdditionalRestrictions = (tripLocation.minDuration !== null) || (tripLocation.maxDuration !== null) || (tripLocation.minDistance !== null) || (tripLocation.maxDistance !== null);
+    if (!hasAdditionalRestrictions) {
+      return;
+    }
+
+    const itNode = nodeEl.ele('IndividualTransportOption');
+    if (tripLocation.customTransportMode) {
+      itNode.ele('ItModeAndModeOfOperation').ele('PersonalMode', tripLocation.customTransportMode);
+    }
+
+    if (tripLocation.minDuration !== null) {
+      itNode.ele('MinDuration', 'PT' + tripLocation.minDuration + 'M');
+    }
+    if (tripLocation.maxDuration !== null) {
+      itNode.ele('MaxDuration', 'PT' + tripLocation.maxDuration + 'M');
+    }
+    if (tripLocation.minDistance !== null) {
+      itNode.ele('MinDistance', tripLocation.minDistance);
+    }
+    if (tripLocation.maxDistance !== null) {
+      itNode.ele('MaxDistance', tripLocation.maxDistance);
+    }
   }
 }
