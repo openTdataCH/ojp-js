@@ -327,9 +327,9 @@ export class TripsRequestParams extends BaseRequestParams {
       return;
     }
 
-    const itNode = nodeEl.ele('IndividualTransportOption');
+    const itNode = nodeEl.ele('IndividualTransportOptions');
     if (tripLocation.customTransportMode) {
-      itNode.ele('ItModeAndModeOfOperation').ele('PersonalMode', tripLocation.customTransportMode);
+      itNode.ele('Mode', tripLocation.customTransportMode);
     }
 
     if (tripLocation.minDuration !== null) {
