@@ -322,6 +322,7 @@ export class TripsRequestParams extends BaseRequestParams {
         paramsNode.ele("ItModesToCover", transportMode);
       }
 
+      // This is OJP v1
       const sharingModes: IndividualTransportMode[] = [
         "bicycle_rental",
         "car_sharing",
