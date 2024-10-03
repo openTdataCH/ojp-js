@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 0.12.x - xx.10.2024
+- Adds Via `DwellTime` support - [PR #110](https://github.com/openTdataCH/ojp-js/pull/110)
+
 ## 0.12.4 - 17.09.2024
 - Customize `NumberOfResults` - [PR #108](https://github.com/openTdataCH/ojp-js/pull/108) 
 
