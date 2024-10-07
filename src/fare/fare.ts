@@ -59,17 +59,20 @@ type TravelClass = "first" | "second";
 
 class FareProduct {
   fareProductId: string;
+  fareProductName: string;
   fareAuthorityRef: string;
   price: number;
   travelClass: TravelClass;
 
   constructor(
     fareProductId: string,
+    fareProductName: string,
     fareAuthorityRef: string,
     price: number,
     travelClass: TravelClass
   ) {
     this.fareProductId = fareProductId;
+    this.fareProductName = fareProductName;
     this.fareAuthorityRef = fareAuthorityRef;
     this.price = price;
     this.travelClass = travelClass;
@@ -80,6 +83,7 @@ class FareProduct {
   ): FareProduct | null {
     const fareProductId =
       fareProductNode.findTextFromChildNamed("FareProductId");
+    const fareProductName = fareProductNode.findTextFromChildNamed("FareProductName");
     const fareAuthorityRef =
       fareProductNode.findTextFromChildNamed("FareAuthorityRef");
     const priceS = fareProductNode.findTextFromChildNamed("Price");
@@ -87,6 +91,7 @@ class FareProduct {
 
     if (
       fareProductId === null ||
+      fareProductName === null ||
       fareAuthorityRef === null ||
       priceS === null ||
       travelClassS === null
@@ -99,6 +104,7 @@ class FareProduct {
 
     const fareProduct = new FareProduct(
       fareProductId,
+      fareProductName,
       fareAuthorityRef,
       price,
       travelClass

@@ -2,23 +2,23 @@ import { Location } from "../location/location"
 import { IndividualTransportMode } from "../types/individual-mode.types"
 
 export class TripLocationPoint {
-    public location: Location
-    public minDuration: number
-    public maxDuration: number
-    public minDistance: number
-    public maxDistance: number
+    public location: Location;
+    public minDuration: number | null;
+    public maxDuration: number | null;
+    public minDistance: number | null;
+    public maxDistance: number | null;
 
     public customTransportMode?: IndividualTransportMode | null
 
     public dwellTimeMinutes: number | null
 
     constructor(location: Location) {
-        this.location = location
-        this.minDuration = 2
-        this.maxDuration = 30
-        this.minDistance = 100
-        this.maxDistance = 20000
-        this.customTransportMode = null
+        this.location = location;
+        this.minDuration = null;
+        this.maxDuration = null;
+        this.minDistance = null;
+        this.maxDistance = null;
+        this.customTransportMode = null;
         this.dwellTimeMinutes = null;
     }
 

@@ -1,7 +1,11 @@
 # CHANGELOG
 
 ## 0.12.x - xx.10.2024
-- Adds Via `DwellTime` support - [PR #110](https://github.com/openTdataCH/ojp-js/pull/110)
+- TripRequest updates - [PR #111](https://github.com/openTdataCH/ojp-js/pull/111)
+  - implement custom additional restrictions `min/max` `Duration/Distance`, they can be turned on/off on individual basis 
+  - adds via `DwellTime` support - [PR #110](https://github.com/openTdataCH/ojp-js/pull/110)
+  - adds `foot` IndividualTransportMode, is used by OJP 2.0
+  - fares: expose `FareProductName`
 
 ## 0.12.4 - 17.09.2024
 - Customize `NumberOfResults` - [PR #108](https://github.com/openTdataCH/ojp-js/pull/108) 
