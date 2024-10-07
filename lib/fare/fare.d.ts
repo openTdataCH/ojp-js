@@ -18,10 +18,11 @@ export declare class NovaFareParser extends BaseParser {
 type TravelClass = "first" | "second";
 declare class FareProduct {
     fareProductId: string;
+    fareProductName: string;
     fareAuthorityRef: string;
     price: number;
     travelClass: TravelClass;
-    constructor(fareProductId: string, fareAuthorityRef: string, price: number, travelClass: TravelClass);
+    constructor(fareProductId: string, fareProductName: string, fareAuthorityRef: string, price: number, travelClass: TravelClass);
     static initFromFareProductNode(fareProductNode: TreeNode): FareProduct | null;
 }
 export interface TripFareResult {
