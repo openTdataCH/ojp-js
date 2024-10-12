@@ -182,7 +182,7 @@ export class TripsRequestParams extends BaseRequestParams {
         let stopPlaceRef = location.stopPlace?.stopPlaceRef ?? "";
 
         placeRefNode.ele("StopPlaceRef", stopPlaceRef);
-        placeRefNode.ele("LocationName").ele("Text", locationName);
+        placeRefNode.ele("Name").ele("Text", locationName);
       } else {
         if (location.geoPosition) {
           const geoPositionNode = placeRefNode.ele("GeoPosition");
@@ -190,7 +190,7 @@ export class TripsRequestParams extends BaseRequestParams {
           geoPositionNode.ele("siri:Latitude", location.geoPosition.latitude);
 
           const locationName = location.geoPosition.asLatLngString();
-          placeRefNode.ele("LocationName").ele("Text", locationName);
+          placeRefNode.ele("Name").ele("Text", locationName);
         }
       }
 
@@ -225,7 +225,7 @@ export class TripsRequestParams extends BaseRequestParams {
         }
       } else {
         viaPointNode.ele('StopPlaceRef', stopPlace.stopPlaceRef);
-        viaPointNode.ele('LocationName').ele('Text', stopPlace.stopPlaceName ?? (viaLocation.location.computeLocationName() ?? 'n/a'));
+        viaPointNode.ele('Name').ele('Text', stopPlace.stopPlaceName ?? (viaLocation.location.computeLocationName() ?? 'n/a'));
       }
 
       if (viaLocation.dwellTimeMinutes !== null) {
@@ -259,7 +259,12 @@ export class TripsRequestParams extends BaseRequestParams {
         "others-drive-car",
       ];
       if (standardModes.indexOf(transportMode) !== -1) {
-        paramsNode.ele("ItModesToCover", transportMode);
+        paramsNode.ele("ItModeToCover").ele('PersonalMode', transportMode);
+      }
+
+      const carTransportModes: IndividualTransportMode[] = ['car', 'car-ferry', 'car-shuttle-train', 'car_sharing', 'self-drive-car', 'others-drive-car'];
+      if (carTransportModes.includes(transportMode)) {
+        paramsNode.ele('ModeAndModeOfOperationFilter').ele('siri:WaterSubmode', 'localCarFerry');
       }
 
       // This is OJP v1
@@ -327,9 +332,9 @@ export class TripsRequestParams extends BaseRequestParams {
       return;
     }
 
-    const itNode = nodeEl.ele('IndividualTransportOptions');
+    const itNode = nodeEl.ele('IndividualTransportOption');
     if (tripLocation.customTransportMode) {
-      itNode.ele('Mode', tripLocation.customTransportMode);
+      itNode.ele('ItModeAndModeOfOperation').ele('PersonalMode', tripLocation.customTransportMode);
     }
 
     if (tripLocation.minDuration !== null) {
