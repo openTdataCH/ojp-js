@@ -8,7 +8,7 @@ import { StopPlace } from "../../../location/stopplace"
 
 type VehicleAccessType = 
   'PLATFORM_ACCESS_WITHOUT_ASSISTANCE' | 'PLATFORM_ACCESS_WITH_ASSISTANCE' | 'PLATFORM_ACCESS_WITH_ASSISTANCE_WHEN_NOTIFIED' 
-  | 'PLATFORM_NOT_WHEELCHAIR_ACCESSIBLE' | 'NO_DATA';
+  | 'PLATFORM_NOT_WHEELCHAIR_ACCESSIBLE' | 'ALTERNATIVE_TRANSPORT' | 'NO_DATA';
 
 export class StopPoint {
   public stopPointType: StopPointType
@@ -112,6 +112,10 @@ export class StopPoint {
 
     if (platformText === 'NO_DATA') {
       return 'NO_DATA';
+    }
+
+    if (platformText === 'ALTERNATIVE_TRANSPORT') {
+      return 'ALTERNATIVE_TRANSPORT';
     }
 
     return null;
