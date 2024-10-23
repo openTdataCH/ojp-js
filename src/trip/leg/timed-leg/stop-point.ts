@@ -4,6 +4,7 @@ import { StopPointType } from "../../../types/stop-point-type"
 import { PtSituationElement } from "../../../situation/situation-element"
 import { TreeNode } from "../../../xml/tree-node"
 import { StopPlace } from "../../../location/stopplace"
+import { DEBUG_LEVEL } from "../../../constants"
 
 
 type VehicleAccessType = 
@@ -116,6 +117,10 @@ export class StopPoint {
 
     if (platformText === 'ALTERNATIVE_TRANSPORT') {
       return 'ALTERNATIVE_TRANSPORT';
+    }
+
+    if (DEBUG_LEVEL === 'DEBUG') {
+      console.log('StopPoint.computePlatformAssistance - cant compute platform from text:--' + platformText + '--');
     }
 
     return null;
