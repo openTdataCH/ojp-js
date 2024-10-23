@@ -3,7 +3,7 @@ import { StopPointTime } from "./stop-point-time";
 import { StopPointType } from "../../../types/stop-point-type";
 import { PtSituationElement } from "../../../situation/situation-element";
 import { TreeNode } from "../../../xml/tree-node";
-type VehicleAccessType = 'PLATFORM_ACCESS_WITHOUT_ASSISTANCE' | 'PLATFORM_ACCESS_WITH_ASSISTANCE' | 'PLATFORM_ACCESS_WITH_ASSISTANCE_WHEN_NOTIFIED' | 'PLATFORM_NOT_WHEELCHAIR_ACCESSIBLE' | 'NO_DATA';
+type VehicleAccessType = 'PLATFORM_ACCESS_WITHOUT_ASSISTANCE' | 'PLATFORM_ACCESS_WITH_ASSISTANCE' | 'PLATFORM_ACCESS_WITH_ASSISTANCE_WHEN_NOTIFIED' | 'PLATFORM_NOT_WHEELCHAIR_ACCESSIBLE' | 'ALTERNATIVE_TRANSPORT' | 'NO_DATA';
 export declare class StopPoint {
     stopPointType: StopPointType;
     location: Location;
