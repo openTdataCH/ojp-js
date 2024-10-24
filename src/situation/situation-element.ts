@@ -204,7 +204,7 @@ export class PtSituationElement {
             return 'unknown';
         })();
 
-        if (!(situationNumber && countryRef && participantRef && situationSource && situationProgress && alertCause && scopeType)) {
+        if (!(situationNumber && situationSource)) {
             console.error('ERROR - cant init', 'PtSituationElement.initFromSituationNode');
             console.log(treeNode);
             return null;
