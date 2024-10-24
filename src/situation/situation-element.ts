@@ -7,7 +7,7 @@ interface TimeInterval {
     endDate: Date
 }
 
-type ScopeType = 'line' | 'stopPlace' | 'vehicleJourney'
+type ScopeType = 'line' | 'stopPlace' | 'vehicleJourney' | 'unknown'
 
 interface PassengerInformationAction {
     actionRef: string | null
@@ -186,7 +186,7 @@ export class PtSituationElement {
         }
         const situationPriority = parseInt(situationPriorityS);
 
-        const scopeType: ScopeType | null = (() => {
+        const scopeType: ScopeType = (() => {
             const scopeTypeS = treeNode.findTextFromChildNamed('siri:ScopeType');
             
             if (scopeTypeS === 'line' || scopeTypeS === 'route') {
@@ -201,7 +201,7 @@ export class PtSituationElement {
                 return 'vehicleJourney';
             };
 
-            return null;
+            return 'unknown';
         })();
 
         if (!(situationNumber && countryRef && participantRef && situationSource && situationProgress && alertCause && scopeType)) {
