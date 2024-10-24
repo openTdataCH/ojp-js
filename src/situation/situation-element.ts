@@ -140,7 +140,7 @@ export class PtSituationElement {
         const creationTime = new Date(creationTimeS);
         
         const countryRef = treeNode.findTextFromChildNamed('siri:CountryRef') ?? 'n/a CountryRef';
-        const participantRef = treeNode.findTextFromChildNamed('siri:ParticipantRef');
+        const participantRef = treeNode.findTextFromChildNamed('siri:ParticipantRef') ?? 'n/a ParticipantRef';
         
         const versionS = treeNode.findTextFromChildNamed('siri:Version');
         if (versionS === null) {
