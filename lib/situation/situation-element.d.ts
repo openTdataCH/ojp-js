@@ -4,7 +4,7 @@ interface TimeInterval {
     startDate: Date;
     endDate: Date;
 }
-type ScopeType = 'line' | 'stopPlace' | 'vehicleJourney';
+type ScopeType = 'line' | 'stopPlace' | 'vehicleJourney' | 'unknown';
 interface PassengerInformationAction {
     actionRef: string | null;
     ownerRef: string | null;
