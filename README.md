@@ -22,7 +22,7 @@ The  main branch of `ojp-js` repo is using OJP 1.0 APIs. The releases are publis
 - include the `ojp-sdk` package in the `./package.json` dependencies of your project 
 ```
   "dependencies": {
-    "ojp-sdk": "0.12.5"
+    "ojp-sdk": "0.12.6"
   }
 ```
 
