@@ -2,6 +2,7 @@
 
 ## 0.12.6 - xx.10.2024
 - adds ALTERNATIVE_TRANSPORT VehicleAccessType, [New BehiG Info Icon #169](https://github.com/openTdataCH/ojp-demo-app-src/issues/169) - [PR #114](https://github.com/openTdataCH/ojp-js/pull/114)
+- simplify SIRI-SX situations creation - [PR #115](https://github.com/openTdataCH/ojp-js/pull/115)
 
 ## 0.12.5 - 07.10.2024
 - TripRequest updates - [PR #111](https://github.com/openTdataCH/ojp-js/pull/111)
