@@ -7,7 +7,7 @@ interface TimeInterval {
     endDate: Date
 }
 
-type ScopeType = 'line' | 'stopPlace' | 'vehicleJourney'
+type ScopeType = 'line' | 'stopPlace' | 'vehicleJourney' | 'unknown'
 
 interface PassengerInformationAction {
     actionRef: string | null
@@ -140,7 +140,7 @@ export class PtSituationElement {
         const creationTime = new Date(creationTimeS);
         
         const countryRef = treeNode.findTextFromChildNamed('siri:CountryRef') ?? 'n/a CountryRef';
-        const participantRef = treeNode.findTextFromChildNamed('siri:ParticipantRef');
+        const participantRef = treeNode.findTextFromChildNamed('siri:ParticipantRef') ?? 'n/a ParticipantRef';
         
         const versionS = treeNode.findTextFromChildNamed('siri:Version');
         if (versionS === null) {
@@ -186,7 +186,7 @@ export class PtSituationElement {
         }
         const situationPriority = parseInt(situationPriorityS);
 
-        const scopeType: ScopeType | null = (() => {
+        const scopeType: ScopeType = (() => {
             const scopeTypeS = treeNode.findTextFromChildNamed('siri:ScopeType');
             
             if (scopeTypeS === 'line' || scopeTypeS === 'route') {
@@ -201,10 +201,10 @@ export class PtSituationElement {
                 return 'vehicleJourney';
             };
 
-            return null;
+            return 'unknown';
         })();
 
-        if (!(situationNumber && countryRef && participantRef && situationSource && situationProgress && alertCause && scopeType)) {
+        if (!(situationNumber && situationSource)) {
             console.error('ERROR - cant init', 'PtSituationElement.initFromSituationNode');
             console.log(treeNode);
             return null;
