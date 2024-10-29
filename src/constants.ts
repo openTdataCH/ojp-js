@@ -12,7 +12,7 @@ export const DEBUG_LEVEL: DEBUG_LEVEL_Type = (() => {
     return 'DEBUG';
 })();
 
-export const SDK_VERSION = '0.12.5';
+export const SDK_VERSION = '0.12.6';
 export const IS_NODE_CLI = typeof process !== 'undefined' && process.versions && process.versions.node;
 
 if (DEBUG_LEVEL === 'DEBUG') {
