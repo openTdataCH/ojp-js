@@ -143,17 +143,17 @@ export class JourneyService {
 
     const cancelledNode = serviceTreeNode.findChildNamed('Cancelled');
     if (cancelledNode) {
-      legService.hasCancellation = true;
+      legService.hasCancellation = cancelledNode.text === 'true';
     }
 
     const deviationNode = serviceTreeNode.findChildNamed('Deviation');
     if (deviationNode) {
-      legService.hasDeviation = true;
+      legService.hasDeviation = deviationNode.text === 'true';
     }
 
     const unplannedNode = serviceTreeNode.findChildNamed('Unplanned');
     if (unplannedNode) {
-      legService.isUnplanned = true;
+      legService.isUnplanned = unplannedNode.text === 'true';
     }
 
     return legService;
