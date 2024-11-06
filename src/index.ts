@@ -9,6 +9,7 @@ export * from './helpers/mapbox-layer-helpers'
 export * from './helpers/xml-helpers'
 
 export * from './journey/journey-service'
+export * from './journey/public-transport-mode'
 
 export * from './location/location'
 export * from './location/geoposition-bbox'
