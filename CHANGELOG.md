@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 0.12.7 - 30.10.2024
+- Fix Service real-time info parsing - [PR #117](https://github.com/openTdataCH/ojp-js/pull/117)
+
 ## 0.12.6 - 29.10.2024
 - adds ALTERNATIVE_TRANSPORT VehicleAccessType, [New BehiG Info Icon #169](https://github.com/openTdataCH/ojp-demo-app-src/issues/169) - [PR #114](https://github.com/openTdataCH/ojp-js/pull/114)
 - simplify SIRI-SX situations creation - [PR #115](https://github.com/openTdataCH/ojp-js/pull/115)
