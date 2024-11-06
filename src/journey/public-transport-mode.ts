@@ -64,61 +64,15 @@ export class PublicTransportMode {
       return true;
     }
 
-    const ignorePtPictograms: PublicTransportPictogram[] = [
-      'picto-bus',
-      'picto-bus-fallback',
-      'picto-tram'
+    const ignorePtModes: string[] = [
+      'bus',
+      'tram'
     ];
-
-    const ptPictogram = this.computePublicTransportPictogram();
-    if (ignorePtPictograms.indexOf(ptPictogram) === -1) {
-      return true;
+    if (ignorePtModes.indexOf(this.ptMode) !== -1) {
+      return false;
     }
 
-    return false;
-  }
-
-  public computePublicTransportPictogram(): PublicTransportPictogram {
-    if (this.ptMode === 'bus') {
-      return 'picto-bus';
-    }
-
-    if (this.isRail()) {
-      return 'picto-railway';
-    }
-
-    if (this.ptMode === 'tram') {
-      return 'picto-tram';
-    }
-
-    // ojp:PtMode === funicular
-    if (this.shortName === 'CC') {
-      return 'picto-rack-railway';
-    }
-    
-    // ojp:PtMode === telecabin
-    if (this.shortName === 'FUN') {
-      return 'picto-funicular';
-    }
-    if (this.shortName === 'PB') {
-      return 'picto-cablecar';
-    }
-    if (this.shortName === 'GB') {
-      return 'picto-gondola';
-    }
-    if (this.shortName === 'SL') {
-      return 'picto-chairlift';
-    }
-
-    if (this.ptMode === 'water') {
-      return 'picto-boat';
-    }
-
-    if (this.isDemandMode) {
-      return 'car-sharing';
-    }
-
-    return 'picto-bus-fallback';
+    return true;
   }
 
   public addToXMLNode(parentNode: XMLElement) {
