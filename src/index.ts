@@ -25,6 +25,7 @@ export * from './request/index'
 export * from './trip/index'
 
 export * from './types/lir-restrictions.type'
+export * from './types/mode-of-transport.type'
 export * from './types/individual-mode.types'
 export * from './types/journey-points'
 export * from './types/language-type'
