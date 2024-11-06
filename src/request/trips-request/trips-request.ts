@@ -9,6 +9,7 @@ import { Language } from '../../types/language-type';
 
 import { TripModeType } from '../../types/trip-mode-type';
 import { IndividualTransportMode } from '../../types/individual-mode.types';
+import { ModeOfTransportType } from '../../types/mode-of-transport.type';
 
 export type TripRequestBoardingType = 'Dep' | 'Arr'
 
@@ -73,6 +74,7 @@ export class TripRequest extends OJPBaseRequest {
     transportMode: IndividualTransportMode  = 'public_transport',
     viaTripLocations: TripLocationPoint[] = [],
     numberOfResults: number | null = null,
+    publicTransportModes: ModeOfTransportType[] = [],
   ) {
     const requestParams = TripsRequestParams.initWithTripLocationsAndDate(
       language, 
@@ -86,6 +88,7 @@ export class TripRequest extends OJPBaseRequest {
       transportMode,
       viaTripLocations,
       numberOfResults,
+      publicTransportModes,
     );
     if (requestParams === null) {
       return null;
