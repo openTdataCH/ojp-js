@@ -48,6 +48,7 @@ export class PublicTransportMode {
     const publicTransportMode = new PublicTransportMode(ptModeS, subMode, name, shortName);
 
     const busSubmode = serviceTreeNode.findTextFromChildNamed('Mode/siri:BusSubmode')
+    // TODO - do we still need this?
     // publicTransportMode.isDemandMode = busSubmode !== null;
     publicTransportMode.isDemandMode = (busSubmode === 'demandAndResponseBus' || busSubmode === 'unknown');
 
