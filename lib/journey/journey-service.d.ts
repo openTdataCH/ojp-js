@@ -13,6 +13,7 @@ export declare class JourneyService {
     journeyRef: string;
     lineRef: string | null;
     directionRef: string | null;
+    operatingDayRef: string | null;
     ptMode: PublicTransportMode;
     agencyCode: string;
     originStopPlace: StopPlace | null;

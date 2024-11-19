@@ -1,7 +1,7 @@
+import { TreeNode } from '../xml/tree-node';
 import { StopPoint } from '../trip/leg/timed-leg/stop-point';
 import { JourneyService } from '../journey/journey-service';
 import { Location } from '../location/location';
-import { TreeNode } from '../xml/tree-node';
 import { PtSituationElement } from '../situation/situation-element';
 export type StationBoardType = 'Departures' | 'Arrivals';
 export declare class StopEvent {
