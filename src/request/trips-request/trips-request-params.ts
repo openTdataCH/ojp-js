@@ -9,6 +9,7 @@ import { Location } from "../../location/location";
 import { TripRequestBoardingType } from './trips-request'
 import { NumberOfResultsType } from "../types/trip-request.type";
 import { Language } from "../../types/language-type";
+import { ModeOfTransportType } from "../../types/mode-of-transport.type";
 
 export class TripsRequestParams extends BaseRequestParams {
   public fromTripLocation: TripLocationPoint;
@@ -17,6 +18,7 @@ export class TripsRequestParams extends BaseRequestParams {
   public tripRequestBoardingType: TripRequestBoardingType
   public numberOfResultsType: NumberOfResultsType
   public numberOfResults: number | null
+  public publicTransportModes: ModeOfTransportType[]
   
   public modeType: TripModeType;
   public transportMode: IndividualTransportMode;
@@ -32,6 +34,7 @@ export class TripsRequestParams extends BaseRequestParams {
     tripRequestBoardingType: TripRequestBoardingType = 'Dep',
     numberOfResultsType: NumberOfResultsType = 'NumberOfResults',
     numberOfResults: number | null = null,
+    publicTransportModes: ModeOfTransportType[] = [],
   ) {
     super(language);
 
@@ -41,6 +44,7 @@ export class TripsRequestParams extends BaseRequestParams {
     this.tripRequestBoardingType = tripRequestBoardingType;
     this.numberOfResultsType = numberOfResultsType;
     this.numberOfResults = numberOfResults;
+    this.publicTransportModes = publicTransportModes;
 
     this.modeType = "monomodal";
     this.transportMode = "public_transport";
@@ -111,6 +115,7 @@ export class TripsRequestParams extends BaseRequestParams {
     transportMode: IndividualTransportMode  = 'public_transport',
     viaTripLocations: TripLocationPoint[] = [],
     numberOfResults: number | null = null,
+    publicTransportModes: ModeOfTransportType[] = [],
   ): TripsRequestParams | null {
     if (fromTripLocationPoint === null || toTripLocationPoint === null) {
       return null;
@@ -136,6 +141,7 @@ export class TripsRequestParams extends BaseRequestParams {
       tripRequestBoardingType,
       numberOfResultsType,
       numberOfResults,
+      publicTransportModes,
     );
 
     tripRequestParams.includeLegProjection = includeLegProjection;
@@ -234,6 +240,14 @@ export class TripsRequestParams extends BaseRequestParams {
     });
 
     const paramsNode = tripRequestNode.ele("Params");
+
+    if (this.publicTransportModes.length > 0) {
+      const modeContainerNode = paramsNode.ele('ModeAndModeOfOperationFilter');
+      modeContainerNode.ele('Exclude', 'false');
+      this.publicTransportModes.forEach(publicTransportMode => {
+        modeContainerNode.ele('PtMode', publicTransportMode);
+      });
+    }
 
     if (this.numberOfResults !== null) {
       const nodeName = this.numberOfResultsType;
