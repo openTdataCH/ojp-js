@@ -7,7 +7,6 @@ import { BaseRequestParams } from "../base-request-params";
 import { JourneyPointType } from '../../types/journey-points';
 import { Location } from "../../location/location";
 import { TripRequestBoardingType } from './trips-request'
-import { NumberOfResultsType } from "../types/trip-request.type";
 import { Language } from "../../types/language-type";
 import { ModeOfTransportType } from "../../types/mode-of-transport.type";
 
@@ -16,7 +15,6 @@ export class TripsRequestParams extends BaseRequestParams {
   public toTripLocation: TripLocationPoint;
   public departureDate: Date;
   public tripRequestBoardingType: TripRequestBoardingType
-  public numberOfResultsType: NumberOfResultsType
   public numberOfResults: number | null
   public publicTransportModes: ModeOfTransportType[]
   
@@ -26,14 +24,18 @@ export class TripsRequestParams extends BaseRequestParams {
 
   public viaLocations: TripLocationPoint[]
 
+  public numberOfResultsAfter: number | null
+  public numberOfResultsBefore: number | null
+
   constructor(
     language: Language,
     fromTripLocation: TripLocationPoint,
     toTripLocation: TripLocationPoint,
     departureDate: Date = new Date(),
     tripRequestBoardingType: TripRequestBoardingType = 'Dep',
-    numberOfResultsType: NumberOfResultsType = 'NumberOfResults',
     numberOfResults: number | null = null,
+    numberOfResultsBefore: number | null = null,
+    numberOfResultsAfter: number | null = null,
     publicTransportModes: ModeOfTransportType[] = [],
   ) {
     super(language);
@@ -42,8 +44,11 @@ export class TripsRequestParams extends BaseRequestParams {
     this.toTripLocation = toTripLocation;
     this.departureDate = departureDate;
     this.tripRequestBoardingType = tripRequestBoardingType;
-    this.numberOfResultsType = numberOfResultsType;
+    
     this.numberOfResults = numberOfResults;
+    this.numberOfResultsBefore = numberOfResultsBefore;
+    this.numberOfResultsAfter = numberOfResultsAfter;
+    
     this.publicTransportModes = publicTransportModes;
 
     this.modeType = "monomodal";
@@ -62,7 +67,6 @@ export class TripsRequestParams extends BaseRequestParams {
       emptyTripLocationPoint,
       new Date(),
       'Dep',
-      'NumberOfResults',
     );
     return requestParams;
   }
@@ -73,12 +77,14 @@ export class TripsRequestParams extends BaseRequestParams {
     toLocation: Location | null,
     departureDate: Date = new Date(),
     tripRequestBoardingType: TripRequestBoardingType = 'Dep',
-    numberOfResultsType: NumberOfResultsType = 'NumberOfResults',
     includeLegProjection: boolean = false,
     modeType: TripModeType = 'monomodal',
     transportMode: IndividualTransportMode  = 'public_transport',
     viaTripLocations: TripLocationPoint[] = [],
     numberOfResults: number | null = null,
+    numberOfResultsBefore: number | null = null,
+    numberOfResultsAfter: number | null = null,
+    publicTransportModes: ModeOfTransportType[] = [],
   ): TripsRequestParams | null {
     if (fromLocation === null || toLocation === null) {
       return null;
@@ -93,12 +99,14 @@ export class TripsRequestParams extends BaseRequestParams {
       toTripLocationPoint, 
       departureDate, 
       tripRequestBoardingType,
-      numberOfResultsType,
       includeLegProjection,
       modeType,
       transportMode,
       viaTripLocations,
       numberOfResults,
+      numberOfResultsBefore,
+      numberOfResultsAfter,
+      publicTransportModes,
     );
     return requestParams;
   }
@@ -109,12 +117,13 @@ export class TripsRequestParams extends BaseRequestParams {
     toTripLocationPoint: TripLocationPoint | null,
     departureDate: Date = new Date(),
     tripRequestBoardingType: TripRequestBoardingType = 'Dep',
-    numberOfResultsType: NumberOfResultsType = 'NumberOfResults',
     includeLegProjection: boolean = false,
     modeType: TripModeType = 'monomodal',
     transportMode: IndividualTransportMode  = 'public_transport',
     viaTripLocations: TripLocationPoint[] = [],
     numberOfResults: number | null = null,
+    numberOfResultsBefore: number | null = null,
+    numberOfResultsAfter: number | null = null,
     publicTransportModes: ModeOfTransportType[] = [],
   ): TripsRequestParams | null {
     if (fromTripLocationPoint === null || toTripLocationPoint === null) {
@@ -139,8 +148,9 @@ export class TripsRequestParams extends BaseRequestParams {
       toTripLocationPoint,
       departureDate,
       tripRequestBoardingType,
-      numberOfResultsType,
       numberOfResults,
+      numberOfResultsBefore,
+      numberOfResultsAfter,
       publicTransportModes,
     );
 
@@ -250,8 +260,13 @@ export class TripsRequestParams extends BaseRequestParams {
     }
 
     if (this.numberOfResults !== null) {
-      const nodeName = this.numberOfResultsType;
-      paramsNode.ele(nodeName, this.numberOfResults);
+      paramsNode.ele('NumberOfResults', this.numberOfResults);
+    }
+    if (this.numberOfResultsBefore !== null) {
+      paramsNode.ele('NumberOfResultsBefore', this.numberOfResultsBefore);
+    }
+    if (this.numberOfResultsAfter !== null) {
+      paramsNode.ele('NumberOfResultsAfter', this.numberOfResultsAfter);
     }
 
     paramsNode.ele("IncludeTrackSections", true);

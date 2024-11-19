@@ -1,7 +1,7 @@
 import { OJPBaseRequest } from '../base-request';
 import { TripsRequestParams } from './trips-request-params';
 import { DEFAULT_STAGE, StageConfig } from '../../types/stage-config';
-import { TripRequest_Response, TripRequest_Callback, NumberOfResultsType } from '../types/trip-request.type';
+import { TripRequest_Response, TripRequest_Callback } from '../types/trip-request.type';
 import { TripRequestParser } from './trip-request-parser';
 import { TripLocationPoint } from '../../trip';
 import { Location } from '../../location/location';
@@ -68,12 +68,13 @@ export class TripRequest extends OJPBaseRequest {
     toTripLocation: TripLocationPoint | null, 
     departureDate: Date, 
     tripRequestBoardingType: TripRequestBoardingType = 'Dep', 
-    numberOfResultsType: NumberOfResultsType = 'NumberOfResults', 
     includeLegProjection: boolean = false,
     modeType: TripModeType = 'monomodal',
     transportMode: IndividualTransportMode  = 'public_transport',
     viaTripLocations: TripLocationPoint[] = [],
     numberOfResults: number | null = null,
+    numberOfResultsBefore: number | null = null,
+    numberOfResultsAfter: number | null = null,
     publicTransportModes: ModeOfTransportType[] = [],
   ) {
     const requestParams = TripsRequestParams.initWithTripLocationsAndDate(
@@ -82,12 +83,13 @@ export class TripRequest extends OJPBaseRequest {
       toTripLocation, 
       departureDate, 
       tripRequestBoardingType,
-      numberOfResultsType,
       includeLegProjection,
       modeType,
       transportMode,
       viaTripLocations,
       numberOfResults,
+      numberOfResultsBefore,
+      numberOfResultsAfter,
       publicTransportModes,
     );
     if (requestParams === null) {
