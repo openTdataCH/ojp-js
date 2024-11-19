@@ -1,7 +1,11 @@
+import { TreeNode } from '../xml/tree-node';
+
+import { DEBUG_LEVEL } from '../constants';
+
+import { DataHelpers } from '../helpers/data-helpers';
 import { StopPoint } from '../trip/leg/timed-leg/stop-point'
 import { JourneyService } from '../journey/journey-service'
 import { Location } from '../location/location';
-import { TreeNode } from '../xml/tree-node';
 import { PtSituationElement } from '../situation/situation-element';
 
 export type StationBoardType = 'Departures' | 'Arrivals'
@@ -75,10 +79,35 @@ export class StopEvent {
         });
 
         stopPointsToPatch.forEach(stopPoint => {
-            const stopPointRef = stopPoint.location.stopPlace?.stopPlaceRef;
-            if (stopPointRef && (stopPointRef in mapContextLocations)) {
-                stopPoint.location = mapContextLocations[stopPointRef];
+            let stopRef = stopPoint.location.stopPlace?.stopPlaceRef ?? null;
+            if (stopRef === null) {
+                if (DEBUG_LEVEL === 'DEBUG') {
+                    console.error('StopEvent.patchStopEventLocations - no stopPlaceRef found in location');
+                    console.log(stopPoint);
+                }
+
+                return;
             }
+
+            if (!(stopRef in mapContextLocations)) {
+                // For StopPoint try to get the StopPlace
+                // see https://github.com/openTdataCH/ojp-sdk/issues/97
+                stopRef = DataHelpers.convertStopPointToStopPlace(stopRef);
+            }
+
+            if (!(stopRef in mapContextLocations)) {
+                if (DEBUG_LEVEL === 'DEBUG') {
+                    console.error('StopEvent.patchLocation - no stopPlaceRef found in mapContextLocations');
+                    console.log(stopPoint);
+                    console.log('location.stopPlace?.stopPlaceRef :' + stopRef);
+                    console.log(mapContextLocations);
+                }
+                
+                return;
+            }
+
+            const contextLocation = mapContextLocations[stopRef];
+            stopPoint.location.patchWithAnotherLocation(contextLocation);
         });
     }
 

@@ -17,6 +17,7 @@ export class JourneyService {
   public journeyRef: string;
   public lineRef: string | null;
   public directionRef: string | null;
+  public operatingDayRef: string | null;
 
   public ptMode: PublicTransportMode;
   public agencyID: string;
@@ -37,6 +38,7 @@ export class JourneyService {
   constructor(journeyRef: string, ptMode: PublicTransportMode, agencyID: string) {
     this.journeyRef = journeyRef;
     this.lineRef = null;
+    this.operatingDayRef = null;
     this.directionRef = null;
 
     this.ptMode = ptMode;
@@ -77,6 +79,7 @@ export class JourneyService {
 
     legService.lineRef = serviceTreeNode.findTextFromChildNamed('siri:LineRef');
     legService.directionRef = serviceTreeNode.findTextFromChildNamed('siri:DirectionRef');
+    legService.operatingDayRef = serviceTreeNode.findTextFromChildNamed('OperatingDayRef');
 
     legService.originStopPlace = StopPlace.initWithServiceTreeNode(serviceTreeNode, 'Origin');
     legService.destinationStopPlace = StopPlace.initWithServiceTreeNode(serviceTreeNode, 'Destination');

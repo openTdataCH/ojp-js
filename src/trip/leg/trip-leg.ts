@@ -13,6 +13,7 @@ import { GeoPositionBBOX } from '../../location/geoposition-bbox'
 import { StopPointType } from '../../types/stop-point-type'
 import { Duration } from '../../shared/duration'
 import { PtSituationElement } from '../../situation/situation-element'
+import { DEBUG_LEVEL } from '../../constants'
 
 export type LegType = 'ContinousLeg' | 'TimedLeg' | 'TransferLeg'
 
@@ -68,8 +69,11 @@ export class TripLeg {
 
     let stopRef = location.stopPlace?.stopPlaceRef ?? null;
     if (stopRef === null) {
-      console.error('TripLeg.patchLocation - no stopPlaceRef found in location');
-      console.log(location);
+      if (DEBUG_LEVEL === 'DEBUG') {
+        console.error('TripLeg.patchLocation - no stopPlaceRef found in location');
+        console.log(location);
+      }
+
       return;
     }
 
@@ -80,10 +84,13 @@ export class TripLeg {
     }
     
     if (!(stopRef in mapContextLocations)) {
-      console.error('TripLeg.patchLocation - no stopPlaceRef found in mapContextLocations');
-      console.log(location);
-      console.log('location.stopPlace?.stopPlaceRef :' + stopRef);
-      console.log(mapContextLocations);
+      if (DEBUG_LEVEL === 'DEBUG') {
+        console.error('TripLeg.patchLocation - no stopPlaceRef found in mapContextLocations');
+        console.log(location);
+        console.log('location.stopPlace?.stopPlaceRef :' + stopRef);
+        console.log(mapContextLocations);
+      }
+      
       return;
     }
 
