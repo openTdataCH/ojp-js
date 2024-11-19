@@ -3,6 +3,8 @@
 ## 0.13.1 - 19.11.2024
 - adds TripRrequest filter for public transport modes - [Adds mean of transport (bus, boat, etc.) option in the TR #170](https://github.com/openTdataCH/ojp-demo-app-src/issues/170) - [PR #119](https://github.com/openTdataCH/ojp-js/pull/119)
   - BREAKING CHANGE - extract client specific code from SDK
+- refactor `NumberOfResults` - [PR #121](https://github.com/openTdataCH/ojp-js/pull/121)
+  - BREAKING CHANGE - allow also to give NumberOfResultsBefore and NumberOfResultsAfter, all optional, this way no need to send the NumberOfResultsType
 
 ## 0.12.7 - 30.10.2024
 - Fix Service real-time info parsing - [PR #117](https://github.com/openTdataCH/ojp-js/pull/117)

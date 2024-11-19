@@ -5,6 +5,5 @@ export * from './trips-request/trip-request-response'
 export * from './trips-request/trips-request'
 
 export * from './types/request-info.type'
-export { NumberOfResultsType } from './types/trip-request.type'
 
 export * from './xml-parser'

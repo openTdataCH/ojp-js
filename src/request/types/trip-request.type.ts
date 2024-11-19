@@ -1,7 +1,5 @@
 import { Trip } from "../../trip";
 
-export type NumberOfResultsType = 'NumberOfResults' | 'NumberOfResultsBefore' | 'NumberOfResultsAfter'
-
 export type TripRequest_ParserMessage = 'TripRequest.TripsNo' | 'TripRequest.Trip' | 'TripRequest.DONE' | 'ERROR';
 export type TripRequest_Response = {
     tripsNo: number
