@@ -1,3 +1,5 @@
+import { DEBUG_LEVEL } from "../../constants";
+import { DataHelpers } from "../../helpers/data-helpers";
 import { JourneyService } from "../../journey/journey-service";
 import { Location } from "../../location/location";
 import { TreeNode } from "../../xml/tree-node";
@@ -68,17 +70,29 @@ export class TripInfoResult {
 
     public patchLocations(mapContextLocations: Record<string, Location>) {
         this.stopPoints.forEach(stopPoint => {
-            const stopPlaceRef = stopPoint.location.stopPlace?.stopPlaceRef ?? null;
+            let stopPlaceRef = stopPoint.location.stopPlace?.stopPlaceRef ?? null;
             if (stopPlaceRef === null) {
-                console.error('TripInfoResult.patchLocations - no stopPlaceRef found in location');
-                console.log(stopPoint);
+                if (DEBUG_LEVEL === 'DEBUG') {
+                    console.error('TripInfoResult.patchLocations - no stopPlaceRef found in location');
+                    console.log(stopPoint);
+                }
                 return;
             }
 
             if (!(stopPlaceRef in mapContextLocations)) {
-                console.error('TripInfoResult.patchLocations - no stopPlaceRef found in mapContextLocations');
-                console.log(stopPoint);
-                console.log(mapContextLocations);
+                // For StopPoint try to get the StopPlace
+                // see https://github.com/openTdataCH/ojp-sdk/issues/97
+                stopPlaceRef = DataHelpers.convertStopPointToStopPlace(stopPlaceRef);
+            }
+
+            if (!(stopPlaceRef in mapContextLocations)) {
+                if (DEBUG_LEVEL === 'DEBUG') {
+                    console.error('TripInfoResult.patchLocations - no stopPlaceRef found in mapContextLocations');
+                    console.log('stopPoint:');
+                    console.log(stopPoint);
+                    console.log('mapContextLocations:');
+                    console.log(mapContextLocations);
+                }
                 return;
             }
 
