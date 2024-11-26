@@ -266,12 +266,13 @@ export class TripsRequestParams extends BaseRequestParams {
     });
 
     const paramsNode = tripRequestNode.ele("Params");
-
+    
     if (this.publicTransportModes.length > 0) {
-      const modeContainerNode = paramsNode.ele('ModeAndModeOfOperationFilter');
+      // https://opentransportdata.swiss/en/cookbook/ojptriprequest/#Params
+      const modeContainerNode = paramsNode.ele('PtModeFilter');
       modeContainerNode.ele('Exclude', 'false');
       this.publicTransportModes.forEach(publicTransportMode => {
-        modeContainerNode.ele('PtMode', publicTransportMode);
+        modeContainerNode.ele('Mode').ele('PtMode', publicTransportMode);
       });
     }
 
