@@ -221,8 +221,24 @@ export class TripsRequestParams extends BaseRequestParams {
         }
       }
 
-      if (isFrom) {
-        this.addAdditionalRestrictions(endPointNode, tripLocation);
+      if (!isMonomodal) {
+        // https://opentransportdata.swiss/en/cookbook/ojptriprequest/#Parameters_for_Configuration_of_the_TripRequest
+        // non-monomodal cycle transport modes is rendered in Origin/Destination
+        const isCycle = transportMode === 'cycle';
+        if (isCycle) {
+          (() => {
+            if (modeType === 'mode_at_start' && !isFrom) {
+              return;
+            }
+
+            if (modeType === 'mode_at_end' && isFrom) {
+              return;
+            }
+
+            const itNode = endPointNode.ele('IndividualTransportOptions');
+            this.addAdditionalRestrictions(itNode, tripLocation);
+          })();
+        }
       }
     });
 
@@ -250,14 +266,17 @@ export class TripsRequestParams extends BaseRequestParams {
     });
 
     const paramsNode = tripRequestNode.ele("Params");
-
+    
     if (this.publicTransportModes.length > 0) {
-      const modeContainerNode = paramsNode.ele('ModeAndModeOfOperationFilter');
+      // https://opentransportdata.swiss/en/cookbook/ojptriprequest/#Params
+      const modeContainerNode = paramsNode.ele('PtModeFilter');
       modeContainerNode.ele('Exclude', 'false');
       this.publicTransportModes.forEach(publicTransportMode => {
-        modeContainerNode.ele('PtMode', publicTransportMode);
+        modeContainerNode.ele('Mode').ele('PtMode', publicTransportMode);
       });
     }
+
+    paramsNode.ele('PrivateModeFilter').ele('Exclude', 'false');
 
     if (this.numberOfResults !== null) {
       paramsNode.ele('NumberOfResults', this.numberOfResults);
@@ -278,6 +297,13 @@ export class TripsRequestParams extends BaseRequestParams {
       paramsNode.ele("IncludeIntermediateStops", true);
     }
 
+    const sharingModes: IndividualTransportMode[] = [
+      "bicycle_rental",
+      "car_sharing",
+      "escooter_rental",
+    ];
+    const isSharingMode = sharingModes.indexOf(transportMode) !== -1;
+
     if (isMonomodal) {
       const standardModes: IndividualTransportMode[] = [
         "foot",
@@ -296,22 +322,21 @@ export class TripsRequestParams extends BaseRequestParams {
         paramsNode.ele('ModeAndModeOfOperationFilter').ele('siri:WaterSubmode', 'localCarFerry');
       }
 
-      // This is OJP v1
-      const sharingModes: IndividualTransportMode[] = [
-        "bicycle_rental",
-        "car_sharing",
-        "escooter_rental",
-      ];
-      const isExtension = sharingModes.indexOf(transportMode) !== -1;
-      if (isExtension) {
+      // https://opentransportdata.swiss/en/cookbook/ojptriprequest/#Parameters_for_Configuration_of_the_TripRequest
+      // - monomodal 
+      // - sharing transport modes 
+      // => Params/Extension/ItModesToCover=transportMode
+      if (isSharingMode) {
         const paramsExtensionNode = paramsNode.ele("Extension");
         paramsExtensionNode.ele("ItModesToCover", transportMode);
       }
     } else {
-      const isOthersDriveCar =
-        transportMode === "taxi" || transportMode === "others-drive-car";
-      const hasExtension = !isOthersDriveCar;
-      if (hasExtension) {
+      // https://opentransportdata.swiss/en/cookbook/ojptriprequest/#Parameters_for_Configuration_of_the_TripRequest
+      // - non-monomodal 
+      // - sharing transport modes 
+      // => Params/Extension/Origin/Mode=transportMode
+
+      if (isSharingMode) {
         const paramsExtensionNode = paramsNode.ele("Extension");
 
         tripEndpoints.forEach((tripEndpoint) => {
@@ -323,31 +348,11 @@ export class TripsRequestParams extends BaseRequestParams {
             return;
           }
 
-          const tripLocation = isFrom
-            ? this.fromTripLocation
-            : this.toTripLocation;
+          const tripLocation = isFrom ? this.fromTripLocation : this.toTripLocation;
+          const tagName = isFrom ? 'Origin' : 'Destination';
+          const endPointNode = paramsExtensionNode.ele(tagName);
 
-          if ((tripLocation.minDistance === null) || (tripLocation.maxDistance === null)) {
-            return;
-          }
-
-          let tagName = isFrom ? "Origin" : "Destination";
-          const endpointNode = paramsExtensionNode.ele(tagName);
-
-          endpointNode.ele(
-            "MinDuration",
-            "PT" + tripLocation.minDuration + "M"
-          );
-          endpointNode.ele(
-            "MaxDuration",
-            "PT" + tripLocation.maxDuration + "M"
-          );
-          endpointNode.ele("MinDistance", tripLocation.minDistance);
-          endpointNode.ele("MaxDistance", tripLocation.maxDistance);
-
-          if (tripLocation.customTransportMode) {
-            endpointNode.ele("Mode", tripLocation.customTransportMode);
-          }
+          this.addAdditionalRestrictions(endPointNode, tripLocation);
         });
       }
     }
@@ -361,22 +366,20 @@ export class TripsRequestParams extends BaseRequestParams {
       return;
     }
 
-    const itNode = nodeEl.ele('IndividualTransportOption');
     if (tripLocation.customTransportMode) {
-      itNode.ele('ItModeAndModeOfOperation').ele('PersonalMode', tripLocation.customTransportMode);
+      nodeEl.ele('ItModeAndModeOfOperation').ele('PersonalMode', tripLocation.customTransportMode);
     }
-
     if (tripLocation.minDuration !== null) {
-      itNode.ele('MinDuration', 'PT' + tripLocation.minDuration + 'M');
+      nodeEl.ele('MinDuration', 'PT' + tripLocation.minDuration + 'M');
     }
     if (tripLocation.maxDuration !== null) {
-      itNode.ele('MaxDuration', 'PT' + tripLocation.maxDuration + 'M');
+      nodeEl.ele('MaxDuration', 'PT' + tripLocation.maxDuration + 'M');
     }
     if (tripLocation.minDistance !== null) {
-      itNode.ele('MinDistance', tripLocation.minDistance);
+      nodeEl.ele('MinDistance', tripLocation.minDistance);
     }
     if (tripLocation.maxDistance !== null) {
-      itNode.ele('MaxDistance', tripLocation.maxDistance);
+      nodeEl.ele('MaxDistance', tripLocation.maxDistance);
     }
   }
 }
