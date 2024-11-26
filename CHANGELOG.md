@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 0.13.2 - 26.11.2024
+- fix multi-modal TR  - [Sharing doesn't work anymore #179](https://github.com/openTdataCH/ojp-demo-app-src/issues/179) - [PR #123](https://github.com/openTdataCH/ojp-js/pull/123)
+
 ## 0.13.1 - 19.11.2024
 - adds TripRrequest filter for public transport modes - [Adds mean of transport (bus, boat, etc.) option in the TR #170](https://github.com/openTdataCH/ojp-demo-app-src/issues/170) - [PR #119](https://github.com/openTdataCH/ojp-js/pull/119)
   - BREAKING CHANGE - extract client specific code from SDK
