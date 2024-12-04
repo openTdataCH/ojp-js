@@ -198,7 +198,7 @@ export class TripsRequestParams extends BaseRequestParams {
         let stopPlaceRef = location.stopPlace?.stopPlaceRef ?? "";
 
         placeRefNode.ele("StopPlaceRef", stopPlaceRef);
-        placeRefNode.ele("LocationName").ele("Text", locationName);
+        placeRefNode.ele("Name").ele("Text", locationName);
       } else {
         if (location.geoPosition) {
           const geoPositionNode = placeRefNode.ele("GeoPosition");
@@ -206,7 +206,7 @@ export class TripsRequestParams extends BaseRequestParams {
           geoPositionNode.ele("siri:Latitude", location.geoPosition.latitude);
 
           const locationName = location.geoPosition.asLatLngString();
-          placeRefNode.ele("LocationName").ele("Text", locationName);
+          placeRefNode.ele("Name").ele("Text", locationName);
         }
       }
 
@@ -257,7 +257,7 @@ export class TripsRequestParams extends BaseRequestParams {
         }
       } else {
         viaPointNode.ele('StopPlaceRef', stopPlace.stopPlaceRef);
-        viaPointNode.ele('LocationName').ele('Text', stopPlace.stopPlaceName ?? (viaLocation.location.computeLocationName() ?? 'n/a'));
+        viaPointNode.ele('Name').ele('Text', stopPlace.stopPlaceName ?? (viaLocation.location.computeLocationName() ?? 'n/a'));
       }
 
       if (viaLocation.dwellTimeMinutes !== null) {
@@ -268,11 +268,10 @@ export class TripsRequestParams extends BaseRequestParams {
     const paramsNode = tripRequestNode.ele("Params");
     
     if (this.publicTransportModes.length > 0) {
-      // https://opentransportdata.swiss/en/cookbook/ojptriprequest/#Params
-      const modeContainerNode = paramsNode.ele('PtModeFilter');
+      const modeContainerNode = paramsNode.ele('ModeAndModeOfOperationFilter');
       modeContainerNode.ele('Exclude', 'false');
       this.publicTransportModes.forEach(publicTransportMode => {
-        modeContainerNode.ele('Mode').ele('PtMode', publicTransportMode);
+        modeContainerNode.ele('PtMode', publicTransportMode);
       });
     }
 
@@ -314,7 +313,12 @@ export class TripsRequestParams extends BaseRequestParams {
         "others-drive-car",
       ];
       if (standardModes.indexOf(transportMode) !== -1) {
-        paramsNode.ele("ItModesToCover", transportMode);
+        paramsNode.ele("ItModeToCover").ele('PersonalMode', transportMode);
+      }
+
+      const carTransportModes: IndividualTransportMode[] = ['car', 'car-ferry', 'car-shuttle-train', 'car_sharing', 'self-drive-car', 'others-drive-car'];
+      if (carTransportModes.includes(transportMode)) {
+        paramsNode.ele('ModeAndModeOfOperationFilter').ele('siri:WaterSubmode', 'localCarFerry');
       }
 
       // https://opentransportdata.swiss/en/cookbook/ojptriprequest/#Parameters_for_Configuration_of_the_TripRequest
@@ -362,7 +366,7 @@ export class TripsRequestParams extends BaseRequestParams {
     }
 
     if (tripLocation.customTransportMode) {
-      nodeEl.ele('Mode', tripLocation.customTransportMode);
+      nodeEl.ele('ItModeAndModeOfOperation').ele('PersonalMode', tripLocation.customTransportMode);
     }
     if (tripLocation.minDuration !== null) {
       nodeEl.ele('MinDuration', 'PT' + tripLocation.minDuration + 'M');
