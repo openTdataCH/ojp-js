@@ -3,6 +3,7 @@
 ## 0.14.1 - 05.12.2024
 - remove `@types/mapbox-gl` - [PR #125](https://github.com/openTdataCH/ojp-js/pull/125)
 - flexible `TimedLeg` Service init - [PR #126](https://github.com/openTdataCH/ojp-js/pull/126)
+- expose OJP backend version (1.0 or 2.0) - [PR #127](https://github.com/openTdataCH/ojp-js/pull/127)
 
 ## 0.13.2 - 26.11.2024
 - fix multi-modal TR  - [Sharing doesn't work anymore #179](https://github.com/openTdataCH/ojp-demo-app-src/issues/179) - [PR #123](https://github.com/openTdataCH/ojp-js/pull/123)
