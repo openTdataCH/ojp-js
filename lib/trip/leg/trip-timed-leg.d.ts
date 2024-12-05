@@ -1,9 +1,6 @@
-import * as GeoJSON from 'geojson';
 import { JourneyService } from '../../journey/journey-service';
 import { StopPoint } from './timed-leg/stop-point';
-import { TripLeg, LinePointData } from "./trip-leg";
-import { TripLegLineType } from "../../types/map-geometry-types";
-import { GeoPosition } from '../../location/geoposition';
+import { TripLeg } from "./trip-leg";
 import { Location } from '../../location/location';
 import { PtSituationElement } from '../../situation/situation-element';
 import { TreeNode } from '../../xml/tree-node';
@@ -19,12 +16,6 @@ export declare class TripTimedLeg extends TripLeg {
     computeDepartureTime(): Date | null;
     computeArrivalTime(): Date | null;
     private computeStopPointTime;
-    protected computeSpecificJSONFeatures(): GeoJSON.Feature[];
-    protected computeLegLineType(): TripLegLineType;
-    protected computeLinePointsData(): LinePointData[];
-    computeLegColor(): string;
-    protected computeBeelineGeoPositions(): GeoPosition[];
-    protected useBeeline(): boolean;
     patchSituations(mapContextSituations: Record<string, PtSituationElement>): void;
     addToXMLNode(parentNode: XMLElement): void;
 }

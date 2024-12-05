@@ -1,8 +1,6 @@
-import * as GeoJSON from 'geojson';
 import { Location } from '../../location/location';
 import { PathGuidance } from '../path-guidance';
-import { TripLeg, LegType, LinePointData } from "./trip-leg";
-import { TripLegLineType } from '../../types/map-geometry-types';
+import { TripLeg, LegType } from "./trip-leg";
 import { Duration } from '../../shared/duration';
 import { IndividualTransportMode, TransferMode } from '../../types/individual-mode.types';
 import { ServiceBooking } from './continous-leg/service-booking';
@@ -24,11 +22,6 @@ export declare class TripContinousLeg extends TripLeg {
     isSharedMobility(): boolean;
     isWalking(): boolean;
     isTaxi(): boolean;
-    protected computeSpecificJSONFeatures(): GeoJSON.Feature[];
-    protected computeLegLineType(): TripLegLineType;
-    protected computeLinePointsData(): LinePointData[];
-    computeLegColor(): string;
     formatDistance(): string;
-    protected useBeeline(): boolean;
     addToXMLNode(parentNode: XMLElement): void;
 }

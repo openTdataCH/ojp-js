@@ -2,8 +2,6 @@ import * as GeoJSON from 'geojson';
 import { XMLElement } from 'xmlbuilder';
 import { Location } from '../../location/location';
 import { LegTrack } from './leg-track';
-import { TripLegLineType } from '../../types/map-geometry-types';
-import { GeoPosition } from '../../location/geoposition';
 import { StopPointType } from '../../types/stop-point-type';
 import { Duration } from '../../shared/duration';
 import { PtSituationElement } from '../../situation/situation-element';
@@ -23,15 +21,5 @@ export declare class TripLeg {
     patchLocations(mapContextLocations: Record<string, Location>): void;
     patchSituations(mapContextSituations: Record<string, PtSituationElement>): void;
     protected patchLocation(location: Location, mapContextLocations: Record<string, Location>): void;
-    computeGeoJSONFeatures(): GeoJSON.Feature[];
-    protected useBeeline(): boolean;
-    private computeLegType;
-    protected computeSpecificJSONFeatures(): GeoJSON.Feature[];
-    computeLegColor(): string;
-    protected computeLinePointsData(): LinePointData[];
-    private computeLinePointFeatures;
-    protected computeLegLineType(): TripLegLineType;
-    private computeBeelineFeature;
-    protected computeBeelineGeoPositions(): GeoPosition[];
     addToXMLNode(parentNode: XMLElement): void;
 }
