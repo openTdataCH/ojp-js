@@ -1,17 +1,11 @@
-import * as GeoJSON from 'geojson'
-
 import { JourneyService } from '../../journey/journey-service'
 import { StopPoint } from './timed-leg/stop-point'
 import { LegTrack } from './leg-track'
 
 import { TripLeg, LegType, LinePointData } from "./trip-leg"
 
-import { TripLegPropertiesEnum, TripLegDrawType, TripLegLineType } from "../../types/map-geometry-types";
+import { StopPointTime } from './timed-leg/stop-point-time';
 
-import { StopPointTime } from './timed-leg/stop-point-time'
-import { MapLegLineTypeColor } from '../../config/map-colors';
-
-import { GeoPosition } from '../../location/geoposition';
 import { Location } from '../../location/location';
 import { PtSituationElement } from '../../situation/situation-element'
 import { TreeNode } from '../../xml/tree-node'
@@ -101,84 +95,6 @@ export class TripTimedLeg extends TripLeg {
 
     const stopPointDate = timeData.estimatedTime ?? timeData.timetableTime;
     return stopPointDate
-  }
-
-  protected override computeSpecificJSONFeatures(): GeoJSON.Feature[] {
-    let features: GeoJSON.Feature[] = [];
-
-    const lineType: TripLegLineType = this.service.computeLegLineType()
-
-    const useDetailedTrack = !this.useBeeline()
-    if (useDetailedTrack) {
-      this.legTrack?.trackSections.forEach(trackSection => {
-        const feature = trackSection.linkProjection?.asGeoJSONFeature()
-        if (feature?.properties) {
-          const drawType: TripLegDrawType = 'LegLine'
-          feature.properties[TripLegPropertiesEnum.DrawType] = drawType
-
-          feature.properties[TripLegPropertiesEnum.LineType] = lineType
-
-          features.push(feature);
-        }
-      });
-    }
-
-    return features
-  }
-
-  protected override computeLegLineType(): TripLegLineType {
-    return this.service.computeLegLineType()
-  }
-
-  protected override computeLinePointsData(): LinePointData[] {
-    const linePointsData = super.computeLinePointsData()
-
-    // Intermediate points
-    this.intermediateStopPoints.forEach(stopPoint => {
-      const locationFeature = stopPoint.location.asGeoJSONFeature();
-      if (locationFeature?.properties) {
-        linePointsData.push({
-          type: 'Intermediate',
-          feature: locationFeature
-        })
-      }
-    });
-
-    return linePointsData
-  }
-
-  public override computeLegColor(): string {
-    const defaultColor = super.computeLegColor();
-
-    const timedLegLineType = this.service.computeLegLineType()
-    const color = MapLegLineTypeColor[timedLegLineType] ?? defaultColor
-
-    return color
-  }
-
-  protected override computeBeelineGeoPositions(): GeoPosition[] {
-    const geoPositions: GeoPosition[] = []
-
-    const stopPoints: StopPoint[] = []
-    stopPoints.push(this.fromStopPoint)
-    this.intermediateStopPoints.forEach(stopPoint => {
-      stopPoints.push(stopPoint)
-    })
-    stopPoints.push(this.toStopPoint)
-
-    stopPoints.forEach(stopPoint => {
-      if (stopPoint.location.geoPosition) {
-        geoPositions.push(stopPoint.location.geoPosition)
-      }
-    })
-
-    return geoPositions
-  }
-
-  protected override useBeeline(): boolean {
-    const usedDetailedLine = this.service.ptMode.hasPrecisePolyline();
-    const useBeeline = super.useBeeline() || !usedDetailedLine
-    return useBeeline
   }
 
   public patchSituations(mapContextSituations: Record<string, PtSituationElement>) {
