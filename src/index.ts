@@ -1,11 +1,8 @@
 export * from './constants'
 
-export * from './config/map-colors'
-
 export * from './fare/fare'
 
 export * from './helpers/date-helpers'
-export * from './helpers/mapbox-layer-helpers'
 export * from './helpers/xml-helpers'
 
 export * from './journey/journey-service'
