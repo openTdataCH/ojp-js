@@ -1,7 +1,6 @@
 import { XMLElement } from 'xmlbuilder';
 
 import { PublicTransportMode } from './public-transport-mode'
-import { TripLegLineType } from "../types/map-geometry-types";
 
 import { StopPlace } from '../location/stopplace';
 import { PtSituationElement } from '../situation/situation-element';
@@ -160,23 +159,6 @@ export class JourneyService {
     }
 
     return legService;
-  }
-
-  public computeLegLineType(): TripLegLineType {
-    const isPostAuto = this.agencyID === '801'
-    if (isPostAuto) {
-      return 'PostAuto'
-    }
-
-    if (this.ptMode.isRail()) {
-      return 'LongDistanceRail'
-    }
-
-    if (this.ptMode.isDemandMode) {
-      return 'OnDemand'
-    }
-
-    return 'Bus'
   }
 
   public formatServiceName(): string {
