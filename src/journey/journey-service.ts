@@ -67,10 +67,17 @@ export class JourneyService {
     const journeyRef = serviceTreeNode.findTextFromChildNamed('JourneyRef');
     const ptMode = PublicTransportMode.initWithServiceTreeNode(serviceTreeNode);
 
-    const ojpAgencyId = serviceTreeNode.findTextFromChildNamed('OperatorRef');
-    const agencyID = ojpAgencyId?.replace('ojp:', '');
+    
+    const agencyID = (() => {
+      const ojpAgencyId = serviceTreeNode.findTextFromChildNamed('OperatorRef');
+      if (ojpAgencyId === null) {
+        return 'n/a OperatorRef'
+      }
 
-    if (!(journeyRef && ptMode && agencyID)) {
+      return ojpAgencyId.replace('ojp:', '');
+    })();
+
+    if (!(journeyRef && ptMode)) {
       return null;
     }
 
