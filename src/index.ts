@@ -1,11 +1,8 @@
 export * from './constants'
 
-export * from './config/map-colors'
-
 export * from './fare/fare'
 
 export * from './helpers/date-helpers'
-export * from './helpers/mapbox-layer-helpers'
 export * from './helpers/xml-helpers'
 
 export * from './journey/journey-service'
@@ -32,4 +29,5 @@ export * from './types/journey-points'
 export * from './types/language-type'
 export * from './types/stage-config'
 export * from './types/stop-event-type'
+export * from './types/stop-point-type'
 export * from './types/trip-mode-type'

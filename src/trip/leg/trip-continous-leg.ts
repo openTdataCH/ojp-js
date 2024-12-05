@@ -1,14 +1,10 @@
-import * as GeoJSON from 'geojson'
-
 import { Location } from '../../location/location'
 
 import { PathGuidance } from '../path-guidance'
 
 import { LegTrack } from './leg-track'
 
-import { TripLeg, LegType, LinePointData } from "./trip-leg"
-import { TripLegPropertiesEnum, TripLegDrawType, TripLegLineType } from '../../types/map-geometry-types'
-import { MapLegLineTypeColor } from '../../config/map-colors'
+import { TripLeg, LegType } from "./trip-leg"
 import { Duration } from '../../shared/duration'
 import { IndividualTransportMode, TransferMode } from '../../types/individual-mode.types'
 import { ServiceBooking } from './continous-leg/service-booking'
@@ -201,103 +197,6 @@ export class TripContinousLeg extends TripLeg {
     return this.legTransportMode === 'taxi' || this.legTransportMode === 'others-drive-car';
   }
 
-  protected override computeSpecificJSONFeatures(): GeoJSON.Feature[] {
-    const features: GeoJSON.Feature[] = [];
-
-    this.pathGuidance?.sections.forEach((pathGuidanceSection, guidanceIDx) => {
-      const feature = pathGuidanceSection.trackSection?.linkProjection?.asGeoJSONFeature();
-      if (feature?.properties) {
-        const drawType: TripLegDrawType = 'LegLine'
-        feature.properties[TripLegPropertiesEnum.DrawType] = drawType
-
-        const lineType: TripLegLineType = 'Guidance'
-        feature.properties[TripLegPropertiesEnum.LineType] = lineType
-
-        feature.properties['PathGuidanceSection.idx'] = guidanceIDx;
-        feature.properties['PathGuidanceSection.TrackSection.RoadName'] = pathGuidanceSection.trackSection?.roadName ?? '';
-        feature.properties['PathGuidanceSection.TrackSection.Duration'] = pathGuidanceSection.trackSection?.duration ?? '';
-        feature.properties['PathGuidanceSection.TrackSection.Length'] = pathGuidanceSection.trackSection?.length ?? '';
-        feature.properties['PathGuidanceSection.GuidanceAdvice'] = pathGuidanceSection.guidanceAdvice ?? '';
-        feature.properties['PathGuidanceSection.TurnAction'] = pathGuidanceSection.turnAction ?? '';
-
-        features.push(feature);
-      }
-    });
-
-    this.legTrack?.trackSections.forEach(trackSection => {
-      const feature = trackSection.linkProjection?.asGeoJSONFeature()
-      if (feature?.properties) {
-        const drawType: TripLegDrawType = 'LegLine'
-        feature.properties[TripLegPropertiesEnum.DrawType] = drawType
-
-        feature.properties[TripLegPropertiesEnum.LineType] = this.computeLegLineType()
-
-        features.push(feature);
-      }
-    });
-
-    return features;
-  }
-
-  protected override computeLegLineType(): TripLegLineType {
-    if (this.isDriveCarLeg()) {
-      return 'Self-Drive Car'
-    }
-
-    if (this.isSharedMobility()) {
-      return 'Shared Mobility'
-    }
-
-    if (this.isTaxi()) {
-      return 'OnDemand';
-    }
-
-    if (this.legType === 'TransferLeg') {
-      return 'Transfer'
-    }
-
-    if (this.legTransportMode === 'car-ferry') {
-      return 'Water';
-    }
-
-    return 'Walk'
-  }
-
-  protected override computeLinePointsData(): LinePointData[] {
-    // Don't show endpoints for TransferLeg
-    if (this.legType === 'TransferLeg') {
-      return []
-    }
-
-    const pointsData = super.computeLinePointsData()
-
-    return pointsData;
-  }
-
-  public override computeLegColor(): string {
-    if (this.isDriveCarLeg()) {
-      return MapLegLineTypeColor['Self-Drive Car']
-    }
-
-    if (this.isSharedMobility()) {
-      return MapLegLineTypeColor['Shared Mobility']
-    }
-
-    if (this.legType === 'TransferLeg') {
-      return MapLegLineTypeColor.Transfer
-    }
-
-    if (this.isTaxi()) {
-      return MapLegLineTypeColor.OnDemand;
-    }
-
-    if (this.legTransportMode === 'car-ferry') {
-      return MapLegLineTypeColor.Water;
-    }
-
-    return MapLegLineTypeColor.Walk;
-  }
-
   public formatDistance(): string {
     if (this.legDistance > 1000) {
       const distanceKmS = (this.legDistance / 1000).toFixed(1) + ' km'
@@ -305,25 +204,6 @@ export class TripContinousLeg extends TripLeg {
     }
 
     return this.legDistance + ' m'
-  }
-
-  protected override useBeeline(): boolean {
-    if (this.legType === 'TransferLeg') {
-      if (this.pathGuidance === null) {
-        return super.useBeeline();
-      }
-
-      let hasGeoData = false;
-      this.pathGuidance.sections.forEach(section => {
-        if (section.trackSection?.linkProjection) {
-          hasGeoData = true;
-        }
-      });
-
-      return hasGeoData === false;
-    }
-
-    return super.useBeeline();
   }
 
   public addToXMLNode(parentNode: XMLElement) {

@@ -1,7 +1,6 @@
 import { XMLElement } from 'xmlbuilder';
 
 import { PublicTransportMode } from './public-transport-mode'
-import { TripLegLineType } from "../types/map-geometry-types";
 
 import { StopPlace } from '../location/stopplace';
 import { PtSituationElement } from '../situation/situation-element';
@@ -68,13 +67,17 @@ export class JourneyService {
     const journeyRef = serviceTreeNode.findTextFromChildNamed('JourneyRef');
     const ptMode = PublicTransportMode.initWithServiceTreeNode(serviceTreeNode);
 
-    // TODO - this should be renamed to code
-    // <siri:LineRef>ojp:91036:A:H</siri:LineRef>
-    // <siri:OperatorRef>SBB</siri:OperatorRef>
-    // <PublicCode>InterRegio</PublicCode>
-    const agencyCode = serviceTreeNode.findTextFromChildNamed('siri:OperatorRef');
+    
+    const agencyCode = (() => {
+      const ojpAgencyId = serviceTreeNode.findTextFromChildNamed('siri:OperatorRef');
+      if (ojpAgencyId === null) {
+        return 'n/a OperatorRef'
+      }
 
-    if (!(journeyRef && ptMode && agencyCode)) {
+      return ojpAgencyId.replace('ojp:', '');
+    })();
+
+    if (!(journeyRef && ptMode)) {
       return null;
     }
 
@@ -166,23 +169,6 @@ export class JourneyService {
     }
 
     return legService;
-  }
-
-  public computeLegLineType(): TripLegLineType {
-    const isPostAuto = this.agencyCode === '801'
-    if (isPostAuto) {
-      return 'PostAuto'
-    }
-
-    if (this.ptMode.isRail()) {
-      return 'LongDistanceRail'
-    }
-
-    if (this.ptMode.isDemandMode) {
-      return 'OnDemand'
-    }
-
-    return 'Bus'
   }
 
   public formatServiceName(): string {

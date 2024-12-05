@@ -1,4 +1,3 @@
-import * as mapboxgl from "mapbox-gl";
 import * as GeoJSON from 'geojson'
 import { TreeNode } from "../xml/tree-node";
 
@@ -53,13 +52,13 @@ export class GeoPosition {
     return geoPosition
   }
 
-  public asLngLat(): mapboxgl.LngLatLike {
+  public asLngLat(): [number, number] {
     const lnglat = [
       this.longitude, 
       this.latitude,
     ];
 
-    return lnglat as mapboxgl.LngLatLike;
+    return lnglat as [number, number];
   }
 
   public asLatLngString(roundCoords: boolean = true): string {
