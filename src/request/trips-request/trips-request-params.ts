@@ -275,7 +275,7 @@ export class TripsRequestParams extends BaseRequestParams {
       });
     }
 
-    paramsNode.ele('PrivateModeFilter').ele('Exclude', 'false');
+    paramsNode.ele('IncludeAllRestrictedLines', 'true');
 
     if (this.numberOfResults !== null) {
       paramsNode.ele('NumberOfResults', this.numberOfResults);
