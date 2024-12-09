@@ -318,7 +318,10 @@ export class TripsRequestParams extends BaseRequestParams {
 
       const carTransportModes: IndividualTransportMode[] = ['car', 'car-ferry', 'car-shuttle-train', 'car_sharing', 'self-drive-car', 'others-drive-car'];
       if (carTransportModes.includes(transportMode)) {
-        paramsNode.ele('ModeAndModeOfOperationFilter').ele('siri:WaterSubmode', 'localCarFerry');
+        const modeAndModeEl = paramsNode.ele('ModeAndModeOfOperationFilter');
+        
+        modeAndModeEl.ele('siri:WaterSubmode', 'localCarFerry');
+        modeAndModeEl.ele('siri:RailSubmode', 'vehicleTunnelTransportRailService');
       }
 
       // https://opentransportdata.swiss/en/cookbook/ojptriprequest/#Parameters_for_Configuration_of_the_TripRequest
