@@ -272,7 +272,7 @@ export class TripsRequestParams extends BaseRequestParams {
       const modeContainerNode = paramsNode.ele('PtModeFilter');
       modeContainerNode.ele('Exclude', 'false');
       this.publicTransportModes.forEach(publicTransportMode => {
-        modeContainerNode.ele('Mode').ele('PtMode', publicTransportMode);
+        modeContainerNode.ele('PtMode', publicTransportMode);
       });
     }
 
