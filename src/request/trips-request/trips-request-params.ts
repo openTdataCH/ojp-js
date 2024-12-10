@@ -1,5 +1,7 @@
 import * as xmlbuilder from "xmlbuilder";
 
+import { OJP_VERSION } from "../../constants";
+
 import { TripLocationPoint } from "../../trip";
 import { IndividualTransportMode } from "../../types/individual-mode.types";
 import { TripModeType } from "../../types/trip-mode-type";
@@ -316,12 +318,14 @@ export class TripsRequestParams extends BaseRequestParams {
         paramsNode.ele("ItModeToCover").ele('PersonalMode', transportMode);
       }
 
-      const carTransportModes: IndividualTransportMode[] = ['car', 'car-ferry', 'car-shuttle-train', 'car_sharing', 'self-drive-car', 'others-drive-car'];
-      if (carTransportModes.includes(transportMode)) {
-        const modeAndModeEl = paramsNode.ele('ModeAndModeOfOperationFilter');
-        
-        modeAndModeEl.ele('siri:WaterSubmode', 'localCarFerry');
-        modeAndModeEl.ele('siri:RailSubmode', 'vehicleTunnelTransportRailService');
+      if (OJP_VERSION === '2.0') {
+        const carTransportModes: IndividualTransportMode[] = ['car', 'car-ferry', 'car-shuttle-train', 'car_sharing', 'self-drive-car', 'others-drive-car'];
+        if (carTransportModes.includes(transportMode)) {
+          const modeAndModeEl = paramsNode.ele('ModeAndModeOfOperationFilter');
+          
+          modeAndModeEl.ele('siri:WaterSubmode', 'localCarFerry');
+          modeAndModeEl.ele('siri:RailSubmode', 'vehicleTunnelTransportRailService');
+        }  
       }
 
       // https://opentransportdata.swiss/en/cookbook/ojptriprequest/#Parameters_for_Configuration_of_the_TripRequest
