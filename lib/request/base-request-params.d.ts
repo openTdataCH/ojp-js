@@ -5,7 +5,7 @@ export declare class BaseRequestParams {
     protected serviceRequestNode: xmlbuilder.XMLElement;
     constructor(language: Language);
     private computeBaseServiceRequestNode;
-    protected buildRequestorRef(): string;
+    static buildRequestorRef(): string;
     protected buildRequestNode(): void;
     buildRequestXML(): string;
 }
