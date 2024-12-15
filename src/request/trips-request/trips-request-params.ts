@@ -169,7 +169,7 @@ export class TripsRequestParams extends BaseRequestParams {
     const dateF = now.toISOString();
     this.serviceRequestNode.ele("siri:RequestTimestamp", dateF);
 
-    this.serviceRequestNode.ele("siri:RequestorRef", this.buildRequestorRef());
+    this.serviceRequestNode.ele("siri:RequestorRef", BaseRequestParams.buildRequestorRef());
 
     const tripRequestNode = this.serviceRequestNode.ele("OJPTripRequest");
     tripRequestNode.ele("siri:RequestTimestamp", dateF);
@@ -267,7 +267,7 @@ export class TripsRequestParams extends BaseRequestParams {
 
     const paramsNode = tripRequestNode.ele("Params");
     
-    if (this.publicTransportModes.length > 0) {
+    if (this.transportMode === 'public_transport' && (this.publicTransportModes.length > 0)) {
       // https://opentransportdata.swiss/en/cookbook/ojptriprequest/#Params
       const modeContainerNode = paramsNode.ele('PtModeFilter');
       modeContainerNode.ele('Exclude', 'false');

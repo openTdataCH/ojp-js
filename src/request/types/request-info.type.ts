@@ -1,4 +1,4 @@
-export type RequestError = 'FetchError' | 'ParseTripsXMLError'
+export type RequestError = 'FetchError' | 'ParseTripsXMLError' | 'ParseXMLError'
 
 export interface RequestErrorData {
   error: RequestError

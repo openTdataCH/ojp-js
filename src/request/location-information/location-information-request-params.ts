@@ -111,7 +111,7 @@ export class LocationInformationRequestParams extends BaseRequestParams {
     const dateF = now.toISOString();
     this.serviceRequestNode.ele("siri:RequestTimestamp", dateF);
 
-    this.serviceRequestNode.ele("siri:RequestorRef", this.buildRequestorRef());
+    this.serviceRequestNode.ele("siri:RequestorRef", BaseRequestParams.buildRequestorRef());
 
     const requestNode = this.serviceRequestNode.ele(
       "OJPLocationInformationRequest"
