@@ -39,7 +39,7 @@ export class StopEventRequestParams extends BaseRequestParams {
        
         this.serviceRequestNode.ele('siri:RequestTimestamp', dateNowF);
 
-        this.serviceRequestNode.ele("siri:RequestorRef", this.buildRequestorRef());
+        this.serviceRequestNode.ele("siri:RequestorRef", BaseRequestParams.buildRequestorRef());
 
         const requestNode = this.serviceRequestNode.ele('OJPStopEventRequest');
         requestNode.ele('siri:RequestTimestamp', dateNowF);
