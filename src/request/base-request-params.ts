@@ -13,7 +13,7 @@ export class BaseRequestParams {
   }
   
   private computeBaseServiceRequestNode(): xmlbuilder.XMLElement {
-    const ojpNode = xmlbuilder.create("siri:OJP", {
+    const ojpNode = xmlbuilder.create("OJP", {
       version: "1.0",
       encoding: "utf-8",
     });
@@ -26,7 +26,7 @@ export class BaseRequestParams {
     ojpNode.att("version", "1.0");
 
     const serviceRequestNode = ojpNode
-      .ele("siri:OJPRequest")
+      .ele("OJPRequest")
       .ele("siri:ServiceRequest");
 
     serviceRequestNode.ele('siri:ServiceRequestContext').ele('siri:Language', this.language);
