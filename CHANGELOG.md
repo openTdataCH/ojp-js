@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 0.15.1 - 15.12.2024
+- updates nova fares - [PR #130](https://github.com/openTdataCH/ojp-js/pull/130)
+
 ## 0.14.2 - 09.12.2024
 - fix `PtModeFilter` - [PR #129](https://github.com/openTdataCH/ojp-js/pull/129)
 
