@@ -34,7 +34,7 @@ export class BaseRequestParams {
     return serviceRequestNode;
   }
 
-  protected buildRequestorRef() {
+  public static buildRequestorRef() {
     return "OJP_JS_SDK_v" + SDK_VERSION;
   }
 

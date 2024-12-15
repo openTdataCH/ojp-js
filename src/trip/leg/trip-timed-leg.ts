@@ -131,7 +131,7 @@ export class TripTimedLeg extends TripLeg {
 
       const stopPlace = stopPoint.location.stopPlace;
       if (stopPlace) {
-        legEndpoint.ele('siri:StopPointRef', stopPlace.stopPlaceRef);
+        legEndpoint.ele('StopPointRef', stopPlace.stopPlaceRef);
         legEndpoint.ele('ojp:StopPointName').ele('ojp:Text', stopPlace.stopPlaceName ?? 'n/a');
       }
 

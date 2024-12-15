@@ -200,10 +200,10 @@ export class JourneyService {
     serviceNode.ele('ojp:JourneyRef', this.journeyRef);
 
     if (this.lineRef) {
-      serviceNode.ele('siri:LineRef', this.lineRef);
+      serviceNode.ele('LineRef', this.lineRef);
     }
     if (this.directionRef) {
-      serviceNode.ele('siri:DirectionRef', this.directionRef);
+      serviceNode.ele('DirectionRef', this.directionRef);
     }
     
     this.ptMode.addToXMLNode(serviceNode);

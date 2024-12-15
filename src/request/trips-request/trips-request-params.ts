@@ -171,7 +171,7 @@ export class TripsRequestParams extends BaseRequestParams {
     const dateF = now.toISOString();
     this.serviceRequestNode.ele("siri:RequestTimestamp", dateF);
 
-    this.serviceRequestNode.ele("siri:RequestorRef", this.buildRequestorRef());
+    this.serviceRequestNode.ele("siri:RequestorRef", BaseRequestParams.buildRequestorRef());
 
     const tripRequestNode = this.serviceRequestNode.ele("OJPTripRequest");
     tripRequestNode.ele("siri:RequestTimestamp", dateF);
