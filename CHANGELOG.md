@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 0.15.2 - 21.01.2025
+- updates package, adds dependencies, disable request logs by default - [PR #132](https://github.com/openTdataCH/ojp-js/pull/132)
+
 ## 0.15.1 - 15.12.2024
 - updates nova fares - [PR #130](https://github.com/openTdataCH/ojp-js/pull/130)
 
