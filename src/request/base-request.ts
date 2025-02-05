@@ -54,7 +54,7 @@ export class OJPBaseRequest {
       "Content-Type": "text/xml"
     };
     if (this.stageConfig.authToken) {
-      requestHeaders['Authorization'] = 'Bearer' + this.stageConfig.authToken;
+      requestHeaders['Authorization'] = 'Bearer ' + this.stageConfig.authToken;
     }
 
     const requestOptions: RequestInit = {
