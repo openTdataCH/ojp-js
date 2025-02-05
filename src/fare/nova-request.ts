@@ -45,10 +45,12 @@ export class NovaRequest {
     rootNode.att('version', '1.0');
 
     const serviceRequestNode = rootNode.ele('OJPRequest').ele('ServiceRequest');
-
     
     const dateF = requestDate.toISOString();
     serviceRequestNode.ele('RequestTimestamp', dateF);
+
+    const requestorRef = BaseRequestParams.buildRequestorRef();
+    serviceRequestNode.ele("siri:RequestorRef", requestorRef);
 
     return serviceRequestNode;
   }
