@@ -4,6 +4,7 @@ import { RequestInfo } from "../request";
 import { Trip } from "../trip";
 import { NovaFare_Response, NovaFareParser } from "./nova-request-parser";
 import { BaseRequestParams } from '../request/base-request-params';
+import { FARES_API_DEFAULT_STAGE } from '../types/stage-config';
 
 export class NovaRequest {
   public requestInfo: RequestInfo;
@@ -83,11 +84,11 @@ export class NovaRequest {
       body: this.requestInfo.requestXML,
       headers: {
         "Content-Type": "text/xml",
+        "Authorization": "Bearer " + FARES_API_DEFAULT_STAGE.authBearerKey,
       },
     };
 
-    // TODO - move me in app-config.ts
-    const apiEndpoint = 'https://tools.odpch.ch/ojp-nova/ojp2023';
+    const apiEndpoint = FARES_API_DEFAULT_STAGE.apiEndpoint;
 
     const promise = new Promise<NovaFare_Response>((resolve) => {
       const errorNovaFare_Response: NovaFare_Response = {
