@@ -3,13 +3,16 @@ import xmlbuilder from 'xmlbuilder';
 import { RequestInfo } from "../request";
 import { Trip } from "../trip";
 import { NovaFare_Response, NovaFareParser } from "./nova-request-parser";
+import { StageConfig } from '../types/stage-config';
 import { BaseRequestParams } from '../request/base-request-params';
-import { FARES_API_DEFAULT_STAGE } from '../types/stage-config';
 
 export class NovaRequest {
+  private stageConfig: StageConfig;
   public requestInfo: RequestInfo;
 
-  constructor() {
+  constructor(stageConfig: StageConfig) {
+    this.stageConfig = stageConfig;
+
     this.requestInfo = {
       requestDateTime: null,
       requestXML: null,
@@ -84,11 +87,11 @@ export class NovaRequest {
       body: this.requestInfo.requestXML,
       headers: {
         "Content-Type": "text/xml",
-        "Authorization": "Bearer " + FARES_API_DEFAULT_STAGE.authBearerKey,
+        "Authorization": "Bearer " + this.stageConfig.authBearerKey,
       },
     };
 
-    const apiEndpoint = FARES_API_DEFAULT_STAGE.apiEndpoint;
+    const apiEndpoint = this.stageConfig.apiEndpoint;
 
     const promise = new Promise<NovaFare_Response>((resolve) => {
       const errorNovaFare_Response: NovaFare_Response = {
