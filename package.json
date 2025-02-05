@@ -23,6 +23,7 @@
   "author": "Vasile Cotovanu",
   "license": "MIT",
   "peerDependencies": {
+    "sax-ts": "1.2.13",
     "@types/geojson": "7946.0.10",
     "@types/sax": "1.2.7"
   },
