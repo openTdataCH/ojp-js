@@ -1,11 +1,10 @@
 import fetch from 'cross-fetch';
 
-import { StageConfig } from '../types/stage-config';
+import { ApiConfig } from '../types/stage-config';
 import { RequestInfo } from './types/request-info.type';
-import { DEBUG_LEVEL } from '../constants';
 
 export class OJPBaseRequest {
-  private stageConfig: StageConfig;
+  private stageConfig: ApiConfig;
 
   public requestInfo: RequestInfo;
 
@@ -13,7 +12,7 @@ export class OJPBaseRequest {
   protected mockRequestXML: string | null;
   protected mockResponseXML: string | null;
 
-  constructor(stageConfig: StageConfig) {
+  constructor(stageConfig: ApiConfig) {
     this.stageConfig = stageConfig;
     
     this.requestInfo = {
@@ -44,20 +43,24 @@ export class OJPBaseRequest {
       this.requestInfo.requestXML = this.buildRequestXML();
     }
 
-    const apiEndpoint = this.stageConfig.apiEndpoint;
+    const apiEndpoint = this.stageConfig.url;
 
     if (this.logRequests) {
       console.log('OJP Request: /POST - ' + apiEndpoint);
       console.log(this.requestInfo.requestXML);
     }
 
+    const requestHeaders: HeadersInit = {
+      "Content-Type": "text/xml"
+    };
+    if (this.stageConfig.authToken) {
+      requestHeaders['Authorization'] = 'Bearer' + this.stageConfig.authToken;
+    }
+
     const requestOptions: RequestInit = {
       method: 'POST',
       body: this.requestInfo.requestXML,
-      headers: {
-        "Content-Type": "text/xml",
-        "Authorization": "Bearer " + this.stageConfig.authBearerKey,
-      },
+      headers: requestHeaders,
     };
     
     const responsePromise = new Promise<RequestInfo>((resolve) => {
