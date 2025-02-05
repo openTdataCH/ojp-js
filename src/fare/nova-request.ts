@@ -3,14 +3,14 @@ import xmlbuilder from 'xmlbuilder';
 import { RequestInfo } from "../request";
 import { Trip } from "../trip";
 import { NovaFare_Response, NovaFareParser } from "./nova-request-parser";
-import { StageConfig } from '../types/stage-config';
+import { ApiConfig } from '../types/stage-config';
 import { BaseRequestParams } from '../request/base-request-params';
 
 export class NovaRequest {
-  private stageConfig: StageConfig;
+  private stageConfig: ApiConfig;
   public requestInfo: RequestInfo;
 
-  constructor(stageConfig: StageConfig) {
+  constructor(stageConfig: ApiConfig) {
     this.stageConfig = stageConfig;
 
     this.requestInfo = {
@@ -84,16 +84,20 @@ export class NovaRequest {
   private fetchResponse(serviceRequestNode: xmlbuilder.XMLElement): Promise<NovaFare_Response> {
     this.requestInfo.requestXML = serviceRequestNode.end({ pretty: true });
 
+    const requestHeaders: HeadersInit = {
+      "Content-Type": "text/xml"
+    };
+    if (this.stageConfig.authToken) {
+      requestHeaders['Authorization'] = 'Bearer' + this.stageConfig.authToken;
+    }
+
     const requestOptions: RequestInit = {
       method: 'POST',
       body: this.requestInfo.requestXML,
-      headers: {
-        "Content-Type": "text/xml",
-        "Authorization": "Bearer " + this.stageConfig.authBearerKey,
-      },
+      headers: requestHeaders,
     };
 
-    const apiEndpoint = this.stageConfig.apiEndpoint;
+    const apiEndpoint = this.stageConfig.url;
 
     const promise = new Promise<NovaFare_Response>((resolve) => {
       const errorNovaFare_Response: NovaFare_Response = {
