@@ -1,4 +1,4 @@
-import { StageConfig } from '../types/stage-config';
+import { ApiConfig } from '../types/stage-config';
 import { RequestInfo } from './types/request-info.type';
 export declare class OJPBaseRequest {
     private stageConfig;
@@ -6,7 +6,7 @@ export declare class OJPBaseRequest {
     protected logRequests: boolean;
     protected mockRequestXML: string | null;
     protected mockResponseXML: string | null;
-    constructor(stageConfig: StageConfig);
+    constructor(stageConfig: ApiConfig);
     protected buildRequestXML(): string;
     protected fetchOJPResponse(): Promise<RequestInfo>;
 }
