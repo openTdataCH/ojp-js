@@ -25,7 +25,7 @@ export class OJPBaseRequest {
       error: null
     };
 
-    this.logRequests = DEBUG_LEVEL === 'DEBUG';
+    this.logRequests = false;
     this.mockRequestXML = null;
     this.mockResponseXML = null;
   }
