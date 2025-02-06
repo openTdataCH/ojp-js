@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.16.1 - 6.02.2025
+- Updates OJP Fare - [PR #134](https://github.com/openTdataCH/ojp-js/pull/134)
+  - refactor ApiConfig, removes default stages from SDK
+
 ## 0.15.2 - 21.01.2025
 - updates package, adds dependencies, disable request logs by default - [PR #132](https://github.com/openTdataCH/ojp-js/pull/132)
 
