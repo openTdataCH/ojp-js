@@ -109,25 +109,23 @@ export class LocationInformationRequestParams extends BaseRequestParams {
 
     const now = new Date();
     const dateF = now.toISOString();
-    this.serviceRequestNode.ele("siri:RequestTimestamp", dateF);
+    this.serviceRequestNode.ele("RequestTimestamp", dateF);
 
-    this.serviceRequestNode.ele("siri:RequestorRef", BaseRequestParams.buildRequestorRef());
+    this.serviceRequestNode.ele("RequestorRef", BaseRequestParams.buildRequestorRef());
 
-    const requestNode = this.serviceRequestNode.ele(
-      "OJPLocationInformationRequest"
-    );
-    requestNode.ele("siri:RequestTimestamp", dateF);
+    const requestNode = this.serviceRequestNode.ele("ojp:OJPLocationInformationRequest");
+    requestNode.ele("RequestTimestamp", dateF);
 
     const locationName = this.locationName ?? null;
     if (locationName !== null) {
-      requestNode.ele('InitialInput').ele('LocationName', locationName);
+      requestNode.ele('ojp:InitialInput').ele('ojp:LocationName', locationName);
     }
 
     const stopPlaceRef = this.stopPlaceRef ?? null;
     if (stopPlaceRef) {
-      const requestPlaceRefNode = requestNode.ele("PlaceRef");
-      requestPlaceRefNode.ele("StopPlaceRef", stopPlaceRef);
-      requestPlaceRefNode.ele("LocationName").ele("Text", "n/a");
+      const requestPlaceRefNode = requestNode.ele("ojp:PlaceRef");
+      requestPlaceRefNode.ele("ojp:StopPlaceRef", stopPlaceRef);
+      requestPlaceRefNode.ele("ojp:LocationName").ele("Text", "n/a");
     }
 
     const bboxWest = this.bboxWest ?? null;
@@ -135,57 +133,57 @@ export class LocationInformationRequestParams extends BaseRequestParams {
     const bboxEast = this.bboxEast ?? null;
     const bboxSouth = this.bboxSouth ?? null;
     if (bboxWest && bboxNorth && bboxEast && bboxSouth) {
-      const rectangleNode = requestNode.ele('InitialInput')
-        .ele("GeoRestriction")
-        .ele("Rectangle");
+      const rectangleNode = requestNode.ele('ojp:InitialInput')
+        .ele("ojp:GeoRestriction")
+        .ele("ojp:Rectangle");
 
-      const upperLeftNode = rectangleNode.ele("UpperLeft");
-      upperLeftNode.ele("siri:Longitude", bboxWest.toFixed(6));
-      upperLeftNode.ele("siri:Latitude", bboxNorth.toFixed(6));
+      const upperLeftNode = rectangleNode.ele("ojp:UpperLeft");
+      upperLeftNode.ele("Longitude", bboxWest.toFixed(6));
+      upperLeftNode.ele("Latitude", bboxNorth.toFixed(6));
 
       const lowerRightNode = rectangleNode.ele("LowerRight");
-      lowerRightNode.ele("siri:Longitude", bboxEast.toFixed(6));
-      lowerRightNode.ele("siri:Latitude", bboxSouth.toFixed(6));
+      lowerRightNode.ele("Longitude", bboxEast.toFixed(6));
+      lowerRightNode.ele("Latitude", bboxSouth.toFixed(6));
     }
 
     if (this.circleCenter !== null && this.circleRadius !== null) {
-      const circleNode = requestNode.ele('InitialInput')
-        .ele("GeoRestriction")
-        .ele("Circle");
+      const circleNode = requestNode.ele('ojp:InitialInput')
+        .ele("ojp:GeoRestriction")
+        .ele("ojp:Circle");
 
-      const centerNode = circleNode.ele('Center');
-      centerNode.ele('siri:Longitude', this.circleCenter.longitude.toFixed(6));
-      centerNode.ele('siri:Latitude', this.circleCenter.latitude.toFixed(6));
+      const centerNode = circleNode.ele('ojp:Center');
+      centerNode.ele('Longitude', this.circleCenter.longitude.toFixed(6));
+      centerNode.ele('Latitude', this.circleCenter.latitude.toFixed(6));
 
       circleNode.ele('Radius', this.circleRadius);
     }
 
-    const restrictionsNode = requestNode.ele("Restrictions");
+    const restrictionsNode = requestNode.ele("ojp:Restrictions");
 
     this.restrictionTypes.forEach(restrictionType => {
-      restrictionsNode.ele("Type", restrictionType);
+      restrictionsNode.ele("ojp:Type", restrictionType);
 
       const isPOI = restrictionType === 'poi';
       if (isPOI && this.poiRestriction) {
-        const poiCategoryNode = restrictionsNode.ele("PointOfInterestFilter").ele("PointOfInterestCategory");
+        const poiCategoryNode = restrictionsNode.ele("ojp:PointOfInterestFilter").ele("PointOfInterestCategory");
 
         const isSharedMobility = this.poiRestriction.poiType === 'shared_mobility';
         const poiOsmTagKey = isSharedMobility ? 'amenity' : 'POI';
         this.poiRestriction.tags.forEach((poiOsmTag) => {
           const osmTagNode = poiCategoryNode.ele("OsmTag");
-          osmTagNode.ele("Tag", poiOsmTagKey);
-          osmTagNode.ele("Value", poiOsmTag);
+          osmTagNode.ele("ojp:Tag", poiOsmTagKey);
+          osmTagNode.ele("ojp:Value", poiOsmTag);
         });
       }
     });
 
     const numberOfResults = this.numberOfResults ?? 10;
-    restrictionsNode.ele("NumberOfResults", numberOfResults);
+    restrictionsNode.ele("ojp:NumberOfResults", numberOfResults);
 
-    const extensionsNode = requestNode.ele("siri:Extensions");
+    const extensionsNode = requestNode.ele("Extensions");
     extensionsNode
-      .ele("ParamsExtension")
-      .ele("PrivateModeFilter")
-      .ele("Exclude", "false");
+      .ele("ojp:ParamsExtension")
+      .ele("ojp:PrivateModeFilter")
+      .ele("ojp:Exclude", "false");
   }
 }

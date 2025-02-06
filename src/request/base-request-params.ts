@@ -18,8 +18,8 @@ export class BaseRequestParams {
       encoding: "utf-8",
     });
 
-    ojpNode.att("xmlns", "http://www.vdv.de/ojp");
-    ojpNode.att("xmlns:siri", "http://www.siri.org.uk/siri");
+    ojpNode.att("xmlns:ojp", "http://www.vdv.de/ojp");
+    ojpNode.att("xmlns", "http://www.siri.org.uk/siri");
     ojpNode.att("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
     ojpNode.att("xmlns:xsd", "http://www.w3.org/2001/XMLSchema");
     ojpNode.att("xsi:schemaLocation", "http://www.vdv.de/ojp");
@@ -27,9 +27,9 @@ export class BaseRequestParams {
 
     const serviceRequestNode = ojpNode
       .ele("OJPRequest")
-      .ele("siri:ServiceRequest");
+      .ele("ServiceRequest");
 
-    serviceRequestNode.ele('siri:ServiceRequestContext').ele('siri:Language', this.language);
+    serviceRequestNode.ele('ServiceRequestContext').ele('Language', this.language);
 
     return serviceRequestNode;
   }

@@ -167,12 +167,12 @@ export class TripsRequestParams extends BaseRequestParams {
 
     const now = new Date();
     const dateF = now.toISOString();
-    this.serviceRequestNode.ele("siri:RequestTimestamp", dateF);
+    this.serviceRequestNode.ele("RequestTimestamp", dateF);
 
-    this.serviceRequestNode.ele("siri:RequestorRef", BaseRequestParams.buildRequestorRef());
+    this.serviceRequestNode.ele("RequestorRef", BaseRequestParams.buildRequestorRef());
 
-    const tripRequestNode = this.serviceRequestNode.ele("OJPTripRequest");
-    tripRequestNode.ele("siri:RequestTimestamp", dateF);
+    const tripRequestNode = this.serviceRequestNode.ele("ojp:OJPTripRequest");
+    tripRequestNode.ele("RequestTimestamp", dateF);
 
     const modeType = this.modeType;
     const isMonomodal = modeType === "monomodal";
@@ -187,37 +187,37 @@ export class TripsRequestParams extends BaseRequestParams {
         : this.toTripLocation;
       const location = tripLocation.location;
 
-      let tagName = isFrom ? "Origin" : "Destination";
+      let tagName = isFrom ? "ojp:Origin" : "ojp:Destination";
 
       const endPointNode = tripRequestNode.ele(tagName);
-      const placeRefNode = endPointNode.ele("PlaceRef");
+      const placeRefNode = endPointNode.ele("ojp:PlaceRef");
 
       if (location.stopPlace?.stopPlaceRef) {
         const locationName = location.locationName ?? "n/a";
 
         let stopPlaceRef = location.stopPlace?.stopPlaceRef ?? "";
 
-        placeRefNode.ele("StopPlaceRef", stopPlaceRef);
-        placeRefNode.ele("LocationName").ele("Text", locationName);
+        placeRefNode.ele("ojp:StopPlaceRef", stopPlaceRef);
+        placeRefNode.ele("ojp:LocationName").ele("ojp:Text", locationName);
       } else {
         if (location.geoPosition) {
-          const geoPositionNode = placeRefNode.ele("GeoPosition");
-          geoPositionNode.ele("siri:Longitude", location.geoPosition.longitude);
-          geoPositionNode.ele("siri:Latitude", location.geoPosition.latitude);
+          const geoPositionNode = placeRefNode.ele("ojp:GeoPosition");
+          geoPositionNode.ele("Longitude", location.geoPosition.longitude);
+          geoPositionNode.ele("Latitude", location.geoPosition.latitude);
 
           const locationName = location.geoPosition.asLatLngString();
-          placeRefNode.ele("LocationName").ele("Text", locationName);
+          placeRefNode.ele("ojp:LocationName").ele("ojp:Text", locationName);
         }
       }
 
       const dateF = this.departureDate.toISOString();
       if (isFrom) {
         if (this.tripRequestBoardingType === 'Dep') {
-          endPointNode.ele("DepArrTime", dateF);
+          endPointNode.ele("ojp:DepArrTime", dateF);
         }
       } else {
         if (this.tripRequestBoardingType === 'Arr') {
-          endPointNode.ele("DepArrTime", dateF);
+          endPointNode.ele("ojp:DepArrTime", dateF);
         }
       }
 
@@ -235,7 +235,7 @@ export class TripsRequestParams extends BaseRequestParams {
               return;
             }
 
-            const itNode = endPointNode.ele('IndividualTransportOptions');
+            const itNode = endPointNode.ele('ojp:IndividualTransportOptions');
             this.addAdditionalRestrictions(itNode, tripLocation);
           })();
         }
@@ -243,25 +243,25 @@ export class TripsRequestParams extends BaseRequestParams {
     });
 
     this.viaLocations.forEach(viaLocation => {
-      const viaNode = tripRequestNode.ele('Via');
-      const viaPointNode = viaNode.ele('ViaPoint');
+      const viaNode = tripRequestNode.ele('ojp:Via');
+      const viaPointNode = viaNode.ele('ojp:ViaPoint');
       const stopPlace = viaLocation.location.stopPlace;
       if (stopPlace === null) {
         const geoPosition = viaLocation.location.geoPosition;
         if (geoPosition !== null) {
-          const geoPositionNode = viaPointNode.ele('GeoPosition');
-          geoPositionNode.ele('siri:Longitude', geoPosition.longitude);
-          geoPositionNode.ele('siri:Latitude', geoPosition.latitude);
+          const geoPositionNode = viaPointNode.ele('ojp:GeoPosition');
+          geoPositionNode.ele('Longitude', geoPosition.longitude);
+          geoPositionNode.ele('Latitude', geoPosition.latitude);
 
-          viaPointNode.ele('Name').ele('Text', viaLocation.location.computeLocationName() ?? 'n/a');
+          viaPointNode.ele('ojp:Name').ele('ojp:Text', viaLocation.location.computeLocationName() ?? 'n/a');
         }
       } else {
-        viaPointNode.ele('StopPlaceRef', stopPlace.stopPlaceRef);
-        viaPointNode.ele('LocationName').ele('Text', stopPlace.stopPlaceName ?? (viaLocation.location.computeLocationName() ?? 'n/a'));
+        viaPointNode.ele('ojp:StopPlaceRef', stopPlace.stopPlaceRef);
+        viaPointNode.ele('ojp:LocationName').ele('ojp:Text', stopPlace.stopPlaceName ?? (viaLocation.location.computeLocationName() ?? 'n/a'));
       }
 
       if (viaLocation.dwellTimeMinutes !== null) {
-        viaNode.ele('DwellTime', 'PT' + viaLocation.dwellTimeMinutes.toString() + 'M');
+        viaNode.ele('ojp:DwellTime', 'PT' + viaLocation.dwellTimeMinutes.toString() + 'M');
       }
     });
 
@@ -270,31 +270,31 @@ export class TripsRequestParams extends BaseRequestParams {
     if (this.transportMode === 'public_transport' && (this.publicTransportModes.length > 0)) {
       // https://opentransportdata.swiss/en/cookbook/ojptriprequest/#Params
       const modeContainerNode = paramsNode.ele('PtModeFilter');
-      modeContainerNode.ele('Exclude', 'false');
+      modeContainerNode.ele('ojp:Exclude', 'false');
       this.publicTransportModes.forEach(publicTransportMode => {
-        modeContainerNode.ele('PtMode', publicTransportMode);
+        modeContainerNode.ele('ojp:PtMode', publicTransportMode);
       });
     }
 
-    paramsNode.ele('PrivateModeFilter').ele('Exclude', 'false');
+    paramsNode.ele('ojp:PrivateModeFilter').ele('ojp:Exclude', 'false');
 
     if (this.numberOfResults !== null) {
-      paramsNode.ele('NumberOfResults', this.numberOfResults);
+      paramsNode.ele('ojp:NumberOfResults', this.numberOfResults);
     }
     if (this.numberOfResultsBefore !== null) {
-      paramsNode.ele('NumberOfResultsBefore', this.numberOfResultsBefore);
+      paramsNode.ele('ojp:NumberOfResultsBefore', this.numberOfResultsBefore);
     }
     if (this.numberOfResultsAfter !== null) {
-      paramsNode.ele('NumberOfResultsAfter', this.numberOfResultsAfter);
+      paramsNode.ele('ojp:NumberOfResultsAfter', this.numberOfResultsAfter);
     }
 
-    paramsNode.ele("IncludeTrackSections", true);
-    paramsNode.ele("IncludeLegProjection", this.includeLegProjection);
-    paramsNode.ele("IncludeTurnDescription", true);
+    paramsNode.ele("ojp:IncludeTrackSections", true);
+    paramsNode.ele("ojp:IncludeLegProjection", this.includeLegProjection);
+    paramsNode.ele("ojp:IncludeTurnDescription", true);
 
     const isPublicTransport = this.transportMode === 'public_transport';
     if (isPublicTransport) {
-      paramsNode.ele("IncludeIntermediateStops", true);
+      paramsNode.ele("ojp:IncludeIntermediateStops", true);
     }
 
     const sharingModes: IndividualTransportMode[] = [
@@ -314,7 +314,7 @@ export class TripsRequestParams extends BaseRequestParams {
         "others-drive-car",
       ];
       if (standardModes.indexOf(transportMode) !== -1) {
-        paramsNode.ele("ItModesToCover", transportMode);
+        paramsNode.ele("ojp:ItModesToCover", transportMode);
       }
 
       // https://opentransportdata.swiss/en/cookbook/ojptriprequest/#Parameters_for_Configuration_of_the_TripRequest
@@ -322,8 +322,8 @@ export class TripsRequestParams extends BaseRequestParams {
       // - sharing transport modes 
       // => Params/Extension/ItModesToCover=transportMode
       if (isSharingMode) {
-        const paramsExtensionNode = paramsNode.ele("Extension");
-        paramsExtensionNode.ele("ItModesToCover", transportMode);
+        const paramsExtensionNode = paramsNode.ele("ojp:Extension");
+        paramsExtensionNode.ele("ojp:ItModesToCover", transportMode);
       }
     } else {
       // https://opentransportdata.swiss/en/cookbook/ojptriprequest/#Parameters_for_Configuration_of_the_TripRequest
@@ -332,7 +332,7 @@ export class TripsRequestParams extends BaseRequestParams {
       // => Params/Extension/Origin/Mode=transportMode
 
       if (isSharingMode) {
-        const paramsExtensionNode = paramsNode.ele("Extension");
+        const paramsExtensionNode = paramsNode.ele("ojp:Extension");
 
         tripEndpoints.forEach((tripEndpoint) => {
           const isFrom = tripEndpoint === "From";
@@ -344,7 +344,7 @@ export class TripsRequestParams extends BaseRequestParams {
           }
 
           const tripLocation = isFrom ? this.fromTripLocation : this.toTripLocation;
-          const tagName = isFrom ? 'Origin' : 'Destination';
+          const tagName = isFrom ? 'ojp:Origin' : 'ojp:Destination';
           const endPointNode = paramsExtensionNode.ele(tagName);
 
           this.addAdditionalRestrictions(endPointNode, tripLocation);
@@ -352,7 +352,7 @@ export class TripsRequestParams extends BaseRequestParams {
       }
     }
 
-    paramsNode.ele("UseRealtimeData", 'explanatory');
+    paramsNode.ele("ojp:UseRealtimeData", 'explanatory');
   }
   
   private addAdditionalRestrictions(nodeEl: xmlbuilder.XMLElement, tripLocation: TripLocationPoint) {
@@ -362,19 +362,19 @@ export class TripsRequestParams extends BaseRequestParams {
     }
 
     if (tripLocation.customTransportMode) {
-      nodeEl.ele('Mode', tripLocation.customTransportMode);
+      nodeEl.ele('ojp:Mode', tripLocation.customTransportMode);
     }
     if (tripLocation.minDuration !== null) {
-      nodeEl.ele('MinDuration', 'PT' + tripLocation.minDuration + 'M');
+      nodeEl.ele('ojp:MinDuration', 'PT' + tripLocation.minDuration + 'M');
     }
     if (tripLocation.maxDuration !== null) {
-      nodeEl.ele('MaxDuration', 'PT' + tripLocation.maxDuration + 'M');
+      nodeEl.ele('ojp:MaxDuration', 'PT' + tripLocation.maxDuration + 'M');
     }
     if (tripLocation.minDistance !== null) {
-      nodeEl.ele('MinDistance', tripLocation.minDistance);
+      nodeEl.ele('ojp:MinDistance', tripLocation.minDistance);
     }
     if (tripLocation.maxDistance !== null) {
-      nodeEl.ele('MaxDistance', tripLocation.maxDistance);
+      nodeEl.ele('ojp:MaxDistance', tripLocation.maxDistance);
     }
   }
 }
