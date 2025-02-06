@@ -1,4 +1,4 @@
-import { DEFAULT_STAGE, StageConfig } from '../../types/stage-config'
+import { EMPTY_API_CONFIG, ApiConfig } from '../../types/stage-config'
 import { OJPBaseRequest } from '../base-request'
 
 import { StopEventRequestParams } from './stop-event-request-params';
@@ -11,7 +11,7 @@ import { Language } from '../../types/language-type';
 export class StopEventRequest extends OJPBaseRequest {
     public requestParams: StopEventRequestParams
 
-    constructor(stageConfig: StageConfig, requestParams: StopEventRequestParams) {
+    constructor(stageConfig: ApiConfig, requestParams: StopEventRequestParams) {
         requestParams.includePreviousCalls = true;
         requestParams.includeOnwardCalls = true;
 
@@ -21,7 +21,7 @@ export class StopEventRequest extends OJPBaseRequest {
         this.requestInfo.requestXML = this.buildRequestXML();
     }
 
-    public static Empty(stageConfig: StageConfig = DEFAULT_STAGE): StopEventRequest {
+    public static Empty(stageConfig: ApiConfig = EMPTY_API_CONFIG): StopEventRequest {
         const emptyRequestParams = StopEventRequestParams.Empty();
         const request = new StopEventRequest(stageConfig, emptyRequestParams);
 
@@ -35,14 +35,14 @@ export class StopEventRequest extends OJPBaseRequest {
         return request;
     }
 
-    public static initWithRequestMock(mockText: string, stageConfig: StageConfig = DEFAULT_STAGE) {
+    public static initWithRequestMock(mockText: string, stageConfig: ApiConfig = EMPTY_API_CONFIG) {
         const request = StopEventRequest.Empty(stageConfig);
         request.mockRequestXML = mockText;
         
         return request;
       }
 
-    public static initWithStopPlaceRef(stageConfig: StageConfig, language: Language, stopPlaceRef: string, stopEventType: StopEventType, stopEventDate: Date): StopEventRequest {
+    public static initWithStopPlaceRef(stageConfig: ApiConfig, language: Language, stopPlaceRef: string, stopEventType: StopEventType, stopEventDate: Date): StopEventRequest {
         const stopEventRequestParams = new StopEventRequestParams(language, stopPlaceRef, null, stopEventType, stopEventDate);
         const stopEventRequest = new StopEventRequest(stageConfig, stopEventRequestParams);
         return stopEventRequest;

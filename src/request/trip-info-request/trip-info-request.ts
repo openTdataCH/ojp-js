@@ -1,4 +1,4 @@
-import { DEFAULT_STAGE, StageConfig } from '../../types/stage-config'
+import { EMPTY_API_CONFIG, ApiConfig } from '../../types/stage-config'
 import { OJPBaseRequest } from '../base-request'
 
 import { TripInfoRequestParams } from './trip-info-request-params';
@@ -10,14 +10,14 @@ import { Language } from '../../types/language-type';
 export class TripInfoRequest extends OJPBaseRequest {
     public requestParams: TripInfoRequestParams
 
-    constructor(stageConfig: StageConfig, requestParams: TripInfoRequestParams) {
+    constructor(stageConfig: ApiConfig, requestParams: TripInfoRequestParams) {
         super(stageConfig);
         
         this.requestParams = requestParams;
         this.requestInfo.requestXML = this.buildRequestXML();
     }
 
-    public static Empty(stageConfig: StageConfig = DEFAULT_STAGE): TripInfoRequest {
+    public static Empty(stageConfig: ApiConfig = EMPTY_API_CONFIG): TripInfoRequest {
         const emptyRequestParams = TripInfoRequestParams.Empty();
         const request = new TripInfoRequest(stageConfig, emptyRequestParams);
 
@@ -31,14 +31,14 @@ export class TripInfoRequest extends OJPBaseRequest {
         return request;
     }
 
-    public static initWithRequestMock(mockText: string, stageConfig: StageConfig = DEFAULT_STAGE) {
+    public static initWithRequestMock(mockText: string, stageConfig: ApiConfig = EMPTY_API_CONFIG) {
         const request = TripInfoRequest.Empty(stageConfig);
         request.mockRequestXML = mockText;
         
         return request;
       }
 
-    public static initWithJourneyRef(stageConfig: StageConfig, language: Language, journeyRef: string, operatingDayRef: string | null = null): TripInfoRequest {
+    public static initWithJourneyRef(stageConfig: ApiConfig, language: Language, journeyRef: string, operatingDayRef: string | null = null): TripInfoRequest {
         if (operatingDayRef === null) {
             const dateNowF = new Date().toISOString();
             operatingDayRef = dateNowF.substring(0, 10);

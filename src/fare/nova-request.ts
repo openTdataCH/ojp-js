@@ -3,12 +3,16 @@ import xmlbuilder from 'xmlbuilder';
 import { RequestInfo } from "../request";
 import { Trip } from "../trip";
 import { NovaFare_Response, NovaFareParser } from "./nova-request-parser";
+import { ApiConfig } from '../types/stage-config';
 import { BaseRequestParams } from '../request/base-request-params';
 
 export class NovaRequest {
+  private stageConfig: ApiConfig;
   public requestInfo: RequestInfo;
 
-  constructor() {
+  constructor(stageConfig: ApiConfig) {
+    this.stageConfig = stageConfig;
+
     this.requestInfo = {
       requestDateTime: null,
       requestXML: null,
@@ -41,10 +45,12 @@ export class NovaRequest {
     rootNode.att('version', '1.0');
 
     const serviceRequestNode = rootNode.ele('OJPRequest').ele('ServiceRequest');
-
     
     const dateF = requestDate.toISOString();
     serviceRequestNode.ele('RequestTimestamp', dateF);
+
+    const requestorRef = BaseRequestParams.buildRequestorRef();
+    serviceRequestNode.ele("siri:RequestorRef", requestorRef);
 
     return serviceRequestNode;
   }
@@ -78,16 +84,20 @@ export class NovaRequest {
   private fetchResponse(serviceRequestNode: xmlbuilder.XMLElement): Promise<NovaFare_Response> {
     this.requestInfo.requestXML = serviceRequestNode.end({ pretty: true });
 
+    const requestHeaders: HeadersInit = {
+      "Content-Type": "text/xml"
+    };
+    if (this.stageConfig.authToken) {
+      requestHeaders['Authorization'] = 'Bearer ' + this.stageConfig.authToken;
+    }
+
     const requestOptions: RequestInit = {
       method: 'POST',
       body: this.requestInfo.requestXML,
-      headers: {
-        "Content-Type": "text/xml",
-      },
+      headers: requestHeaders,
     };
 
-    // TODO - move me in app-config.ts
-    const apiEndpoint = 'https://tools.odpch.ch/ojp-nova/ojp2023';
+    const apiEndpoint = this.stageConfig.url;
 
     const promise = new Promise<NovaFare_Response>((resolve) => {
       const errorNovaFare_Response: NovaFare_Response = {

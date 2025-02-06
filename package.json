@@ -1,6 +1,6 @@
 {
   "name": "ojp-sdk",
-  "version": "0.15.2",
+  "version": "0.16.1",
   "description": "OJP (Open Journey Planner) Javascript SDK",
   "main": "lib/index.js",
   "type": "module",
@@ -23,6 +23,7 @@
   "author": "Vasile Cotovanu",
   "license": "MIT",
   "peerDependencies": {
+    "sax-ts": "1.2.13",
     "@types/geojson": "7946.0.10",
     "@types/sax": "1.2.7"
   },
