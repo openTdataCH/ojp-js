@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.16.2 - 3.03.2025
+- Changes namespaces
+  - make `siri:` default namespace
+
 ## 0.16.1 - 6.02.2025
 - Updates OJP Fare - [PR #134](https://github.com/openTdataCH/ojp-js/pull/134)
   - refactor ApiConfig, removes default stages from SDK
