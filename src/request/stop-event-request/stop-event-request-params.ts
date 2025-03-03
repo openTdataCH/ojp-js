@@ -37,31 +37,31 @@ export class StopEventRequestParams extends BaseRequestParams {
         const dateNowF = new Date().toISOString();
         const dateF = this.depArrTime.toISOString();
        
-        this.serviceRequestNode.ele('siri:RequestTimestamp', dateNowF);
+        this.serviceRequestNode.ele('RequestTimestamp', dateNowF);
 
-        this.serviceRequestNode.ele("siri:RequestorRef", BaseRequestParams.buildRequestorRef());
+        this.serviceRequestNode.ele("RequestorRef", BaseRequestParams.buildRequestorRef());
 
-        const requestNode = this.serviceRequestNode.ele('OJPStopEventRequest');
-        requestNode.ele('siri:RequestTimestamp', dateNowF);
+        const requestNode = this.serviceRequestNode.ele('ojp:OJPStopEventRequest');
+        requestNode.ele('RequestTimestamp', dateNowF);
 
-        const locationNode = requestNode.ele('Location');
+        const locationNode = requestNode.ele('ojp:Location');
 
         if (this.stopPlaceRef) {
-            const requestPlaceRefNode = locationNode.ele('PlaceRef');
-            requestPlaceRefNode.ele('StopPlaceRef', this.stopPlaceRef);
-            requestPlaceRefNode.ele('LocationName').ele('Text', '');
+            const requestPlaceRefNode = locationNode.ele('ojp:PlaceRef');
+            requestPlaceRefNode.ele('ojp:StopPlaceRef', this.stopPlaceRef);
+            requestPlaceRefNode.ele('ojp:LocationName').ele('Text', '');
         }
 
-        locationNode.ele('DepArrTime', dateF);
+        locationNode.ele('ojp:DepArrTime', dateF);
 
-        const requestParamsNode = requestNode.ele('Params');
-        requestParamsNode.ele('NumberOfResults', this.numberOfResults);
-        requestParamsNode.ele('StopEventType', this.stopEventType);
-        requestParamsNode.ele('IncludePreviousCalls', this.includePreviousCalls);
-        requestParamsNode.ele('IncludeOnwardCalls', this.includeOnwardCalls);
-        requestParamsNode.ele('IncludeRealtimeData', this.includeRealtimeData);
+        const requestParamsNode = requestNode.ele('ojp:Params');
+        requestParamsNode.ele('ojp:NumberOfResults', this.numberOfResults);
+        requestParamsNode.ele('ojp:StopEventType', this.stopEventType);
+        requestParamsNode.ele('ojp:IncludePreviousCalls', this.includePreviousCalls);
+        requestParamsNode.ele('ojp:IncludeOnwardCalls', this.includeOnwardCalls);
+        requestParamsNode.ele('ojp:IncludeRealtimeData', this.includeRealtimeData);
 
-        const extensionsNode = requestNode.ele('siri:Extensions');
-        extensionsNode.ele('ParamsExtension').ele('PrivateModeFilter').ele('Exclude', 'false');
+        const extensionsNode = requestNode.ele('Extensions');
+        extensionsNode.ele('ojp:ParamsExtension').ele('ojp:PrivateModeFilter').ele('ojp:Exclude', 'false');
     }
 }

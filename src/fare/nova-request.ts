@@ -50,7 +50,7 @@ export class NovaRequest {
     serviceRequestNode.ele('RequestTimestamp', dateF);
 
     const requestorRef = BaseRequestParams.buildRequestorRef();
-    serviceRequestNode.ele("siri:RequestorRef", requestorRef);
+    serviceRequestNode.ele("RequestorRef", requestorRef);
 
     return serviceRequestNode;
   }
