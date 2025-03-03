@@ -3,6 +3,7 @@
 ## 0.16.2 - 3.03.2025
 - Changes namespaces - [PR #135](https://github.com/openTdataCH/ojp-js/pull/135)
   - make `siri:` default namespace
+  - patch LIR `PointOfInterest` to allow also none categories (support for OJP-SI)
 
 ## 0.16.1 - 6.02.2025
 - Updates OJP Fare - [PR #134](https://github.com/openTdataCH/ojp-js/pull/134)
