@@ -24,55 +24,50 @@ export class PlaygroundComponent implements OnInit {
   }
 
   private async runExamples() {
-    // await this.runLIR();
+    await this.runLIR();
     // await this.runTR();
     // await this.runSER();
   }
 
-  // private async runLIR() {
-  //   console.log('======================');
-  //   console.log('LIR Requests');
-  //   console.log('======================');
+  private async runLIR() {
+    console.log('======================');
+    console.log('LIR Requests');
+    console.log('======================');
 
-  //   // 1) LIR lookup by name
-  //   const searchTerm = 'Bern';
-  //   const request1 = OJP.LocationInformationRequest.initWithLocationName(OJP.DEFAULT_STAGE, searchTerm);
+    // 1) LIR lookup by name
+    const searchTerm = 'Bern';
+    const request1 = OJP.LocationInformationRequest.initWithLocationName(searchTerm);
 
-  //   console.log('1) LIR lookup by name')
-  //   // a) using await/async
-  //   const response = await request1.fetchResponse();
-  //   console.log(response);
+    console.log('1) LIR lookup by name')
+    // a) using await/async
+    const placeResults1 = await this.ojpSDK.fetchPlaceResults(request1);
+    console.log(placeResults1);
 
-  //   // b) using Promise.then
-  //   request1.fetchResponse().then(response => {
-  //     console.log('LIR response via Promise.then');
-  //     console.log(response);
-  //   });
+    // TBA
+    // // 2) LIR lookup by BBOX
+    // // lookup locations by bbox coords (WGS84) 
+    // // and location type: stop | poi_all
 
-  //   // 2) LIR lookup by BBOX
-  //   // lookup locations by bbox coords (WGS84) 
-  //   // and location type: stop | poi_all
+    // // SW corner (bottom-left)
+    // const minLongitude = 7.433259;
+    // const minLatitude = 46.937798;
+    // // NE corner (top-right)
+    // const maxLongitude = 7.475252;
+    // const maxLatitude = 46.954805;
+    // const request2 = OJP.LocationInformationRequest.initWithBBOXAndType(OJP.DEFAULT_STAGE, minLongitude, minLatitude, maxLongitude, maxLatitude, 'stop');
 
-  //   // SW corner (bottom-left)
-  //   const minLongitude = 7.433259;
-  //   const minLatitude = 46.937798;
-  //   // NE corner (top-right)
-  //   const maxLongitude = 7.475252;
-  //   const maxLatitude = 46.954805;
-  //   const request2 = OJP.LocationInformationRequest.initWithBBOXAndType(OJP.DEFAULT_STAGE, minLongitude, minLatitude, maxLongitude, maxLatitude, 'stop');
+    // console.log('2) LIR lookup by BBOX')
+    // const response2 = await request2.fetchResponse();
+    // console.log(response2);
 
-  //   console.log('2) LIR lookup by BBOX')
-  //   const response2 = await request2.fetchResponse();
-  //   console.log(response2);
+    // 3) LIR lookup by stop reference
+    const stopRef = '8507000';
+    const request3 = OJP.LocationInformationRequest.initWithPlaceRef(stopRef);
 
-  //   // 3) LIR lookup by stop reference
-  //   const stopRef = '8507000';
-  //   const request3 = OJP.LocationInformationRequest.initWithStopPlaceRef(OJP.DEFAULT_STAGE, stopRef);
-
-  //   console.log('3) LIR lookup by StopRef')
-  //   const response3 = await request3.fetchResponse();
-  //   console.log(response3);
-  // }
+    console.log('3) LIR lookup by StopRef')
+    const placeResults3 = await this.ojpSDK.fetchPlaceResults(request3);
+    console.log(placeResults3);
+  }
 
   // private async runTR() {
   //   console.log('======================');
