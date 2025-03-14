@@ -13,6 +13,7 @@ import { IndividualTransportMode } from '../../types/individual-mode.types';
 import { ModeOfTransportType } from '../../types/mode-of-transport.type';
 import { JourneyPointType } from '../../types/journey-points';
 import { OJP_Helpers } from "../../helpers/ojp-helpers";
+import { OJP_VERSION } from "../../constants";
 
 export type TripRequestBoardingType = 'Dep' | 'Arr'
 
@@ -174,12 +175,12 @@ export class TripRequest extends OJPBaseRequest {
 
     const now = new Date();
     const dateF = now.toISOString();
-    this.serviceRequestNode.ele("RequestTimestamp", dateF);
+    this.serviceRequestNode.ele("siri:RequestTimestamp", dateF);
 
-    this.serviceRequestNode.ele("RequestorRef", OJP_Helpers.buildRequestorRef());
+    this.serviceRequestNode.ele("siri:RequestorRef", OJP_Helpers.buildRequestorRef());
 
-    const tripRequestNode = this.serviceRequestNode.ele("ojp:OJPTripRequest");
-    tripRequestNode.ele("RequestTimestamp", dateF);
+    const tripRequestNode = this.serviceRequestNode.ele("OJPTripRequest");
+    tripRequestNode.ele("siri:RequestTimestamp", dateF);
 
     const modeType = this.modeType;
     const isMonomodal = modeType === "monomodal";
@@ -194,37 +195,37 @@ export class TripRequest extends OJPBaseRequest {
         : this.toTripLocation;
       const location = tripLocation.location;
 
-      let tagName = isFrom ? "ojp:Origin" : "ojp:Destination";
+      let tagName = isFrom ? "Origin" : "Destination";
 
       const endPointNode = tripRequestNode.ele(tagName);
-      const placeRefNode = endPointNode.ele("ojp:PlaceRef");
+      const placeRefNode = endPointNode.ele("PlaceRef");
 
       if (location.stopPlace?.stopPlaceRef) {
         const locationName = location.locationName ?? "n/a";
 
         let stopPlaceRef = location.stopPlace?.stopPlaceRef ?? "";
 
-        placeRefNode.ele("ojp:StopPlaceRef", stopPlaceRef);
-        placeRefNode.ele("ojp:LocationName").ele("ojp:Text", locationName);
+        placeRefNode.ele("StopPlaceRef", stopPlaceRef);
+        placeRefNode.ele("Name").ele("Text", locationName);
       } else {
         if (location.geoPosition) {
-          const geoPositionNode = placeRefNode.ele("ojp:GeoPosition");
-          geoPositionNode.ele("Longitude", location.geoPosition.longitude);
-          geoPositionNode.ele("Latitude", location.geoPosition.latitude);
+          const geoPositionNode = placeRefNode.ele("GeoPosition");
+          geoPositionNode.ele("siri:Longitude", location.geoPosition.longitude);
+          geoPositionNode.ele("siri:Latitude", location.geoPosition.latitude);
 
           const locationName = location.geoPosition.asLatLngString();
-          placeRefNode.ele("ojp:LocationName").ele("ojp:Text", locationName);
+          placeRefNode.ele("Name").ele("Text", locationName);
         }
       }
 
       const dateF = this.departureDate.toISOString();
       if (isFrom) {
         if (this.tripRequestBoardingType === 'Dep') {
-          endPointNode.ele("ojp:DepArrTime", dateF);
+          endPointNode.ele("DepArrTime", dateF);
         }
       } else {
         if (this.tripRequestBoardingType === 'Arr') {
-          endPointNode.ele("ojp:DepArrTime", dateF);
+          endPointNode.ele("DepArrTime", dateF);
         }
       }
 
@@ -242,7 +243,7 @@ export class TripRequest extends OJPBaseRequest {
               return;
             }
 
-            const itNode = endPointNode.ele('ojp:IndividualTransportOptions');
+            const itNode = endPointNode.ele('IndividualTransportOptions');
             this.addAdditionalRestrictions(itNode, tripLocation);
           })();
         }
@@ -250,60 +251,59 @@ export class TripRequest extends OJPBaseRequest {
     });
 
     this.viaLocations.forEach(viaLocation => {
-      const viaNode = tripRequestNode.ele('ojp:Via');
-      const viaPointNode = viaNode.ele('ojp:ViaPoint');
+      const viaNode = tripRequestNode.ele('Via');
+      const viaPointNode = viaNode.ele('ViaPoint');
       const stopPlace = viaLocation.location.stopPlace;
       if (stopPlace === null) {
         const geoPosition = viaLocation.location.geoPosition;
         if (geoPosition !== null) {
-          const geoPositionNode = viaPointNode.ele('ojp:GeoPosition');
-          geoPositionNode.ele('Longitude', geoPosition.longitude);
-          geoPositionNode.ele('Latitude', geoPosition.latitude);
+          const geoPositionNode = viaPointNode.ele('GeoPosition');
+          geoPositionNode.ele('siri:Longitude', geoPosition.longitude);
+          geoPositionNode.ele('siri:Latitude', geoPosition.latitude);
 
-          viaPointNode.ele('ojp:Name').ele('ojp:Text', viaLocation.location.computeLocationName() ?? 'n/a');
+          viaPointNode.ele('Name').ele('Text', viaLocation.location.computeLocationName() ?? 'n/a');
         }
       } else {
-        viaPointNode.ele('ojp:StopPlaceRef', stopPlace.stopPlaceRef);
-        viaPointNode.ele('ojp:LocationName').ele('ojp:Text', stopPlace.stopPlaceName ?? (viaLocation.location.computeLocationName() ?? 'n/a'));
+        viaPointNode.ele('StopPlaceRef', stopPlace.stopPlaceRef);
+        viaPointNode.ele('Name').ele('Text', stopPlace.stopPlaceName ?? (viaLocation.location.computeLocationName() ?? 'n/a'));
       }
 
       if (viaLocation.dwellTimeMinutes !== null) {
-        viaNode.ele('ojp:DwellTime', 'PT' + viaLocation.dwellTimeMinutes.toString() + 'M');
+        viaNode.ele('DwellTime', 'PT' + viaLocation.dwellTimeMinutes.toString() + 'M');
       }
     });
 
-    const paramsNode = tripRequestNode.ele("ojp:Params");
+    const paramsNode = tripRequestNode.ele("Params");
     
     if (this.transportMode === 'public_transport' && (this.publicTransportModes.length > 0)) {
-      // https://opentransportdata.swiss/en/cookbook/ojptriprequest/#Params
-      const modeContainerNode = paramsNode.ele('PtModeFilter');
-      modeContainerNode.ele('ojp:Exclude', 'false');
+      const modeContainerNode = paramsNode.ele('ModeAndModeOfOperationFilter');
+      modeContainerNode.ele('Exclude', 'false');
       this.publicTransportModes.forEach(publicTransportMode => {
-        modeContainerNode.ele('ojp:PtMode', publicTransportMode);
+        modeContainerNode.ele('PtMode', publicTransportMode);
       });
     }
 
     if (this.enableExtensions) {
-      paramsNode.ele('ojp:PrivateModeFilter').ele('ojp:Exclude', 'false');
+      paramsNode.ele('IncludeAllRestrictedLines', 'true');
     }
 
     if (this.numberOfResults !== null) {
-      paramsNode.ele('ojp:NumberOfResults', this.numberOfResults);
+      paramsNode.ele('NumberOfResults', this.numberOfResults);
     }
     if (this.numberOfResultsBefore !== null) {
-      paramsNode.ele('ojp:NumberOfResultsBefore', this.numberOfResultsBefore);
+      paramsNode.ele('NumberOfResultsBefore', this.numberOfResultsBefore);
     }
     if (this.numberOfResultsAfter !== null) {
-      paramsNode.ele('ojp:NumberOfResultsAfter', this.numberOfResultsAfter);
+      paramsNode.ele('NumberOfResultsAfter', this.numberOfResultsAfter);
     }
 
-    paramsNode.ele("ojp:IncludeTrackSections", true);
-    paramsNode.ele("ojp:IncludeLegProjection", this.includeLegProjection);
-    paramsNode.ele("ojp:IncludeTurnDescription", true);
+    paramsNode.ele("IncludeTrackSections", true);
+    paramsNode.ele("IncludeLegProjection", this.includeLegProjection);
+    paramsNode.ele("IncludeTurnDescription", true);
 
     const isPublicTransport = this.transportMode === 'public_transport';
     if (isPublicTransport) {
-      paramsNode.ele("ojp:IncludeIntermediateStops", true);
+      paramsNode.ele("IncludeIntermediateStops", true);
     }
 
     const sharingModes: IndividualTransportMode[] = [
@@ -323,7 +323,17 @@ export class TripRequest extends OJPBaseRequest {
         "others-drive-car",
       ];
       if (standardModes.indexOf(transportMode) !== -1) {
-        paramsNode.ele("ojp:ItModesToCover", transportMode);
+        paramsNode.ele("ItModeToCover").ele('PersonalMode', transportMode);
+      }
+
+      if (OJP_VERSION === '2.0') {
+        const carTransportModes: IndividualTransportMode[] = ['car', 'car-ferry', 'car-shuttle-train', 'car_sharing', 'self-drive-car', 'others-drive-car'];
+        if (carTransportModes.includes(transportMode)) {
+          const modeAndModeEl = paramsNode.ele('ModeAndModeOfOperationFilter');
+          
+          modeAndModeEl.ele('siri:WaterSubmode', 'localCarFerry');
+          modeAndModeEl.ele('siri:RailSubmode', 'vehicleTunnelTransportRailService');
+        }  
       }
 
       // https://opentransportdata.swiss/en/cookbook/ojptriprequest/#Parameters_for_Configuration_of_the_TripRequest
@@ -331,8 +341,8 @@ export class TripRequest extends OJPBaseRequest {
       // - sharing transport modes 
       // => Params/Extension/ItModesToCover=transportMode
       if (isSharingMode) {
-        const paramsExtensionNode = paramsNode.ele("ojp:Extension");
-        paramsExtensionNode.ele("ojp:ItModesToCover", transportMode);
+        const paramsExtensionNode = paramsNode.ele("Extension");
+        paramsExtensionNode.ele("ItModesToCover", transportMode);
       }
     } else {
       // https://opentransportdata.swiss/en/cookbook/ojptriprequest/#Parameters_for_Configuration_of_the_TripRequest
@@ -341,7 +351,7 @@ export class TripRequest extends OJPBaseRequest {
       // => Params/Extension/Origin/Mode=transportMode
 
       if (isSharingMode) {
-        const paramsExtensionNode = paramsNode.ele("ojp:Extension");
+        const paramsExtensionNode = paramsNode.ele("Extension");
 
         tripEndpoints.forEach((tripEndpoint) => {
           const isFrom = tripEndpoint === "From";
@@ -353,7 +363,7 @@ export class TripRequest extends OJPBaseRequest {
           }
 
           const tripLocation = isFrom ? this.fromTripLocation : this.toTripLocation;
-          const tagName = isFrom ? 'ojp:Origin' : 'ojp:Destination';
+          const tagName = isFrom ? 'Origin' : 'Destination';
           const endPointNode = paramsExtensionNode.ele(tagName);
 
           this.addAdditionalRestrictions(endPointNode, tripLocation);
@@ -361,7 +371,7 @@ export class TripRequest extends OJPBaseRequest {
       }
     }
 
-    paramsNode.ele("ojp:UseRealtimeData", 'explanatory');
+    paramsNode.ele("UseRealtimeData", 'explanatory');
   }
   
   private addAdditionalRestrictions(nodeEl: xmlbuilder.XMLElement, tripLocation: TripLocationPoint) {
@@ -371,19 +381,19 @@ export class TripRequest extends OJPBaseRequest {
     }
 
     if (tripLocation.customTransportMode) {
-      nodeEl.ele('ojp:Mode', tripLocation.customTransportMode);
+      nodeEl.ele('ItModeAndModeOfOperation').ele('PersonalMode', tripLocation.customTransportMode);
     }
     if (tripLocation.minDuration !== null) {
-      nodeEl.ele('ojp:MinDuration', 'PT' + tripLocation.minDuration + 'M');
+      nodeEl.ele('MinDuration', 'PT' + tripLocation.minDuration + 'M');
     }
     if (tripLocation.maxDuration !== null) {
-      nodeEl.ele('ojp:MaxDuration', 'PT' + tripLocation.maxDuration + 'M');
+      nodeEl.ele('MaxDuration', 'PT' + tripLocation.maxDuration + 'M');
     }
     if (tripLocation.minDistance !== null) {
-      nodeEl.ele('ojp:MinDistance', tripLocation.minDistance);
+      nodeEl.ele('MinDistance', tripLocation.minDistance);
     }
     if (tripLocation.maxDistance !== null) {
-      nodeEl.ele('ojp:MaxDistance', tripLocation.maxDistance);
+      nodeEl.ele('MaxDistance', tripLocation.maxDistance);
     }
   }
 

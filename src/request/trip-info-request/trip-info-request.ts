@@ -52,19 +52,19 @@ export class TripInfoRequest extends OJPBaseRequest {
         super.buildRequestNode();
 
         const dateNowF = new Date().toISOString();
-        
-        this.serviceRequestNode.ele('RequestTimestamp', dateNowF);
-        this.serviceRequestNode.ele("RequestorRef", OJP_Helpers.buildRequestorRef());
+       
+        this.serviceRequestNode.ele('siri:RequestTimestamp', dateNowF);
+        this.serviceRequestNode.ele("siri:RequestorRef", OJP_Helpers.buildRequestorRef());
 
-        const requestNode = this.serviceRequestNode.ele('ojp:OJPTripInfoRequest');
-        requestNode.ele('RequestTimestamp', dateNowF);
+        const requestNode = this.serviceRequestNode.ele('OJPTripInfoRequest');
+        requestNode.ele('siri:RequestTimestamp', dateNowF);
 
-        requestNode.ele('ojp:JourneyRef', this.journeyRef);
-        requestNode.ele('ojp:OperatingDayRef', this.operatingDayRef);
+        requestNode.ele('JourneyRef', this.journeyRef);
+        requestNode.ele('OperatingDayRef', this.operatingDayRef);
 
-        const paramsNode = requestNode.ele('ojp:Params');
-        paramsNode.ele('ojp:IncludeCalls', true);
-        paramsNode.ele('ojp:IncludeService', true);
+        const paramsNode = requestNode.ele('Params');
+        paramsNode.ele('IncludeCalls', true);
+        paramsNode.ele('IncludeService', true);
     }
 
     public async fetchResponse(): Promise<TripInfoRequest_Response> {
