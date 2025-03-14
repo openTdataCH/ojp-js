@@ -6,6 +6,7 @@ import { StopEventType } from '../../types/stop-event-type';
 import { StopEventRequest_Response } from '../types/stop-event-request.type';
 import { StopEventRequestParser } from './stop-event-request-parser';
 import { Language } from '../../types/language-type';
+import { OJP_Helpers } from '../../helpers/ojp-helpers';
 
 export class StopEventRequest extends OJPBaseRequest {
     public stopPlaceRef: string | null;
@@ -74,7 +75,7 @@ export class StopEventRequest extends OJPBaseRequest {
     
         this.serviceRequestNode.ele('RequestTimestamp', dateNowF);
 
-        this.serviceRequestNode.ele("RequestorRef", OJPBaseRequest.buildRequestorRef());
+        this.serviceRequestNode.ele("RequestorRef", OJP_Helpers.buildRequestorRef());
 
         const requestNode = this.serviceRequestNode.ele('ojp:OJPStopEventRequest');
         requestNode.ele('RequestTimestamp', dateNowF);

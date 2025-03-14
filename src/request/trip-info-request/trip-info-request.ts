@@ -4,6 +4,7 @@ import { OJPBaseRequest } from '../base-request'
 import { TripInfoRequest_Response } from '../types/trip-info-request.type';
 import { TripInfoRequestParser } from './trip-info-request-parser';
 import { Language } from '../../types/language-type';
+import { OJP_Helpers } from '../../helpers/ojp-helpers';
 
 export class TripInfoRequest extends OJPBaseRequest {
     public journeyRef: string;
@@ -53,7 +54,7 @@ export class TripInfoRequest extends OJPBaseRequest {
         const dateNowF = new Date().toISOString();
         
         this.serviceRequestNode.ele('RequestTimestamp', dateNowF);
-        this.serviceRequestNode.ele("RequestorRef", OJPBaseRequest.buildRequestorRef());
+        this.serviceRequestNode.ele("RequestorRef", OJP_Helpers.buildRequestorRef());
 
         const requestNode = this.serviceRequestNode.ele('ojp:OJPTripInfoRequest');
         requestNode.ele('RequestTimestamp', dateNowF);

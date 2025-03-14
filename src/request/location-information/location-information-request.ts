@@ -6,6 +6,7 @@ import { LIR_Response } from '../types/location-information-request.type';
 import { Location } from '../../location/location';
 import { Language } from '../../types/language-type';
 import { GeoPosition } from '../../location/geoposition';
+import { OJP_Helpers } from '../../helpers/ojp-helpers';
 
 export class LocationInformationRequest extends OJPBaseRequest {
   public locationName: string | null;
@@ -133,7 +134,7 @@ export class LocationInformationRequest extends OJPBaseRequest {
     const dateF = now.toISOString();
     this.serviceRequestNode.ele("RequestTimestamp", dateF);
 
-    this.serviceRequestNode.ele("RequestorRef", OJPBaseRequest.buildRequestorRef());
+    this.serviceRequestNode.ele("RequestorRef", OJP_Helpers);
 
     const requestNode = this.serviceRequestNode.ele("ojp:OJPLocationInformationRequest");
     requestNode.ele("RequestTimestamp", dateF);

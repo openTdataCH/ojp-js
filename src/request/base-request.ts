@@ -118,10 +118,6 @@ export class OJPBaseRequest {
     return responsePromise;
   }
 
-  public static buildRequestorRef() {
-    return "OJP_JS_SDK_v" + SDK_VERSION;
-  }
-
   private computeBaseServiceRequestNode(): xmlbuilder.XMLElement {
     const ojpNode = xmlbuilder.create("OJP", {
       version: "1.0",
