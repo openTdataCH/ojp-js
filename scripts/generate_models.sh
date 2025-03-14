@@ -2,7 +2,7 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 APP_PATH=$DIR/..
 
 OPENAPI_YAML_PATH=$APP_PATH/openapi
-OPENAPI_GENERATED_TS_PATH=$APP_PATH/openapi/generated
+OPENAPI_GENERATED_TS_PATH=$APP_PATH/src/types/openapi/generated
 
 SRC_FILES=(
     "ojp-trip-request.yaml"
