@@ -29,6 +29,8 @@ components:
       type: object
       xml:
         name: PlaceParam
+      required:
+        - type
       properties:
         type:
           type: array
