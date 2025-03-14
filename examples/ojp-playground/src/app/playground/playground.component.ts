@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 import * as OJP from 'ojp-sdk'
 
@@ -7,9 +7,11 @@ import * as OJP from 'ojp-sdk'
   templateUrl: './playground.component.html',
   styleUrls: ['./playground.component.scss']
 })
-export class PlaygroundComponent {
+export class PlaygroundComponent implements OnInit {
   constructor() {
     this.runExamples();
+  async ngOnInit(): Promise<void> {
+    await this.runExamples();
   }
 
   private async runExamples() {
