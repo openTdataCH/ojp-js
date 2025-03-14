@@ -9,7 +9,7 @@
   "scripts": {
     "test": "jest",
     "build": "tsc",
-    "tscw": "tsc --watch"
+    "dev": "tsc --watch"
   },
   "repository": {
     "type": "git",
