@@ -14,7 +14,8 @@
   "scripts": {
     "test": "jest",
     "build": "tsc",
-    "dev": "tsc --watch"
+    "dev": "tsc --watch",
+    "build:models": "bash scripts/generate_models.sh"
   },
   "repository": {
     "type": "git",
