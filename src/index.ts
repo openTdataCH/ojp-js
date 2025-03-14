@@ -8,6 +8,8 @@ export {
 export {
   TripRequest,
   LocationInformationRequest,
+
+  PlaceResult,
 } from "./models/ojp";
 
 export { HTTPConfig } from "./types/_all";
