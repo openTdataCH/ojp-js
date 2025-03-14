@@ -7,6 +7,7 @@ import { StopEventRequest_Response } from '../types/stop-event-request.type';
 import { StopEventRequestParser } from './stop-event-request-parser';
 import { Language } from '../../types/language-type';
 import { OJP_Helpers } from '../../helpers/ojp-helpers';
+import { GeoPosition } from '../../location/geoposition';
 
 export class StopEventRequest extends OJPBaseRequest {
     public stopPlaceRef: string | null;
