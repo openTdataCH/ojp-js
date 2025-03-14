@@ -4,7 +4,7 @@ import { RequestInfo } from "../request";
 import { Trip } from "../trip";
 import { NovaFare_Response, NovaFareParser } from "./nova-request-parser";
 import { ApiConfig } from '../types/stage-config';
-import { BaseRequestParams } from '../request/base-request-params';
+import { OJPBaseRequest } from '../request/base-request';
 
 export class NovaRequest {
   private stageConfig: ApiConfig;
@@ -49,7 +49,7 @@ export class NovaRequest {
     const dateF = requestDate.toISOString();
     serviceRequestNode.ele('RequestTimestamp', dateF);
 
-    const requestorRef = BaseRequestParams.buildRequestorRef();
+    const requestorRef = OJPBaseRequest.buildRequestorRef();
     serviceRequestNode.ele("RequestorRef", requestorRef);
 
     return serviceRequestNode;

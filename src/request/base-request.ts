@@ -2,6 +2,7 @@ import fetch from 'cross-fetch';
 
 import { ApiConfig } from '../types/stage-config';
 import { RequestInfo } from './types/request-info.type';
+import { SDK_VERSION } from '../constants';
 
 export class OJPBaseRequest {
   private stageConfig: ApiConfig;
@@ -100,5 +101,9 @@ export class OJPBaseRequest {
     });
 
     return responsePromise;
+  }
+
+  public static buildRequestorRef() {
+    return "OJP_JS_SDK_v" + SDK_VERSION;
   }
 }
