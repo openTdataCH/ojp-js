@@ -8,8 +8,17 @@ import * as OJP from 'ojp-sdk'
   styleUrls: ['./playground.component.scss']
 })
 export class PlaygroundComponent implements OnInit {
+  private ojpSDK: OJP.SDK;
+
   constructor() {
-    this.runExamples();
+    let httpConfig: OJP.HTTPConfig = {
+      url: 'https://api.opentransportdata.swiss/ojp20',
+      authToken: null,
+    };
+
+    this.ojpSDK = new OJP.SDK(httpConfig, 'de');
+  }
+
   async ngOnInit(): Promise<void> {
     await this.runExamples();
   }
