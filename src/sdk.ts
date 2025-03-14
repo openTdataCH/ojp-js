@@ -1,6 +1,6 @@
 import axios, { AxiosHeaders, AxiosRequestConfig } from "axios";
 
-import { LocationInformationRequest, PlaceResult, Trip, TripRequest } from "./models/sdk";
+import { LocationInformationRequest, PlaceResult, Trip, TripRequest } from "./models/ojp";
 import { HTTPConfig, Language } from "./types/_all";
 
 export class SDK {
