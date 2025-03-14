@@ -5,4 +5,9 @@ export {
   ContinuousLegSchema as ContinuousLeg,
 } from './types/openapi';
 
+export {
+  TripRequest,
+  LocationInformationRequest,
+} from "./models/sdk";
+
 export { HTTPConfig } from "./types/_all";
