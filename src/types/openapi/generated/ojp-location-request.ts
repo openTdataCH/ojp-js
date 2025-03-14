@@ -30,7 +30,7 @@ export type webhooks = Record<string, never>;
 export interface components {
   schemas: {
     PlaceParam: {
-      type?: ("stop" | "address" | "poi" | "location" | "topographicPlace")[];
+      type: ("stop" | "address" | "poi" | "location" | "topographicPlace")[];
       numberOfResults?: number;
       includePtModes?: boolean;
     };
