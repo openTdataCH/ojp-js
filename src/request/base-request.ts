@@ -36,7 +36,7 @@ export class OJPBaseRequest {
     this.mockResponseXML = null;
   }
 
-  protected buildRequestXML(): string {
+  private buildRequestXML(): string {
     this.buildRequestNode();
 
     const bodyXML_s = this.serviceRequestNode.end({
