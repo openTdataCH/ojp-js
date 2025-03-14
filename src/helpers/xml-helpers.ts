@@ -1,30 +1,158 @@
-export class XML_Helpers {
-  // from https://stackoverflow.com/a/47317538
-  public static prettyPrintXML(sourceXml: string): string {
-    var xmlDoc = new DOMParser().parseFromString(sourceXml, 'application/xml');
-    var xsltDoc = new DOMParser().parseFromString([
-      '<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform">',
-      '  <xsl:strip-space elements="*"/>',
-      '  <xsl:template match="para[content-style][not(text())]">', // change to just text() to strip space in text nodes
-      '    <xsl:value-of select="normalize-space(.)"/>',
-      '  </xsl:template>',
-      '  <xsl:template match="node()|@*">',
-      '    <xsl:copy><xsl:apply-templates select="node()|@*"/></xsl:copy>',
-      '  </xsl:template>',
-      '  <xsl:output indent="yes"/>',
-      '</xsl:stylesheet>',
-    ].join("\n"), 'application/xml');
+import { XMLParser, XMLBuilder } from "fast-xml-parser";
+import { MapArrayTags, MapNS_Tags, MapParentArrayTags } from "../types/openapi/openapi-dependencies";
 
-    try {
-      var xsltProcessor = new XSLTProcessor();
-      // TODO - check what's wrong in Firefox, why this fails
-      xsltProcessor.importStylesheet(xsltDoc);
-      var resultDoc = xsltProcessor.transformToDocument(xmlDoc);
-      var resultXml = new XMLSerializer().serializeToString(resultDoc);
-      return resultXml
-    } catch(error) {
-      console.error('XML_Helpers.prettyPrintXML - fails, see TODO');
-      return sourceXml
+const transformTagNameHandler = (tagName: string) => {
+  // Convert to camelCase, strip -_
+  let newTagName = tagName.replace(/[-_](.)/g, (_, char) => char.toUpperCase()) 
+  // Ensure first letter is lowercase
+  newTagName = newTagName.replace(/^([A-Z])/, (match) => match.toLowerCase());
+
+  // console.log('transformToCamelCase:   ' + tagName);
+
+  return newTagName;
+};
+
+const isArrayHandler = (tagName: string, jPath: string) => {
+  // console.log('handleArrayNodes:       ' + tagName +  ' -- ' + jPath);
+
+  const jPathParts = jPath.split('.');
+  if (jPathParts.length > 1) {
+    const pathPart = jPathParts.slice(-2).join('.');
+    if (pathPart in MapArrayTags) {
+      return true;
+    }
+  }
+
+  return false;
+};
+
+export function traverseJSON(obj: any, callback: (key: string, value: any, path: string) => void, path: string = '') {
+  if (typeof obj !== 'object' || obj === null) return;
+  
+  for (const key in obj) {
+    if (Object.prototype.hasOwnProperty.call(obj, key)) {
+      const value = obj[key];
+      
+      const newPath: string = (() => {
+        if (obj instanceof Array) {
+          return path;
+        }
+
+        return path + '.' + key;
+      })(); 
+
+      callback(key, value, newPath);
+
+      if (typeof value === 'object' && value !== null) {
+        traverseJSON(value, callback, newPath);
+      }
     }
   }
 }
+
+export function parseXML<T>(xml: string, parentPath: string = ''): T {
+  let response = parser.parse(xml) as T;
+  
+  traverseJSON(response, (key: string, value: any, jPath: string) => {
+    // console.log(path + ' k: ' + key + ' v: ' + value);
+    
+    if (typeof value === 'object') {
+      
+      // enforce empty arrays if the array items are not present
+      const jPathParts = jPath.split('.'); 
+      if (jPathParts.length > 1) {
+        const pathPart = jPathParts.slice(-2).join('.');
+        if (pathPart in MapParentArrayTags) {
+          const enforceChildTags = MapParentArrayTags[pathPart];
+          enforceChildTags.forEach(childTagName => {
+            value[childTagName] ??= [];
+          });
+        }
+      }
+
+      // check for #text keys that are added for text nodes that have attributes
+      for (const key1 in value) {
+        if (typeof value[key1] === 'object') {
+          if (Object.keys(value[key1]).includes('#text')) {
+            const otherKeys = Object.keys(value[key1]).filter(el => el !== '#text');
+
+            // keep attributes
+            otherKeys.forEach(otherKey => {
+              const newKey = key1 + otherKey;
+              value[newKey] = value[key1][otherKey];
+            });
+            
+            // replace the object with literal value of #text
+            value[key1] = value[key1]['#text'];
+          }
+        }
+      }
+    }
+ }, parentPath);
+
+  return response;
+}
+
+function transformKeys<T extends Record<string, any>>(obj: T, callback:(key: string, path: string[]) => string, path: string[] = []): Record<string, any> {
+  return Object.entries(obj).reduce((acc, [key, value]) => {
+    const newKey = callback(key, path);
+    const newPath = path.concat([newKey]);
+
+    acc[newKey] = (() => {
+      if (value instanceof Object) {
+        if (!Array.isArray(value)) {
+          return transformKeys(value, callback, newPath);
+        }
+      }
+
+      return value;
+    })();
+    
+    return acc;
+  }, {} as Record<string, any>);
+}
+
+export function buildXML(obj: Record<string, any>): string {
+  const objTransformed = transformKeys(obj, (key: string, path: string[]) => {
+    // capitalize first letter
+    let newKey = key.charAt(0).toUpperCase() + key.slice(1);
+    
+    // ensure namespaces
+    const parentKey = path.at(-1) ?? null;
+    if (parentKey !== null) {
+      const tagNS_Key = parentKey.replace(/^.*:/, '') + '.' + newKey;
+      const tagNS = MapNS_Tags[tagNS_Key] ?? null;
+
+      if (tagNS !== null) {
+        newKey = tagNS + ':' + newKey;
+      }
+    }
+
+    return newKey;
+  }, ['OJP']);
+
+  const options = {
+    format: true, 
+    ignoreAttributes: false,
+    suppressEmptyNode: true,
+  };
+  const builder = new XMLBuilder(options);
+  const xmlParts = [
+    '<?xml version="1.0" encoding="utf-8"?>',
+    '<OJP xmlns="http://www.vdv.de/ojp" xmlns:siri="http://www.siri.org.uk/siri" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xsi:schemaLocation="http://www.vdv.de/ojp" version="2.0">',
+    builder.build(objTransformed),
+    '</OJP>',
+  ];
+
+  const xmlS = xmlParts.join('\n');
+
+  return xmlS;
+}
+
+// Configure the parser to remove namespace prefixes
+const parser = new XMLParser({
+  ignoreAttributes: false,
+  removeNSPrefix: true,
+  transformTagName: transformTagNameHandler,
+  isArray: isArrayHandler,
+});

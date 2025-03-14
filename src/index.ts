@@ -1,34 +1,17 @@
-export * from './constants'
+// These exports - ./types/openapi - should be kept at minimum as possible
+export { 
+  TimedLegSchema as TimedLeg, 
+  TransferLegSchema as TransferLeg, 
+  ContinuousLegSchema as ContinuousLeg,
+} from './types/openapi';
 
-export * from './fare/fare'
-export * from './fare/nova-request'
+export {
+  TripRequest,
+  LocationInformationRequest,
 
-export * from './helpers/date-helpers'
-export * from './helpers/xml-helpers'
+  PlaceResult,
+} from "./models/ojp";
 
-export * from './journey/journey-service'
-export * from './journey/public-transport-mode'
+export { HTTPConfig } from "./types/_all";
 
-export * from './location/location'
-export * from './location/geoposition-bbox'
-export * from './location/geoposition'
-
-export * from './shared/duration'
-
-export * from './situation/situation-element'
-
-export * from './stop-event/stop-event'
-
-export * from './request/index'
-
-export * from './trip/index'
-
-export * from './types/lir-restrictions.type'
-export * from './types/mode-of-transport.type'
-export * from './types/individual-mode.types'
-export * from './types/journey-points'
-export * from './types/language-type'
-export * from './types/stage-config'
-export * from './types/stop-event-type'
-export * from './types/stop-point-type'
-export * from './types/trip-mode-type'
+export { SDK } from "./sdk";
