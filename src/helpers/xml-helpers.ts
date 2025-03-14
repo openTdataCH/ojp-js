@@ -1,5 +1,5 @@
-import { XMLParser } from "fast-xml-parser";
-import { MapArrayTags, MapParentArrayTags } from "../types/openapi/openapi-dependencies";
+import { XMLParser, XMLBuilder } from "fast-xml-parser";
+import { MapArrayTags, MapNS_Tags, MapParentArrayTags } from "../types/openapi/openapi-dependencies";
 
 const transformTagNameHandler = (tagName: string) => {
   // Convert to camelCase, strip -_
@@ -93,7 +93,7 @@ export function parseXML<T>(xml: string, parentPath: string = ''): T {
   return response;
 }
 
-export function transformKeys<T extends Record<string, any>>(obj: T, callback:(key: string, path: string[]) => string, path: string[] = []): Record<string, any> {
+function transformKeys<T extends Record<string, any>>(obj: T, callback:(key: string, path: string[]) => string, path: string[] = []): Record<string, any> {
   return Object.entries(obj).reduce((acc, [key, value]) => {
     const newKey = callback(key, path);
     const newPath = path.concat([newKey]);
@@ -110,6 +110,43 @@ export function transformKeys<T extends Record<string, any>>(obj: T, callback:(k
     
     return acc;
   }, {} as Record<string, any>);
+}
+
+export function buildXML(obj: Record<string, any>): string {
+  const objTransformed = transformKeys(obj, (key: string, path: string[]) => {
+    // capitalize first letter
+    let newKey = key.charAt(0).toUpperCase() + key.slice(1);
+    
+    // ensure namespaces
+    const parentKey = path.at(-1) ?? null;
+    if (parentKey !== null) {
+      const tagNS_Key = parentKey.replace(/^.*:/, '') + '.' + newKey;
+      const tagNS = MapNS_Tags[tagNS_Key] ?? null;
+
+      if (tagNS !== null) {
+        newKey = tagNS + ':' + newKey;
+      }
+    }
+
+    return newKey;
+  }, ['OJP']);
+
+  const options = {
+    format: true, 
+    ignoreAttributes: false,
+    suppressEmptyNode: true,
+  };
+  const builder = new XMLBuilder(options);
+  const xmlParts = [
+    '<?xml version="1.0" encoding="utf-8"?>',
+    '<OJP xmlns="http://www.vdv.de/ojp" xmlns:siri="http://www.siri.org.uk/siri" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xsi:schemaLocation="http://www.vdv.de/ojp" version="2.0">',
+    builder.build(objTransformed),
+    '</OJP>',
+  ];
+
+  const xmlS = xmlParts.join('\n');
+
+  return xmlS;
 }
 
 // Configure the parser to remove namespace prefixes
