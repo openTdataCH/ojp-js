@@ -4,43 +4,81 @@ import { OJPBaseRequest } from '../base-request'
 import { LocationInformationParser } from './location-information-parser';
 import { LIR_Response } from '../types/location-information-request.type';
 import { Location } from '../../location/location';
-import { LocationInformationRequestParams } from './location-information-request-params';
 import { Language } from '../../types/language-type';
+import { GeoPosition } from '../../location/geoposition';
+import { OJP_Helpers } from '../../helpers/ojp-helpers';
 
 export class LocationInformationRequest extends OJPBaseRequest {
-  private requestParams: LocationInformationRequestParams;
+  public locationName: string | null;
+  public stopPlaceRef: string | null;
+  
+  public restrictionTypes: RestrictionType[];
+  public poiRestriction: POI_Restriction | null;
+  
+  public numberOfResults: number | null;
+  
+  public bboxWest: number | null;
+  public bboxNorth: number | null;
+  public bboxEast: number | null;
+  public bboxSouth: number | null;
 
-  constructor(stageConfig: ApiConfig, requestParams: LocationInformationRequestParams) {
-    super(stageConfig);
-    this.requestParams = requestParams;
-    this.requestInfo.requestXML = this.buildRequestXML();
+  public circleCenter: GeoPosition | null;
+  public circleRadius: number | null;
+
+  public enableExtensions: boolean;
+
+  constructor(stageConfig: ApiConfig, language: Language) {
+    super(stageConfig, language);
+
+    this.locationName = null;
+    this.stopPlaceRef = null;
+
+    this.restrictionTypes = [];
+    this.poiRestriction = null;
+    
+    this.numberOfResults = null;
+
+    this.bboxWest = null;
+    this.bboxNorth = null;
+    this.bboxEast = null;
+    this.bboxSouth = null;
+
+    this.circleCenter = null;
+    this.circleRadius = null;
+
+    this.enableExtensions = true;
   }
 
   public static initWithResponseMock(mockText: string) {
-    const emptyRequestParams = new LocationInformationRequestParams('en');
-    const request = new LocationInformationRequest(EMPTY_API_CONFIG, emptyRequestParams);
+    const request = new LocationInformationRequest(EMPTY_API_CONFIG, 'en');
     request.mockResponseXML = mockText;
     
     return request;
   }
 
   public static initWithRequestMock(mockText: string, stageConfig: ApiConfig = EMPTY_API_CONFIG) {
-    const emptyRequestParams = new LocationInformationRequestParams('en');
-    const request = new LocationInformationRequest(stageConfig, emptyRequestParams);
+    const request = new LocationInformationRequest(stageConfig, 'en');
     request.mockRequestXML = mockText;
     
     return request;
   }
 
   public static initWithLocationName(stageConfig: ApiConfig, language: Language, locationName: string, restrictionTypes: RestrictionType[], limit: number = 10): LocationInformationRequest {
-    const requestParams = LocationInformationRequestParams.initWithLocationName(language, locationName, restrictionTypes, limit);
-    const request = new LocationInformationRequest(stageConfig, requestParams);
+    const request = new LocationInformationRequest(stageConfig, language);
+    request.locationName = locationName;
+    request.numberOfResults = limit;
+
+    if (restrictionTypes !== null) {
+      request.restrictionTypes = restrictionTypes;
+    }
+
     return request;
   }
 
   public static initWithStopPlaceRef(stageConfig: ApiConfig, language: Language, stopPlaceRef: string): LocationInformationRequest {
-    const requestParams = LocationInformationRequestParams.initWithStopPlaceRef(language, stopPlaceRef);
-    const request = new LocationInformationRequest(stageConfig, requestParams);
+    const request = new LocationInformationRequest(stageConfig, language);
+    request.stopPlaceRef = stopPlaceRef;
+    
     return request;
   }
 
@@ -53,8 +91,13 @@ export class LocationInformationRequest extends OJPBaseRequest {
     restrictionTypes: RestrictionType[] = [],
     numberOfResults: number = 1000
   ): LocationInformationRequest {
-    const requestParams = LocationInformationRequestParams.initWithCircleLngLatRadius(language, circleLongitude, circleLatitude, circleRadius, restrictionTypes, numberOfResults);
-    const request = new LocationInformationRequest(stageConfig, requestParams);
+    const request = new LocationInformationRequest(stageConfig, language);
+    
+    request.circleCenter = new GeoPosition(circleLongitude, circleLatitude);
+    request.circleRadius = circleRadius;
+    request.restrictionTypes = restrictionTypes;
+    request.numberOfResults = numberOfResults;
+    
     return request;
   }
 
@@ -69,13 +112,104 @@ export class LocationInformationRequest extends OJPBaseRequest {
     limit: number = 1000,
     poiRestriction: POI_Restriction | null = null,
   ): LocationInformationRequest {
-    const requestParams = LocationInformationRequestParams.initWithBBOXAndType(language, bboxWest, bboxNorth, bboxEast, bboxSouth, restrictionTypes, limit, poiRestriction);
-    const request = new LocationInformationRequest(stageConfig, requestParams);
+    const request = new LocationInformationRequest(stageConfig, language);
+
+    request.numberOfResults = limit;
+
+    request.bboxWest = bboxWest;
+    request.bboxNorth = bboxNorth;
+    request.bboxEast = bboxEast;
+    request.bboxSouth = bboxSouth;
+    
+    request.restrictionTypes = restrictionTypes;
+    request.poiRestriction = poiRestriction;
+
     return request;
   }
 
-  protected buildRequestXML(): string {
-    return this.requestParams.buildRequestXML();
+  protected buildRequestNode() {
+    super.buildRequestNode();
+
+    const now = new Date();
+    const dateF = now.toISOString();
+    this.serviceRequestNode.ele("RequestTimestamp", dateF);
+
+    this.serviceRequestNode.ele("RequestorRef", OJP_Helpers);
+
+    const requestNode = this.serviceRequestNode.ele("ojp:OJPLocationInformationRequest");
+    requestNode.ele("RequestTimestamp", dateF);
+
+    const locationName = this.locationName ?? null;
+    if (locationName !== null) {
+      requestNode.ele('ojp:InitialInput').ele('ojp:LocationName', locationName);
+    }
+
+    const stopPlaceRef = this.stopPlaceRef ?? null;
+    if (stopPlaceRef) {
+      const requestPlaceRefNode = requestNode.ele("ojp:PlaceRef");
+      requestPlaceRefNode.ele("ojp:StopPlaceRef", stopPlaceRef);
+      requestPlaceRefNode.ele("ojp:LocationName").ele("Text", "n/a");
+    }
+
+    const bboxWest = this.bboxWest ?? null;
+    const bboxNorth = this.bboxNorth ?? null;
+    const bboxEast = this.bboxEast ?? null;
+    const bboxSouth = this.bboxSouth ?? null;
+    if (bboxWest && bboxNorth && bboxEast && bboxSouth) {
+      const rectangleNode = requestNode.ele('ojp:InitialInput')
+        .ele("ojp:GeoRestriction")
+        .ele("ojp:Rectangle");
+
+      const upperLeftNode = rectangleNode.ele("ojp:UpperLeft");
+      upperLeftNode.ele("Longitude", bboxWest.toFixed(6));
+      upperLeftNode.ele("Latitude", bboxNorth.toFixed(6));
+
+      const lowerRightNode = rectangleNode.ele("ojp:LowerRight");
+      lowerRightNode.ele("Longitude", bboxEast.toFixed(6));
+      lowerRightNode.ele("Latitude", bboxSouth.toFixed(6));
+    }
+
+    if (this.circleCenter !== null && this.circleRadius !== null) {
+      const circleNode = requestNode.ele('ojp:InitialInput')
+        .ele("ojp:GeoRestriction")
+        .ele("ojp:Circle");
+
+      const centerNode = circleNode.ele('ojp:Center');
+      centerNode.ele('Longitude', this.circleCenter.longitude.toFixed(6));
+      centerNode.ele('Latitude', this.circleCenter.latitude.toFixed(6));
+
+      circleNode.ele('Radius', this.circleRadius);
+    }
+
+    const restrictionsNode = requestNode.ele("ojp:Restrictions");
+
+    this.restrictionTypes.forEach(restrictionType => {
+      restrictionsNode.ele("ojp:Type", restrictionType);
+
+      const isPOI = restrictionType === 'poi';
+      if (isPOI && this.poiRestriction) {
+        const poiCategoryNode = restrictionsNode.ele("ojp:PointOfInterestFilter").ele("PointOfInterestCategory");
+
+        const isSharedMobility = this.poiRestriction.poiType === 'shared_mobility';
+        const poiOsmTagKey = isSharedMobility ? 'amenity' : 'POI';
+        this.poiRestriction.tags.forEach((poiOsmTag) => {
+          const osmTagNode = poiCategoryNode.ele("OsmTag");
+          osmTagNode.ele("ojp:Tag", poiOsmTagKey);
+          osmTagNode.ele("ojp:Value", poiOsmTag);
+        });
+      }
+    });
+
+    const numberOfResults = this.numberOfResults ?? 10;
+    restrictionsNode.ele("ojp:NumberOfResults", numberOfResults);
+
+    if (this.enableExtensions) {
+      const extensionsNode = requestNode.ele("Extensions");
+      extensionsNode
+        .ele("ojp:ParamsExtension")
+        .ele("ojp:PrivateModeFilter")
+        .ele("ojp:Exclude", "false");
+    }
   }
 
   public async fetchResponse(): Promise<LIR_Response> {
