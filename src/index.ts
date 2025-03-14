@@ -8,8 +8,8 @@ export {
 export {
   TripRequest,
   LocationInformationRequest,
-} from "./models/sdk";
+} from "./models/ojp";
 
 export { HTTPConfig } from "./types/_all";
 
-export { SDK } from "./ojp";
+export { SDK } from "./sdk";
