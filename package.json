@@ -6,6 +6,11 @@
   "main": "lib/index.cjs",
   "module": "lib/index.js",
   "types": "lib/index.d.ts",
+  "exports": {
+    "require": "./lib/index.cjs",
+    "import": "./lib/index.js"
+  },
+  "files": ["lib/**/*"],
   "scripts": {
     "test": "jest",
     "build": "tsc",
