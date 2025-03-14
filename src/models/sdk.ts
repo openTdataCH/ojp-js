@@ -1,8 +1,4 @@
-import { XMLBuilder } from "fast-xml-parser";
-
-import { MapNS_Tags} from '../types/openapi/openapi-dependencies';
-
-import { parseXML, transformKeys } from "../helpers/parser";
+import { buildXML, parseXML } from "../helpers/xml-helpers";
 import { Language } from "../types/_all";
 
 import { 
@@ -103,7 +99,7 @@ export class TripRequest implements TripRequestSchema {
   }
 
   public buildRequestXML(language: Language): string {
-    const tripRequestOJP: TripRequestOJP = {
+    const requestOJP: TripRequestOJP = {
       OJPRequest: {
         serviceRequest: {
           serviceRequestContext: {
@@ -116,37 +112,7 @@ export class TripRequest implements TripRequestSchema {
       },
     };
 
-    const tripRequestTransformed = transformKeys(tripRequestOJP, (key: string, path: string[]) => {
-      // capitalize first letter
-      let newKey = key.charAt(0).toUpperCase() + key.slice(1);
-      
-      const parentKey = path.at(-1) ?? null;
-      if (parentKey !== null) {
-        const tagNS_Key = parentKey.replace(/^.*:/, '') + '.' + newKey;
-        const tagNS = MapNS_Tags[tagNS_Key] ?? null;
-  
-        if (tagNS !== null) {
-          newKey = tagNS + ':' + newKey;
-        }
-      }
-
-      return newKey;
-    }, ['OJP']);
-
-    const options = {
-      format: true, 
-      ignoreAttributes: false,
-      suppressEmptyNode: true,
-    };
-    const builder = new XMLBuilder(options);
-    const xmlParts = [
-      '<?xml version="1.0" encoding="utf-8"?>',
-      '<OJP xmlns="http://www.vdv.de/ojp" xmlns:siri="http://www.siri.org.uk/siri" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xsi:schemaLocation="http://www.vdv.de/ojp" version="2.0">',
-      builder.build(tripRequestTransformed),
-      '</OJP>',
-    ];
-
-    const xmlS = xmlParts.join('\n');
+    const xmlS = buildXML(requestOJP);
 
     return xmlS;
   }
@@ -271,37 +237,7 @@ export class LocationInformationRequest implements LocationInformationRequestSch
       },
     };
 
-    const tripRequestTransformed = transformKeys(requestOJP, (key: string, path: string[]) => {
-      // capitalize first letter
-      let newKey = key.charAt(0).toUpperCase() + key.slice(1);
-      
-      const parentKey = path.at(-1) ?? null;
-      if (parentKey !== null) {
-        const tagNS_Key = parentKey.replace(/^.*:/, '') + '.' + newKey;
-        const tagNS = MapNS_Tags[tagNS_Key] ?? null;
-  
-        if (tagNS !== null) {
-          newKey = tagNS + ':' + newKey;
-        }
-      }
-
-      return newKey;
-    }, ['OJP']);
-
-    const options = {
-      format: true, 
-      ignoreAttributes: false,
-      suppressEmptyNode: true,
-    };
-    const builder = new XMLBuilder(options);
-    const xmlParts = [
-      '<?xml version="1.0" encoding="utf-8"?>',
-      '<OJP xmlns="http://www.vdv.de/ojp" xmlns:siri="http://www.siri.org.uk/siri" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xsi:schemaLocation="http://www.vdv.de/ojp" version="2.0">',
-      builder.build(tripRequestTransformed),
-      '</OJP>',
-    ];
-
-    const xmlS = xmlParts.join('\n');
+    const xmlS = buildXML(requestOJP);
 
     return xmlS;
   }
