@@ -1,25 +1,23 @@
 import { EMPTY_API_CONFIG, ApiConfig } from '../../types/stage-config'
 import { OJPBaseRequest } from '../base-request'
 
-import { TripInfoRequestParams } from './trip-info-request-params';
-
 import { TripInfoRequest_Response } from '../types/trip-info-request.type';
 import { TripInfoRequestParser } from './trip-info-request-parser';
 import { Language } from '../../types/language-type';
 
 export class TripInfoRequest extends OJPBaseRequest {
-    public requestParams: TripInfoRequestParams
+    public journeyRef: string;
+    public operatingDayRef: string;
 
-    constructor(stageConfig: ApiConfig, requestParams: TripInfoRequestParams) {
-        super(stageConfig);
-        
-        this.requestParams = requestParams;
-        this.requestInfo.requestXML = this.buildRequestXML();
+    constructor(stageConfig: ApiConfig, language: Language, journeyRef: string, operatingDayRef: string) {
+        super(stageConfig, language);
+
+        this.journeyRef = journeyRef;
+        this.operatingDayRef = operatingDayRef;
     }
 
     public static Empty(stageConfig: ApiConfig = EMPTY_API_CONFIG): TripInfoRequest {
-        const emptyRequestParams = TripInfoRequestParams.Empty();
-        const request = new TripInfoRequest(stageConfig, emptyRequestParams);
+        const request = new TripInfoRequest(stageConfig, 'en', 'n/a', 'n/a');
 
         return request;
     }
@@ -44,14 +42,28 @@ export class TripInfoRequest extends OJPBaseRequest {
             operatingDayRef = dateNowF.substring(0, 10);
         }
         
-        const requestParams = new TripInfoRequestParams(language, journeyRef, operatingDayRef);
-        const request = new TripInfoRequest(stageConfig, requestParams);
+        const request = new TripInfoRequest(stageConfig, language, journeyRef, operatingDayRef);
         
         return request;
     }
 
-    protected buildRequestXML(): string {
-        return this.requestParams.buildRequestXML();
+    protected buildRequestNode(): void {
+        super.buildRequestNode();
+
+        const dateNowF = new Date().toISOString();
+        
+        this.serviceRequestNode.ele('RequestTimestamp', dateNowF);
+        this.serviceRequestNode.ele("RequestorRef", OJPBaseRequest.buildRequestorRef());
+
+        const requestNode = this.serviceRequestNode.ele('ojp:OJPTripInfoRequest');
+        requestNode.ele('RequestTimestamp', dateNowF);
+
+        requestNode.ele('ojp:JourneyRef', this.journeyRef);
+        requestNode.ele('ojp:OperatingDayRef', this.operatingDayRef);
+
+        const paramsNode = requestNode.ele('ojp:Params');
+        paramsNode.ele('ojp:IncludeCalls', true);
+        paramsNode.ele('ojp:IncludeService', true);
     }
 
     public async fetchResponse(): Promise<TripInfoRequest_Response> {

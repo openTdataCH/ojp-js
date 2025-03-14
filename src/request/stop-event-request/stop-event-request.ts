@@ -1,7 +1,6 @@
 import { EMPTY_API_CONFIG, ApiConfig } from '../../types/stage-config'
 import { OJPBaseRequest } from '../base-request'
 
-import { StopEventRequestParams } from './stop-event-request-params';
 import { StopEventType } from '../../types/stop-event-type';
 
 import { StopEventRequest_Response } from '../types/stop-event-request.type';
@@ -9,21 +8,40 @@ import { StopEventRequestParser } from './stop-event-request-parser';
 import { Language } from '../../types/language-type';
 
 export class StopEventRequest extends OJPBaseRequest {
-    public requestParams: StopEventRequestParams
+    public stopPlaceRef: string | null;
+    public geoPosition: GeoPosition | null;
+    
+    public depArrTime: Date;
+    public numberOfResults: number;
+    
+    public stopEventType: StopEventType;
 
-    constructor(stageConfig: ApiConfig, requestParams: StopEventRequestParams) {
-        requestParams.includePreviousCalls = true;
-        requestParams.includeOnwardCalls = true;
+    public includePreviousCalls: boolean;
+    public includeOnwardCalls: boolean;
+    public includeRealtimeData: boolean;
+    
+    public enableExtensions: boolean;
 
-        super(stageConfig);
+    constructor(stageConfig: ApiConfig, language: Language, stopPlaceRef: string | null, geoPosition: GeoPosition | null, stopEventType: StopEventType, stopEventDate: Date) {
+        super(stageConfig, language);
+
+        this.stopPlaceRef = stopPlaceRef;
+        this.geoPosition = geoPosition;
         
-        this.requestParams = requestParams;
-        this.requestInfo.requestXML = this.buildRequestXML();
+        this.depArrTime = stopEventDate;
+        this.numberOfResults = 10;
+
+        this.stopEventType = stopEventType;
+
+        this.includePreviousCalls = true;
+        this.includeOnwardCalls = true;
+        this.includeRealtimeData = true;
+
+        this.enableExtensions = true;
     }
 
     public static Empty(stageConfig: ApiConfig = EMPTY_API_CONFIG): StopEventRequest {
-        const emptyRequestParams = StopEventRequestParams.Empty();
-        const request = new StopEventRequest(stageConfig, emptyRequestParams);
+        const request = new StopEventRequest(stageConfig, 'en', null, null, 'departure', new Date());
 
         return request;
     }
@@ -43,13 +61,45 @@ export class StopEventRequest extends OJPBaseRequest {
       }
 
     public static initWithStopPlaceRef(stageConfig: ApiConfig, language: Language, stopPlaceRef: string, stopEventType: StopEventType, stopEventDate: Date): StopEventRequest {
-        const stopEventRequestParams = new StopEventRequestParams(language, stopPlaceRef, null, stopEventType, stopEventDate);
-        const stopEventRequest = new StopEventRequest(stageConfig, stopEventRequestParams);
+        const stopEventRequest = new StopEventRequest(stageConfig, language, stopPlaceRef, null, stopEventType, stopEventDate);
+        
         return stopEventRequest;
     }
 
-    protected buildRequestXML(): string {
-        return this.requestParams.buildRequestXML();
+    protected buildRequestNode() {
+        super.buildRequestNode();
+
+        const dateNowF = new Date().toISOString();
+        const dateF = this.depArrTime.toISOString();
+    
+        this.serviceRequestNode.ele('RequestTimestamp', dateNowF);
+
+        this.serviceRequestNode.ele("RequestorRef", OJPBaseRequest.buildRequestorRef());
+
+        const requestNode = this.serviceRequestNode.ele('ojp:OJPStopEventRequest');
+        requestNode.ele('RequestTimestamp', dateNowF);
+
+        const locationNode = requestNode.ele('ojp:Location');
+
+        if (this.stopPlaceRef) {
+            const requestPlaceRefNode = locationNode.ele('ojp:PlaceRef');
+            requestPlaceRefNode.ele('ojp:StopPlaceRef', this.stopPlaceRef);
+            requestPlaceRefNode.ele('ojp:LocationName').ele('Text', '');
+        }
+
+        locationNode.ele('ojp:DepArrTime', dateF);
+
+        const requestParamsNode = requestNode.ele('ojp:Params');
+        requestParamsNode.ele('ojp:NumberOfResults', this.numberOfResults);
+        requestParamsNode.ele('ojp:StopEventType', this.stopEventType);
+        requestParamsNode.ele('ojp:IncludePreviousCalls', this.includePreviousCalls);
+        requestParamsNode.ele('ojp:IncludeOnwardCalls', this.includeOnwardCalls);
+        requestParamsNode.ele('ojp:IncludeRealtimeData', this.includeRealtimeData);
+
+        if (this.enableExtensions) {
+            const extensionsNode = requestNode.ele('Extensions');
+            extensionsNode.ele('ojp:ParamsExtension').ele('ojp:PrivateModeFilter').ele('ojp:Exclude', 'false');
+        }
     }
 
     public async fetchResponse(): Promise<StopEventRequest_Response> {

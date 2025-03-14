@@ -1,20 +1,26 @@
 import fetch from 'cross-fetch';
+import * as xmlbuilder from "xmlbuilder";
 
 import { ApiConfig } from '../types/stage-config';
 import { RequestInfo } from './types/request-info.type';
+import { Language } from '../types/language-type';
 import { SDK_VERSION } from '../constants';
 
 export class OJPBaseRequest {
   private stageConfig: ApiConfig;
+  private language: Language;
+  protected serviceRequestNode: xmlbuilder.XMLElement;
 
   public requestInfo: RequestInfo;
 
-  protected logRequests: boolean
+  public logRequests: boolean
   protected mockRequestXML: string | null;
   protected mockResponseXML: string | null;
 
-  constructor(stageConfig: ApiConfig) {
+  constructor(stageConfig: ApiConfig, language: Language) {
     this.stageConfig = stageConfig;
+    this.language = language;
+    this.serviceRequestNode = this.computeBaseServiceRequestNode();
     
     this.requestInfo = {
       requestDateTime: null,
@@ -31,8 +37,17 @@ export class OJPBaseRequest {
   }
 
   protected buildRequestXML(): string {
-    // override
-    return '<override/>';
+    this.buildRequestNode();
+
+    const bodyXML_s = this.serviceRequestNode.end({
+        pretty: true,
+    });
+
+    return bodyXML_s;
+  }
+
+  public updateRequestXML(): void {
+    this.requestInfo.requestXML = this.buildRequestXML();
   }
 
   protected fetchOJPResponse(): Promise<RequestInfo> {
@@ -105,5 +120,31 @@ export class OJPBaseRequest {
 
   public static buildRequestorRef() {
     return "OJP_JS_SDK_v" + SDK_VERSION;
+  }
+
+  private computeBaseServiceRequestNode(): xmlbuilder.XMLElement {
+    const ojpNode = xmlbuilder.create("OJP", {
+      version: "1.0",
+      encoding: "utf-8",
+    });
+
+    ojpNode.att("xmlns:ojp", "http://www.vdv.de/ojp");
+    ojpNode.att("xmlns", "http://www.siri.org.uk/siri");
+    ojpNode.att("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
+    ojpNode.att("xmlns:xsd", "http://www.w3.org/2001/XMLSchema");
+    ojpNode.att("xsi:schemaLocation", "http://www.vdv.de/ojp");
+    ojpNode.att("version", "1.0");
+
+    const serviceRequestNode = ojpNode
+      .ele("OJPRequest")
+      .ele("ServiceRequest");
+
+    serviceRequestNode.ele('ServiceRequestContext').ele('Language', this.language);
+
+    return serviceRequestNode;
+  }
+
+  protected buildRequestNode() {
+    this.serviceRequestNode = this.computeBaseServiceRequestNode();
   }
 }
