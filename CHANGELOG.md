@@ -1,7 +1,7 @@
 # CHANGELOG
 
 ## 0.16.3 - 14.03.2025
-- internal change, refactor params/request implementation - TBA PR
+- internal change, refactor params/request implementation - [PR #137](https://github.com/openTdataCH/ojp-js/pull/137)
 
 ## 0.16.2 - 3.03.2025
 - Changes namespaces - [PR #135](https://github.com/openTdataCH/ojp-js/pull/135)
