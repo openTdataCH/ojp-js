@@ -42,10 +42,8 @@ export class Trip {
       return null;
     }
 
-    const transfersNoS = treeNode.findTextFromChildNamed('Transfers');
-    if (transfersNoS === null) {
-      return null;
-    }
+    // Adds hack for OJP-SI, eventhough Transfers is required in XSD
+    const transfersNoS = treeNode.findTextFromChildNamed('Transfers') ?? '0';
 
     const tripStartTimeS = treeNode.findTextFromChildNamed('StartTime');
     const tripEndTimeS = treeNode.findTextFromChildNamed('EndTime');
