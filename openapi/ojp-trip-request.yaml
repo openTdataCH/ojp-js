@@ -1,0 +1,191 @@
+openapi: 3.0.3
+info:
+  title: XML OJP 2.0 API
+  description: API that returns trip data in XML format.
+  version: 0.0.1
+
+servers:
+  - url: https://api.example.com
+
+paths:
+  /ojp:
+    post:
+      summary: Main /ojp endpoint
+      description: Main /ojp endpoint
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/OJP"
+        "500":
+          description: Server error
+
+components:
+  schemas:
+    # https://vdvde.github.io/OJP/develop/documentation-tables/ojp.html#type_ojp__ModeAndModeOfOperationFilterStructure
+    ModeAndModeOfOperationFilter:
+      type: object
+      xml:
+        name: ModeAndModeOfOperationFilter
+      properties:
+        exclude:
+          type: boolean
+          xml:
+            name: Exclude
+        ptMode:
+          type: array
+          xml:
+            name: PtMode
+          items:
+            $ref: './shared.yml#/components/schemas/VehicleModesOfTransportEnum'
+
+    # https://vdvde.github.io/OJP/develop/documentation-tables/ojp.html#type_ojp__TripParamStructure
+    TripParam:
+      type: object
+      xml:
+        name: Params
+      properties:
+        modeAndModeOfOperationFilter:
+          type: array
+          xml:
+            name: ModeAndModeOfOperationFilter
+          items:
+            $ref: "#/components/schemas/ModeAndModeOfOperationFilter"
+        numberOfResults:
+          type: number
+          xml:
+            name: NumberOfResults
+        numberOfResultsBefore:
+          type: number
+          xml:
+            name: NumberOfResultsBefore
+        numberOfResultsAfter:
+          type: number
+          xml:
+            name: NumberOfResultsAfter
+        useRealtimeData:
+          $ref: "./shared.yml#/components/schemas/UseRealtimeDataEnum"
+          xml:
+            name: UseRealtimeData
+        includeAllRestrictedLines:
+          type: boolean
+          xml:
+            name: IncludeAllRestrictedLines
+        includeTrackSections:
+          type: boolean
+          xml:
+            name: IncludeTrackSections
+        includeLegProjection:
+          type: boolean
+          xml:
+            name: IncludeLegProjection
+        includeTurnDescription:
+          type: boolean
+          xml:
+            name: IncludeTurnDescription
+        includeIntermediateStops:
+          type: boolean
+          xml:
+            name: IncludeIntermediateStops
+
+    # https://vdvde.github.io/OJP/develop/documentation-tables/ojp.html#type_ojp__TripViaStructure
+    ViaPoint:
+      type: object
+      xml:
+        name: ViaPoint
+      required:
+        - placeRef
+      properties:
+        placeRef:
+          $ref: './shared.yml#/components/schemas/PlaceRef'
+          xml:
+            name: PlaceRef
+        dwellTime:
+          type: number
+          xml:
+            name: DwellTime
+
+    # https://vdvde.github.io/OJP/develop/documentation-tables/ojp.html#type_ojp__OJPTripRequestStructure
+    OJPTripRequest:
+      type: object
+      xml:
+        name: OJPTripRequest
+      required:
+        - requestTimestamp
+        - origin
+        - destination
+        - via
+      properties:
+        requestTimestamp:
+          type: string
+          xml:
+            name: RequestTimestamp
+            namespace: "http://www.siri.org.uk/siri"
+            prefix: siri
+        origin:
+          $ref: './shared.yml#/components/schemas/PlaceContext'
+          xml:
+            name: Origin
+        destination:
+          $ref: './shared.yml#/components/schemas/PlaceContext'
+          xml:
+            name: Destination
+        via:
+          type: array
+          xml:
+            name: Via
+          items:
+            $ref: "#/components/schemas/ViaPoint"
+        params:
+          $ref: '#/components/schemas/TripParam'
+          xml:
+            name: Params
+
+    OJP:
+      type: object
+      xml:
+        name: OJP
+      required:
+        - OJPRequest
+      properties:
+        OJPRequest:
+          type: object
+          xml:
+            name: OJPRequest
+          required:
+            - serviceRequest
+          properties:
+            serviceRequest:
+              type: object
+              xml:
+                name: ServiceRequest
+                namespace: "http://www.siri.org.uk/siri"
+                prefix: siri
+              required:
+                - requestTimestamp
+                - requestorRef
+                - OJPTripRequest
+              properties:
+                serviceRequestContext:
+                  $ref: './shared.yml#/components/schemas/ServiceRequestContext'
+                  xml:
+                    name: ServiceRequestContext
+                requestTimestamp:
+                  type: string
+                  xml:
+                    name: RequestTimestamp
+                    namespace: "http://www.siri.org.uk/siri"
+                    prefix: siri
+                requestorRef:
+                  type: string
+                  xml:
+                    name: RequestorRef
+                    namespace: "http://www.siri.org.uk/siri"
+                    prefix: siri
+                OJPTripRequest:
+                  $ref: '#/components/schemas/OJPTripRequest'
+                  xml:
+                    name: OJPTripRequest              
+        

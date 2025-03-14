@@ -1,0 +1,108 @@
+components:
+  schemas:
+    # https://vdvde.github.io/OJP/develop/documentation-tables/siri.html#type_siri__VehicleModesOfTransportEnumeration
+    VehicleModesOfTransportEnum:
+      type: string
+      enum: [
+        air, 
+        bus, coach, trolleyBus,
+        metro, rail, tram,
+        water, ferry,
+        cableway, funicular, lift,
+        other, unknown,
+      ]
+
+    # https://vdvde.github.io/OJP/develop/documentation-tables/ojp.html#type_ojp__UseRealtimeDataEnumeration
+    UseRealtimeDataEnum:
+      type: string
+      enum: [full, explanatory, none]
+
+    InternationalText:
+      type: object
+      xml:
+        name: InternationalText
+      required:
+        - text
+      properties:
+        text:
+          type: string
+          xml:
+            name: Text
+    
+    GeoPosition:
+      type: object
+      xml:
+        name: GeoPosition
+      required:
+        - longitude
+        - latitude
+      properties:
+        longitude:
+          type: number
+          xml:
+            name: Longitude
+            namespace: "http://www.siri.org.uk/siri"
+            prefix: siri
+        latitude:
+          type: number
+          xml:
+            name: Latitude
+            namespace: "http://www.siri.org.uk/siri"
+            prefix: siri
+
+    # https://vdvde.github.io/OJP/develop/documentation-tables/ojp.html#type_ojp__PlaceRefStructure
+    PlaceRef:
+      type: object
+      required:
+        - name
+      properties:
+        stopPointRef:
+          type: string
+          xml:
+            name: StopPointRef
+            namespace: "http://www.siri.org.uk/siri"
+            prefix: siri
+        stopPlaceRef:
+          type: string
+          xml:
+            name: StopPlaceRef
+        geoPosition:
+          $ref: '#/components/schemas/GeoPosition'
+          xml:
+            name: GeoPosition
+        name:
+          $ref: '#/components/schemas/InternationalText'
+          xml:
+            name: Name
+
+    # https://vdvde.github.io/OJP/develop/documentation-tables/ojp.html#type_ojp__PlaceContextStructure
+    PlaceContext:
+      type: object
+      xml:
+        name: PlaceContext
+      required:
+        - placeRef
+      properties:
+        placeRef:
+          $ref: '#/components/schemas/PlaceRef'
+          xml:
+            name: PlaceRef
+        depArrTime:
+          type: string
+          xml:
+            name: DepArrTime
+
+    ServiceRequestContext:
+      type: object
+      xml:
+        name: ServiceRequestContext
+        namespace: "http://www.siri.org.uk/siri"
+        prefix: siri
+      properties:
+        language:
+          type: string
+          xml:
+            name: Language
+            namespace: "http://www.siri.org.uk/siri"
+            prefix: siri
+    

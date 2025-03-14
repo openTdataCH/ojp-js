@@ -1,0 +1,133 @@
+openapi: 3.0.3
+info:
+  title: XML OJP 2.0 API
+  description: API that returns trip data in XML format.
+  version: 0.0.1
+
+servers:
+  - url: https://api.example.com
+
+paths:
+  /ojp:
+    post:
+      summary: Main /ojp endpoint
+      description: Main /ojp endpoint
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/OJP"
+        "500":
+          description: Server error
+
+components:
+  schemas:
+    # https://vdvde.github.io/OJP/develop/documentation-tables/ojp.html#type_ojp__PlaceParamStructure
+    PlaceParam:
+      type: object
+      xml:
+        name: PlaceParam
+      properties:
+        type:
+          type: array
+          items:
+            type: string
+            # https://vdvde.github.io/OJP/develop/documentation-tables/ojp.html#type_ojp__PlaceTypeEnumeration
+            enum: [stop, address, poi, location, topographicPlace]
+          xml:
+            name: Type
+        numberOfResults:
+          type: number
+          xml:
+            name: NumberOfResults
+        includePtModes:
+          type: boolean
+          xml:
+            name: IncludePtModes
+
+    # https://vdvde.github.io/OJP/develop/documentation-tables/ojp.html#type_ojp__InitialLocationInputStructure
+    InitialInput:
+      type: object
+      xml:
+        name: InitialInput
+      properties:
+        name:
+          type: string
+          xml:
+            name: Name
+
+    # https://vdvde.github.io/OJP/develop/documentation-tables/ojp.html#element_ojp__OJPLocationInformationRequest
+    OJPLocationInformationRequest:
+      type: object
+      xml:
+        name: OJPLocationInformationRequest
+      required:
+        - requestTimestamp
+      properties:
+        requestTimestamp:
+          type: string
+          xml:
+            name: RequestTimestamp
+            namespace: "http://www.siri.org.uk/siri"
+            prefix: siri
+        initialInput:
+          $ref: '#/components/schemas/InitialInput'
+          xml:
+            name: InitialInput
+        placeRef:
+          $ref: './shared.yml#/components/schemas/PlaceRef'
+          xml:
+            name: PlaceRef
+        restrictions:
+          $ref: '#/components/schemas/PlaceParam'
+          xml:
+            name: Restrictions
+
+    OJP:
+      type: object
+      xml:
+        name: OJP
+      required:
+        - OJPRequest
+      properties:
+        OJPRequest:
+          type: object
+          xml:
+            name: OJPRequest
+          required:
+            - serviceRequest
+          properties:
+            serviceRequest:
+              type: object
+              xml:
+                name: ServiceRequest
+                namespace: "http://www.siri.org.uk/siri"
+                prefix: siri
+              required:
+                - requestTimestamp
+                - requestorRef
+                - OJPTripRequest
+              properties:
+                serviceRequestContext:
+                  $ref: './shared.yml#/components/schemas/ServiceRequestContext'
+                  xml:
+                    name: ServiceRequestContext
+                requestTimestamp:
+                  type: string
+                  xml:
+                    name: RequestTimestamp
+                    namespace: "http://www.siri.org.uk/siri"
+                    prefix: siri
+                requestorRef:
+                  type: string
+                  xml:
+                    name: RequestorRef
+                    namespace: "http://www.siri.org.uk/siri"
+                    prefix: siri
+                OJPLocationInformationRequest:
+                  $ref: '#/components/schemas/OJPLocationInformationRequest'
+                  xml:
+                    name: OJPLocationInformationRequest              
+        
