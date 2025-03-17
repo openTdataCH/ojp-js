@@ -35,9 +35,7 @@ components:
         type:
           type: array
           items:
-            type: string
-            # https://vdvde.github.io/OJP/develop/documentation-tables/ojp.html#type_ojp__PlaceTypeEnumeration
-            enum: [stop, address, poi, location, topographicPlace]
+            $ref: "./shared.yml#/components/schemas/PlaceTypeEnum"
           xml:
             name: Type
         numberOfResults:

@@ -17,6 +17,11 @@ components:
       type: string
       enum: [full, explanatory, none]
 
+    # https://vdvde.github.io/OJP/develop/documentation-tables/ojp.html#type_ojp__PlaceTypeEnumeration
+    PlaceTypeEnum:
+      type: string
+      enum: [stop, address, poi, location, topographicPlace]
+
     InternationalText:
       type: object
       xml:
