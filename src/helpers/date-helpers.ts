@@ -19,17 +19,8 @@ export class DateHelpers {
   }
 
   // 21:38
-  public static formatTimeHHMM(d: Date): string {
+  public static formatTimeHHMM(d: Date = new Date()): string {
     const dateFormatted = DateHelpers.formatDate(d)
     return dateFormatted.substring(11,16);
-  }
-
-  public static formatDistance(distanceMeters: number): string {
-    if (distanceMeters > 1000) {
-      const distanceKmS = (distanceMeters / 1000).toFixed(1) + 'km'
-      return distanceKmS
-    }
-
-    return distanceMeters + 'm'
   }
 }
