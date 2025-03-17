@@ -16,6 +16,7 @@ import {
   LocationInformationRequestOJP,
   PlaceResultSchema,
   PlaceSchema,
+  PlaceTypeEnum,
 } from '../types/openapi';
 
 
@@ -219,6 +220,50 @@ export class LocationInformationRequest implements LocationInformationRequestSch
   public static initWithPlaceRef(placeRefS: string): LocationInformationRequest {
     const request = new LocationInformationRequest();
     request.placeRef = PlaceRef.initWithStopRefAndName(placeRefS, 'n/a');
+
+    return request;
+  }
+
+  public static initWithBBOX(bboxData: string | number[], placeType: PlaceTypeEnum[]): LocationInformationRequest {
+    const bboxDataParts: number[] = (() => {
+      if (Array.isArray(bboxData)) {
+        return bboxData;
+      }
+
+      return (bboxData as string).split(',').map(el => Number(el));
+    })();
+
+    const request = new LocationInformationRequest();
+
+    // TODO - handle data issues, also long min / max smaller / greater
+    if (bboxDataParts.length !== 4) {
+      debugger;
+      return request;
+    }
+
+    const longMin = bboxDataParts[0];
+    const latMin = bboxDataParts[1];
+    const longMax = bboxDataParts[2];
+    const latMax = bboxDataParts[3];
+
+    request.initialInput = {
+      geoRestriction: {
+        rectangle: {
+          upperLeft: {
+            longitude: longMin,
+            latitude: latMax,
+          },
+          lowerRight: {
+            longitude: longMax,
+            latitude: latMin,
+          },
+        }
+      }
+    };
+
+    request.restrictions = {
+      type: placeType
+    };
 
     return request;
   }
