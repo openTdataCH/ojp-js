@@ -7,6 +7,7 @@ import { components as sharedComponents } from './generated/shared';
 // TODO - this can be generated
 export type UseRealtimeDataEnum = sharedComponents["schemas"]["UseRealtimeDataEnum"];
 export type VehicleModesOfTransportEnum = sharedComponents["schemas"]["VehicleModesOfTransportEnum"];
+export type PlaceTypeEnum = sharedComponents["schemas"]["PlaceTypeEnum"];
 
 export type GeoPositionSchema = sharedComponents["schemas"]["GeoPosition"];
 export type PlaceRefSchema = sharedComponents["schemas"]["PlaceRef"];
