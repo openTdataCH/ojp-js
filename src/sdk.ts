@@ -76,7 +76,7 @@ export class SDK {
 
     const placeResultMatches: string[] = responseXML.match(/<PlaceResult\b[^>]*>.*?<\/PlaceResult>/gs) ?? [];
     
-    console.log('fetchLocations - regexp matches - found ' + placeResultMatches.length + ' trips');
+    console.log('fetchLocations - regexp matches - found ' + placeResultMatches.length + ' places');
 
     const placeResults: PlaceResult[] = [];
     placeResultMatches.forEach((nodeXML, idx1) => {
