@@ -38,6 +38,10 @@ export const MapNS_Tags: Record<string, string> = {
 
   // LIR Request
   'OJPLocationInformationRequest.RequestTimestamp': 'siri',
+  'UpperLeft.Longitude': 'siri',
+  'UpperLeft.Latitude': 'siri',
+  'LowerRight.Longitude': 'siri',
+  'LowerRight.Latitude': 'siri',
 };
 
 // TODO - this should be generated
