@@ -14,6 +14,8 @@ export interface components {
     VehicleModesOfTransportEnum: "air" | "bus" | "coach" | "trolleyBus" | "metro" | "rail" | "tram" | "water" | "ferry" | "cableway" | "funicular" | "lift" | "other" | "unknown";
     /** @enum {string} */
     UseRealtimeDataEnum: "full" | "explanatory" | "none";
+    /** @enum {string} */
+    PlaceTypeEnum: "stop" | "address" | "poi" | "location" | "topographicPlace";
     InternationalText: {
       text: string;
     };

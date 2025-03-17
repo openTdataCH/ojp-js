@@ -34,8 +34,18 @@ export interface components {
       numberOfResults?: number;
       includePtModes?: boolean;
     };
+    GeoRestrictionGeoPosition: {
+      longitude: number;
+      latitude: number;
+    };
     InitialInput: {
       name?: string;
+      geoRestriction?: {
+        rectangle: {
+          upperLeft: components["schemas"]["GeoRestrictionGeoPosition"];
+          lowerRight: components["schemas"]["GeoRestrictionGeoPosition"];
+        };
+      };
     };
     OJPLocationInformationRequest: {
       requestTimestamp: string;
