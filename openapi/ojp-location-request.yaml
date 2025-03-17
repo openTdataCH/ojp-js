@@ -80,6 +80,29 @@ components:
           type: string
           xml:
             name: Name
+        geoRestriction:
+          type: object
+          xml:
+            name: GeoRestriction
+          required:
+            - rectangle
+          properties:
+            rectangle:
+              type: object
+              xml:
+                name: Rectangle
+              required:
+                - upperLeft
+                - lowerRight
+              properties:
+                upperLeft:
+                  $ref: '#/components/schemas/GeoRestrictionGeoPosition'
+                  xml:
+                    name: UpperLeft
+                lowerRight:
+                  $ref: '#/components/schemas/GeoRestrictionGeoPosition'
+                  xml:
+                    name: LowerRight
 
     # https://vdvde.github.io/OJP/develop/documentation-tables/ojp.html#element_ojp__OJPLocationInformationRequest
     OJPLocationInformationRequest:
