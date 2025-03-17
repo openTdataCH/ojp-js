@@ -463,7 +463,7 @@ components:
           xml:
             name: Duration
 
-    # https://vdvde.github.io/OJP/develop/documentation-tables/ojp.html#type_ojp__TimedLegStructure
+    # https://vdvde.github.io/OJP/develop/documentation-tables/ojp.html#type_ojp__LegStructure
     Leg:
       type: object
       xml:
