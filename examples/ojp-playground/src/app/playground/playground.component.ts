@@ -39,26 +39,18 @@ export class PlaygroundComponent implements OnInit {
     const request1 = OJP.LocationInformationRequest.initWithLocationName(searchTerm);
 
     console.log('1) LIR lookup by name')
-    // a) using await/async
     const placeResults1 = await this.ojpSDK.fetchPlaceResults(request1);
     console.log(placeResults1);
 
-    // TBA
-    // // 2) LIR lookup by BBOX
-    // // lookup locations by bbox coords (WGS84) 
-    // // and location type: stop | poi_all
-
-    // // SW corner (bottom-left)
-    // const minLongitude = 7.433259;
-    // const minLatitude = 46.937798;
-    // // NE corner (top-right)
-    // const maxLongitude = 7.475252;
-    // const maxLatitude = 46.954805;
-    // const request2 = OJP.LocationInformationRequest.initWithBBOXAndType(OJP.DEFAULT_STAGE, minLongitude, minLatitude, maxLongitude, maxLatitude, 'stop');
-
-    // console.log('2) LIR lookup by BBOX')
-    // const response2 = await request2.fetchResponse();
-    // console.log(response2);
+    // 2) LIR lookup by BBOX
+    
+    // these are equivalent
+    let bbox: string | number[] = '7.433259,46.937798,7.475252,46.954805';
+    bbox = [7.433259, 46.937798, 7.475252, 46.954805];
+    
+    const request2 = OJP.LocationInformationRequest.initWithBBOX(bbox, ['stop']);
+    const placeResults2 = await this.ojpSDK.fetchPlaceResults(request2);
+    console.log(placeResults2);
 
     // 3) LIR lookup by stop reference
     const stopRef = '8507000';
@@ -87,7 +79,7 @@ export class PlaygroundComponent implements OnInit {
     // const fromLocationCoords = OJP.Location.initWithLngLat(7.431170, 46.957522);
     // const toLocationCoords = OJP.Location.initWithLngLat(7.485132, 46.931849);
     // const request2 = OJP.TripRequest.initWithLocationsAndDate(OJP.DEFAULT_STAGE, fromLocationCoords, toLocationCoords, new Date(), 'Dep');
-    
+
     // Handling response
     
     // a) using await/async
