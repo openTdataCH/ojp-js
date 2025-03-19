@@ -11,6 +11,7 @@ export {
   StopEventRequest,
 
   PlaceResult,
+  StopEventResult,
 } from "./models/ojp";
 
 export { DateHelpers } from './helpers';
