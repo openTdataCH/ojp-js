@@ -122,7 +122,7 @@ export class TripRequest implements TripRequestSchema {
     this.origin.depArrTime = newDatetime.toISOString();
   }
 
-  public buildRequestXML(language: Language): string {
+  public buildRequestXML(language: Language, requestorRef: string): string {
     const requestOJP: TripRequestOJP = {
       OJPRequest: {
         serviceRequest: {
@@ -130,7 +130,7 @@ export class TripRequest implements TripRequestSchema {
             language: language,
           },
           requestTimestamp: this.requestTimestamp,
-          requestorRef: 'TBA.requestorRef',
+          requestorRef: requestorRef,
           OJPTripRequest: this,
         },
       },
@@ -253,7 +253,7 @@ export class LocationInformationRequest implements LocationInformationRequestSch
     return request;
   }
 
-  public buildRequestXML(language: Language): string {
+  public buildRequestXML(language: Language, requestorRef: string): string {
     const requestOJP: LocationInformationRequestOJP = {
       OJPRequest: {
         serviceRequest: {
@@ -261,7 +261,7 @@ export class LocationInformationRequest implements LocationInformationRequestSch
             language: language
           },
           requestTimestamp: this.requestTimestamp,
-          requestorRef: 'TBA.requestorRef',
+          requestorRef: requestorRef,
           OJPLocationInformationRequest: this,
         }
       },
@@ -337,7 +337,7 @@ export class StopEventRequest implements StopEventRequestSchema {
     return request;
   }
 
-  public buildRequestXML(language: Language): string {
+  public buildRequestXML(language: Language, requestorRef: string): string {
     const requestOJP: SER_RequestOJP = {
       OJPRequest: {
         serviceRequest: {
@@ -345,7 +345,7 @@ export class StopEventRequest implements StopEventRequestSchema {
             language: language
           },
           requestTimestamp: this.requestTimestamp,
-          requestorRef: 'TBA.requestorRef',
+          requestorRef: requestorRef,
           OJPStopEventRequest: this,
         }
       },

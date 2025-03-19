@@ -4,10 +4,14 @@ import { LocationInformationRequest, PlaceResult, StopEventRequest, StopEventRes
 import { HTTPConfig, Language } from "./types/_all";
 
 export class SDK {
+  private requestorRef: string;
   private httpConfig: HTTPConfig;
   private language: Language;
 
-  constructor(httpConfig: HTTPConfig, language: Language) {
+  constructor(requestorRef: string, httpConfig: HTTPConfig, language: Language) {
+    this.requestorRef = requestorRef;
+    // TODO - do some validation on the format? [0-9a-zA-Z_\.] ?
+
     this.httpConfig = httpConfig;
     this.language = language;
   }
@@ -42,7 +46,7 @@ export class SDK {
   }
 
   public async fetchTrips(tripRequest: TripRequest): Promise<Trip[]> {
-    const requestXML = tripRequest.buildRequestXML(this.language);
+    const requestXML = tripRequest.buildRequestXML(this.language, this.requestorRef);
     console.log('fetchTrips: requestXML');
     console.log(requestXML);
 
@@ -66,7 +70,7 @@ export class SDK {
   }
 
   public async fetchPlaceResults(lirRequest: LocationInformationRequest): Promise<PlaceResult[]> {
-    const requestXML = lirRequest.buildRequestXML(this.language);
+    const requestXML = lirRequest.buildRequestXML(this.language, this.requestorRef);
     console.log('fetchLocations: requestXML');
     console.log(requestXML);
 
@@ -88,7 +92,7 @@ export class SDK {
   }
 
   public async fetchStopEvents(request: StopEventRequest): Promise<StopEventResult[]> {
-    const requestXML = request.buildRequestXML(this.language);
+    const requestXML = request.buildRequestXML(this.language, this.requestorRef);
     console.log('fetchStopEvents: requestXML');
     console.log(requestXML);
 
