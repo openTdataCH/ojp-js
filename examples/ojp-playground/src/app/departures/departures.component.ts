@@ -60,7 +60,37 @@ export class DeparturesComponent implements OnInit {
     }
 
     const place = placeResults[0].place;
-    console.log(place);
+    
+    // TODO - this should go in a helper?
+    const placeRef = (() => {
+      const stopPlaceRef = place.stopPlace?.stopPlaceRef ?? null;
+      if (stopPlaceRef !== null) {
+        return stopPlaceRef;
+      }
+
+      const stopPointRef = place.stopPoint?.stopPointRef ?? null;
+      if (stopPointRef !== null) {
+        return stopPointRef;
+      }
+
+      return null;
+    })();
+
+    if (placeRef === null) {
+      console.error('CANT compute placeRef');
+      console.log(place);
+      return;
+    }
+
+    this.renderModel.stop = {
+      id: place.stopPlace?.stopPlaceRef ?? 'n/a stopPlaceRef',
+      name: place.name.text,
+    };
+
+    setTimeout(() => {
+      this.fetchLatestDepartures(placeRef);
+    }, 1000 * 60);
+    this.fetchLatestDepartures(placeRef);
   }
 
   private async fetchLookupLocations(): Promise<OJP.PlaceResult[]> {
@@ -77,5 +107,110 @@ export class DeparturesComponent implements OnInit {
     const placeResults = await this.ojpSDK.fetchPlaceResults(lir);
 
     return placeResults;
+  }
+
+  private async fetchLatestDepartures(placeRef: string) {
+    const request = OJP.StopEventRequest.initWithPlaceRefAndDate(placeRef, new Date());
+
+    const results = await this.ojpSDK.fetchStopEvents(request);
+    
+    this.renderModel.departures = [];
+    results.forEach(result => {
+      const departureRow = this.computeDepartureRow(result);
+      this.renderModel.departures.push(departureRow);
+    });
+  }
+
+  private computeDepartureRow(stopEventResult: OJP.StopEventResult): DepartureRow {
+    const stopEvent = stopEventResult.stopEvent;
+    // console.log(stopEvent);
+
+    const journeyService = stopEvent.service;
+    const serviceLineNumber = journeyService.publishedServiceName.text;
+    
+    const serviceLine: string = (() => {
+      const isRail = journeyService.mode.ptMode === 'rail';
+      if (isRail) {
+        return serviceLineNumber ?? 'n/a'
+      } else {
+        const serviceLineParts: string[] = []
+        
+        // prepend B (for bus)
+        serviceLineParts.push(journeyService.mode.shortName.text)
+        
+        // then line number
+        serviceLineParts.push(serviceLineNumber)
+
+        return serviceLineParts.join('');
+      }
+    })();
+
+    const headingText: string = (() => {
+      const lineParts: string[] = [];
+
+      if (journeyService.destinationText) {
+        lineParts.push(journeyService.destinationText.text);
+      }
+
+      return lineParts.join('');
+    })();
+
+    const stopData: string = (() => {
+      const lineParts: string[] = [];
+      stopEvent.onwardCall.forEach(call => {
+        const stopPointName = call.callAtStop.stopPointName?.text ?? 'n/a';
+        lineParts.push(stopPointName);
+      });
+
+      return ' - ' + lineParts.join(' - ');
+    })();
+
+    const departureData = stopEvent.thisCall.callAtStop.serviceDeparture ?? null;
+    
+    const departureTimeF: string = (() => {
+      if (departureData === null) {
+        return 'n/a';
+      }
+
+      const date = new Date(departureData.timetabledTime);
+      return OJP.DateHelpers.formatTimeHHMM(date);
+    })();
+
+    const delayText: string = (() => {
+      if (departureData === null) {
+        return '';
+      }
+
+      const delayMinutes = OJP.DateHelpers.computeDelayMinutes(departureData.timetabledTime, departureData.estimatedTime ?? null);
+      if (delayMinutes === null) {
+        return '';
+      }
+
+      if (delayMinutes > 0) {
+        return '+' + delayMinutes + ' min';
+      }
+      if (delayMinutes < 0) {
+        return '-' + delayMinutes + ' min';
+      }
+      return 'ON TIME'
+    })();
+
+
+    const departureRow: DepartureRow = {
+      service: {
+        line: serviceLine
+      },
+      journey: {
+        number: journeyService.trainNumber ?? 'n/a TrainNumber',
+        headingText: headingText,
+        stops: stopData,
+      },
+      departure: {
+        timeF: departureTimeF,
+        delayText: delayText,
+      },
+    };
+
+    return departureRow;
   }
 }
