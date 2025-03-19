@@ -21,7 +21,8 @@ for file in "${SRC_FILES[@]}"; do
     npx --prefix $APP_PATH \
         swagger-cli bundle $src_path \
         -o $bundle_src_path \
-        --type yaml
+        --dereference \
+        --type=yaml
 
     # 2. convert to TS
     npx --prefix $APP_PATH \
