@@ -78,10 +78,6 @@ export interface components {
       numberOfResults?: number;
       includePtModes?: boolean;
     };
-    GeoRestrictionGeoPosition: {
-      longitude: number;
-      latitude: number;
-    };
     InitialInput: {
       name?: string;
       geoRestriction?: {

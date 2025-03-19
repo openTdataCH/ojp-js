@@ -370,10 +370,6 @@ export interface components {
       noBoardingAtStop?: boolean;
       noAlightingAtStop?: boolean;
     }, "stopPointRef" | "stopPointName" | "serviceArrival">;
-    LinkProjectionGeoPosition: {
-      longitude: number;
-      latitude: number;
-    };
     LinkProjection: {
       position: ({
           longitude: number;
