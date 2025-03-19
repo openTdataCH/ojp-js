@@ -15,7 +15,82 @@ export interface paths {
         /** @description Successful response */
         200: {
           content: {
-            "application/xml": components["schemas"]["OJP"];
+            "application/xml": {
+              OJPResponse: {
+                serviceDelivery: {
+                  responseTimestamp: string;
+                  producerRef: string;
+                  OJPLocationInformationDelivery: {
+                    responseTimestamp: string;
+                    requestMessageRef?: string;
+                    defaultLanguage?: string;
+                    calcTime?: string;
+                    placeResult: ({
+                        place: {
+                          stopPoint?: {
+                            stopPointRef: string;
+                            stopPointName: {
+                              text: string;
+                            };
+                            plannedQuay?: {
+                              text: string;
+                            };
+                            estimatedQuay?: {
+                              text: string;
+                            };
+                          };
+                          stopPlace?: {
+                            stopPlaceRef?: string;
+                            stopPlaceName?: {
+                              text: string;
+                            };
+                          };
+                          topographicPlace?: {
+                            topographicPlaceCode: string;
+                            topographicPlaceName: {
+                              text: string;
+                            };
+                          };
+                          pointOfInterest?: {
+                            publicCode: string;
+                            name: {
+                              text: string;
+                            };
+                            pointOfInterestCategory: ({
+                                osmTag?: {
+                                  tag: string;
+                                  value: string;
+                                };
+                              })[];
+                            topographicPlaceRef?: string;
+                          };
+                          address?: {
+                            publicCode: string;
+                            name: {
+                              text: string;
+                            };
+                            postCode?: string;
+                            topographicPlaceName?: string;
+                            TopographicPlaceRef?: string;
+                            Street?: string;
+                            HouseNumber?: string;
+                          };
+                          name: {
+                            text: string;
+                          };
+                          geoPosition: {
+                            longitude: number;
+                            latitude: number;
+                          };
+                          mode: ("air" | "bus" | "coach" | "trolleyBus" | "metro" | "rail" | "tram" | "water" | "ferry" | "cableway" | "funicular" | "lift" | "other" | "unknown")[];
+                        };
+                        complete: boolean;
+                        probability?: number;
+                      })[];
+                  };
+                };
+              };
+            };
           };
         };
         /** @description Server error */
@@ -29,58 +104,65 @@ export type webhooks = Record<string, never>;
 
 export interface components {
   schemas: {
-    PointOfInterestCategory: {
-      osmTag?: {
-        tag: string;
-        value: string;
-      };
-    };
-    StopPoint: {
-      stopPointRef: string;
-      stopPointName: components["schemas"]["Place"]["name"];
-      plannedQuay?: components["schemas"]["Place"]["name"];
-      estimatedQuay?: components["schemas"]["Place"]["name"];
-    };
-    StopPlace: {
-      stopPlaceRef?: string;
-      stopPlaceName?: components["schemas"]["Place"]["name"];
-    };
-    TopographicPlace: {
-      topographicPlaceCode: string;
-      topographicPlaceName: components["schemas"]["Place"]["name"];
-    };
-    PointOfInterest: {
-      publicCode: string;
-      name: components["schemas"]["Place"]["name"];
-      pointOfInterestCategory: (components["schemas"]["PointOfInterestCategory"])[];
-      topographicPlaceRef?: string;
-    };
-    Address: {
-      publicCode: string;
-      name: components["schemas"]["Place"]["name"];
-      postCode?: string;
-      topographicPlaceName?: string;
-      TopographicPlaceRef?: string;
-      Street?: string;
-      HouseNumber?: string;
-    };
-    Place: {
-      stopPoint?: components["schemas"]["StopPoint"];
-      stopPlace?: components["schemas"]["StopPlace"];
-      topographicPlace?: components["schemas"]["TopographicPlace"];
-      pointOfInterest?: components["schemas"]["PointOfInterest"];
-      address?: components["schemas"]["Address"];
-      name: {
-        text: string;
-      };
-      geoPosition: {
-        longitude: number;
-        latitude: number;
-      };
-      mode: ("air" | "bus" | "coach" | "trolleyBus" | "metro" | "rail" | "tram" | "water" | "ferry" | "cableway" | "funicular" | "lift" | "other" | "unknown")[];
-    };
     PlaceResult: {
-      place: components["schemas"]["Place"];
+      place: {
+        stopPoint?: {
+          stopPointRef: string;
+          stopPointName: {
+            text: string;
+          };
+          plannedQuay?: {
+            text: string;
+          };
+          estimatedQuay?: {
+            text: string;
+          };
+        };
+        stopPlace?: {
+          stopPlaceRef?: string;
+          stopPlaceName?: {
+            text: string;
+          };
+        };
+        topographicPlace?: {
+          topographicPlaceCode: string;
+          topographicPlaceName: {
+            text: string;
+          };
+        };
+        pointOfInterest?: {
+          publicCode: string;
+          name: {
+            text: string;
+          };
+          pointOfInterestCategory: ({
+              osmTag?: {
+                tag: string;
+                value: string;
+              };
+            })[];
+          topographicPlaceRef?: string;
+        };
+        address?: {
+          publicCode: string;
+          name: {
+            text: string;
+          };
+          postCode?: string;
+          topographicPlaceName?: string;
+          TopographicPlaceRef?: string;
+          Street?: string;
+          HouseNumber?: string;
+        };
+        name: {
+          text: string;
+        };
+        geoPosition: {
+          longitude: number;
+          latitude: number;
+        };
+        mode: ("air" | "bus" | "coach" | "trolleyBus" | "metro" | "rail" | "tram" | "water" | "ferry" | "cableway" | "funicular" | "lift" | "other" | "unknown")[];
+      };
       complete: boolean;
       probability?: number;
     };
@@ -89,14 +171,142 @@ export interface components {
       requestMessageRef?: string;
       defaultLanguage?: string;
       calcTime?: string;
-      placeResult: (components["schemas"]["PlaceResult"])[];
+      placeResult: ({
+          place: {
+            stopPoint?: {
+              stopPointRef: string;
+              stopPointName: {
+                text: string;
+              };
+              plannedQuay?: {
+                text: string;
+              };
+              estimatedQuay?: {
+                text: string;
+              };
+            };
+            stopPlace?: {
+              stopPlaceRef?: string;
+              stopPlaceName?: {
+                text: string;
+              };
+            };
+            topographicPlace?: {
+              topographicPlaceCode: string;
+              topographicPlaceName: {
+                text: string;
+              };
+            };
+            pointOfInterest?: {
+              publicCode: string;
+              name: {
+                text: string;
+              };
+              pointOfInterestCategory: ({
+                  osmTag?: {
+                    tag: string;
+                    value: string;
+                  };
+                })[];
+              topographicPlaceRef?: string;
+            };
+            address?: {
+              publicCode: string;
+              name: {
+                text: string;
+              };
+              postCode?: string;
+              topographicPlaceName?: string;
+              TopographicPlaceRef?: string;
+              Street?: string;
+              HouseNumber?: string;
+            };
+            name: {
+              text: string;
+            };
+            geoPosition: {
+              longitude: number;
+              latitude: number;
+            };
+            mode: ("air" | "bus" | "coach" | "trolleyBus" | "metro" | "rail" | "tram" | "water" | "ferry" | "cableway" | "funicular" | "lift" | "other" | "unknown")[];
+          };
+          complete: boolean;
+          probability?: number;
+        })[];
     };
     OJP: {
       OJPResponse: {
         serviceDelivery: {
           responseTimestamp: string;
           producerRef: string;
-          OJPLocationInformationDelivery: components["schemas"]["OJPLocationInformationDelivery"];
+          OJPLocationInformationDelivery: {
+            responseTimestamp: string;
+            requestMessageRef?: string;
+            defaultLanguage?: string;
+            calcTime?: string;
+            placeResult: ({
+                place: {
+                  stopPoint?: {
+                    stopPointRef: string;
+                    stopPointName: {
+                      text: string;
+                    };
+                    plannedQuay?: {
+                      text: string;
+                    };
+                    estimatedQuay?: {
+                      text: string;
+                    };
+                  };
+                  stopPlace?: {
+                    stopPlaceRef?: string;
+                    stopPlaceName?: {
+                      text: string;
+                    };
+                  };
+                  topographicPlace?: {
+                    topographicPlaceCode: string;
+                    topographicPlaceName: {
+                      text: string;
+                    };
+                  };
+                  pointOfInterest?: {
+                    publicCode: string;
+                    name: {
+                      text: string;
+                    };
+                    pointOfInterestCategory: ({
+                        osmTag?: {
+                          tag: string;
+                          value: string;
+                        };
+                      })[];
+                    topographicPlaceRef?: string;
+                  };
+                  address?: {
+                    publicCode: string;
+                    name: {
+                      text: string;
+                    };
+                    postCode?: string;
+                    topographicPlaceName?: string;
+                    TopographicPlaceRef?: string;
+                    Street?: string;
+                    HouseNumber?: string;
+                  };
+                  name: {
+                    text: string;
+                  };
+                  geoPosition: {
+                    longitude: number;
+                    latitude: number;
+                  };
+                  mode: ("air" | "bus" | "coach" | "trolleyBus" | "metro" | "rail" | "tram" | "water" | "ferry" | "cableway" | "funicular" | "lift" | "other" | "unknown")[];
+                };
+                complete: boolean;
+                probability?: number;
+              })[];
+          };
         };
       };
     };

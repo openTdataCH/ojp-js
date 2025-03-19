@@ -15,7 +15,51 @@ export interface paths {
         /** @description Successful response */
         200: {
           content: {
-            "application/xml": components["schemas"]["OJP"];
+            "application/xml": {
+              OJPRequest: {
+                serviceRequest: {
+                  serviceRequestContext?: {
+                    language?: string;
+                  };
+                  requestTimestamp: string;
+                  requestorRef: string;
+                  OJPLocationInformationRequest?: {
+                    requestTimestamp: string;
+                    initialInput?: {
+                      name?: string;
+                      geoRestriction?: {
+                        rectangle: {
+                          upperLeft: {
+                            longitude: number;
+                            latitude: number;
+                          };
+                          lowerRight: {
+                            longitude: number;
+                            latitude: number;
+                          };
+                        };
+                      };
+                    };
+                    placeRef?: {
+                      stopPointRef?: string;
+                      stopPlaceRef?: string;
+                      geoPosition?: {
+                        longitude: number;
+                        latitude: number;
+                      };
+                      name: {
+                        text: string;
+                      };
+                    };
+                    restrictions?: {
+                      type: ("stop" | "address" | "poi" | "location" | "topographicPlace")[];
+                      numberOfResults?: number;
+                      includePtModes?: boolean;
+                    };
+                  };
+                };
+              };
+            };
           };
         };
         /** @description Server error */
@@ -42,14 +86,34 @@ export interface components {
       name?: string;
       geoRestriction?: {
         rectangle: {
-          upperLeft: components["schemas"]["GeoRestrictionGeoPosition"];
-          lowerRight: components["schemas"]["GeoRestrictionGeoPosition"];
+          upperLeft: {
+            longitude: number;
+            latitude: number;
+          };
+          lowerRight: {
+            longitude: number;
+            latitude: number;
+          };
         };
       };
     };
     OJPLocationInformationRequest: {
       requestTimestamp: string;
-      initialInput?: components["schemas"]["InitialInput"];
+      initialInput?: {
+        name?: string;
+        geoRestriction?: {
+          rectangle: {
+            upperLeft: {
+              longitude: number;
+              latitude: number;
+            };
+            lowerRight: {
+              longitude: number;
+              latitude: number;
+            };
+          };
+        };
+      };
       placeRef?: {
         stopPointRef?: string;
         stopPlaceRef?: string;
@@ -61,7 +125,11 @@ export interface components {
           text: string;
         };
       };
-      restrictions?: components["schemas"]["PlaceParam"];
+      restrictions?: {
+        type: ("stop" | "address" | "poi" | "location" | "topographicPlace")[];
+        numberOfResults?: number;
+        includePtModes?: boolean;
+      };
     };
     OJP: {
       OJPRequest: {
@@ -71,7 +139,40 @@ export interface components {
           };
           requestTimestamp: string;
           requestorRef: string;
-          OJPLocationInformationRequest?: components["schemas"]["OJPLocationInformationRequest"];
+          OJPLocationInformationRequest?: {
+            requestTimestamp: string;
+            initialInput?: {
+              name?: string;
+              geoRestriction?: {
+                rectangle: {
+                  upperLeft: {
+                    longitude: number;
+                    latitude: number;
+                  };
+                  lowerRight: {
+                    longitude: number;
+                    latitude: number;
+                  };
+                };
+              };
+            };
+            placeRef?: {
+              stopPointRef?: string;
+              stopPlaceRef?: string;
+              geoPosition?: {
+                longitude: number;
+                latitude: number;
+              };
+              name: {
+                text: string;
+              };
+            };
+            restrictions?: {
+              type: ("stop" | "address" | "poi" | "location" | "topographicPlace")[];
+              numberOfResults?: number;
+              includePtModes?: boolean;
+            };
+          };
         };
       };
     };

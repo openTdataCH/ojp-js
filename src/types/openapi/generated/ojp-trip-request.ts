@@ -15,7 +15,78 @@ export interface paths {
         /** @description Successful response */
         200: {
           content: {
-            "application/xml": components["schemas"]["OJP"];
+            "application/xml": {
+              OJPRequest: {
+                serviceRequest: {
+                  serviceRequestContext?: {
+                    language?: string;
+                  };
+                  requestTimestamp: string;
+                  requestorRef: string;
+                  OJPTripRequest: {
+                    requestTimestamp: string;
+                    origin: {
+                      placeRef: {
+                        stopPointRef?: string;
+                        stopPlaceRef?: string;
+                        geoPosition?: {
+                          longitude: number;
+                          latitude: number;
+                        };
+                        name: {
+                          text: string;
+                        };
+                      };
+                      depArrTime?: string;
+                    };
+                    destination: {
+                      placeRef: {
+                        stopPointRef?: string;
+                        stopPlaceRef?: string;
+                        geoPosition?: {
+                          longitude: number;
+                          latitude: number;
+                        };
+                        name: {
+                          text: string;
+                        };
+                      };
+                      depArrTime?: string;
+                    };
+                    via: ({
+                        placeRef: {
+                          stopPointRef?: string;
+                          stopPlaceRef?: string;
+                          geoPosition?: {
+                            longitude: number;
+                            latitude: number;
+                          };
+                          name: {
+                            text: string;
+                          };
+                        };
+                        dwellTime?: number;
+                      })[];
+                    params?: {
+                      modeAndModeOfOperationFilter?: ({
+                          exclude?: boolean;
+                          ptMode?: ("air" | "bus" | "coach" | "trolleyBus" | "metro" | "rail" | "tram" | "water" | "ferry" | "cableway" | "funicular" | "lift" | "other" | "unknown")[];
+                        })[];
+                      numberOfResults?: number;
+                      numberOfResultsBefore?: number;
+                      numberOfResultsAfter?: number;
+                      /** @enum {string} */
+                      useRealtimeData?: "full" | "explanatory" | "none";
+                      includeAllRestrictedLines?: boolean;
+                      includeTrackSections?: boolean;
+                      includeLegProjection?: boolean;
+                      includeTurnDescription?: boolean;
+                      includeIntermediateStops?: boolean;
+                    };
+                  };
+                };
+              };
+            };
           };
         };
         /** @description Server error */
@@ -34,7 +105,10 @@ export interface components {
       ptMode?: ("air" | "bus" | "coach" | "trolleyBus" | "metro" | "rail" | "tram" | "water" | "ferry" | "cableway" | "funicular" | "lift" | "other" | "unknown")[];
     };
     TripParam: {
-      modeAndModeOfOperationFilter?: (components["schemas"]["ModeAndModeOfOperationFilter"])[];
+      modeAndModeOfOperationFilter?: ({
+          exclude?: boolean;
+          ptMode?: ("air" | "bus" | "coach" | "trolleyBus" | "metro" | "rail" | "tram" | "water" | "ferry" | "cableway" | "funicular" | "lift" | "other" | "unknown")[];
+        })[];
       numberOfResults?: number;
       numberOfResultsBefore?: number;
       numberOfResultsAfter?: number;
@@ -63,12 +137,63 @@ export interface components {
     OJPTripRequest: {
       requestTimestamp: string;
       origin: {
-        placeRef: components["schemas"]["ViaPoint"]["placeRef"];
+        placeRef: {
+          stopPointRef?: string;
+          stopPlaceRef?: string;
+          geoPosition?: {
+            longitude: number;
+            latitude: number;
+          };
+          name: {
+            text: string;
+          };
+        };
         depArrTime?: string;
       };
-      destination: components["schemas"]["OJPTripRequest"]["origin"];
-      via: (components["schemas"]["ViaPoint"])[];
-      params?: components["schemas"]["TripParam"];
+      destination: {
+        placeRef: {
+          stopPointRef?: string;
+          stopPlaceRef?: string;
+          geoPosition?: {
+            longitude: number;
+            latitude: number;
+          };
+          name: {
+            text: string;
+          };
+        };
+        depArrTime?: string;
+      };
+      via: ({
+          placeRef: {
+            stopPointRef?: string;
+            stopPlaceRef?: string;
+            geoPosition?: {
+              longitude: number;
+              latitude: number;
+            };
+            name: {
+              text: string;
+            };
+          };
+          dwellTime?: number;
+        })[];
+      params?: {
+        modeAndModeOfOperationFilter?: ({
+            exclude?: boolean;
+            ptMode?: ("air" | "bus" | "coach" | "trolleyBus" | "metro" | "rail" | "tram" | "water" | "ferry" | "cableway" | "funicular" | "lift" | "other" | "unknown")[];
+          })[];
+        numberOfResults?: number;
+        numberOfResultsBefore?: number;
+        numberOfResultsAfter?: number;
+        /** @enum {string} */
+        useRealtimeData?: "full" | "explanatory" | "none";
+        includeAllRestrictedLines?: boolean;
+        includeTrackSections?: boolean;
+        includeLegProjection?: boolean;
+        includeTurnDescription?: boolean;
+        includeIntermediateStops?: boolean;
+      };
     };
     OJP: {
       OJPRequest: {
@@ -78,7 +203,67 @@ export interface components {
           };
           requestTimestamp: string;
           requestorRef: string;
-          OJPTripRequest: components["schemas"]["OJPTripRequest"];
+          OJPTripRequest: {
+            requestTimestamp: string;
+            origin: {
+              placeRef: {
+                stopPointRef?: string;
+                stopPlaceRef?: string;
+                geoPosition?: {
+                  longitude: number;
+                  latitude: number;
+                };
+                name: {
+                  text: string;
+                };
+              };
+              depArrTime?: string;
+            };
+            destination: {
+              placeRef: {
+                stopPointRef?: string;
+                stopPlaceRef?: string;
+                geoPosition?: {
+                  longitude: number;
+                  latitude: number;
+                };
+                name: {
+                  text: string;
+                };
+              };
+              depArrTime?: string;
+            };
+            via: ({
+                placeRef: {
+                  stopPointRef?: string;
+                  stopPlaceRef?: string;
+                  geoPosition?: {
+                    longitude: number;
+                    latitude: number;
+                  };
+                  name: {
+                    text: string;
+                  };
+                };
+                dwellTime?: number;
+              })[];
+            params?: {
+              modeAndModeOfOperationFilter?: ({
+                  exclude?: boolean;
+                  ptMode?: ("air" | "bus" | "coach" | "trolleyBus" | "metro" | "rail" | "tram" | "water" | "ferry" | "cableway" | "funicular" | "lift" | "other" | "unknown")[];
+                })[];
+              numberOfResults?: number;
+              numberOfResultsBefore?: number;
+              numberOfResultsAfter?: number;
+              /** @enum {string} */
+              useRealtimeData?: "full" | "explanatory" | "none";
+              includeAllRestrictedLines?: boolean;
+              includeTrackSections?: boolean;
+              includeLegProjection?: boolean;
+              includeTurnDescription?: boolean;
+              includeIntermediateStops?: boolean;
+            };
+          };
         };
       };
     };

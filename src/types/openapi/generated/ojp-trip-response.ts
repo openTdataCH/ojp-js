@@ -18,7 +18,258 @@ export interface paths {
         /** @description Successful response */
         200: {
           content: {
-            "application/xml": components["schemas"]["OJP"];
+            "application/xml": {
+              OJPResponse: {
+                serviceDelivery: {
+                  responseTimestamp: string;
+                  producerRef: string;
+                  OJPTripDelivery: {
+                    responseTimestamp: string;
+                    requestMessageRef?: string;
+                    defaultLanguage?: string;
+                    calcTime?: string;
+                    tripResult: ({
+                        id: string;
+                        trip: {
+                          id: string;
+                          duration: string;
+                          /** Format: date-time */
+                          startTime: string;
+                          /** Format: date-time */
+                          endTime: string;
+                          transfers: number;
+                          leg: ({
+                              id: string;
+                              duration?: string;
+                              timedLeg?: {
+                                legBoard: WithRequired<{
+                                  stopPointRef?: string;
+                                  stopPointName?: {
+                                    text: string;
+                                  };
+                                  nameSuffix?: {
+                                    text: string;
+                                  };
+                                  plannedQuay?: {
+                                    text: string;
+                                  };
+                                  estimatedQuay?: {
+                                    text: string;
+                                  };
+                                  serviceArrival?: {
+                                    timetabledTime: string;
+                                    estimatedTime?: string;
+                                  };
+                                  serviceDeparture?: {
+                                    timetabledTime: string;
+                                    estimatedTime?: string;
+                                  };
+                                  order?: number;
+                                  requestStop?: boolean;
+                                  unplannedStop?: boolean;
+                                  notServicedStop?: boolean;
+                                  noBoardingAtStop?: boolean;
+                                  noAlightingAtStop?: boolean;
+                                }, "stopPointRef" | "stopPointName" | "serviceDeparture">;
+                                legIntermediate: (WithRequired<{
+                                    stopPointRef?: string;
+                                    stopPointName?: {
+                                      text: string;
+                                    };
+                                    nameSuffix?: {
+                                      text: string;
+                                    };
+                                    plannedQuay?: {
+                                      text: string;
+                                    };
+                                    estimatedQuay?: {
+                                      text: string;
+                                    };
+                                    serviceArrival?: {
+                                      timetabledTime: string;
+                                      estimatedTime?: string;
+                                    };
+                                    serviceDeparture?: {
+                                      timetabledTime: string;
+                                      estimatedTime?: string;
+                                    };
+                                    order?: number;
+                                    requestStop?: boolean;
+                                    unplannedStop?: boolean;
+                                    notServicedStop?: boolean;
+                                    noBoardingAtStop?: boolean;
+                                    noAlightingAtStop?: boolean;
+                                  }, "stopPointRef" | "stopPointName" | "serviceArrival" | "serviceDeparture">)[];
+                                legAlight: WithRequired<{
+                                  stopPointRef?: string;
+                                  stopPointName?: {
+                                    text: string;
+                                  };
+                                  nameSuffix?: {
+                                    text: string;
+                                  };
+                                  plannedQuay?: {
+                                    text: string;
+                                  };
+                                  estimatedQuay?: {
+                                    text: string;
+                                  };
+                                  serviceArrival?: {
+                                    timetabledTime: string;
+                                    estimatedTime?: string;
+                                  };
+                                  serviceDeparture?: {
+                                    timetabledTime: string;
+                                    estimatedTime?: string;
+                                  };
+                                  order?: number;
+                                  requestStop?: boolean;
+                                  unplannedStop?: boolean;
+                                  notServicedStop?: boolean;
+                                  noBoardingAtStop?: boolean;
+                                  noAlightingAtStop?: boolean;
+                                }, "stopPointRef" | "stopPointName" | "serviceArrival">;
+                                service: {
+                                  conventionalModeOfOperation?: string;
+                                  operatingDayRef: string;
+                                  journeyRef: string;
+                                  publicCode?: string;
+                                  lineRef: string;
+                                  directionRef?: string;
+                                  mode: {
+                                    ptMode: string;
+                                    railSubmode?: string;
+                                    name: {
+                                      text: string;
+                                    };
+                                    shortName: {
+                                      text: string;
+                                    };
+                                  };
+                                  productCategory?: {
+                                    name?: {
+                                      text: string;
+                                    };
+                                    shortName?: {
+                                      text: string;
+                                    };
+                                    productCategoryRef?: string;
+                                  };
+                                  publishedServiceName: {
+                                    text: string;
+                                  };
+                                  trainNumber?: string;
+                                  attribute: ({
+                                      userText: {
+                                        text: string;
+                                      };
+                                      code: string;
+                                    })[];
+                                  operatorRef?: string;
+                                  destinationStopPointRef?: string;
+                                  destinationText?: {
+                                    text: string;
+                                  };
+                                  unplanned?: boolean;
+                                  cancelled?: boolean;
+                                  deviation?: boolean;
+                                };
+                                legTrack?: {
+                                  trackSection: {
+                                    trackSectionStart?: {
+                                      stopPointRef?: string;
+                                      stopPlaceRef?: string;
+                                      geoPosition?: {
+                                        longitude: number;
+                                        latitude: number;
+                                      };
+                                      name: {
+                                        text: string;
+                                      };
+                                    };
+                                    trackSectionEnd?: {
+                                      stopPointRef?: string;
+                                      stopPlaceRef?: string;
+                                      geoPosition?: {
+                                        longitude: number;
+                                        latitude: number;
+                                      };
+                                      name: {
+                                        text: string;
+                                      };
+                                    };
+                                    linkProjection?: {
+                                      position: ({
+                                          longitude: number;
+                                          latitude: number;
+                                        })[];
+                                    };
+                                  };
+                                };
+                              };
+                              transferLeg?: {
+                                /** @enum {string} */
+                                transferType: "walk" | "remainInVehicle";
+                                legStart: {
+                                  stopPointRef?: string;
+                                  stopPlaceRef?: string;
+                                  geoPosition?: {
+                                    longitude: number;
+                                    latitude: number;
+                                  };
+                                  name: {
+                                    text: string;
+                                  };
+                                };
+                                legEnd: {
+                                  stopPointRef?: string;
+                                  stopPlaceRef?: string;
+                                  geoPosition?: {
+                                    longitude: number;
+                                    latitude: number;
+                                  };
+                                  name: {
+                                    text: string;
+                                  };
+                                };
+                                duration: string;
+                              };
+                              continuousLeg?: {
+                                legStart: {
+                                  stopPointRef?: string;
+                                  stopPlaceRef?: string;
+                                  geoPosition?: {
+                                    longitude: number;
+                                    latitude: number;
+                                  };
+                                  name: {
+                                    text: string;
+                                  };
+                                };
+                                legEnd: {
+                                  stopPointRef?: string;
+                                  stopPlaceRef?: string;
+                                  geoPosition?: {
+                                    longitude: number;
+                                    latitude: number;
+                                  };
+                                  name: {
+                                    text: string;
+                                  };
+                                };
+                                service: {
+                                  personalModeOfOperation?: string;
+                                  personalMode?: string;
+                                };
+                                duration: string;
+                              };
+                            })[];
+                        };
+                      })[];
+                  };
+                };
+              };
+            };
           };
         };
         /** @description Server error */
@@ -32,94 +283,349 @@ export type webhooks = Record<string, never>;
 
 export interface components {
   schemas: {
-    SharedServiceArrivalDeparture: {
-      timetabledTime: string;
-      estimatedTime?: string;
-    };
-    Mode: {
-      ptMode: string;
-      railSubmode?: string;
-      name: {
+    LegBoard: WithRequired<{
+      stopPointRef?: string;
+      stopPointName?: {
         text: string;
       };
-      shortName: components["schemas"]["Mode"]["name"];
-    };
-    ProductCategory: {
-      name?: components["schemas"]["Mode"]["name"];
-      shortName?: components["schemas"]["Mode"]["name"];
-      productCategoryRef?: string;
-    };
-    GeneralAttribute: {
-      userText: components["schemas"]["Mode"]["name"];
-      code: string;
-    };
-    SharedLegSection: {
-      stopPointRef?: string;
-      stopPointName?: components["schemas"]["Mode"]["name"];
-      nameSuffix?: components["schemas"]["Mode"]["name"];
-      plannedQuay?: components["schemas"]["Mode"]["name"];
-      estimatedQuay?: components["schemas"]["Mode"]["name"];
-      serviceArrival?: components["schemas"]["SharedServiceArrivalDeparture"];
-      serviceDeparture?: components["schemas"]["SharedServiceArrivalDeparture"];
+      nameSuffix?: {
+        text: string;
+      };
+      plannedQuay?: {
+        text: string;
+      };
+      estimatedQuay?: {
+        text: string;
+      };
+      serviceArrival?: {
+        timetabledTime: string;
+        estimatedTime?: string;
+      };
+      serviceDeparture?: {
+        timetabledTime: string;
+        estimatedTime?: string;
+      };
       order?: number;
       requestStop?: boolean;
       unplannedStop?: boolean;
       notServicedStop?: boolean;
       noBoardingAtStop?: boolean;
       noAlightingAtStop?: boolean;
-    };
-    LegBoard: WithRequired<components["schemas"]["SharedLegSection"], "stopPointRef" | "stopPointName" | "serviceDeparture">;
-    LegIntermediate: WithRequired<components["schemas"]["SharedLegSection"], "stopPointRef" | "stopPointName" | "serviceArrival" | "serviceDeparture">;
-    LegAlight: WithRequired<components["schemas"]["SharedLegSection"], "stopPointRef" | "stopPointName" | "serviceArrival">;
+    }, "stopPointRef" | "stopPointName" | "serviceDeparture">;
+    LegIntermediate: WithRequired<{
+      stopPointRef?: string;
+      stopPointName?: {
+        text: string;
+      };
+      nameSuffix?: {
+        text: string;
+      };
+      plannedQuay?: {
+        text: string;
+      };
+      estimatedQuay?: {
+        text: string;
+      };
+      serviceArrival?: {
+        timetabledTime: string;
+        estimatedTime?: string;
+      };
+      serviceDeparture?: {
+        timetabledTime: string;
+        estimatedTime?: string;
+      };
+      order?: number;
+      requestStop?: boolean;
+      unplannedStop?: boolean;
+      notServicedStop?: boolean;
+      noBoardingAtStop?: boolean;
+      noAlightingAtStop?: boolean;
+    }, "stopPointRef" | "stopPointName" | "serviceArrival" | "serviceDeparture">;
+    LegAlight: WithRequired<{
+      stopPointRef?: string;
+      stopPointName?: {
+        text: string;
+      };
+      nameSuffix?: {
+        text: string;
+      };
+      plannedQuay?: {
+        text: string;
+      };
+      estimatedQuay?: {
+        text: string;
+      };
+      serviceArrival?: {
+        timetabledTime: string;
+        estimatedTime?: string;
+      };
+      serviceDeparture?: {
+        timetabledTime: string;
+        estimatedTime?: string;
+      };
+      order?: number;
+      requestStop?: boolean;
+      unplannedStop?: boolean;
+      notServicedStop?: boolean;
+      noBoardingAtStop?: boolean;
+      noAlightingAtStop?: boolean;
+    }, "stopPointRef" | "stopPointName" | "serviceArrival">;
     LinkProjectionGeoPosition: {
       longitude: number;
       latitude: number;
     };
     LinkProjection: {
-      position: (components["schemas"]["LinkProjectionGeoPosition"])[];
+      position: ({
+          longitude: number;
+          latitude: number;
+        })[];
     };
     TrackSection: {
-      trackSectionStart?: components["schemas"]["TransferLeg"]["legEnd"];
-      trackSectionEnd?: components["schemas"]["TransferLeg"]["legEnd"];
-      linkProjection?: components["schemas"]["LinkProjection"];
+      trackSectionStart?: {
+        stopPointRef?: string;
+        stopPlaceRef?: string;
+        geoPosition?: {
+          longitude: number;
+          latitude: number;
+        };
+        name: {
+          text: string;
+        };
+      };
+      trackSectionEnd?: {
+        stopPointRef?: string;
+        stopPlaceRef?: string;
+        geoPosition?: {
+          longitude: number;
+          latitude: number;
+        };
+        name: {
+          text: string;
+        };
+      };
+      linkProjection?: {
+        position: ({
+            longitude: number;
+            latitude: number;
+          })[];
+      };
     };
     LegTrack: {
-      trackSection: components["schemas"]["TrackSection"];
-    };
-    DatedJourney: {
-      conventionalModeOfOperation?: string;
-      operatingDayRef: string;
-      journeyRef: string;
-      publicCode?: string;
-      lineRef: string;
-      directionRef?: string;
-      mode: components["schemas"]["Mode"];
-      productCategory?: components["schemas"]["ProductCategory"];
-      publishedServiceName: components["schemas"]["Mode"]["name"];
-      trainNumber?: string;
-      attribute: (components["schemas"]["GeneralAttribute"])[];
-      operatorRef?: string;
-      destinationStopPointRef?: string;
-      destinationText?: components["schemas"]["Mode"]["name"];
-      unplanned?: boolean;
-      cancelled?: boolean;
-      deviation?: boolean;
+      trackSection: {
+        trackSectionStart?: {
+          stopPointRef?: string;
+          stopPlaceRef?: string;
+          geoPosition?: {
+            longitude: number;
+            latitude: number;
+          };
+          name: {
+            text: string;
+          };
+        };
+        trackSectionEnd?: {
+          stopPointRef?: string;
+          stopPlaceRef?: string;
+          geoPosition?: {
+            longitude: number;
+            latitude: number;
+          };
+          name: {
+            text: string;
+          };
+        };
+        linkProjection?: {
+          position: ({
+              longitude: number;
+              latitude: number;
+            })[];
+        };
+      };
     };
     ContinuousService: {
       personalModeOfOperation?: string;
       personalMode?: string;
     };
     TimedLeg: {
-      legBoard: components["schemas"]["LegBoard"];
-      legIntermediate: (components["schemas"]["LegIntermediate"])[];
-      legAlight: components["schemas"]["LegAlight"];
-      service: components["schemas"]["DatedJourney"];
-      legTrack?: components["schemas"]["LegTrack"];
+      legBoard: WithRequired<{
+        stopPointRef?: string;
+        stopPointName?: {
+          text: string;
+        };
+        nameSuffix?: {
+          text: string;
+        };
+        plannedQuay?: {
+          text: string;
+        };
+        estimatedQuay?: {
+          text: string;
+        };
+        serviceArrival?: {
+          timetabledTime: string;
+          estimatedTime?: string;
+        };
+        serviceDeparture?: {
+          timetabledTime: string;
+          estimatedTime?: string;
+        };
+        order?: number;
+        requestStop?: boolean;
+        unplannedStop?: boolean;
+        notServicedStop?: boolean;
+        noBoardingAtStop?: boolean;
+        noAlightingAtStop?: boolean;
+      }, "stopPointRef" | "stopPointName" | "serviceDeparture">;
+      legIntermediate: (WithRequired<{
+          stopPointRef?: string;
+          stopPointName?: {
+            text: string;
+          };
+          nameSuffix?: {
+            text: string;
+          };
+          plannedQuay?: {
+            text: string;
+          };
+          estimatedQuay?: {
+            text: string;
+          };
+          serviceArrival?: {
+            timetabledTime: string;
+            estimatedTime?: string;
+          };
+          serviceDeparture?: {
+            timetabledTime: string;
+            estimatedTime?: string;
+          };
+          order?: number;
+          requestStop?: boolean;
+          unplannedStop?: boolean;
+          notServicedStop?: boolean;
+          noBoardingAtStop?: boolean;
+          noAlightingAtStop?: boolean;
+        }, "stopPointRef" | "stopPointName" | "serviceArrival" | "serviceDeparture">)[];
+      legAlight: WithRequired<{
+        stopPointRef?: string;
+        stopPointName?: {
+          text: string;
+        };
+        nameSuffix?: {
+          text: string;
+        };
+        plannedQuay?: {
+          text: string;
+        };
+        estimatedQuay?: {
+          text: string;
+        };
+        serviceArrival?: {
+          timetabledTime: string;
+          estimatedTime?: string;
+        };
+        serviceDeparture?: {
+          timetabledTime: string;
+          estimatedTime?: string;
+        };
+        order?: number;
+        requestStop?: boolean;
+        unplannedStop?: boolean;
+        notServicedStop?: boolean;
+        noBoardingAtStop?: boolean;
+        noAlightingAtStop?: boolean;
+      }, "stopPointRef" | "stopPointName" | "serviceArrival">;
+      service: {
+        conventionalModeOfOperation?: string;
+        operatingDayRef: string;
+        journeyRef: string;
+        publicCode?: string;
+        lineRef: string;
+        directionRef?: string;
+        mode: {
+          ptMode: string;
+          railSubmode?: string;
+          name: {
+            text: string;
+          };
+          shortName: {
+            text: string;
+          };
+        };
+        productCategory?: {
+          name?: {
+            text: string;
+          };
+          shortName?: {
+            text: string;
+          };
+          productCategoryRef?: string;
+        };
+        publishedServiceName: {
+          text: string;
+        };
+        trainNumber?: string;
+        attribute: ({
+            userText: {
+              text: string;
+            };
+            code: string;
+          })[];
+        operatorRef?: string;
+        destinationStopPointRef?: string;
+        destinationText?: {
+          text: string;
+        };
+        unplanned?: boolean;
+        cancelled?: boolean;
+        deviation?: boolean;
+      };
+      legTrack?: {
+        trackSection: {
+          trackSectionStart?: {
+            stopPointRef?: string;
+            stopPlaceRef?: string;
+            geoPosition?: {
+              longitude: number;
+              latitude: number;
+            };
+            name: {
+              text: string;
+            };
+          };
+          trackSectionEnd?: {
+            stopPointRef?: string;
+            stopPlaceRef?: string;
+            geoPosition?: {
+              longitude: number;
+              latitude: number;
+            };
+            name: {
+              text: string;
+            };
+          };
+          linkProjection?: {
+            position: ({
+                longitude: number;
+                latitude: number;
+              })[];
+          };
+        };
+      };
     };
     TransferLeg: {
       /** @enum {string} */
       transferType: "walk" | "remainInVehicle";
-      legStart: components["schemas"]["TransferLeg"]["legEnd"];
+      legStart: {
+        stopPointRef?: string;
+        stopPlaceRef?: string;
+        geoPosition?: {
+          longitude: number;
+          latitude: number;
+        };
+        name: {
+          text: string;
+        };
+      };
       legEnd: {
         stopPointRef?: string;
         stopPlaceRef?: string;
@@ -127,22 +633,266 @@ export interface components {
           longitude: number;
           latitude: number;
         };
-        name: components["schemas"]["Mode"]["name"];
+        name: {
+          text: string;
+        };
       };
       duration: string;
     };
     ContinuousLeg: {
-      legStart: components["schemas"]["TransferLeg"]["legEnd"];
-      legEnd: components["schemas"]["TransferLeg"]["legEnd"];
-      service: components["schemas"]["ContinuousService"];
+      legStart: {
+        stopPointRef?: string;
+        stopPlaceRef?: string;
+        geoPosition?: {
+          longitude: number;
+          latitude: number;
+        };
+        name: {
+          text: string;
+        };
+      };
+      legEnd: {
+        stopPointRef?: string;
+        stopPlaceRef?: string;
+        geoPosition?: {
+          longitude: number;
+          latitude: number;
+        };
+        name: {
+          text: string;
+        };
+      };
+      service: {
+        personalModeOfOperation?: string;
+        personalMode?: string;
+      };
       duration: string;
     };
     Leg: {
       id: string;
       duration?: string;
-      timedLeg?: components["schemas"]["TimedLeg"];
-      transferLeg?: components["schemas"]["TransferLeg"];
-      continuousLeg?: components["schemas"]["ContinuousLeg"];
+      timedLeg?: {
+        legBoard: WithRequired<{
+          stopPointRef?: string;
+          stopPointName?: {
+            text: string;
+          };
+          nameSuffix?: {
+            text: string;
+          };
+          plannedQuay?: {
+            text: string;
+          };
+          estimatedQuay?: {
+            text: string;
+          };
+          serviceArrival?: {
+            timetabledTime: string;
+            estimatedTime?: string;
+          };
+          serviceDeparture?: {
+            timetabledTime: string;
+            estimatedTime?: string;
+          };
+          order?: number;
+          requestStop?: boolean;
+          unplannedStop?: boolean;
+          notServicedStop?: boolean;
+          noBoardingAtStop?: boolean;
+          noAlightingAtStop?: boolean;
+        }, "stopPointRef" | "stopPointName" | "serviceDeparture">;
+        legIntermediate: (WithRequired<{
+            stopPointRef?: string;
+            stopPointName?: {
+              text: string;
+            };
+            nameSuffix?: {
+              text: string;
+            };
+            plannedQuay?: {
+              text: string;
+            };
+            estimatedQuay?: {
+              text: string;
+            };
+            serviceArrival?: {
+              timetabledTime: string;
+              estimatedTime?: string;
+            };
+            serviceDeparture?: {
+              timetabledTime: string;
+              estimatedTime?: string;
+            };
+            order?: number;
+            requestStop?: boolean;
+            unplannedStop?: boolean;
+            notServicedStop?: boolean;
+            noBoardingAtStop?: boolean;
+            noAlightingAtStop?: boolean;
+          }, "stopPointRef" | "stopPointName" | "serviceArrival" | "serviceDeparture">)[];
+        legAlight: WithRequired<{
+          stopPointRef?: string;
+          stopPointName?: {
+            text: string;
+          };
+          nameSuffix?: {
+            text: string;
+          };
+          plannedQuay?: {
+            text: string;
+          };
+          estimatedQuay?: {
+            text: string;
+          };
+          serviceArrival?: {
+            timetabledTime: string;
+            estimatedTime?: string;
+          };
+          serviceDeparture?: {
+            timetabledTime: string;
+            estimatedTime?: string;
+          };
+          order?: number;
+          requestStop?: boolean;
+          unplannedStop?: boolean;
+          notServicedStop?: boolean;
+          noBoardingAtStop?: boolean;
+          noAlightingAtStop?: boolean;
+        }, "stopPointRef" | "stopPointName" | "serviceArrival">;
+        service: {
+          conventionalModeOfOperation?: string;
+          operatingDayRef: string;
+          journeyRef: string;
+          publicCode?: string;
+          lineRef: string;
+          directionRef?: string;
+          mode: {
+            ptMode: string;
+            railSubmode?: string;
+            name: {
+              text: string;
+            };
+            shortName: {
+              text: string;
+            };
+          };
+          productCategory?: {
+            name?: {
+              text: string;
+            };
+            shortName?: {
+              text: string;
+            };
+            productCategoryRef?: string;
+          };
+          publishedServiceName: {
+            text: string;
+          };
+          trainNumber?: string;
+          attribute: ({
+              userText: {
+                text: string;
+              };
+              code: string;
+            })[];
+          operatorRef?: string;
+          destinationStopPointRef?: string;
+          destinationText?: {
+            text: string;
+          };
+          unplanned?: boolean;
+          cancelled?: boolean;
+          deviation?: boolean;
+        };
+        legTrack?: {
+          trackSection: {
+            trackSectionStart?: {
+              stopPointRef?: string;
+              stopPlaceRef?: string;
+              geoPosition?: {
+                longitude: number;
+                latitude: number;
+              };
+              name: {
+                text: string;
+              };
+            };
+            trackSectionEnd?: {
+              stopPointRef?: string;
+              stopPlaceRef?: string;
+              geoPosition?: {
+                longitude: number;
+                latitude: number;
+              };
+              name: {
+                text: string;
+              };
+            };
+            linkProjection?: {
+              position: ({
+                  longitude: number;
+                  latitude: number;
+                })[];
+            };
+          };
+        };
+      };
+      transferLeg?: {
+        /** @enum {string} */
+        transferType: "walk" | "remainInVehicle";
+        legStart: {
+          stopPointRef?: string;
+          stopPlaceRef?: string;
+          geoPosition?: {
+            longitude: number;
+            latitude: number;
+          };
+          name: {
+            text: string;
+          };
+        };
+        legEnd: {
+          stopPointRef?: string;
+          stopPlaceRef?: string;
+          geoPosition?: {
+            longitude: number;
+            latitude: number;
+          };
+          name: {
+            text: string;
+          };
+        };
+        duration: string;
+      };
+      continuousLeg?: {
+        legStart: {
+          stopPointRef?: string;
+          stopPlaceRef?: string;
+          geoPosition?: {
+            longitude: number;
+            latitude: number;
+          };
+          name: {
+            text: string;
+          };
+        };
+        legEnd: {
+          stopPointRef?: string;
+          stopPlaceRef?: string;
+          geoPosition?: {
+            longitude: number;
+            latitude: number;
+          };
+          name: {
+            text: string;
+          };
+        };
+        service: {
+          personalModeOfOperation?: string;
+          personalMode?: string;
+        };
+        duration: string;
+      };
     };
     Trip: {
       id: string;
@@ -152,25 +902,964 @@ export interface components {
       /** Format: date-time */
       endTime: string;
       transfers: number;
-      leg: (components["schemas"]["Leg"])[];
+      leg: ({
+          id: string;
+          duration?: string;
+          timedLeg?: {
+            legBoard: WithRequired<{
+              stopPointRef?: string;
+              stopPointName?: {
+                text: string;
+              };
+              nameSuffix?: {
+                text: string;
+              };
+              plannedQuay?: {
+                text: string;
+              };
+              estimatedQuay?: {
+                text: string;
+              };
+              serviceArrival?: {
+                timetabledTime: string;
+                estimatedTime?: string;
+              };
+              serviceDeparture?: {
+                timetabledTime: string;
+                estimatedTime?: string;
+              };
+              order?: number;
+              requestStop?: boolean;
+              unplannedStop?: boolean;
+              notServicedStop?: boolean;
+              noBoardingAtStop?: boolean;
+              noAlightingAtStop?: boolean;
+            }, "stopPointRef" | "stopPointName" | "serviceDeparture">;
+            legIntermediate: (WithRequired<{
+                stopPointRef?: string;
+                stopPointName?: {
+                  text: string;
+                };
+                nameSuffix?: {
+                  text: string;
+                };
+                plannedQuay?: {
+                  text: string;
+                };
+                estimatedQuay?: {
+                  text: string;
+                };
+                serviceArrival?: {
+                  timetabledTime: string;
+                  estimatedTime?: string;
+                };
+                serviceDeparture?: {
+                  timetabledTime: string;
+                  estimatedTime?: string;
+                };
+                order?: number;
+                requestStop?: boolean;
+                unplannedStop?: boolean;
+                notServicedStop?: boolean;
+                noBoardingAtStop?: boolean;
+                noAlightingAtStop?: boolean;
+              }, "stopPointRef" | "stopPointName" | "serviceArrival" | "serviceDeparture">)[];
+            legAlight: WithRequired<{
+              stopPointRef?: string;
+              stopPointName?: {
+                text: string;
+              };
+              nameSuffix?: {
+                text: string;
+              };
+              plannedQuay?: {
+                text: string;
+              };
+              estimatedQuay?: {
+                text: string;
+              };
+              serviceArrival?: {
+                timetabledTime: string;
+                estimatedTime?: string;
+              };
+              serviceDeparture?: {
+                timetabledTime: string;
+                estimatedTime?: string;
+              };
+              order?: number;
+              requestStop?: boolean;
+              unplannedStop?: boolean;
+              notServicedStop?: boolean;
+              noBoardingAtStop?: boolean;
+              noAlightingAtStop?: boolean;
+            }, "stopPointRef" | "stopPointName" | "serviceArrival">;
+            service: {
+              conventionalModeOfOperation?: string;
+              operatingDayRef: string;
+              journeyRef: string;
+              publicCode?: string;
+              lineRef: string;
+              directionRef?: string;
+              mode: {
+                ptMode: string;
+                railSubmode?: string;
+                name: {
+                  text: string;
+                };
+                shortName: {
+                  text: string;
+                };
+              };
+              productCategory?: {
+                name?: {
+                  text: string;
+                };
+                shortName?: {
+                  text: string;
+                };
+                productCategoryRef?: string;
+              };
+              publishedServiceName: {
+                text: string;
+              };
+              trainNumber?: string;
+              attribute: ({
+                  userText: {
+                    text: string;
+                  };
+                  code: string;
+                })[];
+              operatorRef?: string;
+              destinationStopPointRef?: string;
+              destinationText?: {
+                text: string;
+              };
+              unplanned?: boolean;
+              cancelled?: boolean;
+              deviation?: boolean;
+            };
+            legTrack?: {
+              trackSection: {
+                trackSectionStart?: {
+                  stopPointRef?: string;
+                  stopPlaceRef?: string;
+                  geoPosition?: {
+                    longitude: number;
+                    latitude: number;
+                  };
+                  name: {
+                    text: string;
+                  };
+                };
+                trackSectionEnd?: {
+                  stopPointRef?: string;
+                  stopPlaceRef?: string;
+                  geoPosition?: {
+                    longitude: number;
+                    latitude: number;
+                  };
+                  name: {
+                    text: string;
+                  };
+                };
+                linkProjection?: {
+                  position: ({
+                      longitude: number;
+                      latitude: number;
+                    })[];
+                };
+              };
+            };
+          };
+          transferLeg?: {
+            /** @enum {string} */
+            transferType: "walk" | "remainInVehicle";
+            legStart: {
+              stopPointRef?: string;
+              stopPlaceRef?: string;
+              geoPosition?: {
+                longitude: number;
+                latitude: number;
+              };
+              name: {
+                text: string;
+              };
+            };
+            legEnd: {
+              stopPointRef?: string;
+              stopPlaceRef?: string;
+              geoPosition?: {
+                longitude: number;
+                latitude: number;
+              };
+              name: {
+                text: string;
+              };
+            };
+            duration: string;
+          };
+          continuousLeg?: {
+            legStart: {
+              stopPointRef?: string;
+              stopPlaceRef?: string;
+              geoPosition?: {
+                longitude: number;
+                latitude: number;
+              };
+              name: {
+                text: string;
+              };
+            };
+            legEnd: {
+              stopPointRef?: string;
+              stopPlaceRef?: string;
+              geoPosition?: {
+                longitude: number;
+                latitude: number;
+              };
+              name: {
+                text: string;
+              };
+            };
+            service: {
+              personalModeOfOperation?: string;
+              personalMode?: string;
+            };
+            duration: string;
+          };
+        })[];
     };
     TripResult: {
       id: string;
-      trip: components["schemas"]["Trip"];
+      trip: {
+        id: string;
+        duration: string;
+        /** Format: date-time */
+        startTime: string;
+        /** Format: date-time */
+        endTime: string;
+        transfers: number;
+        leg: ({
+            id: string;
+            duration?: string;
+            timedLeg?: {
+              legBoard: WithRequired<{
+                stopPointRef?: string;
+                stopPointName?: {
+                  text: string;
+                };
+                nameSuffix?: {
+                  text: string;
+                };
+                plannedQuay?: {
+                  text: string;
+                };
+                estimatedQuay?: {
+                  text: string;
+                };
+                serviceArrival?: {
+                  timetabledTime: string;
+                  estimatedTime?: string;
+                };
+                serviceDeparture?: {
+                  timetabledTime: string;
+                  estimatedTime?: string;
+                };
+                order?: number;
+                requestStop?: boolean;
+                unplannedStop?: boolean;
+                notServicedStop?: boolean;
+                noBoardingAtStop?: boolean;
+                noAlightingAtStop?: boolean;
+              }, "stopPointRef" | "stopPointName" | "serviceDeparture">;
+              legIntermediate: (WithRequired<{
+                  stopPointRef?: string;
+                  stopPointName?: {
+                    text: string;
+                  };
+                  nameSuffix?: {
+                    text: string;
+                  };
+                  plannedQuay?: {
+                    text: string;
+                  };
+                  estimatedQuay?: {
+                    text: string;
+                  };
+                  serviceArrival?: {
+                    timetabledTime: string;
+                    estimatedTime?: string;
+                  };
+                  serviceDeparture?: {
+                    timetabledTime: string;
+                    estimatedTime?: string;
+                  };
+                  order?: number;
+                  requestStop?: boolean;
+                  unplannedStop?: boolean;
+                  notServicedStop?: boolean;
+                  noBoardingAtStop?: boolean;
+                  noAlightingAtStop?: boolean;
+                }, "stopPointRef" | "stopPointName" | "serviceArrival" | "serviceDeparture">)[];
+              legAlight: WithRequired<{
+                stopPointRef?: string;
+                stopPointName?: {
+                  text: string;
+                };
+                nameSuffix?: {
+                  text: string;
+                };
+                plannedQuay?: {
+                  text: string;
+                };
+                estimatedQuay?: {
+                  text: string;
+                };
+                serviceArrival?: {
+                  timetabledTime: string;
+                  estimatedTime?: string;
+                };
+                serviceDeparture?: {
+                  timetabledTime: string;
+                  estimatedTime?: string;
+                };
+                order?: number;
+                requestStop?: boolean;
+                unplannedStop?: boolean;
+                notServicedStop?: boolean;
+                noBoardingAtStop?: boolean;
+                noAlightingAtStop?: boolean;
+              }, "stopPointRef" | "stopPointName" | "serviceArrival">;
+              service: {
+                conventionalModeOfOperation?: string;
+                operatingDayRef: string;
+                journeyRef: string;
+                publicCode?: string;
+                lineRef: string;
+                directionRef?: string;
+                mode: {
+                  ptMode: string;
+                  railSubmode?: string;
+                  name: {
+                    text: string;
+                  };
+                  shortName: {
+                    text: string;
+                  };
+                };
+                productCategory?: {
+                  name?: {
+                    text: string;
+                  };
+                  shortName?: {
+                    text: string;
+                  };
+                  productCategoryRef?: string;
+                };
+                publishedServiceName: {
+                  text: string;
+                };
+                trainNumber?: string;
+                attribute: ({
+                    userText: {
+                      text: string;
+                    };
+                    code: string;
+                  })[];
+                operatorRef?: string;
+                destinationStopPointRef?: string;
+                destinationText?: {
+                  text: string;
+                };
+                unplanned?: boolean;
+                cancelled?: boolean;
+                deviation?: boolean;
+              };
+              legTrack?: {
+                trackSection: {
+                  trackSectionStart?: {
+                    stopPointRef?: string;
+                    stopPlaceRef?: string;
+                    geoPosition?: {
+                      longitude: number;
+                      latitude: number;
+                    };
+                    name: {
+                      text: string;
+                    };
+                  };
+                  trackSectionEnd?: {
+                    stopPointRef?: string;
+                    stopPlaceRef?: string;
+                    geoPosition?: {
+                      longitude: number;
+                      latitude: number;
+                    };
+                    name: {
+                      text: string;
+                    };
+                  };
+                  linkProjection?: {
+                    position: ({
+                        longitude: number;
+                        latitude: number;
+                      })[];
+                  };
+                };
+              };
+            };
+            transferLeg?: {
+              /** @enum {string} */
+              transferType: "walk" | "remainInVehicle";
+              legStart: {
+                stopPointRef?: string;
+                stopPlaceRef?: string;
+                geoPosition?: {
+                  longitude: number;
+                  latitude: number;
+                };
+                name: {
+                  text: string;
+                };
+              };
+              legEnd: {
+                stopPointRef?: string;
+                stopPlaceRef?: string;
+                geoPosition?: {
+                  longitude: number;
+                  latitude: number;
+                };
+                name: {
+                  text: string;
+                };
+              };
+              duration: string;
+            };
+            continuousLeg?: {
+              legStart: {
+                stopPointRef?: string;
+                stopPlaceRef?: string;
+                geoPosition?: {
+                  longitude: number;
+                  latitude: number;
+                };
+                name: {
+                  text: string;
+                };
+              };
+              legEnd: {
+                stopPointRef?: string;
+                stopPlaceRef?: string;
+                geoPosition?: {
+                  longitude: number;
+                  latitude: number;
+                };
+                name: {
+                  text: string;
+                };
+              };
+              service: {
+                personalModeOfOperation?: string;
+                personalMode?: string;
+              };
+              duration: string;
+            };
+          })[];
+      };
     };
     OJPTripDelivery: {
       responseTimestamp: string;
       requestMessageRef?: string;
       defaultLanguage?: string;
       calcTime?: string;
-      tripResult: (components["schemas"]["TripResult"])[];
+      tripResult: ({
+          id: string;
+          trip: {
+            id: string;
+            duration: string;
+            /** Format: date-time */
+            startTime: string;
+            /** Format: date-time */
+            endTime: string;
+            transfers: number;
+            leg: ({
+                id: string;
+                duration?: string;
+                timedLeg?: {
+                  legBoard: WithRequired<{
+                    stopPointRef?: string;
+                    stopPointName?: {
+                      text: string;
+                    };
+                    nameSuffix?: {
+                      text: string;
+                    };
+                    plannedQuay?: {
+                      text: string;
+                    };
+                    estimatedQuay?: {
+                      text: string;
+                    };
+                    serviceArrival?: {
+                      timetabledTime: string;
+                      estimatedTime?: string;
+                    };
+                    serviceDeparture?: {
+                      timetabledTime: string;
+                      estimatedTime?: string;
+                    };
+                    order?: number;
+                    requestStop?: boolean;
+                    unplannedStop?: boolean;
+                    notServicedStop?: boolean;
+                    noBoardingAtStop?: boolean;
+                    noAlightingAtStop?: boolean;
+                  }, "stopPointRef" | "stopPointName" | "serviceDeparture">;
+                  legIntermediate: (WithRequired<{
+                      stopPointRef?: string;
+                      stopPointName?: {
+                        text: string;
+                      };
+                      nameSuffix?: {
+                        text: string;
+                      };
+                      plannedQuay?: {
+                        text: string;
+                      };
+                      estimatedQuay?: {
+                        text: string;
+                      };
+                      serviceArrival?: {
+                        timetabledTime: string;
+                        estimatedTime?: string;
+                      };
+                      serviceDeparture?: {
+                        timetabledTime: string;
+                        estimatedTime?: string;
+                      };
+                      order?: number;
+                      requestStop?: boolean;
+                      unplannedStop?: boolean;
+                      notServicedStop?: boolean;
+                      noBoardingAtStop?: boolean;
+                      noAlightingAtStop?: boolean;
+                    }, "stopPointRef" | "stopPointName" | "serviceArrival" | "serviceDeparture">)[];
+                  legAlight: WithRequired<{
+                    stopPointRef?: string;
+                    stopPointName?: {
+                      text: string;
+                    };
+                    nameSuffix?: {
+                      text: string;
+                    };
+                    plannedQuay?: {
+                      text: string;
+                    };
+                    estimatedQuay?: {
+                      text: string;
+                    };
+                    serviceArrival?: {
+                      timetabledTime: string;
+                      estimatedTime?: string;
+                    };
+                    serviceDeparture?: {
+                      timetabledTime: string;
+                      estimatedTime?: string;
+                    };
+                    order?: number;
+                    requestStop?: boolean;
+                    unplannedStop?: boolean;
+                    notServicedStop?: boolean;
+                    noBoardingAtStop?: boolean;
+                    noAlightingAtStop?: boolean;
+                  }, "stopPointRef" | "stopPointName" | "serviceArrival">;
+                  service: {
+                    conventionalModeOfOperation?: string;
+                    operatingDayRef: string;
+                    journeyRef: string;
+                    publicCode?: string;
+                    lineRef: string;
+                    directionRef?: string;
+                    mode: {
+                      ptMode: string;
+                      railSubmode?: string;
+                      name: {
+                        text: string;
+                      };
+                      shortName: {
+                        text: string;
+                      };
+                    };
+                    productCategory?: {
+                      name?: {
+                        text: string;
+                      };
+                      shortName?: {
+                        text: string;
+                      };
+                      productCategoryRef?: string;
+                    };
+                    publishedServiceName: {
+                      text: string;
+                    };
+                    trainNumber?: string;
+                    attribute: ({
+                        userText: {
+                          text: string;
+                        };
+                        code: string;
+                      })[];
+                    operatorRef?: string;
+                    destinationStopPointRef?: string;
+                    destinationText?: {
+                      text: string;
+                    };
+                    unplanned?: boolean;
+                    cancelled?: boolean;
+                    deviation?: boolean;
+                  };
+                  legTrack?: {
+                    trackSection: {
+                      trackSectionStart?: {
+                        stopPointRef?: string;
+                        stopPlaceRef?: string;
+                        geoPosition?: {
+                          longitude: number;
+                          latitude: number;
+                        };
+                        name: {
+                          text: string;
+                        };
+                      };
+                      trackSectionEnd?: {
+                        stopPointRef?: string;
+                        stopPlaceRef?: string;
+                        geoPosition?: {
+                          longitude: number;
+                          latitude: number;
+                        };
+                        name: {
+                          text: string;
+                        };
+                      };
+                      linkProjection?: {
+                        position: ({
+                            longitude: number;
+                            latitude: number;
+                          })[];
+                      };
+                    };
+                  };
+                };
+                transferLeg?: {
+                  /** @enum {string} */
+                  transferType: "walk" | "remainInVehicle";
+                  legStart: {
+                    stopPointRef?: string;
+                    stopPlaceRef?: string;
+                    geoPosition?: {
+                      longitude: number;
+                      latitude: number;
+                    };
+                    name: {
+                      text: string;
+                    };
+                  };
+                  legEnd: {
+                    stopPointRef?: string;
+                    stopPlaceRef?: string;
+                    geoPosition?: {
+                      longitude: number;
+                      latitude: number;
+                    };
+                    name: {
+                      text: string;
+                    };
+                  };
+                  duration: string;
+                };
+                continuousLeg?: {
+                  legStart: {
+                    stopPointRef?: string;
+                    stopPlaceRef?: string;
+                    geoPosition?: {
+                      longitude: number;
+                      latitude: number;
+                    };
+                    name: {
+                      text: string;
+                    };
+                  };
+                  legEnd: {
+                    stopPointRef?: string;
+                    stopPlaceRef?: string;
+                    geoPosition?: {
+                      longitude: number;
+                      latitude: number;
+                    };
+                    name: {
+                      text: string;
+                    };
+                  };
+                  service: {
+                    personalModeOfOperation?: string;
+                    personalMode?: string;
+                  };
+                  duration: string;
+                };
+              })[];
+          };
+        })[];
     };
     OJP: {
       OJPResponse: {
         serviceDelivery: {
           responseTimestamp: string;
           producerRef: string;
-          OJPTripDelivery: components["schemas"]["OJPTripDelivery"];
+          OJPTripDelivery: {
+            responseTimestamp: string;
+            requestMessageRef?: string;
+            defaultLanguage?: string;
+            calcTime?: string;
+            tripResult: ({
+                id: string;
+                trip: {
+                  id: string;
+                  duration: string;
+                  /** Format: date-time */
+                  startTime: string;
+                  /** Format: date-time */
+                  endTime: string;
+                  transfers: number;
+                  leg: ({
+                      id: string;
+                      duration?: string;
+                      timedLeg?: {
+                        legBoard: WithRequired<{
+                          stopPointRef?: string;
+                          stopPointName?: {
+                            text: string;
+                          };
+                          nameSuffix?: {
+                            text: string;
+                          };
+                          plannedQuay?: {
+                            text: string;
+                          };
+                          estimatedQuay?: {
+                            text: string;
+                          };
+                          serviceArrival?: {
+                            timetabledTime: string;
+                            estimatedTime?: string;
+                          };
+                          serviceDeparture?: {
+                            timetabledTime: string;
+                            estimatedTime?: string;
+                          };
+                          order?: number;
+                          requestStop?: boolean;
+                          unplannedStop?: boolean;
+                          notServicedStop?: boolean;
+                          noBoardingAtStop?: boolean;
+                          noAlightingAtStop?: boolean;
+                        }, "stopPointRef" | "stopPointName" | "serviceDeparture">;
+                        legIntermediate: (WithRequired<{
+                            stopPointRef?: string;
+                            stopPointName?: {
+                              text: string;
+                            };
+                            nameSuffix?: {
+                              text: string;
+                            };
+                            plannedQuay?: {
+                              text: string;
+                            };
+                            estimatedQuay?: {
+                              text: string;
+                            };
+                            serviceArrival?: {
+                              timetabledTime: string;
+                              estimatedTime?: string;
+                            };
+                            serviceDeparture?: {
+                              timetabledTime: string;
+                              estimatedTime?: string;
+                            };
+                            order?: number;
+                            requestStop?: boolean;
+                            unplannedStop?: boolean;
+                            notServicedStop?: boolean;
+                            noBoardingAtStop?: boolean;
+                            noAlightingAtStop?: boolean;
+                          }, "stopPointRef" | "stopPointName" | "serviceArrival" | "serviceDeparture">)[];
+                        legAlight: WithRequired<{
+                          stopPointRef?: string;
+                          stopPointName?: {
+                            text: string;
+                          };
+                          nameSuffix?: {
+                            text: string;
+                          };
+                          plannedQuay?: {
+                            text: string;
+                          };
+                          estimatedQuay?: {
+                            text: string;
+                          };
+                          serviceArrival?: {
+                            timetabledTime: string;
+                            estimatedTime?: string;
+                          };
+                          serviceDeparture?: {
+                            timetabledTime: string;
+                            estimatedTime?: string;
+                          };
+                          order?: number;
+                          requestStop?: boolean;
+                          unplannedStop?: boolean;
+                          notServicedStop?: boolean;
+                          noBoardingAtStop?: boolean;
+                          noAlightingAtStop?: boolean;
+                        }, "stopPointRef" | "stopPointName" | "serviceArrival">;
+                        service: {
+                          conventionalModeOfOperation?: string;
+                          operatingDayRef: string;
+                          journeyRef: string;
+                          publicCode?: string;
+                          lineRef: string;
+                          directionRef?: string;
+                          mode: {
+                            ptMode: string;
+                            railSubmode?: string;
+                            name: {
+                              text: string;
+                            };
+                            shortName: {
+                              text: string;
+                            };
+                          };
+                          productCategory?: {
+                            name?: {
+                              text: string;
+                            };
+                            shortName?: {
+                              text: string;
+                            };
+                            productCategoryRef?: string;
+                          };
+                          publishedServiceName: {
+                            text: string;
+                          };
+                          trainNumber?: string;
+                          attribute: ({
+                              userText: {
+                                text: string;
+                              };
+                              code: string;
+                            })[];
+                          operatorRef?: string;
+                          destinationStopPointRef?: string;
+                          destinationText?: {
+                            text: string;
+                          };
+                          unplanned?: boolean;
+                          cancelled?: boolean;
+                          deviation?: boolean;
+                        };
+                        legTrack?: {
+                          trackSection: {
+                            trackSectionStart?: {
+                              stopPointRef?: string;
+                              stopPlaceRef?: string;
+                              geoPosition?: {
+                                longitude: number;
+                                latitude: number;
+                              };
+                              name: {
+                                text: string;
+                              };
+                            };
+                            trackSectionEnd?: {
+                              stopPointRef?: string;
+                              stopPlaceRef?: string;
+                              geoPosition?: {
+                                longitude: number;
+                                latitude: number;
+                              };
+                              name: {
+                                text: string;
+                              };
+                            };
+                            linkProjection?: {
+                              position: ({
+                                  longitude: number;
+                                  latitude: number;
+                                })[];
+                            };
+                          };
+                        };
+                      };
+                      transferLeg?: {
+                        /** @enum {string} */
+                        transferType: "walk" | "remainInVehicle";
+                        legStart: {
+                          stopPointRef?: string;
+                          stopPlaceRef?: string;
+                          geoPosition?: {
+                            longitude: number;
+                            latitude: number;
+                          };
+                          name: {
+                            text: string;
+                          };
+                        };
+                        legEnd: {
+                          stopPointRef?: string;
+                          stopPlaceRef?: string;
+                          geoPosition?: {
+                            longitude: number;
+                            latitude: number;
+                          };
+                          name: {
+                            text: string;
+                          };
+                        };
+                        duration: string;
+                      };
+                      continuousLeg?: {
+                        legStart: {
+                          stopPointRef?: string;
+                          stopPlaceRef?: string;
+                          geoPosition?: {
+                            longitude: number;
+                            latitude: number;
+                          };
+                          name: {
+                            text: string;
+                          };
+                        };
+                        legEnd: {
+                          stopPointRef?: string;
+                          stopPlaceRef?: string;
+                          geoPosition?: {
+                            longitude: number;
+                            latitude: number;
+                          };
+                          name: {
+                            text: string;
+                          };
+                        };
+                        service: {
+                          personalModeOfOperation?: string;
+                          personalMode?: string;
+                        };
+                        duration: string;
+                      };
+                    })[];
+                };
+              })[];
+          };
         };
       };
     };

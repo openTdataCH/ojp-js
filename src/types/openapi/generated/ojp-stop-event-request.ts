@@ -15,7 +15,44 @@ export interface paths {
         /** @description Successful response */
         200: {
           content: {
-            "application/xml": components["schemas"]["OJP"];
+            "application/xml": {
+              OJPRequest: {
+                serviceRequest: {
+                  serviceRequestContext?: {
+                    language?: string;
+                  };
+                  requestTimestamp: string;
+                  requestorRef: string;
+                  OJPStopEventRequest?: {
+                    requestTimestamp: string;
+                    location: {
+                      placeRef: {
+                        stopPointRef?: string;
+                        stopPlaceRef?: string;
+                        geoPosition?: {
+                          longitude: number;
+                          latitude: number;
+                        };
+                        name: {
+                          text: string;
+                        };
+                      };
+                      depArrTime?: string;
+                    };
+                    params?: {
+                      includeAllRestrictedLines?: boolean;
+                      numberOfResults?: number;
+                      /** @enum {string} */
+                      stopEventType?: "departure" | "arrival" | "both";
+                      includePreviousCalls?: boolean;
+                      includeOnwardCalls?: boolean;
+                      /** @enum {string} */
+                      useRealtimeData?: "full" | "explanatory" | "none";
+                    };
+                  };
+                };
+              };
+            };
           };
         };
         /** @description Server error */
@@ -55,8 +92,30 @@ export interface components {
     };
     OJPStopEventRequest: {
       requestTimestamp: string;
-      location: components["schemas"]["PlaceContext"];
-      params?: components["schemas"]["StopEventParam"];
+      location: {
+        placeRef: {
+          stopPointRef?: string;
+          stopPlaceRef?: string;
+          geoPosition?: {
+            longitude: number;
+            latitude: number;
+          };
+          name: {
+            text: string;
+          };
+        };
+        depArrTime?: string;
+      };
+      params?: {
+        includeAllRestrictedLines?: boolean;
+        numberOfResults?: number;
+        /** @enum {string} */
+        stopEventType?: "departure" | "arrival" | "both";
+        includePreviousCalls?: boolean;
+        includeOnwardCalls?: boolean;
+        /** @enum {string} */
+        useRealtimeData?: "full" | "explanatory" | "none";
+      };
     };
     OJP: {
       OJPRequest: {
@@ -66,7 +125,33 @@ export interface components {
           };
           requestTimestamp: string;
           requestorRef: string;
-          OJPStopEventRequest?: components["schemas"]["OJPStopEventRequest"];
+          OJPStopEventRequest?: {
+            requestTimestamp: string;
+            location: {
+              placeRef: {
+                stopPointRef?: string;
+                stopPlaceRef?: string;
+                geoPosition?: {
+                  longitude: number;
+                  latitude: number;
+                };
+                name: {
+                  text: string;
+                };
+              };
+              depArrTime?: string;
+            };
+            params?: {
+              includeAllRestrictedLines?: boolean;
+              numberOfResults?: number;
+              /** @enum {string} */
+              stopEventType?: "departure" | "arrival" | "both";
+              includePreviousCalls?: boolean;
+              includeOnwardCalls?: boolean;
+              /** @enum {string} */
+              useRealtimeData?: "full" | "explanatory" | "none";
+            };
+          };
         };
       };
     };

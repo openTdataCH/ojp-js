@@ -36,6 +36,104 @@ export interface components {
     ServiceRequestContext: {
       language?: string;
     };
+    PointOfInterestCategory: {
+      osmTag?: {
+        tag: string;
+        value: string;
+      };
+    };
+    StopPoint: {
+      stopPointRef: string;
+      stopPointName: components["schemas"]["InternationalText"];
+      plannedQuay?: components["schemas"]["InternationalText"];
+      estimatedQuay?: components["schemas"]["InternationalText"];
+    };
+    StopPlace: {
+      stopPlaceRef?: string;
+      stopPlaceName?: components["schemas"]["InternationalText"];
+    };
+    TopographicPlace: {
+      topographicPlaceCode: string;
+      topographicPlaceName: components["schemas"]["InternationalText"];
+    };
+    PointOfInterest: {
+      publicCode: string;
+      name: components["schemas"]["InternationalText"];
+      pointOfInterestCategory: (components["schemas"]["PointOfInterestCategory"])[];
+      topographicPlaceRef?: string;
+    };
+    Address: {
+      publicCode: string;
+      name: components["schemas"]["InternationalText"];
+      postCode?: string;
+      topographicPlaceName?: string;
+      TopographicPlaceRef?: string;
+      Street?: string;
+      HouseNumber?: string;
+    };
+    Place: {
+      stopPoint?: components["schemas"]["StopPoint"];
+      stopPlace?: components["schemas"]["StopPlace"];
+      topographicPlace?: components["schemas"]["TopographicPlace"];
+      pointOfInterest?: components["schemas"]["PointOfInterest"];
+      address?: components["schemas"]["Address"];
+      name: components["schemas"]["InternationalText"];
+      geoPosition: components["schemas"]["GeoPosition"];
+      mode: (components["schemas"]["VehicleModesOfTransportEnum"])[];
+    };
+    SharedServiceArrivalDeparture: {
+      timetabledTime: string;
+      estimatedTime?: string;
+    };
+    CallAtStop: {
+      stopPointRef?: string;
+      stopPointName?: components["schemas"]["InternationalText"];
+      nameSuffix?: components["schemas"]["InternationalText"];
+      plannedQuay?: components["schemas"]["InternationalText"];
+      estimatedQuay?: components["schemas"]["InternationalText"];
+      serviceArrival?: components["schemas"]["SharedServiceArrivalDeparture"];
+      serviceDeparture?: components["schemas"]["SharedServiceArrivalDeparture"];
+      order?: number;
+      requestStop?: boolean;
+      unplannedStop?: boolean;
+      notServicedStop?: boolean;
+      noBoardingAtStop?: boolean;
+      noAlightingAtStop?: boolean;
+    };
+    Mode: {
+      ptMode: string;
+      railSubmode?: string;
+      name: components["schemas"]["InternationalText"];
+      shortName: components["schemas"]["InternationalText"];
+    };
+    ProductCategory: {
+      name?: components["schemas"]["InternationalText"];
+      shortName?: components["schemas"]["InternationalText"];
+      productCategoryRef?: string;
+    };
+    GeneralAttribute: {
+      userText: components["schemas"]["InternationalText"];
+      code: string;
+    };
+    DatedJourney: {
+      conventionalModeOfOperation?: string;
+      operatingDayRef: string;
+      journeyRef: string;
+      publicCode?: string;
+      lineRef: string;
+      directionRef?: string;
+      mode: components["schemas"]["Mode"];
+      productCategory?: components["schemas"]["ProductCategory"];
+      publishedServiceName: components["schemas"]["InternationalText"];
+      trainNumber?: string;
+      attribute: (components["schemas"]["GeneralAttribute"])[];
+      operatorRef?: string;
+      destinationStopPointRef?: string;
+      destinationText?: components["schemas"]["InternationalText"];
+      unplanned?: boolean;
+      cancelled?: boolean;
+      deviation?: boolean;
+    };
   };
   responses: never;
   parameters: never;
