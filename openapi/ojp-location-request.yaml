@@ -47,29 +47,6 @@ components:
           xml:
             name: IncludePtModes
 
-    # TODO  - this is copy/paste from './shared.yml#/components/schemas/GeoPosition'
-    #       - otherwise strange references are created
-    GeoRestrictionGeoPosition:
-      type: object
-      xml:
-        name: GeoPosition
-      required:
-        - longitude
-        - latitude
-      properties:
-        longitude:
-          type: number
-          xml:
-            name: Longitude
-            namespace: "http://www.siri.org.uk/siri"
-            prefix: siri
-        latitude:
-          type: number
-          xml:
-            name: Latitude
-            namespace: "http://www.siri.org.uk/siri"
-            prefix: siri
-
     # https://vdvde.github.io/OJP/develop/documentation-tables/ojp.html#type_ojp__InitialLocationInputStructure
     InitialInput:
       type: object
@@ -96,11 +73,11 @@ components:
                 - lowerRight
               properties:
                 upperLeft:
-                  $ref: '#/components/schemas/GeoRestrictionGeoPosition'
+                  $ref: './shared.yml#/components/schemas/GeoPosition'
                   xml:
                     name: UpperLeft
                 lowerRight:
-                  $ref: '#/components/schemas/GeoRestrictionGeoPosition'
+                  $ref: './shared.yml#/components/schemas/GeoPosition'
                   xml:
                     name: LowerRight
 

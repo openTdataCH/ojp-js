@@ -59,29 +59,6 @@ components:
         - stopPointName
         - serviceArrival
 
-    # TODO  - this is copy/paste from './shared.yml#/components/schemas/GeoPosition'
-    #       - otherwise strange references are created
-    LinkProjectionGeoPosition:
-      type: object
-      xml:
-        name: GeoPosition
-      required:
-        - longitude
-        - latitude
-      properties:
-        longitude:
-          type: number
-          xml:
-            name: Longitude
-            namespace: "http://www.siri.org.uk/siri"
-            prefix: siri
-        latitude:
-          type: number
-          xml:
-            name: Latitude
-            namespace: "http://www.siri.org.uk/siri"
-            prefix: siri
-
     # https://vdvde.github.io/OJP/develop/documentation-tables/ojp.html#type_ojp__LinearShapeStructure
     LinkProjection:
       type: object
@@ -95,10 +72,7 @@ components:
           xml:
             name: Position
           items:
-            # TODO  - using './shared.yml#/components/schemas/GeoPosition'
-            #       - is leading to funky references
-            #       => use a local hard copy instead
-            $ref: '#/components/schemas/LinkProjectionGeoPosition'
+            $ref: './shared.yml#/components/schemas/GeoPosition'
 
     # https://vdvde.github.io/OJP/develop/documentation-tables/ojp.html#type_ojp__TrackSectionStructure
     TrackSection:
