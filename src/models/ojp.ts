@@ -73,8 +73,6 @@ export class TripRequest implements TripRequestSchema {
   }
 
   public static initWithPlaceRefsAndDate(originPlaceRefS: string, destinationPlaceRefS: string, date: Date = new Date()): TripRequest {
-    const now = new Date();
-
     const origin: PlaceContextSchema = {
       placeRef: PlaceRef.initWithStopRefAndName(originPlaceRefS, 'n/a'),
       depArrTime: date.toISOString(),
