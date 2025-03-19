@@ -67,7 +67,26 @@ export class TripRequest implements TripRequestSchema {
     this.params = params ??= {};
   }
 
-    public static initWithResponseMock(mockXML: string) {
+  public static DefaultRequestParams(): TripParamsSchema {
+    const requestParams: TripParamsSchema = {
+      modeAndModeOfOperationFilter: [],
+      
+      numberOfResults: 5,
+      numberOfResultsBefore: undefined,
+      numberOfResultsAfter: undefined,
+
+      useRealtimeData: 'explanatory',
+
+      includeAllRestrictedLines: true,
+      includeTrackSections: true,
+      includeLegProjection: true,
+      includeIntermediateStops: true,
+    };
+
+    return requestParams;
+  }
+
+  public static initWithResponseMock(mockXML: string) {
     // TODO  to be implemented
     // TODO - add also gist URL, url
   }
@@ -81,7 +100,7 @@ export class TripRequest implements TripRequestSchema {
       placeRef: PlaceRef.initWithStopRefAndName(destinationPlaceRefS, 'n/a'),
     };
 
-    const params = TripRequestParams.Default();
+    const params = TripRequest.DefaultRequestParams();
 
     const request = new TripRequest(origin, destination, [], params);
     return request;
@@ -114,44 +133,6 @@ export class TripRequest implements TripRequestSchema {
     const xmlS = buildXML(requestOJP);
 
     return xmlS;
-  }
-}
-
-export class TripRequestParams implements TripParamsSchema {
-  public modeAndModeOfOperationFilter: ModeAndModeOfOperationFilterSchema[];
-  
-  public numberOfResults?: number;
-  public numberOfResultsBefore?: number;
-  public numberOfResultsAfter?: number;
-  
-  public useRealtimeData?: UseRealtimeDataEnum;
-  
-  public includeAllRestrictedLines?: boolean;
-  public includeTrackSections?: boolean;
-  public includeLegProjection?: boolean;
-  public includeTurnDescription?: boolean;
-  public includeIntermediateStops?: boolean;
-
-  constructor() {
-    this.modeAndModeOfOperationFilter = [];
-  }
-
-  public static Default(): TripRequestParams {
-    const tripParams = new TripRequestParams();
-    
-    tripParams.numberOfResults = 5;
-    delete(tripParams.numberOfResultsBefore);
-    delete(tripParams.numberOfResultsAfter);
-
-    tripParams.useRealtimeData = 'explanatory';
-
-    tripParams.includeAllRestrictedLines = true;
-    tripParams.includeTrackSections = true;
-    tripParams.includeLegProjection = true;
-    tripParams.includeTurnDescription = true;
-    tripParams.includeIntermediateStops = true;
-
-    return tripParams;
   }
 }
 
