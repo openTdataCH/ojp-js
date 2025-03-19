@@ -1,5 +1,6 @@
 import { components as locationInformationRequestComponents } from './generated/ojp-location-request';
 import { components as locationInformationResponseComponents } from './generated/ojp-location-response';
+import { components as stopEventRequestComponents } from './generated/ojp-stop-event-request'
 import { components as tripRequestComponents } from './generated/ojp-trip-request';
 import { components as tripReponseComponents } from './generated/ojp-trip-response';
 import { components as sharedComponents } from './generated/shared';
@@ -40,3 +41,7 @@ export type StopPlaceSchema = locationInformationResponseComponents['schemas']['
 export type TopographicPlaceSchema = locationInformationResponseComponents['schemas']['TopographicPlace']
 export type PointOfInterestSchema = locationInformationResponseComponents['schemas']['PointOfInterest']
 export type AddressSchema = locationInformationResponseComponents['schemas']['Address']
+
+export type StopEventRequestSchema = stopEventRequestComponents['schemas']['OJPStopEventRequest']
+export type SER_RequestLocationSchema = stopEventRequestComponents['schemas']['PlaceContext']
+export type SER_RequestParamsSchema = stopEventRequestComponents['schemas']['StopEventParam']
