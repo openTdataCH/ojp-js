@@ -15,6 +15,13 @@ export type PlaceRefSchema = sharedComponents["schemas"]["PlaceRef"];
 export type InternationalTextSchema = sharedComponents["schemas"]["InternationalText"];
 export type PlaceContextSchema = sharedComponents["schemas"]["PlaceContext"];
 
+export type PlaceSchema = sharedComponents['schemas']['Place']
+export type StopPointSchema = sharedComponents['schemas']['StopPoint']
+export type StopPlaceSchema = sharedComponents['schemas']['StopPlace']
+export type TopographicPlaceSchema = sharedComponents['schemas']['TopographicPlace']
+export type PointOfInterestSchema = sharedComponents['schemas']['PointOfInterest']
+export type AddressSchema = sharedComponents['schemas']['Address']
+
 export type TripRequestOJP = tripRequestComponents["schemas"]["OJP"];
 export type TripParamsSchema = tripRequestComponents["schemas"]["TripParam"];
 export type TripRequestSchema = tripRequestComponents["schemas"]["OJPTripRequest"];
@@ -35,12 +42,6 @@ export type LocationInformationRequestOJP = locationInformationRequestComponents
 export type LocationInformationRequestSchema = locationInformationRequestComponents['schemas']['OJPLocationInformationRequest']
 
 export type PlaceResultSchema = locationInformationResponseComponents['schemas']['PlaceResult']
-export type PlaceSchema = locationInformationResponseComponents['schemas']['Place']
-export type StopPointSchema = locationInformationResponseComponents['schemas']['StopPoint']
-export type StopPlaceSchema = locationInformationResponseComponents['schemas']['StopPlace']
-export type TopographicPlaceSchema = locationInformationResponseComponents['schemas']['TopographicPlace']
-export type PointOfInterestSchema = locationInformationResponseComponents['schemas']['PointOfInterest']
-export type AddressSchema = locationInformationResponseComponents['schemas']['Address']
 
 export type StopEventRequestSchema = stopEventRequestComponents['schemas']['OJPStopEventRequest']
 export type SER_RequestLocationSchema = stopEventRequestComponents['schemas']['PlaceContext']
