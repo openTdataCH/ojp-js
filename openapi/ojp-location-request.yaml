@@ -104,7 +104,7 @@ components:
                   xml:
                     name: LowerRight
 
-    # https://vdvde.github.io/OJP/develop/documentation-tables/ojp.html#element_ojp__OJPLocationInformationRequest
+    # https://vdvde.github.io/OJP/develop/documentation-tables/ojp.html#type_ojp__OJPLocationInformationRequestStructure
     OJPLocationInformationRequest:
       type: object
       xml:
