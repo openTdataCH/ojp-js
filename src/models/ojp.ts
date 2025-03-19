@@ -20,6 +20,9 @@ import {
   StopEventRequestSchema,
   SER_RequestLocationSchema,
   SER_RequestParamsSchema,
+  SER_RequestOJP,
+  StopEventResultSchema,
+  StopEventSchema,
 } from '../types/openapi';
 
 
@@ -332,5 +335,42 @@ export class StopEventRequest implements StopEventRequestSchema {
     const request = new StopEventRequest(location, params);
 
     return request;
+  }
+
+  public buildRequestXML(language: Language): string {
+    const requestOJP: SER_RequestOJP = {
+      OJPRequest: {
+        serviceRequest: {
+          serviceRequestContext: {
+            language: language
+          },
+          requestTimestamp: this.requestTimestamp,
+          requestorRef: 'TBA.requestorRef',
+          OJPStopEventRequest: this,
+        }
+      },
+    };
+
+    const xmlS = buildXML(requestOJP);
+
+    return xmlS;
+  }
+}
+
+export class StopEventResult implements StopEventResultSchema {
+  public id: string;
+  public stopEvent: StopEventSchema;
+
+  constructor(id: string, stopEvent: StopEventSchema) {
+    this.id = id;
+    this.stopEvent = stopEvent;
+  }
+
+  public static initWithXML(nodeXML: string): StopEventResult {
+    const parentTagName = 'StopEventResult';
+    const parsedObj = parseXML<{ stopEventResult: StopEventResultSchema }>(nodeXML, parentTagName);
+    const result = new StopEventResult(parsedObj.stopEventResult.id, parsedObj.stopEventResult.stopEvent);
+
+    return result;
   }
 }
