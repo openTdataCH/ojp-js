@@ -8,6 +8,7 @@ SRC_FILES=(
     "ojp-trip-request.yaml"
     "ojp-trip-response.yaml"
     "ojp-stop-event-request.yaml"
+    "ojp-stop-event-response.yaml"
     "ojp-location-request.yaml"
     "ojp-location-response.yaml"
 )
