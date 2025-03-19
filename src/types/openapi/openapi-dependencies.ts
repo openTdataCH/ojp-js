@@ -42,6 +42,10 @@ export const MapNS_Tags: Record<string, string> = {
   'UpperLeft.Latitude': 'siri',
   'LowerRight.Longitude': 'siri',
   'LowerRight.Latitude': 'siri',
+
+  // SER Request
+  'OJPStopEventRequest.RequestTimestamp': 'siri',
+  'PlaceRef.StopPointRef': 'siri',
 };
 
 // TODO - this should be generated
@@ -59,6 +63,9 @@ export const MapParentArrayTags: Record<string, string[]> = {
   'place.pointOfInterest': ['pointOfInterestCategory'],
   'placeResult.place': ['ptMode'],
   'serviceDelivery.OJPLocationInformationDelivery': ['placeResult'],
+
+  // SER Response
+  'stopEventResult.stopEvent': ['previousCall', 'onwardCall'],
 };
 export const MapArrayTags: Record<string, boolean> = {
   'trip.leg': true,
@@ -73,5 +80,9 @@ export const MapArrayTags: Record<string, boolean> = {
   'pointOfInterest.pointOfInterestCategory': true,
   'place.ptMode': true,
   'OJPLocationInformationDelivery.placeResult': true,
+
+  // SER Response
+  'stopEvent.previousCall': true,
+  'stopEvent.onwardCall': true,
 };
 
