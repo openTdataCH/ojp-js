@@ -2,10 +2,9 @@ import { buildXML, parseXML } from "../helpers/xml-helpers";
 import { Language } from "../types/_all";
 
 import { 
-  PlaceContextSchema, UseRealtimeDataEnum, VehicleModesOfTransportEnum,
+  PlaceContextSchema,
   GeoPositionSchema, PlaceRefSchema, InternationalTextSchema, 
   
-  ModeAndModeOfOperationFilterSchema,
   TripRequestOJP,
   TripRequestSchema, TripParamsSchema, ViaPointSchema,
   TripSchema,
@@ -24,7 +23,6 @@ import {
   StopEventResultSchema,
   StopEventSchema,
 } from '../types/openapi';
-
 
 export class PlaceRef implements PlaceRefSchema {
   public stopPointRef?: string;
