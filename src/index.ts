@@ -8,6 +8,7 @@ export {
 export {
   TripRequest,
   LocationInformationRequest,
+  StopEventRequest,
 
   PlaceResult,
 } from "./models/ojp";

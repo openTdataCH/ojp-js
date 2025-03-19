@@ -17,6 +17,9 @@ import {
   PlaceResultSchema,
   PlaceSchema,
   PlaceTypeEnum,
+  StopEventRequestSchema,
+  SER_RequestLocationSchema,
+  SER_RequestParamsSchema,
 } from '../types/openapi';
 
 
@@ -284,5 +287,50 @@ export class PlaceResult implements PlaceResultSchema {
     const placeResult = new PlaceResult(parsedObj.placeResult.place, parsedObj.placeResult.complete, parsedObj.placeResult.probability);
 
     return placeResult;
+  }
+}
+
+export class StopEventRequest implements StopEventRequestSchema {
+  public requestTimestamp: string;
+  public location: SER_RequestLocationSchema;
+  public params?: SER_RequestParamsSchema;
+
+  constructor(location: SER_RequestLocationSchema, params: SER_RequestParamsSchema | undefined = undefined) {
+    const now = new Date();
+    this.requestTimestamp = now.toISOString();
+    
+    this.location = location;
+    this.params = params;
+  }
+
+  private static DefaultRequestParams(): SER_RequestParamsSchema {
+    const params: SER_RequestParamsSchema = {
+      includeAllRestrictedLines: true,
+      numberOfResults: 10,
+      stopEventType: 'departure',
+      includePreviousCalls: true,
+      includeOnwardCalls: true,
+      useRealtimeData: 'explanatory',
+    };
+
+    return params;
+  }
+
+  public static initWithPlaceRefAndDate(placeRefS: string, date: Date = new Date()): StopEventRequest {
+    const location: SER_RequestLocationSchema = {
+      placeRef: {
+        stopPointRef: placeRefS,
+        name: {
+          text: 'n/a'
+        }
+      },
+      depArrTime: date.toISOString(),
+    };
+
+    const params = StopEventRequest.DefaultRequestParams();
+
+    const request = new StopEventRequest(location, params);
+
+    return request;
   }
 }
