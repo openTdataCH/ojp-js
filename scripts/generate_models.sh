@@ -7,6 +7,7 @@ OPENAPI_GENERATED_TS_PATH=$APP_PATH/src/types/openapi/generated
 SRC_FILES=(
     "ojp-trip-request.yaml"
     "ojp-trip-response.yaml"
+    "ojp-stop-event-request.yaml"
     "ojp-location-request.yaml"
     "ojp-location-response.yaml"
 )
