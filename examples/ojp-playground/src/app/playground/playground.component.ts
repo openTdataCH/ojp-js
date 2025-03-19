@@ -16,7 +16,9 @@ export class PlaygroundComponent implements OnInit {
       authToken: null,
     };
 
-    this.ojpSDK = new OJP.SDK(httpConfig, 'de');
+
+    const requestorRef = 'PlaygroundApp.v1';
+    this.ojpSDK = new OJP.SDK(requestorRef, httpConfig, 'de');
   }
 
   async ngOnInit(): Promise<void> {
