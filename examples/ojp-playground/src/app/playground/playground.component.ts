@@ -28,7 +28,7 @@ export class PlaygroundComponent implements OnInit {
   private async runExamples() {
     await this.runLIR();
     await this.runTR();
-    // await this.runSER();
+    await this.runSER();
   }
 
   private async runLIR() {
@@ -111,23 +111,16 @@ export class PlaygroundComponent implements OnInit {
     // });
   }
 
-  // private async runSER() {
-  //   console.log('======================');
-  //   console.log('SER Requests');
-  //   console.log('======================');
+  private async runSER() {
+    console.log('======================');
+    console.log('SER Requests');
+    console.log('======================');
 
-  //   const stopRef = '8507000'; // Bern
-  //   const request1 = OJP.StopEventRequest.initWithStopPlaceRef(OJP.DEFAULT_STAGE, stopRef, 'departure', new Date());
+    const stopRef = '8507000'; // Bern
+    const request1 = OJP.StopEventRequest.initWithPlaceRefAndDate(stopRef, new Date());
     
-  //   // a) using await/async
-  //   const response1 = await request1.fetchResponse();
-  //   console.log('a) SER using await/async')
-  //   console.log(response1);
-
-  //   // b) using Promise.then
-  //   request1.fetchResponse().then(response => {
-  //     console.log('b) SER using Promise.then')
-  //     console.log(response);
-  //   });
-  // }
+    const response1 = await this.ojpSDK.fetchStopEvents(request1);
+    console.log('a) SER using await/async')
+    console.log(response1);
+  }
 }
