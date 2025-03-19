@@ -1,6 +1,7 @@
 import { components as locationInformationRequestComponents } from './generated/ojp-location-request';
 import { components as locationInformationResponseComponents } from './generated/ojp-location-response';
 import { components as stopEventRequestComponents } from './generated/ojp-stop-event-request'
+import { components as stopEventResponseComponents } from './generated/ojp-stop-event-response'
 import { components as tripRequestComponents } from './generated/ojp-trip-request';
 import { components as tripReponseComponents } from './generated/ojp-trip-response';
 import { components as sharedComponents } from './generated/shared';
@@ -46,3 +47,7 @@ export type PlaceResultSchema = locationInformationResponseComponents['schemas']
 export type StopEventRequestSchema = stopEventRequestComponents['schemas']['OJPStopEventRequest']
 export type SER_RequestLocationSchema = stopEventRequestComponents['schemas']['PlaceContext']
 export type SER_RequestParamsSchema = stopEventRequestComponents['schemas']['StopEventParam']
+export type SER_RequestOJP = stopEventRequestComponents['schemas']['OJP'];
+
+export type StopEventResultSchema = stopEventResponseComponents['schemas']['StopEventResult']
+export type StopEventSchema = stopEventResponseComponents['schemas']['StopEvent']
