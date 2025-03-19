@@ -1,6 +1,6 @@
 import axios, { AxiosHeaders, AxiosRequestConfig } from "axios";
 
-import { LocationInformationRequest, PlaceResult, Trip, TripRequest } from "./models/ojp";
+import { LocationInformationRequest, PlaceResult, StopEventRequest, StopEventResult, Trip, TripRequest } from "./models/ojp";
 import { HTTPConfig, Language } from "./types/_all";
 
 export class SDK {
@@ -85,5 +85,26 @@ export class SDK {
     });
 
     return placeResults;
+  }
+
+  public async fetchStopEvents(request: StopEventRequest): Promise<StopEventResult[]> {
+    const requestXML = request.buildRequestXML(this.language);
+    console.log('fetchStopEvents: requestXML');
+    console.log(requestXML);
+
+    const responseXML = await this.fetchResponse(requestXML);
+
+    console.log('fetchStopEvents ... done fetchResponse');
+
+    const resultMatches: string[] = responseXML.match(/<StopEventResult\b[^>]*>.*?<\/StopEventResult>/gs) ?? []; 
+    console.log('fetchStopEvents - regexp matches - found ' + resultMatches.length + ' stop events');
+
+    const results: StopEventResult[] = [];
+    resultMatches.forEach((nodeXML, idx1) => {
+      const result = StopEventResult.initWithXML(nodeXML);
+      results.push(result);
+    });
+
+    return results;
   }
 }
