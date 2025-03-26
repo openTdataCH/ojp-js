@@ -1,5 +1,5 @@
 {
-  "name": "ojp-sdk",
+  "name": "ojp-sdk-next",
   "description": "OJP (Open Journey Planner) Javascript SDK",
   "version": "0.20.1",
   "type": "module",
