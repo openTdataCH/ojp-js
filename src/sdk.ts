@@ -46,8 +46,6 @@ export class SDK {
   }
 
   public async fetchTrips(tripRequest: TripRequest): Promise<Trip[]> {
-    console.log('fetchTrips: requestXML');
-    console.log(requestXML);
     const requestXML = (() => {
       if (tripRequest.mockRequestXML) {
         console.log('TR: using mock request XML');
@@ -58,6 +56,8 @@ export class SDK {
       return xml;
     })();
     
+    // console.log('fetchTrips: requestXML');
+    // console.log(requestXML);
 
     const responseXML: string = await (async () => {
       if (tripRequest.mockResponseXML) {
@@ -69,11 +69,11 @@ export class SDK {
       return xml;
     })();
 
-    console.log('fetchTrips ... done fetchResponse');
+    // console.log('fetchTrips ... done fetchResponse');
 
     const tripMatches: string[] = responseXML.match(/<Trip\b[^>]*>.*?<\/Trip>/gs) ?? [];
     
-    console.log('fetchTrips - regexp matches - found ' + tripMatches.length + ' trips');
+    // console.log('fetchTrips - regexp matches - found ' + tripMatches.length + ' trips');
 
     const trips: Trip[] = [];
     tripMatches.forEach((tripXML, idx1) => {
@@ -81,23 +81,23 @@ export class SDK {
       trips.push(trip);
     });
 
-    console.log('fetchTrips - done init trips');
+    // console.log('fetchTrips - done init trips');
 
     return trips;
   }
 
   public async fetchPlaceResults(lirRequest: LocationInformationRequest): Promise<PlaceResult[]> {
     const requestXML = lirRequest.buildRequestXML(this.language, this.requestorRef);
-    console.log('fetchLocations: requestXML');
-    console.log(requestXML);
+    // console.log('fetchLocations: requestXML');
+    // console.log(requestXML);
 
     const responseXML = await this.fetchResponse(requestXML);
 
-    console.log('fetchLocations ... done fetchResponse');
+    // console.log('fetchLocations ... done fetchResponse');
 
     const placeResultMatches: string[] = responseXML.match(/<PlaceResult\b[^>]*>.*?<\/PlaceResult>/gs) ?? [];
     
-    console.log('fetchLocations - regexp matches - found ' + placeResultMatches.length + ' places');
+    // console.log('fetchLocations - regexp matches - found ' + placeResultMatches.length + ' places');
 
     const placeResults: PlaceResult[] = [];
     placeResultMatches.forEach((nodeXML, idx1) => {
@@ -110,15 +110,15 @@ export class SDK {
 
   public async fetchStopEvents(request: StopEventRequest): Promise<StopEventResult[]> {
     const requestXML = request.buildRequestXML(this.language, this.requestorRef);
-    console.log('fetchStopEvents: requestXML');
-    console.log(requestXML);
+    // console.log('fetchStopEvents: requestXML');
+    // console.log(requestXML);
 
     const responseXML = await this.fetchResponse(requestXML);
 
-    console.log('fetchStopEvents ... done fetchResponse');
+    // console.log('fetchStopEvents ... done fetchResponse');
 
     const resultMatches: string[] = responseXML.match(/<StopEventResult\b[^>]*>.*?<\/StopEventResult>/gs) ?? []; 
-    console.log('fetchStopEvents - regexp matches - found ' + resultMatches.length + ' stop events');
+    // console.log('fetchStopEvents - regexp matches - found ' + resultMatches.length + ' stop events');
 
     const results: StopEventResult[] = [];
     resultMatches.forEach((nodeXML, idx1) => {
