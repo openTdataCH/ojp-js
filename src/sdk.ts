@@ -46,11 +46,28 @@ export class SDK {
   }
 
   public async fetchTrips(tripRequest: TripRequest): Promise<Trip[]> {
-    const requestXML = tripRequest.buildRequestXML(this.language, this.requestorRef);
     console.log('fetchTrips: requestXML');
     console.log(requestXML);
+    const requestXML = (() => {
+      if (tripRequest.mockRequestXML) {
+        console.log('TR: using mock request XML');
+        return tripRequest.mockRequestXML;
+      }
 
-    const responseXML = await this.fetchResponse(requestXML);
+      const xml = tripRequest.buildRequestXML(this.language, this.requestorRef);
+      return xml;
+    })();
+    
+
+    const responseXML: string = await (async () => {
+      if (tripRequest.mockResponseXML) {
+        console.log('TR: using mock response XML');
+        return tripRequest.mockResponseXML;
+      }
+
+      const xml = await this.fetchResponse(requestXML);
+      return xml;
+    })();
 
     console.log('fetchTrips ... done fetchResponse');
 
