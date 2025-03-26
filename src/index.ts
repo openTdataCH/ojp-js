@@ -16,5 +16,5 @@ export {
 
 export { SDK_VERSION } from './constants';
 export { DateHelpers } from './helpers';
-export { HTTPConfig } from "./types/_all";
+export { HTTPConfig, Language } from "./types/_all";
 export { SDK } from "./sdk";
