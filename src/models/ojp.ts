@@ -89,7 +89,7 @@ export class TripRequest implements TripRequestSchema {
 
       includeAllRestrictedLines: true,
       includeTrackSections: true,
-      includeLegProjection: true,
+      includeLegProjection: false,
       includeIntermediateStops: true,
     };
 
