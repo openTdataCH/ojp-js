@@ -54,6 +54,9 @@ export class TripRequest implements TripRequestSchema {
   
   public params?: TripParamsSchema;
 
+  public mockRequestXML: string | null;
+  public mockResponseXML: string | null;
+
   constructor(
     origin: PlaceContextSchema, 
     destination: PlaceContextSchema, 
@@ -69,6 +72,9 @@ export class TripRequest implements TripRequestSchema {
     this.via = via;
 
     this.params = params ??= {};
+
+    this.mockRequestXML = null;
+    this.mockResponseXML = null;
   }
 
   public static DefaultRequestParams(): TripParamsSchema {
@@ -90,9 +96,26 @@ export class TripRequest implements TripRequestSchema {
     return requestParams;
   }
 
-  public static initWithResponseMock(mockXML: string) {
-    // TODO  to be implemented
-    // TODO - add also gist URL, url
+  public static Empty(): TripRequest {
+    const date = new Date();
+    const origin: PlaceContextSchema = {
+      placeRef: PlaceRef.initWithStopRefAndName('n/a stopRef', 'n/a stopName'),
+      depArrTime: date.toISOString(),
+    };
+    const destination: PlaceContextSchema = {
+      placeRef: PlaceRef.initWithStopRefAndName('n/a stopRef', 'n/a stopName'),
+    };
+    const params = TripRequest.DefaultRequestParams();
+
+    const request = new TripRequest(origin, destination, [], params);
+    return request;
+  }
+
+  public static initWithResponseMock(mockXML: string): TripRequest {
+    const request = TripRequest.Empty();
+    request.mockResponseXML = mockXML;
+
+    return request;
   }
 
   public static initWithPlaceRefsAndDate(originPlaceRefS: string, destinationPlaceRefS: string, date: Date = new Date()): TripRequest {
