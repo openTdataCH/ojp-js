@@ -1,10 +1,10 @@
+import { components as sharedComponents } from './generated/shared';
 import { components as locationInformationRequestComponents } from './generated/ojp-location-request';
 import { components as locationInformationResponseComponents } from './generated/ojp-location-response';
 import { components as stopEventRequestComponents } from './generated/ojp-stop-event-request'
 import { components as stopEventResponseComponents } from './generated/ojp-stop-event-response'
 import { components as tripRequestComponents } from './generated/ojp-trip-request';
 import { components as tripReponseComponents } from './generated/ojp-trip-response';
-import { components as sharedComponents } from './generated/shared';
 
 // TODO - this can be generated
 export type UseRealtimeDataEnum = sharedComponents["schemas"]["UseRealtimeDataEnum"];
@@ -14,8 +14,8 @@ export type PlaceTypeEnum = sharedComponents["schemas"]["PlaceTypeEnum"];
 export type GeoPositionSchema = sharedComponents["schemas"]["GeoPosition"];
 export type PlaceRefSchema = sharedComponents["schemas"]["PlaceRef"];
 export type InternationalTextSchema = sharedComponents["schemas"]["InternationalText"];
-export type PlaceContextSchema = sharedComponents["schemas"]["PlaceContext"];
 
+export type PlaceContextSchema = sharedComponents["schemas"]["PlaceContext"];
 export type PlaceSchema = sharedComponents['schemas']['Place']
 export type StopPointSchema = sharedComponents['schemas']['StopPoint']
 export type StopPlaceSchema = sharedComponents['schemas']['StopPlace']
