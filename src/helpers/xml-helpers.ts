@@ -93,9 +93,9 @@ export function parseXML<T>(xml: string, parentPath: string = ''): T {
   return response;
 }
 
-function transformKeys<T extends Record<string, any>>(obj: T, callback:(key: string, path: string[]) => string, path: string[] = []): Record<string, any> {
+function transformKeys<T extends Record<string, any>>(obj: T, callback:(key: string, value: any, path: string[]) => string, path: string[] = []): Record<string, any> {
   return Object.entries(obj).reduce((acc, [key, value]) => {
-    const newKey = callback(key, path);
+    const newKey = callback(key, value, path);
     const newPath = path.concat([newKey]);
 
     acc[newKey] = (() => {
@@ -113,7 +113,7 @@ function transformKeys<T extends Record<string, any>>(obj: T, callback:(key: str
 }
 
 export function buildXML(obj: Record<string, any>): string {
-  const objTransformed = transformKeys(obj, (key: string, path: string[]) => {
+  const objTransformed = transformKeys(obj, (key: string, value: any, path: string[]) => {
     // capitalize first letter
     let newKey = key.charAt(0).toUpperCase() + key.slice(1);
     
