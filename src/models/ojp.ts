@@ -22,6 +22,12 @@ import {
   SER_RequestOJP,
   StopEventResultSchema,
   StopEventSchema,
+  StopPointSchema,
+  StopPlaceSchema,
+  TopographicPlaceSchema,
+  PointOfInterestSchema,
+  AddressSchema,
+  VehicleModesOfTransportEnum,
 } from '../types/openapi';
 
 export class PlaceRef implements PlaceRefSchema {
