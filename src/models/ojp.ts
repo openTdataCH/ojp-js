@@ -326,13 +326,13 @@ export class LocationInformationRequest extends BaseRequest implements LocationI
   }
 }
 
-type GeoPositionLike = GeoPositionSchema | number[] | string | number;
+type GeoPositionLike = GeoPositionSchema | number[] | string;
 export class GeoPosition implements GeoPositionSchema {
   public longitude: number;
   public latitude: number;
   public properties: Record<string, any>;
 
-  constructor(geoPositionArg: GeoPositionLike, optionalLatitude: number | null = null) {
+  constructor(geoPositionArg: GeoPositionLike | number, optionalLatitude: number | null = null) {
     const invalidCoords: number[] = [Infinity, Infinity];
     const coords = (() => {
       if ((typeof geoPositionArg === 'number') && isNaN(geoPositionArg)) {
@@ -457,7 +457,7 @@ export class Place implements PlaceSchema {
     }
   }
 
-  public static initWithCoords(geoPositionArg: GeoPositionLike, optionalLatitude: number | null = null): Place {
+  public static initWithCoords(geoPositionArg: GeoPositionLike | number, optionalLatitude: number | null = null): Place {
     const geoPosition = new GeoPosition(geoPositionArg, optionalLatitude);
 
     const name: InternationalTextSchema = {
