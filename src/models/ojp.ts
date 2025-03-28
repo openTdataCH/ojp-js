@@ -36,7 +36,7 @@ export class PlaceRef implements PlaceRefSchema {
   public geoPosition?: GeoPositionSchema;
   public name: InternationalTextSchema;
   
-  constructor(name: InternationalTextSchema) {
+  private constructor(name: InternationalTextSchema) {
     this.name = name;
   }
 
@@ -55,7 +55,7 @@ class BaseRequest {
   public mockRequestXML: string | null;
   public mockResponseXML: string | null;
 
-  constructor() {
+  protected constructor() {
     this.mockRequestXML = null;
     this.mockResponseXML = null;
   }
@@ -91,7 +91,7 @@ export class TripRequest extends BaseRequest implements TripRequestSchema {
   public params?: TripParamsSchema;
 
 
-  constructor(
+  private constructor(
     origin: PlaceContextSchema, 
     destination: PlaceContextSchema, 
     via: ViaPointSchema[] = [],
@@ -200,7 +200,7 @@ export class Trip implements TripSchema {
   public transfers: number;
   public leg: LegSchema[];
 
-  constructor(
+  private constructor(
     id: string, 
     duration: string,
     startTime: string,
@@ -231,7 +231,7 @@ export class LocationInformationRequest extends BaseRequest implements LocationI
   public placeRef?: PlaceRef;
   public restrictions?: LIR_RequestParamsSchema;
 
-  constructor() {
+  private constructor() {
     super();
 
     const now = new Date();
@@ -509,7 +509,7 @@ export class PlaceResult implements PlaceResultSchema {
   public complete: boolean;
   public probability?: number;
 
-  constructor(place: Place, complete: boolean, probability?: number) {
+  private constructor(place: Place, complete: boolean, probability?: number) {
     this.place = place;
     this.complete = complete;
     this.probability = probability;
@@ -534,7 +534,7 @@ export class StopEventRequest extends BaseRequest implements StopEventRequestSch
   public location: SER_RequestLocationSchema;
   public params?: SER_RequestParamsSchema;
 
-  constructor(location: SER_RequestLocationSchema, params: SER_RequestParamsSchema | undefined = undefined) {
+  private constructor(location: SER_RequestLocationSchema, params: SER_RequestParamsSchema | undefined = undefined) {
     super();
 
     const now = new Date();
@@ -599,7 +599,7 @@ export class StopEventResult implements StopEventResultSchema {
   public id: string;
   public stopEvent: StopEventSchema;
 
-  constructor(id: string, stopEvent: StopEventSchema) {
+  private constructor(id: string, stopEvent: StopEventSchema) {
     this.id = id;
     this.stopEvent = stopEvent;
   }
