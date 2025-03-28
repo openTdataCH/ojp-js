@@ -15,6 +15,9 @@ export type GeoPositionSchema = sharedComponents["schemas"]["GeoPosition"];
 export type PlaceRefSchema = sharedComponents["schemas"]["PlaceRef"];
 export type InternationalTextSchema = sharedComponents["schemas"]["InternationalText"];
 
+export type DatedJourneySchema = sharedComponents["schemas"]["DatedJourney"];
+export type CallAtStopSchema = sharedComponents["schemas"]["CallAtStop"];
+
 export type PlaceContextSchema = sharedComponents["schemas"]["PlaceContext"];
 export type PlaceSchema = sharedComponents['schemas']['Place']
 export type StopPointSchema = sharedComponents['schemas']['StopPoint']
