@@ -86,3 +86,10 @@ export const MapArrayTags: Record<string, boolean> = {
   'stopEvent.onwardCall': true,
 };
 
+// TODO - this should be generated
+// Declare object properties that are / should be serialised to XML
+export const MapModelKeepPropertiesXML: Record<string, string[]> = {
+  'OJPLocationInformationRequest': ['requestTimestamp', 'initialInput', 'placeRef', 'restrictions'],
+  'OJPTripRequest': ['requestTimestamp', 'origin', 'destination', 'via', 'params'],
+  'OJPStopEventRequest': ['requestTimestamp', 'location', 'params'],
+};
