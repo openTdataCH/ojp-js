@@ -293,7 +293,8 @@ export class LocationInformationRequest extends BaseRequest implements LocationI
     };
 
     request.restrictions = {
-      type: placeType
+      type: placeType,
+      numberOfResults: numberOfResults,
     };
 
     return request;
