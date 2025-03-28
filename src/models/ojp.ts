@@ -498,11 +498,11 @@ export class Place implements PlaceSchema {
 }
 
 export class PlaceResult implements PlaceResultSchema {
-  public place: PlaceSchema;
+  public place: Place;
   public complete: boolean;
   public probability?: number;
 
-  constructor(place: PlaceSchema, complete: boolean, probability?: number) {
+  constructor(place: Place, complete: boolean, probability?: number) {
     this.place = place;
     this.complete = complete;
     this.probability = probability;
@@ -511,7 +511,12 @@ export class PlaceResult implements PlaceResultSchema {
   public static initWithXML(nodeXML: string): PlaceResult {
     const parentTagName = 'PlaceResult';
     const parsedObj = parseXML<{ placeResult: PlaceResultSchema }>(nodeXML, parentTagName);
-    const placeResult = new PlaceResult(parsedObj.placeResult.place, parsedObj.placeResult.complete, parsedObj.placeResult.probability);
+    
+    const placeSchema = parsedObj.placeResult.place;
+    const geoPosition = new GeoPosition(placeSchema.geoPosition);
+    const place = new Place(placeSchema.stopPoint, placeSchema.stopPlace, placeSchema.topographicPlace, placeSchema.pointOfInterest, placeSchema.address, placeSchema.name, geoPosition, placeSchema.mode);
+
+    const placeResult = new PlaceResult(place, parsedObj.placeResult.complete, parsedObj.placeResult.probability);
 
     return placeResult;
   }
