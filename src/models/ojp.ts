@@ -408,8 +408,9 @@ export class GeoPosition implements GeoPositionSchema {
     return s;
   }
 
-  public asPosition(): number[] {
-    const coords = [this.longitude, this.latitude];
+  // For Mapbox LngLat constructs
+  public asLngLat(): [number, number] {
+    const coords: [number, number] = [this.longitude, this.latitude];
     return coords;
   }
 }
