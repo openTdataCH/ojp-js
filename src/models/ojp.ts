@@ -407,6 +407,96 @@ export class GeoPosition implements GeoPositionSchema {
     return coords;
   }
 }
+
+// TODO - make it genetic NearbyObject
+interface NearbyPlace {
+  distance: number
+  object: Place 
+}
+
+export class Place implements PlaceSchema {
+  public stopPoint?: StopPointSchema;
+  public stopPlace?: StopPlaceSchema;
+  public topographicPlace?: TopographicPlaceSchema;
+  public pointOfInterest?: PointOfInterestSchema;
+  public address?: AddressSchema;
+  public name: InternationalTextSchema;
+  public geoPosition: GeoPosition;
+  public mode: VehicleModesOfTransportEnum[];
+
+  public placeType: PlaceTypeEnum | null;
+
+  constructor(stopPoint: StopPointSchema | undefined, stopPlace: StopPlaceSchema | undefined, topographicPlace: TopographicPlaceSchema | undefined, pointOfInterest: PointOfInterestSchema | undefined, address: AddressSchema | undefined, name: InternationalTextSchema, geoPosition: GeoPosition, mode: VehicleModesOfTransportEnum[]) {
+    this.stopPoint = stopPoint;
+    this.stopPlace = stopPlace;
+    this.topographicPlace = topographicPlace;
+    this.pointOfInterest = pointOfInterest;
+    this.address = address;
+    this.name = name;
+    this.geoPosition = geoPosition;
+    this.mode = mode;
+
+    this.placeType = geoPosition.isValid() ? 'location' : null;
+    if (stopPoint || stopPlace) {
+      this.placeType = 'stop';
+    }
+    if (topographicPlace) {
+      this.placeType = 'topographicPlace';
+    }
+    if (pointOfInterest) {
+      this.placeType = 'poi';
+    }
+    if (address) {
+      this.placeType = 'address';
+    }
+  }
+
+  public static initWithCoords(geoPositionArg: GeoPositionLike, optionalLatitude: number | null = null): Place {
+    const geoPosition = new GeoPosition(geoPositionArg, optionalLatitude);
+
+    const name: InternationalTextSchema = {
+      text: geoPosition.latitude + ',' + geoPosition.longitude
+    };
+    
+    const place = new Place(undefined, undefined, undefined, undefined, undefined, name, geoPosition, []);
+
+    return place;
+  }
+
+  public static Empty() {
+    const name: InternationalTextSchema = {
+      text: 'n/a Empty'
+    };
+    const geoPosition = new GeoPosition('0,0');
+    const place = new Place(undefined, undefined, undefined, undefined, undefined, name, geoPosition, []);
+
+    return place;
+  }
+
+  public findClosestPlace(otherPlaces: Place[]): NearbyPlace | null {
+    const geoPositionA = this.geoPosition;
+
+    let closestPlace: NearbyPlace | null = null;
+
+    otherPlaces.forEach(locationB => {
+      const geoPositionB = locationB.geoPosition;
+      if (geoPositionB === null) {
+        return;
+      }
+
+      const dAB = geoPositionA.distanceFrom(geoPositionB);
+      if ((closestPlace === null) || (dAB < closestPlace.distance)) {
+        closestPlace = {
+          object: locationB,
+          distance: dAB
+        }
+      }
+    });
+
+    return closestPlace;
+  }
+}
+
 export class PlaceResult implements PlaceResultSchema {
   public place: PlaceSchema;
   public complete: boolean;
