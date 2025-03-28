@@ -26,6 +26,7 @@ const isArrayHandler = (tagName: string, jPath: string) => {
   return false;
 };
 
+// TODO - keep it abstract, handle the callback if needed
 export function traverseJSON(obj: any, callback: (key: string, value: any, path: string) => void, path: string = '') {
   if (typeof obj !== 'object' || obj === null) return;
   
@@ -93,6 +94,7 @@ export function parseXML<T>(xml: string, parentPath: string = ''): T {
   return response;
 }
 
+// TODO - keep it abstract, handle the callback if needed
 function transformKeys<T extends Record<string, any>>(obj: T, callback:(key: string, value: any, path: string[]) => string, path: string[] = []): Record<string, any> {
   return Object.entries(obj).reduce((acc, [key, value]) => {
     const newKey = callback(key, value, path);
