@@ -75,7 +75,7 @@ class BaseRequest {
   }
 }
 
-export class TripRequest implements TripRequestSchema {
+export class TripRequest extends BaseRequest implements TripRequestSchema {
   public requestTimestamp: string
   
   public origin: PlaceContextSchema;
@@ -84,8 +84,6 @@ export class TripRequest implements TripRequestSchema {
   
   public params?: TripParamsSchema;
 
-  public mockRequestXML: string | null;
-  public mockResponseXML: string | null;
 
   constructor(
     origin: PlaceContextSchema, 
@@ -94,6 +92,8 @@ export class TripRequest implements TripRequestSchema {
     
     params: TripParamsSchema | null = null, 
   ) {
+    super();
+
     const now = new Date();
     this.requestTimestamp = now.toISOString();
 
@@ -138,13 +138,6 @@ export class TripRequest implements TripRequestSchema {
     const params = TripRequest.DefaultRequestParams();
 
     const request = new TripRequest(origin, destination, [], params);
-    return request;
-  }
-
-  public static initWithResponseMock(mockXML: string): TripRequest {
-    const request = TripRequest.Empty();
-    request.mockResponseXML = mockXML;
-
     return request;
   }
 
@@ -226,13 +219,15 @@ export class Trip implements TripSchema {
   }
 }
 
-export class LocationInformationRequest implements LocationInformationRequestSchema {
+export class LocationInformationRequest extends BaseRequest implements LocationInformationRequestSchema {
   public requestTimestamp: string;
   public initialInput?: InitialInputSchema;
   public placeRef?: PlaceRef;
   public restrictions?: LIR_RequestParamsSchema;
 
   constructor() {
+    super();
+
     const now = new Date();
     this.requestTimestamp = now.toISOString();
     this.initialInput = undefined; // order matters in the request XML, thats why it needs explicit declaration
@@ -260,7 +255,7 @@ export class LocationInformationRequest implements LocationInformationRequestSch
     return request;
   }
 
-  public static initWithBBOX(bboxData: string | number[], placeType: PlaceTypeEnum[]): LocationInformationRequest {
+  public static initWithBBOX(bboxData: string | number[], placeType: PlaceTypeEnum[], numberOfResults: number = 10): LocationInformationRequest {
     const bboxDataParts: number[] = (() => {
       if (Array.isArray(bboxData)) {
         return bboxData;
@@ -344,12 +339,14 @@ export class PlaceResult implements PlaceResultSchema {
   }
 }
 
-export class StopEventRequest implements StopEventRequestSchema {
+export class StopEventRequest extends BaseRequest implements StopEventRequestSchema {
   public requestTimestamp: string;
   public location: SER_RequestLocationSchema;
   public params?: SER_RequestParamsSchema;
 
   constructor(location: SER_RequestLocationSchema, params: SER_RequestParamsSchema | undefined = undefined) {
+    super();
+
     const now = new Date();
     this.requestTimestamp = now.toISOString();
     
