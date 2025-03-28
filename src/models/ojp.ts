@@ -458,6 +458,12 @@ export class Place implements PlaceSchema {
     }
   }
 
+  public static initWithXMLSchema(placeSchema: PlaceSchema): Place {
+    const geoPosition = new GeoPosition(placeSchema.geoPosition);
+    const place = new Place(placeSchema.stopPoint, placeSchema.stopPlace, placeSchema.topographicPlace, placeSchema.pointOfInterest, placeSchema.address, placeSchema.name, geoPosition, placeSchema.mode);
+    return place;
+  } 
+
   public static initWithCoords(geoPositionArg: GeoPositionLike | number, optionalLatitude: number | null = null): Place {
     const geoPosition = new GeoPosition(geoPositionArg, optionalLatitude);
 
@@ -520,8 +526,7 @@ export class PlaceResult implements PlaceResultSchema {
     const parsedObj = parseXML<{ placeResult: PlaceResultSchema }>(nodeXML, parentTagName);
     
     const placeSchema = parsedObj.placeResult.place;
-    const geoPosition = new GeoPosition(placeSchema.geoPosition);
-    const place = new Place(placeSchema.stopPoint, placeSchema.stopPlace, placeSchema.topographicPlace, placeSchema.pointOfInterest, placeSchema.address, placeSchema.name, geoPosition, placeSchema.mode);
+    const place = Place.initWithXMLSchema(placeSchema);
 
     const placeResult = new PlaceResult(place, parsedObj.placeResult.complete, parsedObj.placeResult.probability);
 
