@@ -45,6 +45,36 @@ export class PlaceRef implements PlaceRefSchema {
   }
 }
 
+class BaseRequest {
+  public mockRequestXML: string | null;
+  public mockResponseXML: string | null;
+
+  constructor() {
+    this.mockRequestXML = null;
+    this.mockResponseXML = null;
+  }
+
+  public static initWithRequestMock<T extends BaseRequest>(
+    this: new (...args: any[]) => T,
+    mockXML: string,
+    ...args: ConstructorParameters<new (...args: any[]) => T>
+  ): T {
+    const instance = new this(...args);
+    instance.mockRequestXML = mockXML;
+    return instance;
+  }
+
+  public static initWithResponseMock<T extends BaseRequest>(
+    this: new (...args: any[]) => T,
+    mockXML: string,
+    ...args: ConstructorParameters<new (...args: any[]) => T>
+  ): T {
+    const instance = new this(...args);
+    instance.mockResponseXML = mockXML;
+    return instance;
+  }
+}
+
 export class TripRequest implements TripRequestSchema {
   public requestTimestamp: string
   
