@@ -1,15 +1,25 @@
 // These exports - ./types/openapi - should be kept at minimum as possible
 export { 
+  VehicleModesOfTransportEnum,
+  PlaceTypeEnum,
+
+  StopEventSchema as StopEvent,
+  CallAtStopSchema as CallAtStop,
+  DatedJourneySchema as DatedJourney,
+  
   TimedLegSchema as TimedLeg, 
   TransferLegSchema as TransferLeg, 
   ContinuousLegSchema as ContinuousLeg,
 } from './types/openapi';
 
 export {
+  GeoPosition,
+
   TripRequest,
   LocationInformationRequest,
   StopEventRequest,
 
+  Place,
   PlaceResult,
   StopEventResult,
 } from "./models/ojp";
