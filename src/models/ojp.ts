@@ -27,6 +27,9 @@ export class PlaceRef implements PlaceRefSchema {
   public name: InternationalTextSchema;
   
   private constructor(name: InternationalTextSchema) {
+    this.stopPointRef = undefined;
+    this.stopPlaceRef = undefined;
+    this.geoPosition = undefined;
     this.name = name;
   }
 
