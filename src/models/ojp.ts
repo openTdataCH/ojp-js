@@ -33,14 +33,30 @@ export class PlaceRef implements PlaceRefSchema {
     this.name = name;
   }
 
-  public static initWithStopRefAndName(placeRefS: string, nameS: string): PlaceRef {
-    const name: InternationalTextSchema = {
-      text: nameS,
-    };
-    const placeRef = new PlaceRef(name);
-    placeRef.stopPlaceRef = placeRefS;
+  // TODO - introduce a PlaceRefOrCoordsLike type that handles
+  //    - string (currently implemented)
+  //    - PlaceRef (and /or Place)
+  //    - GeoPosition (and /or GeoPositionLike)
+  public static initWithPlaceRefsOrCoords(placeRefOrCoords: string, nameS: string | null = null): PlaceRef {
+    const geoPosition = new GeoPosition(placeRefOrCoords);
+    if (geoPosition.isValid()) {
+      const nameText = nameS ?? geoPosition.asLatLngString();
+      const placeRef = new PlaceRef({
+        text: nameText,
+      });
 
-    return placeRef;
+      placeRef.geoPosition = geoPosition;
+
+      return placeRef;
+    } else {
+      const name: InternationalTextSchema = {
+        text: nameS ?? 'n/a',
+      };
+      const placeRef = new PlaceRef(name);
+      placeRef.stopPlaceRef = placeRefOrCoords;
+  
+      return placeRef;
+    }
   }
 }
 

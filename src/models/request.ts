@@ -70,11 +70,11 @@ export class TripRequest extends BaseRequest implements TripRequestSchema {
   private static Default(): TripRequest {
     const date = new Date();
     const origin: PlaceContextSchema = {
-      placeRef: PlaceRef.initWithStopRefAndName('8503000', 'Zürich'),
+      placeRef: PlaceRef.initWithPlaceRefsOrCoords('8503000', 'Zürich'),
       depArrTime: date.toISOString(),
     };
     const destination: PlaceContextSchema = {
-      placeRef: PlaceRef.initWithStopRefAndName('8507000', 'Bern'),
+      placeRef: PlaceRef.initWithPlaceRefsOrCoords('8507000', 'Bern'),
     };
     const params = TripRequest.DefaultRequestParams();
 
@@ -94,13 +94,12 @@ export class TripRequest extends BaseRequest implements TripRequestSchema {
     return request;
   }
 
-  public static initWithPlaceRefsAndDate(originPlaceRefS: string, destinationPlaceRefS: string, date: Date = new Date()): TripRequest {
+  public static initWithPlaceRefsOrCoords(originPlaceRefS: string, destinationPlaceRefS: string): TripRequest {
     const origin: PlaceContextSchema = {
-      placeRef: PlaceRef.initWithStopRefAndName(originPlaceRefS, 'n/a'),
-      depArrTime: date.toISOString(),
+      placeRef: PlaceRef.initWithPlaceRefsOrCoords(originPlaceRefS),
     };
     const destination: PlaceContextSchema = {
-      placeRef: PlaceRef.initWithStopRefAndName(destinationPlaceRefS, 'n/a'),
+      placeRef: PlaceRef.initWithPlaceRefsOrCoords(destinationPlaceRefS),
     };
 
     const params = TripRequest.DefaultRequestParams();
@@ -195,10 +194,9 @@ export class LocationInformationRequest extends BaseRequest implements LocationI
     return request;
   }
 
-  public static initWithPlaceRef(placeRefS: string): LocationInformationRequest {
+  public static initWithPlaceRef(placeRefOrCoords: string): LocationInformationRequest {
     const request = LocationInformationRequest.Default();
-    request.placeRef = PlaceRef.initWithStopRefAndName(placeRefS, 'n/a');
-
+    request.placeRef = PlaceRef.initWithPlaceRefsOrCoords(placeRefOrCoords);
     return request;
   }
 
