@@ -5,14 +5,16 @@ import { OJP_Helpers } from './helpers/ojp-test.helpers';
 
 
 describe('OJP Test TripRequest', () => {
-  test('Test TR response single <Leg> array', async () => {
+  let trips: OJP.Trip[];
+
+  beforeAll(async () => {
+    const ojp = OJP_Helpers.DefaultSDK();
     const mockXML = FileHelpers.loadMockXML('tr-response-zh-be.xml');
     const mockRequest = OJP.TripRequest.initWithResponseMock(mockXML);
-    
-    const ojp = OJP_Helpers.DefaultSDK();
-    
-    const trips = await ojp.fetchTrips(mockRequest);
+    trips = await ojp.fetchTrips(mockRequest);
+  });
 
+  test('Test TR response single <Leg> array', async () => {
     // check for MapArrayTags mapping in src/types/openapi/openapi-dependencies.ts
     // single <Leg> child nodes would generate 
     //      trip.leg property 
