@@ -67,7 +67,7 @@ export class TripRequest extends BaseRequest implements TripRequestSchema {
     return requestParams;
   }
 
-  public static Empty(): TripRequest {
+  private static Default(): TripRequest {
     const date = new Date();
     const origin: PlaceContextSchema = {
       placeRef: PlaceRef.initWithStopRefAndName('n/a stopRef', 'n/a stopName'),
@@ -243,7 +243,7 @@ export class StopEventRequest extends BaseRequest implements StopEventRequestSch
     this.params = params;
   }
 
-  private static DefaultRequestParams(): SER_RequestParamsSchema {
+  public static DefaultRequestParams(): SER_RequestParamsSchema {
     const params: SER_RequestParamsSchema = {
       includeAllRestrictedLines: true,
       numberOfResults: 10,
