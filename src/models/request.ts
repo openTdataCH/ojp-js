@@ -256,6 +256,24 @@ export class StopEventRequest extends BaseRequest implements StopEventRequestSch
     return params;
   }
 
+  private static Default(): StopEventRequest {
+    const date = new Date();
+    const location: SER_RequestLocationSchema = {
+      placeRef: {
+        stopPointRef: '8507000',
+        name: {
+          text: 'n/a'
+        }
+      },
+      depArrTime: date.toISOString(),
+    };
+
+    const requestParams = StopEventRequest.DefaultRequestParams();
+    const request = new StopEventRequest(location, requestParams);
+    
+    return request;
+  }
+
   public static initWithPlaceRefAndDate(placeRefS: string, date: Date = new Date()): StopEventRequest {
     const location: SER_RequestLocationSchema = {
       placeRef: {
