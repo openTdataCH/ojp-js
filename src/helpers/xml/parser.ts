@@ -28,7 +28,7 @@ const isArrayHandler = (tagName: string, jPath: string) => {
 
 
 // TODO - keep it abstract, handle the callback if needed
-export function traverseJSON(obj: any, callback: (key: string, value: any, path: string) => void, path: string = '') {
+function traverseJSON(obj: any, callback: (key: string, value: any, path: string) => void, path: string = '') {
   if (typeof obj !== 'object' || obj === null) return;
   
   for (const key in obj) {
