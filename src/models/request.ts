@@ -105,6 +105,8 @@ export class TripRequest extends BaseRequest implements TripRequestSchema {
     const params = TripRequest.DefaultRequestParams();
 
     const request = new TripRequest(origin, destination, [], params);
+    request.setDepartureDatetime();
+
     return request;
   }
 
