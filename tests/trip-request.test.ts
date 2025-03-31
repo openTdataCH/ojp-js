@@ -14,7 +14,7 @@ describe('OJP Test TripRequest', () => {
     trips = await ojp.fetchTrips(mockRequest);
   });
 
-  test('Test TR response single <Leg> array', async () => {
+  test('Test TR response single <Leg> array', () => {
     // check for MapArrayTags mapping in src/types/openapi/openapi-dependencies.ts
     // single <Leg> child nodes would generate 
     //      trip.leg property 
