@@ -1,7 +1,7 @@
 import { InitialInputSchema, LIR_RequestParamsSchema, LocationInformationRequestOJP, LocationInformationRequestSchema, PlaceContextSchema, PlaceTypeEnum, SER_RequestLocationSchema, SER_RequestOJP, SER_RequestParamsSchema, StopEventRequestSchema, TripParamsSchema, TripRequestOJP, TripRequestSchema, ViaPointSchema } from "../types/openapi";
 
 import { Language } from "../types/_all";
-import { PlaceRef } from './ojp';
+import { Place, PlaceRef } from './ojp';
 import { buildXML } from "../helpers/xml/builder";
 
 class BaseRequest {
@@ -107,6 +107,14 @@ export class TripRequest extends BaseRequest implements TripRequestSchema {
     const request = new TripRequest(origin, destination, [], params);
     request.setDepartureDatetime();
 
+    return request;
+  }
+
+  public static initWithPlaces(origin: Place, destination: Place): TripRequest {
+    const originPlaceRefS = origin.asStopPlaceRefOrCoords();
+    const destinationPlaceRefS = destination.asStopPlaceRefOrCoords();
+
+    const request = TripRequest.initWithPlaceRefsOrCoords(originPlaceRefS, destinationPlaceRefS);
     return request;
   }
 
