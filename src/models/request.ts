@@ -293,4 +293,3 @@ export class StopEventRequest extends BaseRequest implements StopEventRequestSch
     return xmlS;
   }
 }
-
