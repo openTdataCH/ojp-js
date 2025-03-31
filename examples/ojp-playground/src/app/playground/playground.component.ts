@@ -68,47 +68,24 @@ export class PlaygroundComponent implements OnInit {
     console.log('TR Requests');
     console.log('======================');
 
-    // Building request
-
+    // a) from StopPlaceRef to StopPlaceRef
     const fromStopRef = '8507000';  // Bern
     const toStopRef = '8503000';    // Zürich
 
-    const request1 = OJP.TripRequest.initWithPlaceRefsAndDate(fromStopRef, toStopRef, new Date());
-
-    // TBA
-    // // Request with long/lat coordinates
-    // // https://opentdatach.github.io/ojp-demo-app/search?from=46.957522,7.431170&to=46.931849,7.485132
-    // const fromLocationCoords = OJP.Location.initWithLngLat(7.431170, 46.957522);
-    // const toLocationCoords = OJP.Location.initWithLngLat(7.485132, 46.931849);
-    // const request2 = OJP.TripRequest.initWithLocationsAndDate(OJP.DEFAULT_STAGE, fromLocationCoords, toLocationCoords, new Date(), 'Dep');
-
-    // Handling response
-    
-    // a) using await/async
+    const request1 = OJP.TripRequest.initWithPlaceRefsOrCoords(fromStopRef, toStopRef);
     const response1 = await this.ojpSDK.fetchTrips(request1);
-    console.log('a) TR using await/async')
+    console.log('A) TR with from/to coords')
     console.log(response1);
 
-    // TBA - not sure if needed now
-    // // c) using a callback
-    // // the XML parsing might some time for processing therefore using a callback can allow the GUI to react quickly when having partial results
-    // request1.fetchResponseWithCallback(response => {
-    //   if (response.message === 'TripRequest.DONE') {
-    //     // all trips were parsed, this is also fired when using Promise.then approach
-    //     console.log('c) TR using callback')
-    //     console.log(response);
-    //   } else {
-    //     if (response.message === 'TripRequest.TripsNo') {
-    //       // logic how to proceed next, have an idea of how many trips to expect
-    //       // console.log(response);
-    //     }
-        
-    //     if (response.message === 'TripRequest.Trip') {
-    //       // handle trip by trip, this is faster than expecting for whole TripRequest.DONE event
-    //       // console.log(response);
-    //     }
-    //   }
-    // });
+    // b) from fromCoordsRef to StopPlaceRef
+    // coords in strings format, latitude,longitude
+    const fromCoordsRef = '46.957522,7.431170';
+    const toCoordsRef = '46.931849,7.485132';
+
+    const request2 = OJP.TripRequest.initWithPlaceRefsOrCoords(fromCoordsRef, toCoordsRef);
+    const response2 = await this.ojpSDK.fetchTrips(request2);
+    console.log('B) TR using await/async')
+    console.log(response2);
   }
 
   private async runSER() {
