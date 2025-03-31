@@ -7,6 +7,7 @@ import { PlaygroundComponent } from './playground/playground.component';
 const routes: Routes = [
   { path: 'departures', component: DeparturesComponent },
   { path: 'playground', component: PlaygroundComponent },
+  { path: '', redirectTo: '/playground', pathMatch: 'full' },
 ];
 
 @NgModule({
