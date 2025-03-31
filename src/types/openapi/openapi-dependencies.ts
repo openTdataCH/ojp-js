@@ -93,3 +93,8 @@ export const MapModelKeepPropertiesXML: Record<string, string[]> = {
   'OJPTripRequest': ['requestTimestamp', 'origin', 'destination', 'via', 'params'],
   'OJPStopEventRequest': ['requestTimestamp', 'location', 'params'],
 };
+
+// TODO - this should be generated
+export const MapStringValues: Record<string, boolean> = {
+  'stopPlace.stopPlaceRef': true,
+};
