@@ -43,6 +43,10 @@ export const MapNS_Tags: Record<string, string> = {
   'LowerRight.Longitude': 'siri',
   'LowerRight.Latitude': 'siri',
 
+  // TR Request
+  'GeoPosition.Longitude': 'siri',
+  'GeoPosition.Latitude': 'siri',
+
   // SER Request
   'OJPStopEventRequest.RequestTimestamp': 'siri',
   'PlaceRef.StopPointRef': 'siri',
@@ -92,6 +96,7 @@ export const MapModelKeepPropertiesXML: Record<string, string[]> = {
   'OJPLocationInformationRequest': ['requestTimestamp', 'initialInput', 'placeRef', 'restrictions'],
   'OJPTripRequest': ['requestTimestamp', 'origin', 'destination', 'via', 'params'],
   'OJPStopEventRequest': ['requestTimestamp', 'location', 'params'],
+  'geoPosition': ['longitude', 'latitude'],
 };
 
 // TODO - this should be generated
