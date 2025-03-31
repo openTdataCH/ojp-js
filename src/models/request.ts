@@ -133,21 +133,37 @@ export class LocationInformationRequest extends BaseRequest implements LocationI
   public placeRef?: PlaceRef;
   public restrictions?: LIR_RequestParamsSchema;
 
-  private constructor() {
+  private constructor(initialInput: InitialInputSchema | undefined, placeRef: PlaceRef | undefined, restrictions: LIR_RequestParamsSchema | undefined) {
     super();
 
     const now = new Date();
     this.requestTimestamp = now.toISOString();
-    this.initialInput = undefined; // order matters in the request XML, thats why it needs explicit declaration
-    this.placeRef = undefined;
-    this.restrictions = {
+
+    this.initialInput = initialInput;
+    this.placeRef = placeRef;
+    this.restrictions = restrictions;
+  }
+
+  public static DefaultRequestParams(): LIR_RequestParamsSchema {
+    const params: LIR_RequestParamsSchema = {
       type: [],
       numberOfResults: 10,
     };
+
+    return params;
+  }
+  
+  public static Default(): LocationInformationRequest {
+    const request = new LocationInformationRequest(undefined, undefined, undefined);
+
+    request.restrictions = LocationInformationRequest.DefaultRequestParams();
+
+    return request;
+  }
   }
 
   public static initWithLocationName(name: string): LocationInformationRequest {
-    const request = new LocationInformationRequest();
+    const request = LocationInformationRequest.Default();
 
     request.initialInput = {
       name: name,
@@ -157,7 +173,7 @@ export class LocationInformationRequest extends BaseRequest implements LocationI
   }
 
   public static initWithPlaceRef(placeRefS: string): LocationInformationRequest {
-    const request = new LocationInformationRequest();
+    const request = LocationInformationRequest.Default();
     request.placeRef = PlaceRef.initWithStopRefAndName(placeRefS, 'n/a');
 
     return request;
@@ -172,7 +188,7 @@ export class LocationInformationRequest extends BaseRequest implements LocationI
       return (bboxData as string).split(',').map(el => Number(el));
     })();
 
-    const request = new LocationInformationRequest();
+    const request = LocationInformationRequest.Default();
 
     // TODO - handle data issues, also long min / max smaller / greater
     if (bboxDataParts.length !== 4) {
