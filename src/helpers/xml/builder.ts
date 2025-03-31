@@ -22,7 +22,9 @@ function transformKeys<T extends Record<string, any>>(obj: T, callback:(key: str
 }
 
 export function buildXML(obj: Record<string, any>): string {
-  const objTransformed = transformKeys(obj, (key: string, value: any, path: string[]) => {
+  const objCopy = JSON.parse(JSON.stringify(obj));
+
+  const objTransformed = transformKeys(objCopy, (key: string, value: any, path: string[]) => {
     // capitalize first letter
     let newKey = key.charAt(0).toUpperCase() + key.slice(1);
 
