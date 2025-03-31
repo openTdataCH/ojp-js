@@ -28,19 +28,19 @@ const isArrayHandler = (tagName: string, jPath: string) => {
 
 
 // TODO - keep it abstract, handle the callback if needed
-function traverseJSON(obj: any, callback: (key: string, value: any, path: string) => void, path: string = '') {
+function traverseJSON(obj: any, callback: (key: string, value: any, path: string[]) => void, path: string[]) {
   if (typeof obj !== 'object' || obj === null) return;
   
   for (const key in obj) {
     if (Object.prototype.hasOwnProperty.call(obj, key)) {
       const value = obj[key];
       
-      const newPath: string = (() => {
-        if (obj instanceof Array) {
-          return path;
+      const newPath: string[] = (() => {
+        if (!(obj instanceof Array)) {
+          path.push(key);
         }
-
-        return path + '.' + key;
+        
+        return path;
       })(); 
 
       callback(key, value, newPath);
@@ -63,15 +63,15 @@ export function parseXML<T>(xml: string, parentPath: string = ''): T {
 
   let response = parser.parse(xml) as T;
   
-  traverseJSON(response, (key: string, value: any, jPath: string) => {
-    // console.log(path + ' k: ' + key + ' v: ' + value);
+  traverseJSON(response, (key: string, value: any, path: string[]) => {
+    // console.log('traverseJSON_> ' + jPath + ' k: ' + key + ' v: ' + value);
     
     if (typeof value === 'object') {
       
       // enforce empty arrays if the array items are not present
-      const jPathParts = jPath.split('.'); 
-      if (jPathParts.length > 1) {
-        const pathPart = jPathParts.slice(-2).join('.');
+      if (path.length > 1) {
+        const pathPart = path.slice(-2).join('.');
+        
         if (pathPart in MapParentArrayTags) {
           const enforceChildTags = MapParentArrayTags[pathPart];
           enforceChildTags.forEach(childTagName => {
@@ -80,9 +80,9 @@ export function parseXML<T>(xml: string, parentPath: string = ''): T {
         }
       }
 
-      // check for #text keys that are added for text nodes that have attributes
       for (const key1 in value) {
         if (typeof value[key1] === 'object') {
+          // check for #text keys that are added for text nodes that have attributes
           if (Object.keys(value[key1]).includes('#text')) {
             const otherKeys = Object.keys(value[key1]).filter(el => el !== '#text');
 
@@ -98,7 +98,7 @@ export function parseXML<T>(xml: string, parentPath: string = ''): T {
         }
       }
     }
-  }, parentPath);
+  }, [parentPath]);
   
   return response;
 }
