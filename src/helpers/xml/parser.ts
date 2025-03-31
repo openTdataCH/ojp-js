@@ -53,6 +53,14 @@ function traverseJSON(obj: any, callback: (key: string, value: any, path: string
 }
 
 export function parseXML<T>(xml: string, parentPath: string = ''): T {
+  const parser = new XMLParser({
+    ignoreAttributes: false,
+    removeNSPrefix: true,
+    transformTagName: transformTagNameHandler,
+    isArray: isArrayHandler,
+    // parseTagValue: false,
+  });
+
   let response = parser.parse(xml) as T;
   
   traverseJSON(response, (key: string, value: any, jPath: string) => {
@@ -90,15 +98,7 @@ export function parseXML<T>(xml: string, parentPath: string = ''): T {
         }
       }
     }
- }, parentPath);
-
+  }, parentPath);
+  
   return response;
 }
-
-// Configure the parser to remove namespace prefixes
-const parser = new XMLParser({
-  ignoreAttributes: false,
-  removeNSPrefix: true,
-  transformTagName: transformTagNameHandler,
-  isArray: isArrayHandler,
-});
