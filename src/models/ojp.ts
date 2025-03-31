@@ -186,6 +186,19 @@ export class Place implements PlaceSchema {
 
     return closestPlace;
   }
+
+  // used by TR
+  //    TODO - logic should be added to Place.initWithPlaceRefsOrCoords
+  public asStopPlaceRefOrCoords(): string {
+    const stopPlaceRef = this.stopPlace?.stopPlaceRef ?? null;
+    if (stopPlaceRef !== null) {
+      return stopPlaceRef;
+    }
+
+    const coordsS = this.geoPosition.asLatLngString();
+
+    return coordsS;
+  }
 }
 
 export class PlaceResult implements PlaceResultSchema {
