@@ -8,7 +8,7 @@ class BaseRequest {
   public mockRequestXML: string | null;
   public mockResponseXML: string | null;
 
-  private enableExtension: boolean;
+  public enableExtension: boolean;
 
   protected constructor() {
     this.mockRequestXML = null;
