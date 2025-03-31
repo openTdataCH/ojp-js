@@ -38,9 +38,12 @@ export class GeoPosition implements GeoPositionSchema {
       }
 
       if (typeof geoPositionArg === 'object') {
-        const longitude = (geoPositionArg as GeoPositionSchema).longitude;
-        const latitude = (geoPositionArg as GeoPositionSchema).latitude;
-        return [longitude, latitude];
+        const geoPositionObj = geoPositionArg as Object;
+        if (geoPositionObj.hasOwnProperty('longitude') && geoPositionObj.hasOwnProperty('latitude')) {
+          const longitude = (geoPositionArg as GeoPositionSchema).longitude;
+          const latitude = (geoPositionArg as GeoPositionSchema).latitude;
+          return [Number(longitude), Number(latitude)];
+        }
       }
 
       return invalidCoords;
