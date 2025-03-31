@@ -12,19 +12,19 @@ export {
   ContinuousLegSchema as ContinuousLeg,
 } from './types/openapi';
 
-export {
-  GeoPosition,
-
-  Place,
-  PlaceResult,
-  StopEventResult,
-} from "./models/ojp";
-
 export { 
   LocationInformationRequest, 
   StopEventRequest, 
   TripRequest 
 } from './models/request';
+
+export { GeoPosition } from './models/geoposition';
+
+export {
+  Place,
+  PlaceResult,
+  StopEventResult,
+} from "./models/ojp";
 
 export { SDK_VERSION } from './constants';
 export { DateHelpers } from './helpers';
