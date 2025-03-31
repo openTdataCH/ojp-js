@@ -82,6 +82,18 @@ export class TripRequest extends BaseRequest implements TripRequestSchema {
     return request;
   }
 
+  public static initWithRequestMock(mockText: string): TripRequest {
+    const request = TripRequest.Default();
+    request.mockRequestXML = mockText;
+    return request;
+  }
+
+  public static initWithResponseMock(mockText: string): TripRequest {
+    const request = TripRequest.Default();
+    request.mockResponseXML = mockText;
+    return request;
+  }
+
   public static initWithPlaceRefsAndDate(originPlaceRefS: string, destinationPlaceRefS: string, date: Date = new Date()): TripRequest {
     const origin: PlaceContextSchema = {
       placeRef: PlaceRef.initWithStopRefAndName(originPlaceRefS, 'n/a'),
@@ -160,6 +172,17 @@ export class LocationInformationRequest extends BaseRequest implements LocationI
 
     return request;
   }
+
+  public static initWithRequestMock(mockText: string): LocationInformationRequest {
+    const request = LocationInformationRequest.Default();
+    request.mockRequestXML = mockText;
+    return request;
+  }
+
+  public static initWithResponseMock(mockText: string): LocationInformationRequest {
+    const request = LocationInformationRequest.Default();
+    request.mockResponseXML = mockText;
+    return request;
   }
 
   public static initWithLocationName(name: string): LocationInformationRequest {
@@ -287,6 +310,18 @@ export class StopEventRequest extends BaseRequest implements StopEventRequestSch
     const requestParams = StopEventRequest.DefaultRequestParams();
     const request = new StopEventRequest(location, requestParams);
     
+    return request;
+  }
+
+  public static initWithRequestMock(mockText: string): StopEventRequest {
+    const request = StopEventRequest.Default();
+    request.mockRequestXML = mockText;
+    return request;
+  }
+
+  public static initWithResponseMock(mockText: string): StopEventRequest {
+    const request = StopEventRequest.Default();
+    request.mockResponseXML = mockText;
     return request;
   }
 
