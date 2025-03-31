@@ -70,11 +70,11 @@ export class TripRequest extends BaseRequest implements TripRequestSchema {
   private static Default(): TripRequest {
     const date = new Date();
     const origin: PlaceContextSchema = {
-      placeRef: PlaceRef.initWithStopRefAndName('n/a stopRef', 'n/a stopName'),
+      placeRef: PlaceRef.initWithStopRefAndName('8503000', 'Zürich'),
       depArrTime: date.toISOString(),
     };
     const destination: PlaceContextSchema = {
-      placeRef: PlaceRef.initWithStopRefAndName('n/a stopRef', 'n/a stopName'),
+      placeRef: PlaceRef.initWithStopRefAndName('8507000', 'Bern'),
     };
     const params = TripRequest.DefaultRequestParams();
 
