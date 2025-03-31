@@ -15,14 +15,16 @@ export {
 export {
   GeoPosition,
 
-  TripRequest,
-  LocationInformationRequest,
-  StopEventRequest,
-
   Place,
   PlaceResult,
   StopEventResult,
 } from "./models/ojp";
+
+export { 
+  LocationInformationRequest, 
+  StopEventRequest, 
+  TripRequest 
+} from './models/request';
 
 export { SDK_VERSION } from './constants';
 export { DateHelpers } from './helpers';
