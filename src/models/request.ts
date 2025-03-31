@@ -2,7 +2,7 @@ import { InitialInputSchema, LIR_RequestParamsSchema, LocationInformationRequest
 
 import { Language } from "../types/_all";
 import { PlaceRef } from './ojp';
-import { buildXML } from "../helpers/xml-helpers";
+import { buildXML } from "../helpers/xml/builder";
 
 class BaseRequest {
   public mockRequestXML: string | null;

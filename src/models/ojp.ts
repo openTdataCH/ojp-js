@@ -1,4 +1,4 @@
-import { parseXML } from "../helpers/xml-helpers";
+import { parseXML } from "../helpers/xml/parser";
 
 import { 
   GeoPositionSchema, PlaceRefSchema, InternationalTextSchema, 
