@@ -1,5 +1,5 @@
 import { XMLParser } from "fast-xml-parser";
-import { MapArrayTags, MapParentArrayTags } from "../../types/openapi/openapi-dependencies";
+import { MapArrayTags, MapParentArrayTags, MapStringValues } from "../../types/openapi/openapi-dependencies";
 
 const transformTagNameHandler = (tagName: string) => {
   // Convert to camelCase, strip -_
@@ -81,6 +81,15 @@ export function parseXML<T>(xml: string, parentPath: string = ''): T {
       }
 
       for (const key1 in value) {
+        const lastItem = (path.at(-1) ?? '');
+        const stringKey = lastItem + '.' + key1;
+
+        if (stringKey in MapStringValues) {
+          // fast-xml-parser attempts to converts everything
+          //    conform to schema id needed, i.e. String values
+          value[key1] = String(value[key1]);
+        }
+
         if (typeof value[key1] === 'object') {
           // check for #text keys that are added for text nodes that have attributes
           if (Object.keys(value[key1]).includes('#text')) {
