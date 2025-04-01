@@ -14,7 +14,7 @@ See [docs](./docs/) and [examples](./examples/) for usage.
 
 **Note:** 26.Mar - a different package name is used for test purpose: `ojp-sdk-next`
 
-- include the `ojp-sdk` package in the `./package.json` dependencies of the project 
+- include the `ojp-sdk-next` package in the `./package.json` dependencies of the project 
 ```
   "dependencies": {
     "ojp-sdk-next": "0.20.2"
@@ -26,7 +26,7 @@ See [docs](./docs/) and [examples](./examples/) for usage.
 - use the SDK, see also [playground.component.ts](./examples/ojp-playground/src/app/playground/playground.component.ts) in examples
 
 ```
-import * as OJP from 'ojp-sdk';
+import * as OJP from 'ojp-sdk-next';
 
 // ...
 
