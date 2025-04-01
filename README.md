@@ -20,10 +20,58 @@ See [docs](./docs/) and [examples](./examples/) for usage.
   }
 ```
 
-More info:
-- this repo [docs](./docs/)
-- this repo [examples](./examples/)
-- [OJP Demo App](https://github.com/openTdataCH/ojp-demo-app-src) source code
+- get an API key from [opentransportdata.swiss](https://api-manager.opentransportdata.swiss/) API manager
+
+- use the SDK, see also [playground.component.ts](./examples/ojp-playground/src/app/playground/playground.component.ts) in examples
+
+```
+import * as OJP from 'ojp-sdk';
+
+// ...
+
+// declare the stage config, PROD example below
+const httpConfig: OJP.HTTPConfig = {
+  url: 'https://api.opentransportdata.swiss/ojp20',
+  authToken: 'TOKEN_FROM_opentransportdata.swiss',
+};
+
+// define a requestorRef that describes the client
+const requestorRef = 'MyExampleTransportApp.v1';
+
+// define the SDK i18n language
+const language = 'de'; // de, fr, it, en
+const ojpSDK = new OJP.SDK(requestorRef, httpConfig, language);
+
+// build LIR by Name
+const searchTerm = 'Bern';
+const request1 = OJP.LocationInformationRequest.initWithLocationName(searchTerm);
+
+// build LIR by StopRef
+const stopRef = '8507000'; // Bern
+const request2 = OJP.LocationInformationRequest.initWithPlaceRef(stopRef);
+
+// build LIR by BBOX
+// these are equivalent
+let bbox: string | number[] = '7.433259,46.937798,7.475252,46.954805';
+bbox = [7.433259, 46.937798, 7.475252, 46.954805];
+
+const request3 =  OJP.LocationInformationRequest.initWithBBOX(bbox, ['stop']);
+
+// fetch the results
+async myMethod() {
+  // ...
+  const placeResults = await this.ojpSDK.fetchPlaceResults(request1);
+
+  // do something with the placeResult
+
+  placeResults1.forEach(placeResult => {
+
+  });
+}
+```
+
+TBA
+- update [docs](./docs/)
 
 ## License
 
