@@ -24,6 +24,7 @@ export {
   Place,
   PlaceResult,
   StopEventResult,
+  Trip,
 } from "./models/ojp";
 
 export { SDK_VERSION } from './constants';
