@@ -49,7 +49,7 @@ export class SDK {
   public async fetchTrips(tripRequest: TripRequest): Promise<Trip[]> {
     const requestXML = (() => {
       if (tripRequest.mockRequestXML) {
-        console.log('TR: using mock request XML');
+        // console.log('TR: using mock request XML');
         return tripRequest.mockRequestXML;
       }
 
@@ -62,7 +62,7 @@ export class SDK {
 
     const responseXML: string = await (async () => {
       if (tripRequest.mockResponseXML) {
-        console.log('TR: using mock response XML');
+        // console.log('TR: using mock response XML');
         return tripRequest.mockResponseXML;
       }
 
