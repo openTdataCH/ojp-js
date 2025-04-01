@@ -9,9 +9,10 @@ See [docs](./docs/) and [examples](./examples/) for usage.
 - OJP Demo App: https://opentdatach.github.io/ojp-demo-app/ - web application using this SDK
 - [CHANGELOG](./CHANGELOG.md) for latest changes
 - npm `ojp-sdk` package: https://www.npmjs.com/package/ojp-sdk
-  - note: 26.Mar - a different package name is used for test purpose `ojp-sdk-next`
 
 ## Usage 
+
+**Note:** 26.Mar - a different package name is used for test purpose: `ojp-sdk-next`
 
 - include the `ojp-sdk` package in the `./package.json` dependencies of the project 
 ```
