@@ -1,5 +1,9 @@
 # OJP Javascript SDK
 
+**Note 2.Apr 2025**: OJP v1.0 will be discontinued and this repo will be cloned into another project. [ojp-sdk-next](https://github.com/openTdataCH/ojp-js/tree/feature/ojp-sdk-next) branch based on OJP v2.0 will replace this branch.
+
+----
+
 The OJP Javascript SDK is a Javascript/Typescript package used for communication with [OJP APIs](https://opentransportdata.swiss/en/cookbook/open-journey-planner-ojp/).
 
 See [Reference](./docs/reference.md) and [examples](./examples/) for usage.
@@ -17,23 +21,19 @@ Two versions of the OJP APIs can be used:
 - [OJP 2.0](https://opentransportdata.swiss/de/cookbook/ojp2entwicklung/) - next version, see [VDVde/OJP](https://github.com/VDVde/OJP/blob/changes_for_v1.1/README.md) specs
 
 ### OJP 1.0
-The  main branch of `ojp-js` repo is using OJP 1.0 APIs. The releases are published to [npmjs.com](https://www.npmjs.com/package/ojp-sdk) as `ojp-sdk` packages. 
+The  main branch of this repo is using OJP 1.0 APIs. The releases are published to [npmjs.com](https://www.npmjs.com/package/ojp-sdk) as `ojp-sdk-v1` package. 
 
-- include the `ojp-sdk` package in the `./package.json` dependencies of your project 
+
+- include the `ojp-sdk-v1` package in the `./package.json` dependencies of your project 
 ```
   "dependencies": {
-    "ojp-sdk": "0.16.3"
+    "ojp-sdk-v1": "0.17.1"
   }
 ```
 
 ### OJP 2.0
-The [ojp-v2](https://github.com/openTdataCH/ojp-js/tree/feature/ojp-v2) branch is used for developing [OJP 2.0](https://opentransportdata.swiss/de/cookbook/ojp2entwicklung/) bindings, 
-- include the `#ojp-v2` branch
-```
-  "dependencies": {
-    "ojp-sdk": "git+https://github.com/openTdataCH/ojp-js.git#feature/ojp-v2"
-  }
-```
+
+see [ojp-sdk-next](https://github.com/openTdataCH/ojp-js/tree/feature/ojp-sdk-next) branch
 
 ## Usage
 
@@ -44,7 +44,7 @@ $ npm install
 
 - include OJP SDK in the Typescript / Javascript code
 ```
-import * as OJP from 'ojp-sdk'
+import * as OJP from 'ojp-sdk-v1'
 ```
 
 - for more details check:
@@ -56,4 +56,4 @@ import * as OJP from 'ojp-sdk'
 
 The project is released under a [MIT license](./LICENSE).
 
-Copyright (c) 2021 - 2024 Open Data Platform Mobility Switzerland - [opentransportdata.swiss](https://opentransportdata.swiss/en/).
+Copyright (c) 2021 - 2025 Open Data Platform Mobility Switzerland - [opentransportdata.swiss](https://opentransportdata.swiss/en/).
