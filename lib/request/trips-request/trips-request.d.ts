@@ -7,6 +7,7 @@ import { Language } from '../../types/language-type';
 import { TripModeType } from '../../types/trip-mode-type';
 import { IndividualTransportMode } from '../../types/individual-mode.types';
 import { ModeOfTransportType } from '../../types/mode-of-transport.type';
+import { UseRealtimeDataEnumeration } from "../../types/_all";
 export type TripRequestBoardingType = 'Dep' | 'Arr';
 export declare class TripRequest extends OJPBaseRequest {
     fromTripLocation: TripLocationPoint;
@@ -23,6 +24,7 @@ export declare class TripRequest extends OJPBaseRequest {
     viaLocations: TripLocationPoint[];
     response: TripRequest_Response | null;
     enableExtensions: boolean;
+    useRealTimeDataType: UseRealtimeDataEnumeration;
     constructor(stageConfig: ApiConfig, language: Language, fromTripLocation: TripLocationPoint, toTripLocation: TripLocationPoint, departureDate?: Date, tripRequestBoardingType?: TripRequestBoardingType, numberOfResults?: number | null, numberOfResultsBefore?: number | null, numberOfResultsAfter?: number | null, publicTransportModes?: ModeOfTransportType[]);
     private static Empty;
     static initWithResponseMock(mockText: string): TripRequest;

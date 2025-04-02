@@ -4,6 +4,7 @@ import { StopEventType } from '../../types/stop-event-type';
 import { StopEventRequest_Response } from '../types/stop-event-request.type';
 import { Language } from '../../types/language-type';
 import { GeoPosition } from '../../location/geoposition';
+import { UseRealtimeDataEnumeration } from '../../types/_all';
 export declare class StopEventRequest extends OJPBaseRequest {
     stopPlaceRef: string | null;
     geoPosition: GeoPosition | null;
@@ -14,6 +15,7 @@ export declare class StopEventRequest extends OJPBaseRequest {
     includeOnwardCalls: boolean;
     includeRealtimeData: boolean;
     enableExtensions: boolean;
+    useRealTimeDataType: UseRealtimeDataEnumeration;
     constructor(stageConfig: ApiConfig, language: Language, stopPlaceRef: string | null, geoPosition: GeoPosition | null, stopEventType: StopEventType, stopEventDate: Date);
     static Empty(stageConfig?: ApiConfig): StopEventRequest;
     static initWithMock(mockText: string): StopEventRequest;
