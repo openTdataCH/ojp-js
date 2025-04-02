@@ -13,6 +13,7 @@ import { IndividualTransportMode } from '../../types/individual-mode.types';
 import { ModeOfTransportType } from '../../types/mode-of-transport.type';
 import { JourneyPointType } from '../../types/journey-points';
 import { OJP_Helpers } from "../../helpers/ojp-helpers";
+import { OJP_VERSION } from "../../constants";
 
 export type TripRequestBoardingType = 'Dep' | 'Arr'
 
@@ -361,7 +362,9 @@ export class TripRequest extends OJPBaseRequest {
       }
     }
 
-    paramsNode.ele("ojp:UseRealtimeData", 'explanatory');
+    if (OJP_VERSION === '2.0') {
+      paramsNode.ele("ojp:UseRealtimeData", 'explanatory');
+    }
   }
   
   private addAdditionalRestrictions(nodeEl: xmlbuilder.XMLElement, tripLocation: TripLocationPoint) {
