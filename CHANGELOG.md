@@ -1,11 +1,12 @@
 # CHANGELOG
 
 ## 0.17.3 - 2.04.2025
-- let the client handle the service attribute code
-- allow the clients to set TR, SER `UseRealtimeData` enum. Only in v2
+- updates TR, SER requests - [PR #143](https://github.com/openTdataCH/ojp-js/pull/143)
+  - let the client handle the service attribute code - [TR: catch attributes that are not standard #210](https://github.com/openTdataCH/ojp-demo-app-src/issues/210)
+  - allow the clients to set TR, SER `UseRealtimeData` enum. Only in v2 - [Selection for UseRealtimeData in OJP 2.0 #209](https://github.com/openTdataCH/ojp-demo-app-src/issues/209)
 
 ## 0.17.2 - 2.04.2025
-- disable `IncludeRealtimeData` for SER requests v1.0 OJP
+- disable `IncludeRealtimeData` for SER requests v1.0 OJP - [Wrong parameter in OJP 1.0 TR & SER #208](https://github.com/openTdataCH/ojp-demo-app-src/issues/208)
 
 ## 0.17.1 - 2.04.2025
 - changed package name to `ojp-sdk-v1` - [PR #141](https://github.com/openTdataCH/ojp-js/pull/141)
