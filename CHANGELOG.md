@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 0.17.3 - 2.04.2025
+- let the client handle the service attribute code
+
 ## 0.17.2 - 2.04.2025
 - disable `IncludeRealtimeData` for SER requests v1.0 OJP
 
