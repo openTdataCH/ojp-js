@@ -8,6 +8,8 @@ import { StopEventRequestParser } from './stop-event-request-parser';
 import { Language } from '../../types/language-type';
 import { OJP_Helpers } from '../../helpers/ojp-helpers';
 import { GeoPosition } from '../../location/geoposition';
+import { OJP_VERSION } from '../../constants';
+import { UseRealtimeDataEnumeration } from '../../types/_all';
 
 export class StopEventRequest extends OJPBaseRequest {
     public stopPlaceRef: string | null;
@@ -23,6 +25,7 @@ export class StopEventRequest extends OJPBaseRequest {
     public includeRealtimeData: boolean;
     
     public enableExtensions: boolean;
+    public useRealTimeDataType: UseRealtimeDataEnumeration;
 
     constructor(stageConfig: ApiConfig, language: Language, stopPlaceRef: string | null, geoPosition: GeoPosition | null, stopEventType: StopEventType, stopEventDate: Date) {
         super(stageConfig, language);
@@ -40,6 +43,7 @@ export class StopEventRequest extends OJPBaseRequest {
         this.includeRealtimeData = true;
 
         this.enableExtensions = true;
+        this.useRealTimeDataType = 'explanatory';
     }
 
     public static Empty(stageConfig: ApiConfig = EMPTY_API_CONFIG): StopEventRequest {
@@ -96,7 +100,11 @@ export class StopEventRequest extends OJPBaseRequest {
         requestParamsNode.ele('ojp:StopEventType', this.stopEventType);
         requestParamsNode.ele('ojp:IncludePreviousCalls', this.includePreviousCalls);
         requestParamsNode.ele('ojp:IncludeOnwardCalls', this.includeOnwardCalls);
-        requestParamsNode.ele('ojp:IncludeRealtimeData', this.includeRealtimeData);
+
+        if (OJP_VERSION === '2.0') {
+            requestParamsNode.ele('ojp:IncludeRealtimeData', this.includeRealtimeData);
+            requestParamsNode.ele("ojp:UseRealtimeData", this.useRealTimeDataType);
+        }
 
         if (this.enableExtensions) {
             const extensionsNode = requestNode.ele('Extensions');

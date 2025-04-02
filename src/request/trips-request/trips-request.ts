@@ -13,6 +13,8 @@ import { IndividualTransportMode } from '../../types/individual-mode.types';
 import { ModeOfTransportType } from '../../types/mode-of-transport.type';
 import { JourneyPointType } from '../../types/journey-points';
 import { OJP_Helpers } from "../../helpers/ojp-helpers";
+import { OJP_VERSION } from "../../constants";
+import { UseRealtimeDataEnumeration } from "../../types/_all";
 
 export type TripRequestBoardingType = 'Dep' | 'Arr'
 
@@ -37,6 +39,7 @@ export class TripRequest extends OJPBaseRequest {
   public response: TripRequest_Response | null;
 
   public enableExtensions: boolean;
+  public useRealTimeDataType: UseRealtimeDataEnumeration;
 
   constructor(
     stageConfig: ApiConfig, 
@@ -70,6 +73,7 @@ export class TripRequest extends OJPBaseRequest {
     this.viaLocations = [];
 
     this.enableExtensions = true;
+    this.useRealTimeDataType = 'explanatory';
 
     this.response = null;
   }
@@ -361,7 +365,9 @@ export class TripRequest extends OJPBaseRequest {
       }
     }
 
-    paramsNode.ele("ojp:UseRealtimeData", 'explanatory');
+    if (OJP_VERSION === '2.0') {
+      paramsNode.ele("ojp:UseRealtimeData", this.useRealTimeDataType);
+    }
   }
   
   private addAdditionalRestrictions(nodeEl: xmlbuilder.XMLElement, tripLocation: TripLocationPoint) {
