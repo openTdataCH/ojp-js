@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 0.17.3 - 2.04.2025
+- let the client handle the service attribute code
+
+## 0.17.2 - 2.04.2025
+- disable `IncludeRealtimeData` for SER requests v1.0 OJP
+
 ## 0.17.1 - 2.04.2025
 - changed package name to `ojp-sdk-v1` - [PR #141](https://github.com/openTdataCH/ojp-js/pull/141)
   - prepare to extract the OJP v1.0 SDK code into a separate repo
