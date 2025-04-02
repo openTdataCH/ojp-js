@@ -12,7 +12,7 @@ See [Reference](./docs/reference.md) and [examples](./examples/) for usage.
 
 - OJP Demo App: https://opentdatach.github.io/ojp-demo-app/ - web application this SDK
 - [CHANGELOG](./CHANGELOG.md) for latest changes
-- npm `ojp-sdk` package: https://www.npmjs.com/package/ojp-sdk
+- npm `ojp-sdk-v1` package: https://www.npmjs.com/package/ojp-sdk-v1
 
 ## Install
 
@@ -21,7 +21,7 @@ Two versions of the OJP APIs can be used:
 - [OJP 2.0](https://opentransportdata.swiss/de/cookbook/ojp2entwicklung/) - next version, see [VDVde/OJP](https://github.com/VDVde/OJP/blob/changes_for_v1.1/README.md) specs
 
 ### OJP 1.0
-The  main branch of this repo is using OJP 1.0 APIs. The releases are published to [npmjs.com](https://www.npmjs.com/package/ojp-sdk) as `ojp-sdk-v1` package. 
+The  main branch of this repo is using OJP 1.0 APIs. The releases are published to [npmjs.com](https://www.npmjs.com/package/ojp-sdk-v1) as `ojp-sdk-v1` package. 
 
 
 - include the `ojp-sdk-v1` package in the `./package.json` dependencies of your project 
