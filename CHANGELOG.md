@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.17.1 - 2.04.2025
+- changed package name to `ojp-sdk-v1` - [PR #141](https://github.com/openTdataCH/ojp-js/pull/141)
+  - prepare to extract the OJP v1.0 SDK code into a separate repo
+
 ## 0.16.3 - 24.03.2025
 - internal change, refactor params/request implementation - [PR #137](https://github.com/openTdataCH/ojp-js/pull/137)
 - adds hack for OJP-SI to allow Trip nodes without Transfer children node - [PR #138](https://github.com/openTdataCH/ojp-js/pull/138)
