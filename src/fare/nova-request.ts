@@ -4,7 +4,6 @@ import { RequestInfo } from "../request";
 import { Trip } from "../trip";
 import { NovaFare_Response, NovaFareParser } from "./nova-request-parser";
 import { ApiConfig } from '../types/stage-config';
-import { OJPBaseRequest } from '../request/base-request';
 import { OJP_Helpers } from '../helpers/ojp-helpers';
 
 export class NovaRequest {
