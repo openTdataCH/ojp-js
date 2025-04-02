@@ -23,6 +23,7 @@ export * from './request/index'
 
 export * from './trip/index'
 
+export { UseRealtimeDataEnumeration } from './types/_all'
 export * from './types/lir-restrictions.type'
 export * from './types/mode-of-transport.type'
 export * from './types/individual-mode.types'

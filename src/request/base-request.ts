@@ -4,7 +4,6 @@ import * as xmlbuilder from "xmlbuilder";
 import { ApiConfig } from '../types/stage-config';
 import { RequestInfo } from './types/request-info.type';
 import { Language } from '../types/language-type';
-import { SDK_VERSION } from '../constants';
 
 export class OJPBaseRequest {
   private stageConfig: ApiConfig;
