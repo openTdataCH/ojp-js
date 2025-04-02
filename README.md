@@ -1,6 +1,9 @@
 # OJP Javascript SDK
 
-**Note 2.Apr 2025**: OJP v1.0 will be discontinued and this repo will be cloned into another project. [ojp-sdk-next](https://github.com/openTdataCH/ojp-js/tree/feature/ojp-sdk-next) branch based on OJP v2.0 will replace this branch.
+**Note 2.Apr 2025**: The main branch of this repo is freezed for development.
+
+- for [OJP v1.0](https://opentransportdata.swiss/en/cookbook/open-journey-planner-ojp/) - check [feature/ojp-v1](https://github.com/openTdataCH/ojp-js/tree/feature/ojp-v1) branch. Features for this branch will receive less support in the future
+- for [OJP v2.0](https://opentransportdata.swiss/en/cookbook/open-journey-planner-ojp/) - check [feature/ojp-sdk-next](https://github.com/openTdataCH/ojp-js/tree/feature/ojp-sdk-next) branch. **OJP v2.0 branch has full support in development and will replace the main branch of this repo**
 
 ----
 
@@ -12,28 +15,16 @@ See [Reference](./docs/reference.md) and [examples](./examples/) for usage.
 
 - OJP Demo App: https://opentdatach.github.io/ojp-demo-app/ - web application this SDK
 - [CHANGELOG](./CHANGELOG.md) for latest changes
-- npm `ojp-sdk-v1` package: https://www.npmjs.com/package/ojp-sdk-v1
+- npm `ojp-sdk` package: https://www.npmjs.com/package/ojp-sdk
 
 ## Install
 
-Two versions of the OJP APIs can be used:
-- [OJP 1.0](https://opentransportdata.swiss/en/cookbook/open-journey-planner-ojp/) - still supported by `ojp-js` SDK but might receive less support in the future
-- [OJP 2.0](https://opentransportdata.swiss/de/cookbook/ojp2entwicklung/) - next version, see [VDVde/OJP](https://github.com/VDVde/OJP/blob/changes_for_v1.1/README.md) specs
-
-### OJP 1.0
-The  main branch of this repo is using OJP 1.0 APIs. The releases are published to [npmjs.com](https://www.npmjs.com/package/ojp-sdk-v1) as `ojp-sdk-v1` package. 
-
-
-- include the `ojp-sdk-v1` package in the `./package.json` dependencies of your project 
+- include the `ojp-sdk` package in the `./package.json` dependencies of your project 
 ```
   "dependencies": {
-    "ojp-sdk-v1": "0.17.1"
+    "ojp-sdk": "0.20.2"
   }
 ```
-
-### OJP 2.0
-
-see [ojp-sdk-next](https://github.com/openTdataCH/ojp-js/tree/feature/ojp-sdk-next) branch
 
 ## Usage
 
@@ -44,7 +35,7 @@ $ npm install
 
 - include OJP SDK in the Typescript / Javascript code
 ```
-import * as OJP from 'ojp-sdk-v1'
+import * as OJP from 'ojp-sdk'
 ```
 
 - for more details check:
