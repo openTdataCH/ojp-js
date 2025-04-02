@@ -1,13 +1,6 @@
 # OJP Javascript SDK
 
-**Note 2.Apr 2025**: The main branch of this repo is freezed for development.
-
-- for [OJP v1.0](https://opentransportdata.swiss/en/cookbook/open-journey-planner-ojp/) - check [feature/ojp-v1](https://github.com/openTdataCH/ojp-js/tree/feature/ojp-v1) branch. Features for this branch will receive less support in the future
-- for [OJP v2.0](https://opentransportdata.swiss/en/cookbook/open-journey-planner-ojp/) - check [feature/ojp-sdk-next](https://github.com/openTdataCH/ojp-js/tree/feature/ojp-sdk-next) branch. **OJP v2.0 branch has full support in development and will replace the main branch of this repo**
-
-----
-
-The OJP Javascript SDK is a Javascript/Typescript package used for communication with [OJP APIs](https://opentransportdata.swiss/en/cookbook/open-journey-planner-ojp/).
+This branch hosts the Javascript SDK used for [OJP v1.0](https://opentransportdata.swiss/en/cookbook/open-journey-planner-ojp/) APIs. For [OJP v2.0](https://opentransportdata.swiss/de/cookbook/ojp2entwicklung/) usage please check [feature/ojp-sdk-next](https://github.com/openTdataCH/ojp-js/tree/feature/ojp-sdk-next) branch.
 
 See [Reference](./docs/reference.md) and [examples](./examples/) for usage.
 
@@ -19,10 +12,10 @@ See [Reference](./docs/reference.md) and [examples](./examples/) for usage.
 
 ## Install
 
-- include the `ojp-sdk` package in the `./package.json` dependencies of your project 
+- include the `ojp-sdk-v1` package in the `./package.json` dependencies of your project 
 ```
   "dependencies": {
-    "ojp-sdk": "0.20.2"
+    "ojp-sdk-v1": "0.17.1"
   }
 ```
 
@@ -35,7 +28,7 @@ $ npm install
 
 - include OJP SDK in the Typescript / Javascript code
 ```
-import * as OJP from 'ojp-sdk'
+import * as OJP from 'ojp-sdk-v1'
 ```
 
 - for more details check:
