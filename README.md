@@ -1,13 +1,18 @@
 # OJP Javascript SDK
 
-**Note 2.Apr 2025**: The main branch of this repo is freezed for development.
+**Note 2.Apr 2025**: The main branch of this repo is freezed for development, see below table for reference
 
-- for [OJP v1.0](https://opentransportdata.swiss/en/cookbook/open-journey-planner-ojp/) - check [feature/ojp-v1](https://github.com/openTdataCH/ojp-js/tree/feature/ojp-v1) branch. Features for this branch will receive less support in the future
-- for [OJP v2.0](https://opentransportdata.swiss/en/cookbook/open-journey-planner-ojp/) - check [feature/ojp-sdk-next](https://github.com/openTdataCH/ojp-js/tree/feature/ojp-sdk-next) branch. **OJP v2.0 branch has full support in development and will replace the main branch of this repo**
+## Current Development Status
+
+| OJP | JS SDK | NPM | Demo App | Description |
+|-|-|-|-|-|
+| v1.0 | [ojp-js#ojp-v1](https://github.com/openTdataCH/ojp-js/tree/feature/ojp-v1) | [ojp-sdk-v1](https://www.npmjs.com/package/ojp-sdk-v1) | <ul><li>[PROD](https://opentdatach.github.io/ojp-demo-app/search)</li><li>[BETA v1](https://tools.odpch.ch/beta-ojp-demo/search)</ul> | original SDK, receives bug fixes or critical features needed for OJP 1.0  |
+| v2.0 | [ojp-js#ojp-v2](https://github.com/openTdataCH/ojp-js/tree/feature/ojp-v2) | Github branch | [BETA v2](https://tools.odpch.ch/ojp-demo-v2/search) | original SDK, receives all features until `ojp-sdk-next` branch is merged to main |
+| v2.0 | [ojp-js#ojp-sdk-next](https://github.com/openTdataCH/ojp-js/tree/feature/ojp-sdk-next) | [ojp-sdk-next](https://www.npmjs.com/package/ojp-sdk-next) - temporarely, long-term will be published under `ojp-sdk` | under development | new SDK code with models derived from XSD schema, this will be the main development reference for OJP JS SDK |
 
 ----
 
-The OJP Javascript SDK is a Javascript/Typescript package used for communication with [OJP APIs](https://opentransportdata.swiss/en/cookbook/open-journey-planner-ojp/).
+OJP Javascript SDK is a Javascript/Typescript package used for communication with [OJP APIs](https://opentransportdata.swiss/en/cookbook/open-journey-planner-ojp/).
 
 See [Reference](./docs/reference.md) and [examples](./examples/) for usage.
 
