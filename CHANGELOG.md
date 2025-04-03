@@ -1,7 +1,7 @@
 # CHANGELOG
 
 ## 0.17.4 - 3.04.2025
-- fix Journey Service attribute codes - PR TBA
+- fix Journey Service attribute codes - [PR #144](https://github.com/openTdataCH/ojp-js/pull/144)
   - [TR: catch attributes that are not standard #210](https://github.com/openTdataCH/ojp-demo-app-src/issues/210)
 
 ## 0.17.3 - 2.04.2025
