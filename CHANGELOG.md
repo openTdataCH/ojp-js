@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.17.4 - 3.04.2025
+- fix Journey Service attribute codes - [PR #144](https://github.com/openTdataCH/ojp-js/pull/144)
+  - [TR: catch attributes that are not standard #210](https://github.com/openTdataCH/ojp-demo-app-src/issues/210)
+
 ## 0.17.3 - 2.04.2025
 - updates TR, SER requests - [PR #143](https://github.com/openTdataCH/ojp-js/pull/143)
   - let the client handle the service attribute code - [TR: catch attributes that are not standard #210](https://github.com/openTdataCH/ojp-demo-app-src/issues/210)
