@@ -107,16 +107,11 @@ export class JourneyService {
 
     legService.serviceAttributes = {};
     serviceTreeNode.findChildrenNamed('Attribute').forEach(attributeTreeNode => {
-      let code = attributeTreeNode.findTextFromChildNamed('Code');
+      const code = attributeTreeNode.findTextFromChildNamed('Code');
       if (code === null) {
         console.error('ERROR - cant find code for Attribute');
         console.log(attributeTreeNode);
         return;
-      }
-
-      if (code.startsWith('A_')) {
-        // normalize HRDF *A attributes, strip A__ chars
-        code = code.replace(/A_*/, '');
       }
 
       const text = attributeTreeNode.findTextFromChildNamed('UserText/Text');
