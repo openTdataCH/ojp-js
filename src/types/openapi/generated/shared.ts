@@ -26,11 +26,26 @@ export interface components {
     PlaceRef: {
       stopPointRef?: string;
       stopPlaceRef?: string;
-      geoPosition?: components["schemas"]["GeoPosition"];
-      name: components["schemas"]["InternationalText"];
+      geoPosition?: {
+        longitude: number;
+        latitude: number;
+      };
+      name: {
+        text: string;
+      };
     };
     PlaceContext: {
-      placeRef: components["schemas"]["PlaceRef"];
+      placeRef: {
+        stopPointRef?: string;
+        stopPlaceRef?: string;
+        geoPosition?: {
+          longitude: number;
+          latitude: number;
+        };
+        name: {
+          text: string;
+        };
+      };
       depArrTime?: string;
     };
     ServiceRequestContext: {
@@ -44,27 +59,46 @@ export interface components {
     };
     StopPoint: {
       stopPointRef: string;
-      stopPointName: components["schemas"]["InternationalText"];
-      plannedQuay?: components["schemas"]["InternationalText"];
-      estimatedQuay?: components["schemas"]["InternationalText"];
+      stopPointName: {
+        text: string;
+      };
+      plannedQuay?: {
+        text: string;
+      };
+      estimatedQuay?: {
+        text: string;
+      };
     };
     StopPlace: {
       stopPlaceRef?: string;
-      stopPlaceName?: components["schemas"]["InternationalText"];
+      stopPlaceName?: {
+        text: string;
+      };
     };
     TopographicPlace: {
       topographicPlaceCode: string;
-      topographicPlaceName: components["schemas"]["InternationalText"];
+      topographicPlaceName: {
+        text: string;
+      };
     };
     PointOfInterest: {
       publicCode: string;
-      name: components["schemas"]["InternationalText"];
-      pointOfInterestCategory: (components["schemas"]["PointOfInterestCategory"])[];
+      name: {
+        text: string;
+      };
+      pointOfInterestCategory: ({
+          osmTag?: {
+            tag: string;
+            value: string;
+          };
+        })[];
       topographicPlaceRef?: string;
     };
     Address: {
       publicCode: string;
-      name: components["schemas"]["InternationalText"];
+      name: {
+        text: string;
+      };
       postCode?: string;
       topographicPlaceName?: string;
       TopographicPlaceRef?: string;
@@ -72,14 +106,62 @@ export interface components {
       HouseNumber?: string;
     };
     Place: {
-      stopPoint?: components["schemas"]["StopPoint"];
-      stopPlace?: components["schemas"]["StopPlace"];
-      topographicPlace?: components["schemas"]["TopographicPlace"];
-      pointOfInterest?: components["schemas"]["PointOfInterest"];
-      address?: components["schemas"]["Address"];
-      name: components["schemas"]["InternationalText"];
-      geoPosition: components["schemas"]["GeoPosition"];
-      mode: (components["schemas"]["VehicleModesOfTransportEnum"])[];
+      stopPoint?: {
+        stopPointRef: string;
+        stopPointName: {
+          text: string;
+        };
+        plannedQuay?: {
+          text: string;
+        };
+        estimatedQuay?: {
+          text: string;
+        };
+      };
+      stopPlace?: {
+        stopPlaceRef?: string;
+        stopPlaceName?: {
+          text: string;
+        };
+      };
+      topographicPlace?: {
+        topographicPlaceCode: string;
+        topographicPlaceName: {
+          text: string;
+        };
+      };
+      pointOfInterest?: {
+        publicCode: string;
+        name: {
+          text: string;
+        };
+        pointOfInterestCategory: ({
+            osmTag?: {
+              tag: string;
+              value: string;
+            };
+          })[];
+        topographicPlaceRef?: string;
+      };
+      address?: {
+        publicCode: string;
+        name: {
+          text: string;
+        };
+        postCode?: string;
+        topographicPlaceName?: string;
+        TopographicPlaceRef?: string;
+        Street?: string;
+        HouseNumber?: string;
+      };
+      name: {
+        text: string;
+      };
+      geoPosition: {
+        longitude: number;
+        latitude: number;
+      };
+      mode: ("air" | "bus" | "coach" | "trolleyBus" | "metro" | "rail" | "tram" | "water" | "ferry" | "cableway" | "funicular" | "lift" | "other" | "unknown")[];
     };
     SharedServiceArrivalDeparture: {
       timetabledTime: string;
@@ -87,12 +169,26 @@ export interface components {
     };
     CallAtStop: {
       stopPointRef?: string;
-      stopPointName?: components["schemas"]["InternationalText"];
-      nameSuffix?: components["schemas"]["InternationalText"];
-      plannedQuay?: components["schemas"]["InternationalText"];
-      estimatedQuay?: components["schemas"]["InternationalText"];
-      serviceArrival?: components["schemas"]["SharedServiceArrivalDeparture"];
-      serviceDeparture?: components["schemas"]["SharedServiceArrivalDeparture"];
+      stopPointName?: {
+        text: string;
+      };
+      nameSuffix?: {
+        text: string;
+      };
+      plannedQuay?: {
+        text: string;
+      };
+      estimatedQuay?: {
+        text: string;
+      };
+      serviceArrival?: {
+        timetabledTime: string;
+        estimatedTime?: string;
+      };
+      serviceDeparture?: {
+        timetabledTime: string;
+        estimatedTime?: string;
+      };
       order?: number;
       requestStop?: boolean;
       unplannedStop?: boolean;
@@ -103,16 +199,26 @@ export interface components {
     Mode: {
       ptMode: string;
       railSubmode?: string;
-      name: components["schemas"]["InternationalText"];
-      shortName: components["schemas"]["InternationalText"];
+      name: {
+        text: string;
+      };
+      shortName: {
+        text: string;
+      };
     };
     ProductCategory: {
-      name?: components["schemas"]["InternationalText"];
-      shortName?: components["schemas"]["InternationalText"];
+      name?: {
+        text: string;
+      };
+      shortName?: {
+        text: string;
+      };
       productCategoryRef?: string;
     };
     GeneralAttribute: {
-      userText: components["schemas"]["InternationalText"];
+      userText: {
+        text: string;
+      };
       code: string;
     };
     DatedJourney: {
@@ -122,14 +228,40 @@ export interface components {
       publicCode?: string;
       lineRef: string;
       directionRef?: string;
-      mode: components["schemas"]["Mode"];
-      productCategory?: components["schemas"]["ProductCategory"];
-      publishedServiceName: components["schemas"]["InternationalText"];
+      mode: {
+        ptMode: string;
+        railSubmode?: string;
+        name: {
+          text: string;
+        };
+        shortName: {
+          text: string;
+        };
+      };
+      productCategory?: {
+        name?: {
+          text: string;
+        };
+        shortName?: {
+          text: string;
+        };
+        productCategoryRef?: string;
+      };
+      publishedServiceName: {
+        text: string;
+      };
       trainNumber?: string;
-      attribute: (components["schemas"]["GeneralAttribute"])[];
+      attribute: ({
+          userText: {
+            text: string;
+          };
+          code: string;
+        })[];
       operatorRef?: string;
       destinationStopPointRef?: string;
-      destinationText?: components["schemas"]["InternationalText"];
+      destinationText?: {
+        text: string;
+      };
       unplanned?: boolean;
       cancelled?: boolean;
       deviation?: boolean;
