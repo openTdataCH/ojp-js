@@ -1,3 +1,8 @@
+openapi: 3.0.3
+info:
+  title: Empty API
+  version: 1.0.0
+paths: {}
 components:
   schemas:
     # https://vdvde.github.io/OJP/develop/documentation-tables/siri.html#type_siri__VehicleModesOfTransportEnumeration
