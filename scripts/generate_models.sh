@@ -11,6 +11,7 @@ SRC_FILES=(
     "ojp-stop-event-response.yaml"
     "ojp-location-request.yaml"
     "ojp-location-response.yaml"
+    "shared.yml"
 )
 for file in "${SRC_FILES[@]}"; do
     filename="${file%.*}"
@@ -36,16 +37,4 @@ for file in "${SRC_FILES[@]}"; do
     # Print the filename without extension
     echo "$file exported to $dst_path"
     echo ""
-done
-
-SRC_FILES=("shared.yml")
-for file in "${SRC_FILES[@]}"; do
-    src_path=$OPENAPI_YAML_PATH/$file
-    
-    filename="${file%.*}"
-    dst_path=$OPENAPI_GENERATED_TS_PATH/$filename.ts
-    
-    npx --prefix $APP_PATH \
-        openapi-typescript $src_path \
-        -o $dst_path
 done
