@@ -3,7 +3,6 @@ import { FileHelpers } from './helpers/file-helpers';
 import * as OJP from '../src'
 import { OJP_Helpers } from './helpers/ojp-test.helpers';
 
-
 describe('OJP Test TripRequest Response', () => {
   let trips: OJP.Trip[];
 
