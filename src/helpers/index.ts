@@ -1,1 +1,1 @@
-export { DateHelpers } from "./date-helpers.js";
+export { DateHelpers } from "./date-helpers";

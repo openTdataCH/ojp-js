@@ -1,4 +1,4 @@
-import { parseXML } from "../helpers/xml/parser.js";
+import { parseXML } from '../helpers/xml/parser';
 
 import { 
   GeoPositionSchema, PlaceRefSchema, InternationalTextSchema, 
@@ -16,9 +16,9 @@ import {
   PointOfInterestSchema,
   AddressSchema,
   VehicleModesOfTransportEnum,
-} from '../types/openapi/index.js';
+} from '../types/openapi/index';
 
-import { GeoPosition, GeoPositionLike } from "./geoposition.js";
+import { GeoPosition, GeoPositionLike } from "./geoposition";
 
 export class PlaceRef implements PlaceRefSchema {
   public stopPointRef?: string;

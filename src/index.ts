@@ -10,24 +10,24 @@ export {
   TimedLegSchema as TimedLeg, 
   TransferLegSchema as TransferLeg, 
   ContinuousLegSchema as ContinuousLeg,
-} from './types/openapi/index.js';
+} from './types/openapi/index';
 
 export { 
   LocationInformationRequest, 
   StopEventRequest, 
   TripRequest,
-} from './models/request.js';
+} from './models/request';
 
-export { GeoPosition } from './models/geoposition.js';
+export { GeoPosition } from './models/geoposition';
 
 export {
   Place,
   PlaceResult,
   StopEventResult,
   Trip,
-} from "./models/ojp.js";
+} from "./models/ojp";
 
-export { SDK_VERSION } from './constants.js';
-export { DateHelpers } from './helpers/index.js';
-export { HTTPConfig, Language } from "./types/_all.js";
-export { SDK } from "./sdk.js";
+export { SDK_VERSION } from './constants';
+export { DateHelpers } from './helpers/index';
+export { HTTPConfig, Language } from "./types/_all";
+export { SDK } from "./sdk";

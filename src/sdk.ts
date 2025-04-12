@@ -1,9 +1,9 @@
 import axios, { AxiosHeaders, AxiosRequestConfig } from "axios";
 
-import { PlaceResult, StopEventResult, Trip } from "./models/ojp.js";
-import { XML_Config, HTTPConfig, Language } from "./types/_all.js";
-import { LocationInformationRequest, StopEventRequest, TripRequest } from "./models/request.js";
-import { DefaultXML_Config } from "./constants.js";
+import { PlaceResult, StopEventResult, Trip } from "./models/ojp";
+import { XML_Config, HTTPConfig, Language } from "./types/_all";
+import { LocationInformationRequest, StopEventRequest, TripRequest } from "./models/request";
+import { DefaultXML_Config } from "./constants";
 
 export class SDK {
   private requestorRef: string;
