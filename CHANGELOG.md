@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.20.4 - 12.04.2025
+- refactor/next version of the SDK (continued) - [PR #139](https://github.com/openTdataCH/ojp-js/pull/139)
+  - revert to use CJS module style
+
 ## 0.20.3 - 12.04.2025
 - refactor/next version of the SDK (continued) - [PR #139](https://github.com/openTdataCH/ojp-js/pull/139)
   - use NodeNext, ESM style
