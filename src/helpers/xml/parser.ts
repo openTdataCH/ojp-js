@@ -1,5 +1,5 @@
 import { XMLParser } from "fast-xml-parser";
-import { MapArrayTags, MapParentArrayTags, MapStringValues } from "../../types/openapi/openapi-dependencies";
+import { MapArrayTags, MapParentArrayTags, MapStringValues } from "../../types/openapi/openapi-dependencies.js";
 
 const transformTagNameHandler = (tagName: string) => {
   if (tagName.startsWith('OJP')) {

@@ -1,10 +1,11 @@
-import { components as sharedComponents } from './generated/shared';
-import { components as locationInformationRequestComponents } from './generated/ojp-location-request';
-import { components as locationInformationResponseComponents } from './generated/ojp-location-response';
-import { components as stopEventRequestComponents } from './generated/ojp-stop-event-request'
-import { components as stopEventResponseComponents } from './generated/ojp-stop-event-response'
-import { components as tripRequestComponents } from './generated/ojp-trip-request';
-import { components as tripReponseComponents } from './generated/ojp-trip-response';
+import { components as sharedComponents } from './generated/shared.js';
+
+import { components as locationInformationRequestComponents } from './generated/ojp-location-request.js';
+import { components as locationInformationResponseComponents } from './generated/ojp-location-response.js';
+import { components as stopEventRequestComponents } from './generated/ojp-stop-event-request.js'
+import { components as stopEventResponseComponents } from './generated/ojp-stop-event-response.js'
+import { components as tripRequestComponents } from './generated/ojp-trip-request.js';
+import { components as tripReponseComponents } from './generated/ojp-trip-response.js';
 
 // TODO - this can be generated
 export type UseRealtimeDataEnum = sharedComponents["schemas"]["UseRealtimeDataEnum"];

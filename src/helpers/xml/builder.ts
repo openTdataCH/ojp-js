@@ -1,5 +1,5 @@
 import { XMLBuilder } from "fast-xml-parser";
-import { MapModelKeepPropertiesXML, MapNS_Tags } from "../../types/openapi/openapi-dependencies";
+import { MapModelKeepPropertiesXML, MapNS_Tags } from "../../types/openapi/openapi-dependencies.js";
 
 // TODO - keep it abstract, handle the callback if needed
 function transformKeys<T extends Record<string, any>>(obj: T, callback:(key: string, value: any, path: string[]) => string, path: string[] = []): Record<string, any> {

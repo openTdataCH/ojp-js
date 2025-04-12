@@ -1,4 +1,4 @@
-import { GeoPositionSchema } from "../types/openapi";
+import { GeoPositionSchema } from "../types/openapi/index.js";
 
 export type GeoPositionLike = GeoPositionSchema | number[] | string;
 

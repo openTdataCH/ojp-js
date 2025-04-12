@@ -1,8 +1,8 @@
-import { InitialInputSchema, LIR_RequestParamsSchema, LocationInformationRequestOJP, LocationInformationRequestSchema, PlaceContextSchema, PlaceTypeEnum, SER_RequestLocationSchema, SER_RequestOJP, SER_RequestParamsSchema, StopEventRequestSchema, TripParamsSchema, TripRequestOJP, TripRequestSchema, ViaPointSchema } from "../types/openapi";
+import { InitialInputSchema, LIR_RequestParamsSchema, LocationInformationRequestOJP, LocationInformationRequestSchema, PlaceContextSchema, PlaceTypeEnum, SER_RequestLocationSchema, SER_RequestOJP, SER_RequestParamsSchema, StopEventRequestSchema, TripParamsSchema, TripRequestOJP, TripRequestSchema, ViaPointSchema } from "../types/openapi/index.js";
 
-import { Language } from "../types/_all";
-import { Place, PlaceRef } from './ojp';
-import { buildXML } from "../helpers/xml/builder";
+import { Language } from "../types/_all.js";
+import { Place, PlaceRef } from './ojp.js';
+import { buildXML } from "../helpers/xml/builder.js";
 
 class BaseRequest {
   public mockRequestXML: string | null;
