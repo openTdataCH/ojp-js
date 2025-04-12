@@ -1,4 +1,7 @@
+// TODO - split request / response
+
 // TODO - this should be generated
+// - in request (builder) XML
 export const MapNS_Tags: Record<string, string> = {
   'OJPRequest.ServiceRequest': 'siri',
   'ServiceRequest.ServiceRequestContext': 'siri',
@@ -54,6 +57,7 @@ export const MapNS_Tags: Record<string, string> = {
 
 // TODO - this should be generated
 // // they are all camelCase because the tags are already transformed in XMLParser.isArrayHandler
+// - in response (parser) XML
 export const MapParentArrayTags: Record<string, string[]> = {
   'TripResult.trip': ['leg'],
   'leg.timedLeg': ['legIntermediate'],
@@ -71,7 +75,9 @@ export const MapParentArrayTags: Record<string, string[]> = {
   // SER Response
   'stopEventResult.stopEvent': ['previousCall', 'onwardCall'],
 };
+// - in response (parser) XML
 export const MapArrayTags: Record<string, boolean> = {
+  // TR Response
   'trip.leg': true,
   'timedLeg.legIntermediate': true,
   'service.attribute': true,
@@ -92,6 +98,7 @@ export const MapArrayTags: Record<string, boolean> = {
 
 // TODO - this should be generated
 // Declare object properties that are / should be serialised to XML
+// - in request (builder) XML
 export const MapModelKeepPropertiesXML: Record<string, string[]> = {
   'OJPLocationInformationRequest': ['requestTimestamp', 'initialInput', 'placeRef', 'restrictions'],
   'OJPTripRequest': ['requestTimestamp', 'origin', 'destination', 'via', 'params'],
@@ -100,6 +107,7 @@ export const MapModelKeepPropertiesXML: Record<string, string[]> = {
 };
 
 // TODO - this should be generated
+// - in response (parser) XML
 export const MapStringValues: Record<string, boolean> = {
   'stopPlace.stopPlaceRef': true,
 };
