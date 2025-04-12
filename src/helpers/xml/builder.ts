@@ -72,6 +72,10 @@ export function buildXML(obj: Record<string, any>, xmlConfig: XML_Config = Defau
     return newKey;
   }, ['OJP']);
 
+  if (callbackTransformedObj) {
+    callbackTransformedObj(objTransformed);
+  }
+
   const options = {
     format: true, 
     ignoreAttributes: false,
