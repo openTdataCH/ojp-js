@@ -3,11 +3,13 @@ import axios, { AxiosHeaders, AxiosRequestConfig } from "axios";
 import { PlaceResult, StopEventResult, Trip } from "./models/ojp.js";
 import { XML_Config, HTTPConfig, Language } from "./types/_all.js";
 import { LocationInformationRequest, StopEventRequest, TripRequest } from "./models/request.js";
+import { DefaultXML_Config } from "./constants.js";
 
 export class SDK {
   private requestorRef: string;
   private httpConfig: HTTPConfig;
   private language: Language;
+  private xmlConfig: XML_Config;
 
   constructor(requestorRef: string, httpConfig: HTTPConfig, language: Language) {
     this.requestorRef = requestorRef;
@@ -15,6 +17,8 @@ export class SDK {
 
     this.httpConfig = httpConfig;
     this.language = language;
+    
+    this.xmlConfig = DefaultXML_Config;
   }
 
   private async fetchResponse(requestXML: string): Promise<string> {
