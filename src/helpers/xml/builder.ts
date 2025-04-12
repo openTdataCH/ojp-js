@@ -1,5 +1,7 @@
 import { XMLBuilder } from "fast-xml-parser";
 import { MapModelKeepPropertiesXML, MapNS_Tags } from "../../types/openapi/openapi-dependencies.js";
+import { XML_Config } from "../../types/_all.js";
+import { DefaultXML_Config } from "../../constants.js";
 
 // TODO - keep it abstract, handle the callback if needed
 function transformKeys<T extends Record<string, any>>(obj: T, callback:(key: string, value: any, path: string[]) => string, path: string[] = []): Record<string, any> {
@@ -27,7 +29,7 @@ function transformKeys<T extends Record<string, any>>(obj: T, callback:(key: str
   }, {} as Record<string, any>);
 }
 
-export function buildXML(obj: Record<string, any>): string {
+export function buildXML(obj: Record<string, any>, xmlConfig: XML_Config = DefaultXML_Config, callbackTransformedObj: ((obj: Record<string, any>) => void) | null = null): string {
   const objCopy = JSON.parse(JSON.stringify(obj));
 
   const objTransformed = transformKeys(objCopy, (key: string, value: any, path: string[]) => {
@@ -53,10 +55,17 @@ export function buildXML(obj: Record<string, any>): string {
     const parentKey = path.at(-1) ?? null;
     if (parentKey !== null) {
       const tagNS_Key = parentKey.replace(/^.*:/, '') + '.' + newKey;
-      const tagNS = MapNS_Tags[tagNS_Key] ?? null;
+      const tagNS = (() => {
+        const tagNS = MapNS_Tags[tagNS_Key] ?? 'ojp';
+        if (xmlConfig.defaultNS === tagNS) {
+          return '';
+        }
+
+        return tagNS + ':';
+      })();
 
       if (tagNS !== null) {
-        newKey = tagNS + ':' + newKey;
+        newKey = tagNS + newKey;
       }
     }
 
@@ -69,9 +78,21 @@ export function buildXML(obj: Record<string, any>): string {
     suppressEmptyNode: true,
   };
   const builder = new XMLBuilder(options);
+
+  const xmlAttrs: string[] = [];
+  for (const ns in xmlConfig.mapNS) {
+    const url = xmlConfig.mapNS[ns];
+    const attrNS = ns === xmlConfig.defaultNS ? 'xmlns' : ('xmlns:' + ns);
+    const xmlAttr = attrNS + '="' + url + '"';
+    xmlAttrs.push(xmlAttr);
+  }
+
+  const xmlVersionAttr = 'version="' + xmlConfig.version + '"';
+  xmlAttrs.push(xmlVersionAttr);
+
   const xmlParts = [
     '<?xml version="1.0" encoding="utf-8"?>',
-    '<OJP xmlns="http://www.vdv.de/ojp" xmlns:siri="http://www.siri.org.uk/siri" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xsi:schemaLocation="http://www.vdv.de/ojp" version="2.0">',
+    '<OJP ' + xmlAttrs.join(' ') + '>',
     builder.build(objTransformed),
     '</OJP>',
   ];
