@@ -2,6 +2,10 @@ import { XMLParser } from "fast-xml-parser";
 import { MapArrayTags, MapParentArrayTags, MapStringValues } from "../../types/openapi/openapi-dependencies";
 
 const transformTagNameHandler = (tagName: string) => {
+  if (tagName.startsWith('OJP')) {
+    return tagName;
+  }
+
   // Convert to camelCase, strip -_
   let newTagName = tagName.replace(/[-_](.)/g, (_, char) => char.toUpperCase()) 
   // Ensure first letter is lowercase
