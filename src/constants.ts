@@ -1,6 +1,6 @@
 import { XML_Config } from "./types/_all.js";
 
-export const SDK_VERSION = '0.20.3';
+export const SDK_VERSION = '0.20.4';
 
 export const DefaultXML_Config: XML_Config = {
   version: '2.0',
