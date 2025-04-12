@@ -1,7 +1,15 @@
 # CHANGELOG
 
+## 0.20.3 - 12.04.2025
+- refactor/next version of the SDK (continued) - [PR #139](https://github.com/openTdataCH/ojp-js/pull/139)
+  - use NodeNext, ESM style
+  - more robust NS parsing
+
+## 0.20.2 - 01.04.2025
+- refactor/next version of the SDK (continued) - [PR #139](https://github.com/openTdataCH/ojp-js/pull/139)
+
 ## 0.20.1 - 26.03.2025
-- WIP: refactor/next version of the SDK - [PR #139](https://github.com/openTdataCH/ojp-js/pull/139)
+- refactor/next version of the SDK - [PR #139](https://github.com/openTdataCH/ojp-js/pull/139)
   - OJP 2.0 APIs is now used
   - [XSD schema](https://vdvde.github.io/OJP/develop/documentation-tables/ojp.html) is used for models
   - bundle OJP demo app in [examples/ojp-demo-app](./examples/ojp-demo-app)
