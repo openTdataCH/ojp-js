@@ -48,7 +48,7 @@ export class TripRequest extends BaseRequest implements TripRequestSchema {
     this.mockResponseXML = null;
   }
 
-  public static DefaultRequestParams(): TripParamsSchema {
+  private static DefaultRequestParams(): TripParamsSchema {
     const requestParams: TripParamsSchema = {
       modeAndModeOfOperationFilter: [],
       
@@ -165,7 +165,7 @@ export class LocationInformationRequest extends BaseRequest implements LocationI
     this.restrictions = restrictions;
   }
 
-  public static DefaultRequestParams(): LIR_RequestParamsSchema {
+  private static DefaultRequestParams(): LIR_RequestParamsSchema {
     const params: LIR_RequestParamsSchema = {
       type: [],
       numberOfResults: 10,
@@ -290,7 +290,7 @@ export class StopEventRequest extends BaseRequest implements StopEventRequestSch
     this.params = params;
   }
 
-  public static DefaultRequestParams(): SER_RequestParamsSchema {
+  private static DefaultRequestParams(): SER_RequestParamsSchema {
     const params: SER_RequestParamsSchema = {
       includeAllRestrictedLines: true,
       numberOfResults: 10,
