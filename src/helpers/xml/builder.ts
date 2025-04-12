@@ -9,7 +9,13 @@ function transformKeys<T extends Record<string, any>>(obj: T, callback:(key: str
 
     acc[newKey] = (() => {
       if (value instanceof Object) {
-        if (!Array.isArray(value)) {
+        if (Array.isArray(value)) {
+          (value as any[]).forEach((el, idx) => {
+            if (el instanceof Object) {
+              value[idx] = transformKeys(el, callback, newPath);
+            }
+          });
+        } else {
           return transformKeys(value, callback, newPath);
         }
       }
