@@ -3,9 +3,11 @@
   "description": "OJP (Open Journey Planner) Javascript SDK",
   "version": "0.20.4",
   "type": "module",
-  "main": "lib/index.js",
+  "main": "./lib/index.cjs",
+  "module": "./lib/index.js",
   "types": "lib/index.d.ts",
   "exports": {
+    "require": "./lib/index.cjs",
     "import": "./lib/index.js"
   },
   "files": ["lib/**/*"],
