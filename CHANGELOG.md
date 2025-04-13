@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.20.5 - 13.04.2025
+- refactor/next version of the SDK (continued) - [PR #139](https://github.com/openTdataCH/ojp-js/pull/139)
+  - use dual builds (CommonJS and ESM) via `tsup`
+
 ## 0.20.4 - 12.04.2025
 - refactor/next version of the SDK (continued) - [PR #139](https://github.com/openTdataCH/ojp-js/pull/139)
   - revert to use CJS module style
