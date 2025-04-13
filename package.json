@@ -11,7 +11,7 @@
   "files": ["lib/**/*"],
   "scripts": {
     "test": "jest",
-    "build": "rm -rf lib && tsc",
+    "build": "rm -rf lib && tsup src/index.ts --dts --format esm,cjs --out-dir lib",
     "dev": "tsc --watch",
     "build:models": "bash scripts/generate_models.sh"
   },
