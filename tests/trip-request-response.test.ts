@@ -30,6 +30,15 @@ describe('OJP Test TripRequest Response', () => {
     expect(trip.transfers).toBe(1);
   });
 
+  test('Test TR response empty <LegIntermediate> array', () => {
+    const trip = trips[0];
+
+    const timedLeg1 = trip.leg[0].timedLeg as OJP.TimedLeg;
+    if (timedLeg1) {
+      expect(timedLeg1.legIntermediate.length).toBe(0);
+    }
+  })
+
   test('Test TR response single <LegIntermediate> array', () => {
     const trip = trips[2];
     
