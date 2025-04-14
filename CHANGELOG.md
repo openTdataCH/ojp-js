@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## 0.20.6 - 14.04.2025
+## 0.20.7 - 14.04.2025
 - refactor/next version of the SDK (continued) - [PR #139](https://github.com/openTdataCH/ojp-js/pull/139)
   - fixed JSON (xml-parsed) traverse, catch case for expected empty arrays
 
