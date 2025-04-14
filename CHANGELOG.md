@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.20.6 - 14.04.2025
+- refactor/next version of the SDK (continued) - [PR #139](https://github.com/openTdataCH/ojp-js/pull/139)
+  - fixed JSON (xml-parsed) traverse, catch case for expected empty arrays
+
 ## 0.20.5 - 13.04.2025
 - refactor/next version of the SDK (continued) - [PR #139](https://github.com/openTdataCH/ojp-js/pull/139)
   - use dual builds (CommonJS and ESM) via `tsup`
