@@ -30,28 +30,23 @@ const isArrayHandler = (tagName: string, jPath: string) => {
   return false;
 };
 
+function traverseJSON(obj: any, path: string[], callback: (key: string, value: any, path: string[]) => void) {
+  if ((typeof obj !== 'object') || (obj === null)) {
+    return;
+  }
 
-// TODO - keep it abstract, handle the callback if needed
-function traverseJSON(obj: any, callback: (key: string, value: any, path: string[]) => void, path: string[]) {
-  if (typeof obj !== 'object' || obj === null) return;
-  
-  for (const key in obj) {
-    if (Object.prototype.hasOwnProperty.call(obj, key)) {
-      const value = obj[key];
-      
-      const newPath: string[] = (() => {
-        if (!(obj instanceof Array)) {
-          path.push(key);
-        }
-        
-        return path;
-      })(); 
+  if (Array.isArray(obj)) {
+    for (const item of obj) {
+      traverseJSON(item, path, callback);
+    }
+  } else {
+    for (const key in obj) {
+      const newPath = path.slice();
+      newPath.push(key);
 
-      callback(key, value, newPath);
+      callback(key, obj[key], newPath);
 
-      if (typeof value === 'object' && value !== null) {
-        traverseJSON(value, callback, newPath);
-      }
+      traverseJSON(obj[key], newPath, callback);
     }
   }
 }
@@ -66,12 +61,11 @@ export function parseXML<T>(xml: string, parentPath: string = ''): T {
   });
 
   let response = parser.parse(xml) as T;
-  
-  traverseJSON(response, (key: string, value: any, path: string[]) => {
+
+  traverseJSON(response, [parentPath], (key: string, value: any, path: string[]) => {
     // console.log('traverseJSON_> ' + jPath + ' k: ' + key + ' v: ' + value);
     
-    if (typeof value === 'object') {
-      
+    if (typeof value === 'object') {    
       // enforce empty arrays if the array items are not present
       if (path.length > 1) {
         const pathPart = path.slice(-2).join('.');
@@ -111,7 +105,7 @@ export function parseXML<T>(xml: string, parentPath: string = ''): T {
         }
       }
     }
-  }, [parentPath]);
+  });
   
   return response;
 }
