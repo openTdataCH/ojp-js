@@ -5,6 +5,7 @@ import { XML_Config, HTTPConfig, Language } from "./types/_all";
 import { LocationInformationRequest, StopEventRequest, TripRequest } from "./models/request";
 import { DefaultXML_Config } from "./constants";
 
+type OJP_RequestType = TripRequest | LocationInformationRequest | StopEventRequest;
 export class SDK {
   private requestorRef: string;
   private httpConfig: HTTPConfig;
