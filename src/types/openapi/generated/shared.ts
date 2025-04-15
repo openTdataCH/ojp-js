@@ -105,6 +105,19 @@ export interface components {
       Street?: string;
       HouseNumber?: string;
     };
+    ModeStructure: {
+      /** @enum {string} */
+      ptMode: "air" | "bus" | "coach" | "trolleyBus" | "metro" | "rail" | "tram" | "water" | "ferry" | "cableway" | "funicular" | "lift" | "other" | "unknown";
+      airSubmode?: string;
+      busSubmode?: string;
+      coachSubmode?: string;
+      funicularSubmode?: string;
+      metroSubmode?: string;
+      tramSubmode?: string;
+      telecabinSubmode?: string;
+      railSubmode?: string;
+      waterSubmode?: string;
+    };
     Place: {
       stopPoint?: {
         stopPointRef: string;
@@ -161,7 +174,19 @@ export interface components {
         longitude: number;
         latitude: number;
       };
-      mode: ("air" | "bus" | "coach" | "trolleyBus" | "metro" | "rail" | "tram" | "water" | "ferry" | "cableway" | "funicular" | "lift" | "other" | "unknown")[];
+      mode: ({
+          /** @enum {string} */
+          ptMode: "air" | "bus" | "coach" | "trolleyBus" | "metro" | "rail" | "tram" | "water" | "ferry" | "cableway" | "funicular" | "lift" | "other" | "unknown";
+          airSubmode?: string;
+          busSubmode?: string;
+          coachSubmode?: string;
+          funicularSubmode?: string;
+          metroSubmode?: string;
+          tramSubmode?: string;
+          telecabinSubmode?: string;
+          railSubmode?: string;
+          waterSubmode?: string;
+        })[];
     };
     SharedServiceArrivalDeparture: {
       timetabledTime: string;
