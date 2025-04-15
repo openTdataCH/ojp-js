@@ -466,33 +466,6 @@ components:
             name: NoAlightingAtStop
     # SharedLegSection
 
-    # https://vdvde.github.io/OJP/develop/documentation-tables/ojp.html#group_ojp__ModeGroup
-    Mode:
-      type: object
-      xml:
-        name: Mode
-      required:
-        - ptMode
-        - name
-        - shortName
-      properties:
-        ptMode:
-          type: string
-          xml:
-            name: PtMode
-        railSubmode:
-          type: string
-          xml:
-            name: RailSubmode
-        name:
-          $ref: '#/components/schemas/InternationalText'
-          xml:
-            name: Name
-        shortName:
-          $ref: '#/components/schemas/InternationalText'
-          xml:
-            name: ShortName
-
     # https://vdvde.github.io/OJP/develop/documentation-tables/ojp.html#type_ojp__ProductCategoryStructure
     ProductCategory:
       type: object
@@ -566,7 +539,7 @@ components:
           xml:
             name: DirectionRef
         mode:
-          $ref: '#/components/schemas/Mode'
+          $ref: '#/components/schemas/ModeStructure'
           xml:
             name: Mode
         productCategory:
