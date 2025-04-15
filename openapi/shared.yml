@@ -334,6 +334,14 @@ components:
             name: WaterSubmode
             namespace: "http://www.siri.org.uk/siri"
             prefix: siri
+        name:
+          $ref: '#/components/schemas/InternationalText'
+          xml:
+            name: Name
+        shortName:
+          $ref: '#/components/schemas/InternationalText'
+          xml:
+            name: ShortName
     
     # https://vdvde.github.io/OJP/develop/documentation-tables/ojp.html#type_ojp__PlaceStructure
     Place:
