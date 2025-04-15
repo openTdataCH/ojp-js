@@ -85,6 +85,7 @@ export const MapArrayTags: Record<string, boolean> = {
 
   // LIR Request
   'restrictions.placeParam': true,
+  'place.mode': true,
 
   // LIR Response
   'pointOfInterest.pointOfInterestCategory': true,
