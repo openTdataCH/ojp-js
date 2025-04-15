@@ -76,30 +76,7 @@ export class SDK {
   }
 
   public async fetchTrips(tripRequest: TripRequest): Promise<Trip[]> {
-    const requestXML = (() => {
-      if (tripRequest.mockRequestXML) {
-        // console.log('TR: using mock request XML');
-        return tripRequest.mockRequestXML;
-      }
-
-      const xml = tripRequest.buildRequestXML(this.language, this.requestorRef);
-      return xml;
-    })();
-    
-    // console.log('fetchTrips: requestXML');
-    // console.log(requestXML);
-
-    const responseXML: string = await (async () => {
-      if (tripRequest.mockResponseXML) {
-        // console.log('TR: using mock response XML');
-        return tripRequest.mockResponseXML;
-      }
-
-      const xml = await this.fetchResponse(requestXML);
-      return xml;
-    })();
-
-    // console.log('fetchTrips ... done fetchResponse');
+    const responseXML = await this.computeResponse(tripRequest);
 
     const tripMatches: string[] = responseXML.match(/<Trip\b[^>]*>.*?<\/Trip>/gs) ?? [];
     
@@ -117,11 +94,7 @@ export class SDK {
   }
 
   public async fetchPlaceResults(lirRequest: LocationInformationRequest): Promise<PlaceResult[]> {
-    const requestXML = lirRequest.buildRequestXML(this.language, this.requestorRef);
-    // console.log('fetchLocations: requestXML');
-    // console.log(requestXML);
-
-    const responseXML = await this.fetchResponse(requestXML);
+    const responseXML = await this.computeResponse(lirRequest);
 
     // console.log('fetchLocations ... done fetchResponse');
 
@@ -139,11 +112,7 @@ export class SDK {
   }
 
   public async fetchStopEvents(request: StopEventRequest): Promise<StopEventResult[]> {
-    const requestXML = request.buildRequestXML(this.language, this.requestorRef);
-    // console.log('fetchStopEvents: requestXML');
-    // console.log(requestXML);
-
-    const responseXML = await this.fetchResponse(requestXML);
+    const responseXML = await this.computeResponse(request);
 
     // console.log('fetchStopEvents ... done fetchResponse');
 
