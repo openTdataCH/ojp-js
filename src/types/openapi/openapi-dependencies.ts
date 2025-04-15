@@ -13,6 +13,9 @@ export const MapNS_Tags: Record<string, string> = {
   'ServiceDelivery.ResponseTimestamp': 'siri',
   'ServiceDelivery.ProducerRef': 'siri',
 
+  // TRR
+  'OJPTripRefineRequest.RequestTimestamp': 'siri',
+
   // TripRequest  
   'OJPTripRequest.RequestTimestamp': 'siri',
  
