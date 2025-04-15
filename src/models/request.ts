@@ -1,16 +1,26 @@
 import { InitialInputSchema, LIR_RequestParamsSchema, LocationInformationRequestOJP, LocationInformationRequestSchema, PlaceContextSchema, PlaceTypeEnum, SER_RequestLocationSchema, SER_RequestOJP, SER_RequestParamsSchema, StopEventRequestSchema, TripParamsSchema, TripRequestOJP, TripRequestSchema, ViaPointSchema } from "../types/openapi/index";
 
-import { Language } from "../types/_all";
-import { Place, PlaceRef } from './ojp';
+import { Language, RequestInfo } from "../types/_all";
+import { Place, PlaceRef, Trip } from './ojp';
 import { buildXML } from "../helpers/xml/builder";
 
 class BaseRequest {
+  public requestInfo: RequestInfo;
+
   public mockRequestXML: string | null;
   public mockResponseXML: string | null;
 
   public enableExtensions: boolean;
 
   protected constructor() {
+    this.requestInfo = {
+      requestDateTime: null,
+      requestXML: null,
+      responseDateTime: null,
+      responseXML: null,
+      parseDateTime: null,
+    };
+
     this.mockRequestXML = null;
     this.mockResponseXML = null;
     this.enableExtensions = true;
@@ -18,7 +28,7 @@ class BaseRequest {
 }
 
 export class TripRequest extends BaseRequest implements TripRequestSchema {
-  public requestTimestamp: string
+  public requestTimestamp: string;
   
   public origin: PlaceContextSchema;
   public destination: PlaceContextSchema;

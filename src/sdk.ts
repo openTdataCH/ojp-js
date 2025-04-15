@@ -33,6 +33,9 @@ export class SDK {
       return xml;
     })();
 
+    request.requestInfo.requestDateTime = new Date();
+    request.requestInfo.requestXML = requestXML;
+
     const responseXML: string = await (async () => {
       if (request.mockResponseXML) {
         // console.log('TR: using mock response XML');
@@ -42,6 +45,9 @@ export class SDK {
       const xml = await this.fetchResponse(requestXML);
       return xml;
     })();
+
+    request.requestInfo.responseDateTime = new Date();
+    request.requestInfo.responseXML = responseXML;
 
     return responseXML;
   }
@@ -88,6 +94,8 @@ export class SDK {
       trips.push(trip);
     });
 
+    tripRequest.requestInfo.parseDateTime = new Date();
+
     // console.log('fetchTrips - done init trips');
 
     return trips;
@@ -108,6 +116,8 @@ export class SDK {
       placeResults.push(placeResult);
     });
 
+    lirRequest.requestInfo.parseDateTime = new Date();
+
     return placeResults;
   }
 
@@ -124,6 +134,8 @@ export class SDK {
       const result = StopEventResult.initWithXML(nodeXML);
       results.push(result);
     });
+
+    request.requestInfo.parseDateTime = new Date();
 
     return results;
   }
