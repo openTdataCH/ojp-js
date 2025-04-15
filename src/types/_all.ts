@@ -10,3 +10,11 @@ export interface XML_Config {
   defaultNS: 'ojp' | 'siri' | null,
   mapNS: Record<string, string>
 }
+
+export interface RequestInfo {
+  requestDateTime: Date | null;
+  requestXML: string | null;
+  responseDateTime: Date | null;
+  responseXML: string | null;
+  parseDateTime: Date | null;
+}
