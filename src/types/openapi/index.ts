@@ -26,6 +26,7 @@ export type StopPlaceSchema = sharedComponents['schemas']['StopPlace']
 export type TopographicPlaceSchema = sharedComponents['schemas']['TopographicPlace']
 export type PointOfInterestSchema = sharedComponents['schemas']['PointOfInterest']
 export type AddressSchema = sharedComponents['schemas']['Address']
+export type PlaceModeStructureSchema = sharedComponents['schemas']['ModeStructure']
 
 export type TripRequestOJP = tripRequestComponents["schemas"]["OJP"];
 export type TripParamsSchema = tripRequestComponents["schemas"]["TripParam"];
