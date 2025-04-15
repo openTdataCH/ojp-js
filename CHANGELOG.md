@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.20.8 - 15.04.2025
+- refactor/next version of the SDK (continued) - [PR #139](https://github.com/openTdataCH/ojp-js/pull/139)
+  - [Fix LIR models (Place.Mode) #148](https://github.com/openTdataCH/ojp-js/pull/148)
+
 ## 0.20.7 - 14.04.2025
 - refactor/next version of the SDK (continued) - [PR #139](https://github.com/openTdataCH/ojp-js/pull/139)
   - fixed JSON (xml-parsed) traverse, catch case for expected empty arrays
