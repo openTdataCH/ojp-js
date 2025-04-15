@@ -2,10 +2,10 @@ import axios, { AxiosHeaders, AxiosRequestConfig } from "axios";
 
 import { PlaceResult, StopEventResult, Trip } from "./models/ojp";
 import { XML_Config, HTTPConfig, Language } from "./types/_all";
-import { LocationInformationRequest, StopEventRequest, TripRequest } from "./models/request";
+import { LocationInformationRequest, StopEventRequest, TripRefineRequest, TripRequest } from "./models/request";
 import { DefaultXML_Config } from "./constants";
 
-type OJP_RequestType = TripRequest | LocationInformationRequest | StopEventRequest;
+type OJP_RequestType = TripRequest | LocationInformationRequest | StopEventRequest | TripRefineRequest;
 export class SDK {
   private requestorRef: string;
   private httpConfig: HTTPConfig;
@@ -138,5 +138,21 @@ export class SDK {
     request.requestInfo.parseDateTime = new Date();
 
     return results;
+  }
+
+  public async fetchTRR_Trips(request: TripRefineRequest): Promise<Trip[]> {
+    const responseXML = await this.computeResponse(request);
+
+    const tripMatches: string[] = responseXML.match(/<Trip\b[^>]*>.*?<\/Trip>/gs) ?? [];
+
+    const trips: Trip[] = [];
+    tripMatches.forEach((tripXML, idx1) => {
+      const trip = Trip.initWithTripXML(tripXML);
+      trips.push(trip);
+    });
+
+    request.requestInfo.parseDateTime = new Date();
+
+    return trips;
   }
 }
