@@ -91,7 +91,7 @@ export function buildXML(obj: Record<string, any>, xmlConfig: XML_Config = Defau
     xmlAttrs.push(xmlAttr);
   }
 
-  const xmlVersionAttr = 'version="' + xmlConfig.version + '"';
+  const xmlVersionAttr = 'version="' + xmlConfig.ojpVersion + '"';
   xmlAttrs.push(xmlVersionAttr);
 
   const xmlParts = [
