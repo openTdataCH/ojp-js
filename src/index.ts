@@ -16,6 +16,7 @@ export {
   LocationInformationRequest, 
   StopEventRequest, 
   TripRequest,
+  TripRefineRequest,
 } from './models/request';
 
 export { GeoPosition } from './models/geoposition';
