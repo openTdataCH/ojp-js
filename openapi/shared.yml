@@ -376,9 +376,9 @@ components:
         mode:
           type: array
           xml:
-            name: PtMode
+            name: Mode
           items:
-            $ref: '#/components/schemas/VehicleModesOfTransportEnum'
+            $ref: '#/components/schemas/ModeStructure'
 
     SharedServiceArrivalDeparture:
       type: object
