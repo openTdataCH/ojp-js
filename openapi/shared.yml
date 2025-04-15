@@ -267,6 +267,73 @@ components:
           type: string
           xml:
             name: houseNumber
+
+    # https://vdvde.github.io/OJP/develop/documentation-tables/ojp.html#type_ojp__ModeStructure
+    ModeStructure:
+      type: object
+      xml:
+        name: Mode
+      required:
+        - ptMode
+      properties:
+        ptMode:
+          $ref: '#/components/schemas/VehicleModesOfTransportEnum'
+          xml:
+            name: PtMode
+        airSubmode:
+          type: string
+          xml:
+            name: AirSubmode
+            namespace: "http://www.siri.org.uk/siri"
+            prefix: siri
+        busSubmode:
+          type: string
+          xml:
+            name: BusSubmode
+            namespace: "http://www.siri.org.uk/siri"
+            prefix: siri
+        coachSubmode:
+          type: string
+          xml:
+            name: CoachSubmode
+            namespace: "http://www.siri.org.uk/siri"
+            prefix: siri
+        funicularSubmode:
+          type: string
+          xml:
+            name: FunicularSubmode
+            namespace: "http://www.siri.org.uk/siri"
+            prefix: siri
+        metroSubmode:
+          type: string
+          xml:
+            name: MetroSubmode
+            namespace: "http://www.siri.org.uk/siri"
+            prefix: siri
+        tramSubmode:
+          type: string
+          xml:
+            name: TramSubmode
+            namespace: "http://www.siri.org.uk/siri"
+            prefix: siri
+        telecabinSubmode:
+          type: string
+          xml:
+            name: TelecabinSubmode
+            namespace: "http://www.siri.org.uk/siri"
+            prefix: siri
+        railSubmode:
+          type: string
+          xml:
+            name: RailSubmode
+            namespace: "http://www.siri.org.uk/siri"
+            prefix: siri
+        waterSubmode:
+          type: string
+          xml:
+            name: WaterSubmode
+            namespace: "http://www.siri.org.uk/siri"
+            prefix: siri
     
     # https://vdvde.github.io/OJP/develop/documentation-tables/ojp.html#type_ojp__PlaceStructure
     Place:
