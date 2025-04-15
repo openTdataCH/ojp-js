@@ -22,6 +22,30 @@ export class SDK {
     this.xmlConfig = DefaultXML_Config;
   }
 
+  private async computeResponse(request: OJP_RequestType): Promise<string> {
+    const requestXML = (() => {
+      if (request.mockRequestXML) {
+        // console.log('TR: using mock request XML');
+        return request.mockRequestXML;
+      }
+
+      const xml = request.buildRequestXML(this.language, this.requestorRef);
+      return xml;
+    })();
+
+    const responseXML: string = await (async () => {
+      if (request.mockResponseXML) {
+        // console.log('TR: using mock response XML');
+        return request.mockResponseXML;
+      }
+
+      const xml = await this.fetchResponse(requestXML);
+      return xml;
+    })();
+
+    return responseXML;
+  }
+
   private async fetchResponse(requestXML: string): Promise<string> {
     const headers = new AxiosHeaders();
     headers.set('Accept', 'application/xml');
