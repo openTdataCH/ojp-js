@@ -83,7 +83,19 @@ export interface paths {
                               longitude: number;
                               latitude: number;
                             };
-                            mode: ("air" | "bus" | "coach" | "trolleyBus" | "metro" | "rail" | "tram" | "water" | "ferry" | "cableway" | "funicular" | "lift" | "other" | "unknown")[];
+                            mode: ({
+                                /** @enum {string} */
+                                ptMode: "air" | "bus" | "coach" | "trolleyBus" | "metro" | "rail" | "tram" | "water" | "ferry" | "cableway" | "funicular" | "lift" | "other" | "unknown";
+                                airSubmode?: string;
+                                busSubmode?: string;
+                                coachSubmode?: string;
+                                funicularSubmode?: string;
+                                metroSubmode?: string;
+                                tramSubmode?: string;
+                                telecabinSubmode?: string;
+                                railSubmode?: string;
+                                waterSubmode?: string;
+                              })[];
                           })[];
                       };
                     };
@@ -484,7 +496,19 @@ export interface components {
               longitude: number;
               latitude: number;
             };
-            mode: ("air" | "bus" | "coach" | "trolleyBus" | "metro" | "rail" | "tram" | "water" | "ferry" | "cableway" | "funicular" | "lift" | "other" | "unknown")[];
+            mode: ({
+                /** @enum {string} */
+                ptMode: "air" | "bus" | "coach" | "trolleyBus" | "metro" | "rail" | "tram" | "water" | "ferry" | "cableway" | "funicular" | "lift" | "other" | "unknown";
+                airSubmode?: string;
+                busSubmode?: string;
+                coachSubmode?: string;
+                funicularSubmode?: string;
+                metroSubmode?: string;
+                tramSubmode?: string;
+                telecabinSubmode?: string;
+                railSubmode?: string;
+                waterSubmode?: string;
+              })[];
           })[];
       };
     };
@@ -875,7 +899,19 @@ export interface components {
                 longitude: number;
                 latitude: number;
               };
-              mode: ("air" | "bus" | "coach" | "trolleyBus" | "metro" | "rail" | "tram" | "water" | "ferry" | "cableway" | "funicular" | "lift" | "other" | "unknown")[];
+              mode: ({
+                  /** @enum {string} */
+                  ptMode: "air" | "bus" | "coach" | "trolleyBus" | "metro" | "rail" | "tram" | "water" | "ferry" | "cableway" | "funicular" | "lift" | "other" | "unknown";
+                  airSubmode?: string;
+                  busSubmode?: string;
+                  coachSubmode?: string;
+                  funicularSubmode?: string;
+                  metroSubmode?: string;
+                  tramSubmode?: string;
+                  telecabinSubmode?: string;
+                  railSubmode?: string;
+                  waterSubmode?: string;
+                })[];
             })[];
         };
       };
@@ -1096,7 +1132,19 @@ export interface components {
                       longitude: number;
                       latitude: number;
                     };
-                    mode: ("air" | "bus" | "coach" | "trolleyBus" | "metro" | "rail" | "tram" | "water" | "ferry" | "cableway" | "funicular" | "lift" | "other" | "unknown")[];
+                    mode: ({
+                        /** @enum {string} */
+                        ptMode: "air" | "bus" | "coach" | "trolleyBus" | "metro" | "rail" | "tram" | "water" | "ferry" | "cableway" | "funicular" | "lift" | "other" | "unknown";
+                        airSubmode?: string;
+                        busSubmode?: string;
+                        coachSubmode?: string;
+                        funicularSubmode?: string;
+                        metroSubmode?: string;
+                        tramSubmode?: string;
+                        telecabinSubmode?: string;
+                        railSubmode?: string;
+                        waterSubmode?: string;
+                      })[];
                   })[];
               };
             };

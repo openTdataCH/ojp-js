@@ -16,6 +16,7 @@ import {
   PointOfInterestSchema,
   AddressSchema,
   VehicleModesOfTransportEnum,
+  PlaceModeStructureSchema,
 } from '../types/openapi/index';
 
 import { GeoPosition, GeoPositionLike } from "./geoposition";
@@ -107,11 +108,11 @@ export class Place implements PlaceSchema {
   public address?: AddressSchema;
   public name: InternationalTextSchema;
   public geoPosition: GeoPosition;
-  public mode: VehicleModesOfTransportEnum[];
+  public mode: PlaceModeStructureSchema[];
 
   public placeType: PlaceTypeEnum | null;
 
-  private constructor(stopPoint: StopPointSchema | undefined, stopPlace: StopPlaceSchema | undefined, topographicPlace: TopographicPlaceSchema | undefined, pointOfInterest: PointOfInterestSchema | undefined, address: AddressSchema | undefined, name: InternationalTextSchema, geoPosition: GeoPosition, mode: VehicleModesOfTransportEnum[]) {
+  private constructor(stopPoint: StopPointSchema | undefined, stopPlace: StopPlaceSchema | undefined, topographicPlace: TopographicPlaceSchema | undefined, pointOfInterest: PointOfInterestSchema | undefined, address: AddressSchema | undefined, name: InternationalTextSchema, geoPosition: GeoPosition, mode: PlaceModeStructureSchema[]) {
     this.stopPoint = stopPoint;
     this.stopPlace = stopPlace;
     this.topographicPlace = topographicPlace;

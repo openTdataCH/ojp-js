@@ -69,7 +69,7 @@ export const MapParentArrayTags: Record<string, string[]> = {
 
   // LIR Response
   'place.pointOfInterest': ['pointOfInterestCategory'],
-  'placeResult.place': ['ptMode'],
+  'placeResult.place': ['mode'],
   'serviceDelivery.OJPLocationInformationDelivery': ['placeResult'],
 
   // SER Response
@@ -85,10 +85,10 @@ export const MapArrayTags: Record<string, boolean> = {
 
   // LIR Request
   'restrictions.placeParam': true,
+  'place.mode': true,
 
   // LIR Response
   'pointOfInterest.pointOfInterestCategory': true,
-  'place.ptMode': true,
   'OJPLocationInformationDelivery.placeResult': true,
 
   // SER Response
