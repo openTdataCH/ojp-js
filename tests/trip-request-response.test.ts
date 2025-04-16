@@ -66,10 +66,10 @@ describe('OJP Test TripRequest Response', () => {
   test('Test TR Response Status', () => {
     const trip = trips[2];
 
-    expect(trip.status.cancelled).toBeFalsy();
-    expect(trip.status.unplanned).toBeFalsy();
-    expect(trip.status.deviation).toBeFalsy();
-    expect(trip.status.delayed).toBeFalsy();
-    expect(trip.status.infeasible).toBe(true);
+    expect(trip.cancelled).toBeFalsy();
+    expect(trip.unplanned).toBeFalsy();
+    expect(trip.deviation).toBeFalsy();
+    expect(trip.delayed).toBeFalsy();
+    expect(trip.infeasible).toBe(true);
   })
 });

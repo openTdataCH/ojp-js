@@ -16,7 +16,6 @@ import {
   PointOfInterestSchema,
   AddressSchema,
   PlaceModeStructureSchema,
-  TripStatusSchema,
 } from '../types/openapi/index';
 
 import { GeoPosition, GeoPositionLike } from "./geoposition";
@@ -68,7 +67,11 @@ export class Trip implements TripSchema {
   public endTime: string;
   public transfers: number;
   public leg: LegSchema[];
-  public status: TripStatusSchema;
+  public cancelled?: boolean;
+  public delayed?: boolean;
+  public deviation?: boolean;
+  public infeasible?: boolean;
+  public unplanned?: boolean;
 
   private constructor(
     id: string, 
@@ -77,7 +80,11 @@ export class Trip implements TripSchema {
     endTime: string,
     transfers: number,
     leg: LegSchema[],
-    status: TripStatusSchema,
+    cancelled?: boolean,
+    delayed?: boolean,
+    deviation?: boolean,
+    infeasible?: boolean,
+    unplanned?: boolean
   ) {
     this.id = id;
     this.duration = duration;
@@ -85,20 +92,29 @@ export class Trip implements TripSchema {
     this.endTime = endTime;
     this.transfers = transfers;
     this.leg = leg;
-    this.status = status;
+    this.cancelled = cancelled;
+    this.delayed = delayed;
+    this.deviation = deviation;
+    this.infeasible = infeasible;
+    this.unplanned = unplanned;
   }
 
   public static initWithTripXML(tripXML: string): Trip {
     const parentTagName = 'TripResult';
     const parsedTrip = parseXML<{ trip: TripSchema }>(tripXML, parentTagName);
-    const tripStatus = { 
-      cancelled: parsedTrip.trip.cancelled,
-      delayed: parsedTrip.trip.delayed,
-      deviation: parsedTrip.trip.deviation, 
-      infeasible: parsedTrip.trip.infeasible, 
-      unplanned: parsedTrip.trip.unplanned,
-    } satisfies TripStatusSchema;
-    const trip = new Trip(parsedTrip.trip.id, parsedTrip.trip.duration, parsedTrip.trip.startTime, parsedTrip.trip.endTime, parsedTrip.trip.transfers, parsedTrip.trip.leg, tripStatus);
+    const trip = new Trip(
+      parsedTrip.trip.id,
+      parsedTrip.trip.duration,
+      parsedTrip.trip.startTime,
+      parsedTrip.trip.endTime,
+      parsedTrip.trip.transfers,
+      parsedTrip.trip.leg,
+      parsedTrip.trip.cancelled,
+      parsedTrip.trip.delayed,
+      parsedTrip.trip.deviation, 
+      parsedTrip.trip.infeasible, 
+      parsedTrip.trip.unplanned,
+    );
     return trip;
   }
 }

@@ -245,13 +245,47 @@ components:
           $ref: '#/components/schemas/ContinuousLeg'
           xml:
             name: ContinuousLeg
-    
-    # https://vdvde.github.io/OJP/develop/documentation-tables/ojp.html#group_ojp__TripStatusGroup
-    TripStatus:
+
+    Trip:
       type: object
       xml:
-        name: TripStatus
+        name: Trip
+      required:
+        - id
+        - duration
+        - startTime
+        - endTime
+        - transfers
+        - leg
       properties:
+        id:
+          type: string
+          xml:
+            name: Id
+        duration:
+          type: string
+          xml:
+            name: Duration
+        startTime:
+          type: string
+          format: date-time
+          xml:
+            name: StartTime
+        endTime:
+          type: string
+          format: date-time
+          xml:
+            name: EndTime
+        transfers:
+          type: number
+          xml:
+            name: Transfers
+        leg:
+          type: array
+          xml:
+            name: Leg
+          items:
+            $ref: "#/components/schemas/Leg"
         unplanned: 
           type: boolean
           xml:
@@ -272,50 +306,6 @@ components:
           type: boolean
           xml:
             name: Infeasible
-    
-    Trip:
-      allOf:
-        - $ref: "#/components/schemas/TripStatus"
-        - type: object
-          xml:
-            name: Trip
-          required:
-            - id
-            - duration
-            - startTime
-            - endTime
-            - transfers
-            - leg
-            - status
-          properties:
-            id:
-              type: string
-              xml:
-                name: Id
-            duration:
-              type: string
-              xml:
-                name: Duration
-            startTime:
-              type: string
-              format: date-time
-              xml:
-                name: StartTime
-            endTime:
-              type: string
-              format: date-time
-              xml:
-                name: EndTime
-            transfers:
-              type: number
-              xml:
-                name: Transfers
-            leg:
-              type: array
-              xml:
-                name: Leg
-              items:
-                $ref: "#/components/schemas/Leg"
 
     # https://vdvde.github.io/OJP/develop/documentation-tables/ojp.html#type_ojp__TripResultStructure
     TripResult:
