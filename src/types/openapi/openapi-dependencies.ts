@@ -13,6 +13,9 @@ export const MapNS_Tags: Record<string, string> = {
   'ServiceDelivery.ResponseTimestamp': 'siri',
   'ServiceDelivery.ProducerRef': 'siri',
 
+  // TRR
+  'OJPTripRefineRequest.RequestTimestamp': 'siri',
+
   // TripRequest  
   'OJPTripRequest.RequestTimestamp': 'siri',
  
@@ -103,6 +106,7 @@ export const MapModelKeepPropertiesXML: Record<string, string[]> = {
   'OJPLocationInformationRequest': ['requestTimestamp', 'initialInput', 'placeRef', 'restrictions'],
   'OJPTripRequest': ['requestTimestamp', 'origin', 'destination', 'via', 'params'],
   'OJPStopEventRequest': ['requestTimestamp', 'location', 'params'],
+  'OJPTripRefineRequest': ['requestTimestamp', 'tripResult'],
   'geoPosition': ['longitude', 'latitude'],
 };
 

@@ -6,6 +6,7 @@ import { components as stopEventRequestComponents } from './generated/ojp-stop-e
 import { components as stopEventResponseComponents } from './generated/ojp-stop-event-response'
 import { components as tripRequestComponents } from './generated/ojp-trip-request';
 import { components as tripReponseComponents } from './generated/ojp-trip-response';
+import { components as trrRequestComponents } from './generated/ojp-trr-request';
 
 // TODO - this can be generated
 export type UseRealtimeDataEnum = sharedComponents["schemas"]["UseRealtimeDataEnum"];
@@ -35,6 +36,8 @@ export type TripRequestSchema = tripRequestComponents["schemas"]["OJPTripRequest
 export type ViaPointSchema = tripRequestComponents["schemas"]["ViaPoint"];
 export type ModeAndModeOfOperationFilterSchema = tripRequestComponents["schemas"]["ModeAndModeOfOperationFilter"];
 
+export type TripResultSchema = tripReponseComponents['schemas']['TripResult'];
+
 export type TripSchema = tripReponseComponents["schemas"]["Trip"];
 export type LegSchema = tripReponseComponents["schemas"]["Leg"];
 
@@ -56,3 +59,6 @@ export type SER_RequestOJP = stopEventRequestComponents['schemas']['OJP'];
 
 export type StopEventResultSchema = stopEventResponseComponents['schemas']['StopEventResult']
 export type StopEventSchema = stopEventResponseComponents['schemas']['StopEvent']
+
+export type TRR_RequestSchema = trrRequestComponents["schemas"]['OJPTripRefineRequest'];
+export type TRR_RequestOJP = trrRequestComponents['schemas']['OJP'];

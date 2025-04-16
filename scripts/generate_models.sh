@@ -11,6 +11,8 @@ SRC_FILES=(
     "ojp-stop-event-response.yaml"
     "ojp-location-request.yaml"
     "ojp-location-response.yaml"
+    "ojp-trr-request.yaml"
+    "ojp-trr-response.yaml"
     "shared.yml"
 )
 for file in "${SRC_FILES[@]}"; do

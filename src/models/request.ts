@@ -1,16 +1,26 @@
-import { InitialInputSchema, LIR_RequestParamsSchema, LocationInformationRequestOJP, LocationInformationRequestSchema, PlaceContextSchema, PlaceTypeEnum, SER_RequestLocationSchema, SER_RequestOJP, SER_RequestParamsSchema, StopEventRequestSchema, TripParamsSchema, TripRequestOJP, TripRequestSchema, ViaPointSchema } from "../types/openapi/index";
+import { InitialInputSchema, LIR_RequestParamsSchema, LocationInformationRequestOJP, LocationInformationRequestSchema, PlaceContextSchema, PlaceTypeEnum, SER_RequestLocationSchema, SER_RequestOJP, SER_RequestParamsSchema, StopEventRequestSchema, TripParamsSchema, TripRequestOJP, TripRequestSchema, TripResultSchema, TRR_RequestOJP, TRR_RequestSchema, ViaPointSchema } from "../types/openapi/index";
 
-import { Language } from "../types/_all";
-import { Place, PlaceRef } from './ojp';
+import { Language, RequestInfo } from "../types/_all";
+import { Place, PlaceRef, Trip } from './ojp';
 import { buildXML } from "../helpers/xml/builder";
 
 class BaseRequest {
+  public requestInfo: RequestInfo;
+
   public mockRequestXML: string | null;
   public mockResponseXML: string | null;
 
   public enableExtensions: boolean;
 
   protected constructor() {
+    this.requestInfo = {
+      requestDateTime: null,
+      requestXML: null,
+      responseDateTime: null,
+      responseXML: null,
+      parseDateTime: null,
+    };
+
     this.mockRequestXML = null;
     this.mockResponseXML = null;
     this.enableExtensions = true;
@@ -18,7 +28,7 @@ class BaseRequest {
 }
 
 export class TripRequest extends BaseRequest implements TripRequestSchema {
-  public requestTimestamp: string
+  public requestTimestamp: string;
   
   public origin: PlaceContextSchema;
   public destination: PlaceContextSchema;
@@ -361,6 +371,50 @@ export class StopEventRequest extends BaseRequest implements StopEventRequestSch
           requestTimestamp: this.requestTimestamp,
           requestorRef: requestorRef,
           OJPStopEventRequest: this,
+        }
+      },
+    };
+
+    const xmlS = buildXML(requestOJP);
+
+    return xmlS;
+  }
+}
+
+export class TripRefineRequest extends BaseRequest implements TRR_RequestSchema {
+  public requestTimestamp: string;
+  public tripResult: TripResultSchema;
+
+  private constructor(tripResult: TripResultSchema) {
+    super();
+
+    const now = new Date();
+    this.requestTimestamp = now.toISOString();
+
+    this.tripResult = tripResult;
+  }
+
+  public static initWithTrip(trip: Trip): TripRefineRequest {
+    const tripResult: TripResultSchema = {
+      id: trip.id,
+      trip: trip,
+    };
+
+    const request = new TripRefineRequest(tripResult);
+    
+    return request;
+  }
+
+  public buildRequestXML(language: Language, requestorRef: string): string {
+    const requestOJP: TRR_RequestOJP = {
+      OJPRequest: {
+        serviceRequest: {
+          serviceRequestContext: {
+            language: language
+          },
+          requestTimestamp: this.requestTimestamp,
+          requestorRef: requestorRef,
+          OJPTripRefineRequest: this,
         }
       },
     };

@@ -1,0 +1,92 @@
+openapi: 3.0.3
+info:
+  title: XML OJP 2.0 API
+  description: API that returns trip data in XML format.
+  version: 0.0.1
+
+servers:
+  - url: https://api.example.com
+
+paths:
+  /ojp:
+    post:
+      summary: Main /ojp endpoint
+      description: Main /ojp endpoint
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/OJP"
+        "500":
+          description: Server error
+
+components:
+  schemas:
+    # https://vdvde.github.io/OJP/release/2.0/documentation-tables/ojp.html#type_ojp__OJPTripRefineRequestStructure
+    OJPTripRefineRequest:
+      type: object
+      xml:
+        name: OJPTripRefineRequest
+      required:
+        - requestTimestamp
+        - tripResult
+      properties:
+        requestTimestamp:
+          type: string
+          xml:
+            name: RequestTimestamp
+            namespace: "http://www.siri.org.uk/siri"
+            prefix: siri
+        tripResult:
+          $ref: './ojp-trip-response.yaml#/components/schemas/TripResult'
+          xml:
+            name: TripResult
+
+    OJP:
+      type: object
+      xml:
+        name: OJP
+      required:
+        - OJPRequest
+      properties:
+        OJPRequest:
+          type: object
+          xml:
+            name: OJPRequest
+          required:
+            - serviceRequest
+          properties:
+            serviceRequest:
+              type: object
+              xml:
+                name: ServiceRequest
+                namespace: "http://www.siri.org.uk/siri"
+                prefix: siri
+              required:
+                - requestTimestamp
+                - requestorRef
+                - OJPTripRequest
+              properties:
+                serviceRequestContext:
+                  $ref: './shared.yml#/components/schemas/ServiceRequestContext'
+                  xml:
+                    name: ServiceRequestContext
+                requestTimestamp:
+                  type: string
+                  xml:
+                    name: RequestTimestamp
+                    namespace: "http://www.siri.org.uk/siri"
+                    prefix: siri
+                requestorRef:
+                  type: string
+                  xml:
+                    name: RequestorRef
+                    namespace: "http://www.siri.org.uk/siri"
+                    prefix: siri
+                OJPTripRefineRequest:
+                  $ref: '#/components/schemas/OJPTripRefineRequest'
+                  xml:
+                    name: OJPTripRefineRequest              
+        
