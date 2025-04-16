@@ -35,6 +35,7 @@ export type TripRequestSchema = tripRequestComponents["schemas"]["OJPTripRequest
 export type ViaPointSchema = tripRequestComponents["schemas"]["ViaPoint"];
 export type ModeAndModeOfOperationFilterSchema = tripRequestComponents["schemas"]["ModeAndModeOfOperationFilter"];
 
+export type TripStatusSchema = tripReponseComponents["schemas"]["TripStatus"];
 export type TripSchema = tripReponseComponents["schemas"]["Trip"];
 export type LegSchema = tripReponseComponents["schemas"]["Leg"];
 

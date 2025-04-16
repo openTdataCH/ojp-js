@@ -31,6 +31,12 @@ export interface paths {
                     tripResult: ({
                         id: string;
                         trip: {
+                          unplanned?: boolean;
+                          cancelled?: boolean;
+                          deviation?: boolean;
+                          delayed?: boolean;
+                          infeasible?: boolean;
+                        } & ({
                           id: string;
                           duration: string;
                           /** Format: date-time */
@@ -264,7 +270,7 @@ export interface paths {
                                 duration: string;
                               };
                             })[];
-                        };
+                        });
                       })[];
                   };
                 };
@@ -890,7 +896,20 @@ export interface components {
         duration: string;
       };
     };
+    TripStatus: {
+      unplanned?: boolean;
+      cancelled?: boolean;
+      deviation?: boolean;
+      delayed?: boolean;
+      infeasible?: boolean;
+    };
     Trip: {
+      unplanned?: boolean;
+      cancelled?: boolean;
+      deviation?: boolean;
+      delayed?: boolean;
+      infeasible?: boolean;
+    } & ({
       id: string;
       duration: string;
       /** Format: date-time */
@@ -1124,10 +1143,16 @@ export interface components {
             duration: string;
           };
         })[];
-    };
+    });
     TripResult: {
       id: string;
       trip: {
+        unplanned?: boolean;
+        cancelled?: boolean;
+        deviation?: boolean;
+        delayed?: boolean;
+        infeasible?: boolean;
+      } & ({
         id: string;
         duration: string;
         /** Format: date-time */
@@ -1361,7 +1386,7 @@ export interface components {
               duration: string;
             };
           })[];
-      };
+      });
     };
     OJPTripDelivery: {
       responseTimestamp: string;
@@ -1371,6 +1396,12 @@ export interface components {
       tripResult: ({
           id: string;
           trip: {
+            unplanned?: boolean;
+            cancelled?: boolean;
+            deviation?: boolean;
+            delayed?: boolean;
+            infeasible?: boolean;
+          } & ({
             id: string;
             duration: string;
             /** Format: date-time */
@@ -1604,7 +1635,7 @@ export interface components {
                   duration: string;
                 };
               })[];
-          };
+          });
         })[];
     };
     OJP: {
@@ -1620,6 +1651,12 @@ export interface components {
             tripResult: ({
                 id: string;
                 trip: {
+                  unplanned?: boolean;
+                  cancelled?: boolean;
+                  deviation?: boolean;
+                  delayed?: boolean;
+                  infeasible?: boolean;
+                } & ({
                   id: string;
                   duration: string;
                   /** Format: date-time */
@@ -1853,7 +1890,7 @@ export interface components {
                         duration: string;
                       };
                     })[];
-                };
+                });
               })[];
           };
         };
