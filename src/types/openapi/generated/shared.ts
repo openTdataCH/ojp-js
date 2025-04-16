@@ -117,6 +117,12 @@ export interface components {
       telecabinSubmode?: string;
       railSubmode?: string;
       waterSubmode?: string;
+      name?: {
+        text: string;
+      };
+      shortName?: {
+        text: string;
+      };
     };
     Place: {
       stopPoint?: {
@@ -186,6 +192,12 @@ export interface components {
           telecabinSubmode?: string;
           railSubmode?: string;
           waterSubmode?: string;
+          name?: {
+            text: string;
+          };
+          shortName?: {
+            text: string;
+          };
         })[];
     };
     SharedServiceArrivalDeparture: {
@@ -221,16 +233,6 @@ export interface components {
       noBoardingAtStop?: boolean;
       noAlightingAtStop?: boolean;
     };
-    Mode: {
-      ptMode: string;
-      railSubmode?: string;
-      name: {
-        text: string;
-      };
-      shortName: {
-        text: string;
-      };
-    };
     ProductCategory: {
       name?: {
         text: string;
@@ -254,12 +256,21 @@ export interface components {
       lineRef: string;
       directionRef?: string;
       mode: {
-        ptMode: string;
+        /** @enum {string} */
+        ptMode: "air" | "bus" | "coach" | "trolleyBus" | "metro" | "rail" | "tram" | "water" | "ferry" | "cableway" | "funicular" | "lift" | "other" | "unknown";
+        airSubmode?: string;
+        busSubmode?: string;
+        coachSubmode?: string;
+        funicularSubmode?: string;
+        metroSubmode?: string;
+        tramSubmode?: string;
+        telecabinSubmode?: string;
         railSubmode?: string;
-        name: {
+        waterSubmode?: string;
+        name?: {
           text: string;
         };
-        shortName: {
+        shortName?: {
           text: string;
         };
       };

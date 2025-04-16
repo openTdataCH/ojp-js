@@ -94,6 +94,12 @@ export interface paths {
                               telecabinSubmode?: string;
                               railSubmode?: string;
                               waterSubmode?: string;
+                              name?: {
+                                text: string;
+                              };
+                              shortName?: {
+                                text: string;
+                              };
                             })[];
                         };
                         complete: boolean;
@@ -185,6 +191,12 @@ export interface components {
             telecabinSubmode?: string;
             railSubmode?: string;
             waterSubmode?: string;
+            name?: {
+              text: string;
+            };
+            shortName?: {
+              text: string;
+            };
           })[];
       };
       complete: boolean;
@@ -264,6 +276,12 @@ export interface components {
                 telecabinSubmode?: string;
                 railSubmode?: string;
                 waterSubmode?: string;
+                name?: {
+                  text: string;
+                };
+                shortName?: {
+                  text: string;
+                };
               })[];
           };
           complete: boolean;
@@ -349,6 +367,12 @@ export interface components {
                       telecabinSubmode?: string;
                       railSubmode?: string;
                       waterSubmode?: string;
+                      name?: {
+                        text: string;
+                      };
+                      shortName?: {
+                        text: string;
+                      };
                     })[];
                 };
                 complete: boolean;

@@ -137,12 +137,21 @@ export interface paths {
                                   lineRef: string;
                                   directionRef?: string;
                                   mode: {
-                                    ptMode: string;
+                                    /** @enum {string} */
+                                    ptMode: "air" | "bus" | "coach" | "trolleyBus" | "metro" | "rail" | "tram" | "water" | "ferry" | "cableway" | "funicular" | "lift" | "other" | "unknown";
+                                    airSubmode?: string;
+                                    busSubmode?: string;
+                                    coachSubmode?: string;
+                                    funicularSubmode?: string;
+                                    metroSubmode?: string;
+                                    tramSubmode?: string;
+                                    telecabinSubmode?: string;
                                     railSubmode?: string;
-                                    name: {
+                                    waterSubmode?: string;
+                                    name?: {
                                       text: string;
                                     };
-                                    shortName: {
+                                    shortName?: {
                                       text: string;
                                     };
                                   };
@@ -264,6 +273,11 @@ export interface paths {
                                 duration: string;
                               };
                             })[];
+                          unplanned?: boolean;
+                          cancelled?: boolean;
+                          deviation?: boolean;
+                          delayed?: boolean;
+                          infeasible?: boolean;
                         };
                       })[];
                   };
@@ -538,12 +552,21 @@ export interface components {
         lineRef: string;
         directionRef?: string;
         mode: {
-          ptMode: string;
+          /** @enum {string} */
+          ptMode: "air" | "bus" | "coach" | "trolleyBus" | "metro" | "rail" | "tram" | "water" | "ferry" | "cableway" | "funicular" | "lift" | "other" | "unknown";
+          airSubmode?: string;
+          busSubmode?: string;
+          coachSubmode?: string;
+          funicularSubmode?: string;
+          metroSubmode?: string;
+          tramSubmode?: string;
+          telecabinSubmode?: string;
           railSubmode?: string;
-          name: {
+          waterSubmode?: string;
+          name?: {
             text: string;
           };
-          shortName: {
+          shortName?: {
             text: string;
           };
         };
@@ -763,12 +786,21 @@ export interface components {
           lineRef: string;
           directionRef?: string;
           mode: {
-            ptMode: string;
+            /** @enum {string} */
+            ptMode: "air" | "bus" | "coach" | "trolleyBus" | "metro" | "rail" | "tram" | "water" | "ferry" | "cableway" | "funicular" | "lift" | "other" | "unknown";
+            airSubmode?: string;
+            busSubmode?: string;
+            coachSubmode?: string;
+            funicularSubmode?: string;
+            metroSubmode?: string;
+            tramSubmode?: string;
+            telecabinSubmode?: string;
             railSubmode?: string;
-            name: {
+            waterSubmode?: string;
+            name?: {
               text: string;
             };
-            shortName: {
+            shortName?: {
               text: string;
             };
           };
@@ -997,12 +1029,21 @@ export interface components {
               lineRef: string;
               directionRef?: string;
               mode: {
-                ptMode: string;
+                /** @enum {string} */
+                ptMode: "air" | "bus" | "coach" | "trolleyBus" | "metro" | "rail" | "tram" | "water" | "ferry" | "cableway" | "funicular" | "lift" | "other" | "unknown";
+                airSubmode?: string;
+                busSubmode?: string;
+                coachSubmode?: string;
+                funicularSubmode?: string;
+                metroSubmode?: string;
+                tramSubmode?: string;
+                telecabinSubmode?: string;
                 railSubmode?: string;
-                name: {
+                waterSubmode?: string;
+                name?: {
                   text: string;
                 };
-                shortName: {
+                shortName?: {
                   text: string;
                 };
               };
@@ -1124,6 +1165,11 @@ export interface components {
             duration: string;
           };
         })[];
+      unplanned?: boolean;
+      cancelled?: boolean;
+      deviation?: boolean;
+      delayed?: boolean;
+      infeasible?: boolean;
     };
     TripResult: {
       id: string;
@@ -1234,12 +1280,21 @@ export interface components {
                 lineRef: string;
                 directionRef?: string;
                 mode: {
-                  ptMode: string;
+                  /** @enum {string} */
+                  ptMode: "air" | "bus" | "coach" | "trolleyBus" | "metro" | "rail" | "tram" | "water" | "ferry" | "cableway" | "funicular" | "lift" | "other" | "unknown";
+                  airSubmode?: string;
+                  busSubmode?: string;
+                  coachSubmode?: string;
+                  funicularSubmode?: string;
+                  metroSubmode?: string;
+                  tramSubmode?: string;
+                  telecabinSubmode?: string;
                   railSubmode?: string;
-                  name: {
+                  waterSubmode?: string;
+                  name?: {
                     text: string;
                   };
-                  shortName: {
+                  shortName?: {
                     text: string;
                   };
                 };
@@ -1361,6 +1416,11 @@ export interface components {
               duration: string;
             };
           })[];
+        unplanned?: boolean;
+        cancelled?: boolean;
+        deviation?: boolean;
+        delayed?: boolean;
+        infeasible?: boolean;
       };
     };
     OJPTripDelivery: {
@@ -1477,12 +1537,21 @@ export interface components {
                     lineRef: string;
                     directionRef?: string;
                     mode: {
-                      ptMode: string;
+                      /** @enum {string} */
+                      ptMode: "air" | "bus" | "coach" | "trolleyBus" | "metro" | "rail" | "tram" | "water" | "ferry" | "cableway" | "funicular" | "lift" | "other" | "unknown";
+                      airSubmode?: string;
+                      busSubmode?: string;
+                      coachSubmode?: string;
+                      funicularSubmode?: string;
+                      metroSubmode?: string;
+                      tramSubmode?: string;
+                      telecabinSubmode?: string;
                       railSubmode?: string;
-                      name: {
+                      waterSubmode?: string;
+                      name?: {
                         text: string;
                       };
-                      shortName: {
+                      shortName?: {
                         text: string;
                       };
                     };
@@ -1604,6 +1673,11 @@ export interface components {
                   duration: string;
                 };
               })[];
+            unplanned?: boolean;
+            cancelled?: boolean;
+            deviation?: boolean;
+            delayed?: boolean;
+            infeasible?: boolean;
           };
         })[];
     };
@@ -1726,12 +1800,21 @@ export interface components {
                           lineRef: string;
                           directionRef?: string;
                           mode: {
-                            ptMode: string;
+                            /** @enum {string} */
+                            ptMode: "air" | "bus" | "coach" | "trolleyBus" | "metro" | "rail" | "tram" | "water" | "ferry" | "cableway" | "funicular" | "lift" | "other" | "unknown";
+                            airSubmode?: string;
+                            busSubmode?: string;
+                            coachSubmode?: string;
+                            funicularSubmode?: string;
+                            metroSubmode?: string;
+                            tramSubmode?: string;
+                            telecabinSubmode?: string;
                             railSubmode?: string;
-                            name: {
+                            waterSubmode?: string;
+                            name?: {
                               text: string;
                             };
-                            shortName: {
+                            shortName?: {
                               text: string;
                             };
                           };
@@ -1853,6 +1936,11 @@ export interface components {
                         duration: string;
                       };
                     })[];
+                  unplanned?: boolean;
+                  cancelled?: boolean;
+                  deviation?: boolean;
+                  delayed?: boolean;
+                  infeasible?: boolean;
                 };
               })[];
           };
