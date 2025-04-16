@@ -15,8 +15,8 @@ import {
   TopographicPlaceSchema,
   PointOfInterestSchema,
   AddressSchema,
-  VehicleModesOfTransportEnum,
   PlaceModeStructureSchema,
+  TripStatusSchema,
 } from '../types/openapi/index';
 
 import { GeoPosition, GeoPositionLike } from "./geoposition";
@@ -68,6 +68,7 @@ export class Trip implements TripSchema {
   public endTime: string;
   public transfers: number;
   public leg: LegSchema[];
+  public status: TripStatusSchema;
 
   private constructor(
     id: string, 
@@ -76,6 +77,7 @@ export class Trip implements TripSchema {
     endTime: string,
     transfers: number,
     leg: LegSchema[],
+    status: TripStatusSchema,
   ) {
     this.id = id;
     this.duration = duration;
@@ -83,13 +85,20 @@ export class Trip implements TripSchema {
     this.endTime = endTime;
     this.transfers = transfers;
     this.leg = leg;
+    this.status = status;
   }
 
   public static initWithTripXML(tripXML: string): Trip {
     const parentTagName = 'TripResult';
     const parsedTrip = parseXML<{ trip: TripSchema }>(tripXML, parentTagName);
-    const trip = new Trip(parsedTrip.trip.id, parsedTrip.trip.duration, parsedTrip.trip.startTime, parsedTrip.trip.endTime, parsedTrip.trip.transfers, parsedTrip.trip.leg);
-
+    const tripStatus = { 
+      cancelled: parsedTrip.trip.cancelled,
+      delayed: parsedTrip.trip.delayed,
+      deviation: parsedTrip.trip.deviation, 
+      infeasible: parsedTrip.trip.infeasible, 
+      unplanned: parsedTrip.trip.unplanned,
+    } satisfies TripStatusSchema;
+    const trip = new Trip(parsedTrip.trip.id, parsedTrip.trip.duration, parsedTrip.trip.startTime, parsedTrip.trip.endTime, parsedTrip.trip.transfers, parsedTrip.trip.leg, tripStatus);
     return trip;
   }
 }
