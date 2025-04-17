@@ -4,7 +4,6 @@ import { RequestInfo } from "../request";
 import { Trip } from "../trip";
 import { NovaFare_Response, NovaFareParser } from "./nova-request-parser";
 import { ApiConfig } from '../types/stage-config';
-import { OJP_Helpers } from '../helpers/ojp-helpers';
 import { XML_Config } from '../types/_all';
 import { REQUESTOR_REF, XML_Config_OJPv1 } from '../constants';
 import { Language } from '../types/language-type';
@@ -34,20 +33,13 @@ export class NovaRequest {
   }
 
   public fetchResponseForTrips(trips: Trip[]) {
-    const ojpV1_XML_Config: XML_Config = {
-      ojpVersion: '1.0',
-      defaultNS: null,
-      mapNS: {
-        'ojp': 'http://www.vdv.de/ojp',
-        'siri': 'http://www.siri.org.uk/siri',
-      },
-    };
+    const xmlConfig = XML_Config_OJPv1;
 
     const now = new Date();
-    const serviceRequestNode = this.buildServiceRequestNode(ojpV1_XML_Config, now);
+    const serviceRequestNode = this.buildServiceRequestNode(xmlConfig, now);
 
     trips.forEach(trip => {
-      this.addTripToServiceRequestNode(serviceRequestNode, ojpV1_XML_Config, trip, now);
+      this.addTripToServiceRequestNode(serviceRequestNode, xmlConfig, trip, now);
     });
 
     return this.fetchResponse(serviceRequestNode);
@@ -73,8 +65,7 @@ export class NovaRequest {
     const dateF = requestDate.toISOString();
     serviceRequestNode.ele(siriPrefix + 'RequestTimestamp', dateF);
 
-    const requestorRef = OJP_Helpers.buildRequestorRef();
-    serviceRequestNode.ele(siriPrefix + "RequestorRef", requestorRef);
+    serviceRequestNode.ele(siriPrefix + "RequestorRef", this.requestorRef);
 
     return serviceRequestNode;
   }
