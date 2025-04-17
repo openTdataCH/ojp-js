@@ -60,5 +60,6 @@ export type SER_RequestOJP = stopEventRequestComponents['schemas']['OJP'];
 export type StopEventResultSchema = stopEventResponseComponents['schemas']['StopEventResult']
 export type StopEventSchema = stopEventResponseComponents['schemas']['StopEvent']
 
+export type TRR_RequestParamsSchema = trrRequestComponents['schemas']['TripRefineParam']
 export type TRR_RequestSchema = trrRequestComponents["schemas"]['OJPTripRefineRequest'];
 export type TRR_RequestOJP = trrRequestComponents['schemas']['OJP'];
