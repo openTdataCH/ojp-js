@@ -6,7 +6,6 @@ import { StopEventType } from '../../types/stop-event-type';
 import { StopEventRequest_Response } from '../types/stop-event-request.type';
 import { StopEventRequestParser } from './stop-event-request-parser';
 import { Language } from '../../types/language-type';
-import { OJP_Helpers } from '../../helpers/ojp-helpers';
 import { GeoPosition } from '../../location/geoposition';
 import { OJP_VERSION } from '../../constants';
 import { UseRealtimeDataEnumeration } from '../../types/_all';
@@ -76,12 +75,7 @@ export class StopEventRequest extends OJPBaseRequest {
         super.buildRequestNode();
 
         const dateNowF = new Date().toISOString();
-        const dateF = this.depArrTime.toISOString();
-    
-        this.serviceRequestNode.ele('RequestTimestamp', dateNowF);
-
-        this.serviceRequestNode.ele("RequestorRef", OJP_Helpers.buildRequestorRef());
-
+       
         const requestNode = this.serviceRequestNode.ele('ojp:OJPStopEventRequest');
         requestNode.ele('RequestTimestamp', dateNowF);
 
@@ -93,6 +87,7 @@ export class StopEventRequest extends OJPBaseRequest {
             requestPlaceRefNode.ele('ojp:LocationName').ele('Text', '');
         }
 
+        const dateF = this.depArrTime.toISOString();
         locationNode.ele('ojp:DepArrTime', dateF);
 
         const requestParamsNode = requestNode.ele('ojp:Params');

@@ -12,7 +12,6 @@ import { TripModeType } from '../../types/trip-mode-type';
 import { IndividualTransportMode } from '../../types/individual-mode.types';
 import { ModeOfTransportType } from '../../types/mode-of-transport.type';
 import { JourneyPointType } from '../../types/journey-points';
-import { OJP_Helpers } from "../../helpers/ojp-helpers";
 import { OJP_VERSION } from "../../constants";
 import { UseRealtimeDataEnumeration } from "../../types/_all";
 
@@ -176,13 +175,10 @@ export class TripRequest extends OJPBaseRequest {
   protected buildRequestNode(): void {
     super.buildRequestNode();
 
-    const now = new Date();
-    const dateF = now.toISOString();
-    this.serviceRequestNode.ele("RequestTimestamp", dateF);
-
-    this.serviceRequestNode.ele("RequestorRef", OJP_Helpers.buildRequestorRef());
-
     const tripRequestNode = this.serviceRequestNode.ele("ojp:OJPTripRequest");
+    
+    const now = new Date();
+    const dateF = now.toISOString();    
     tripRequestNode.ele("RequestTimestamp", dateF);
 
     const modeType = this.modeType;
