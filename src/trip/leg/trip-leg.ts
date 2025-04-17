@@ -11,6 +11,7 @@ import { StopPointType } from '../../types/stop-point-type'
 import { Duration } from '../../shared/duration'
 import { PtSituationElement } from '../../situation/situation-element'
 import { DEBUG_LEVEL } from '../../constants'
+import { XML_Config } from '../../types/_all'
 
 export type LegType = 'ContinuousLeg' | 'TimedLeg' | 'TransferLeg'
 
@@ -96,7 +97,7 @@ export class TripLeg {
     location.patchWithAnotherLocation(contextLocation);
   }
 
-  public addToXMLNode(parentNode: XMLElement) {
+  public addToXMLNode(parentNode: XMLElement, xmlConfig: XML_Config) {
     // override
     debugger;
   }

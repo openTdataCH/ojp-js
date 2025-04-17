@@ -10,6 +10,7 @@ import { IndividualTransportMode, TransferMode } from '../../types/individual-mo
 import { ServiceBooking } from './continous-leg/service-booking'
 import { TreeNode } from '../../xml/tree-node'
 import { XMLElement } from 'xmlbuilder'
+import { XML_Config } from '../../types/_all'
 type PersonalModeEnum = 'foot' | 'bicycle' | 'car' | 'motorcycle' | 'truck' | 'scooter' | 'other';
 type PersonalModeOfOperation = 'self' | 'own' | 'otherOwned' | 'privateLift' | 'lease';
 interface ContinuousLegService {
@@ -224,9 +225,15 @@ export class TripContinuousLeg extends TripLeg {
     return this.legDistance + ' m'
   }
 
-  public addToXMLNode(parentNode: XMLElement) {
-    const tripLegNode = parentNode.ele('ojp:TripLeg');
-    tripLegNode.ele('ojp:LegId', this.legID);
-    tripLegNode.ele('ojp:' + this.legType);
+  public addToXMLNode(parentNode: XMLElement, xmlConfig: XML_Config) {
+    const ojpPrefix = xmlConfig.defaultNS === 'ojp' ? '' : 'ojp:';
+    const siriPrefix = xmlConfig.defaultNS === 'siri' ? '' : 'siri:';
+    const isOJPv1 = xmlConfig.ojpVersion === '1.0';
+
+    const legNodeName = isOJPv1 ? 'TripLeg' : 'Leg';
+    const tripLegNode = parentNode.ele(ojpPrefix + legNodeName);
+    
+    const legIdTagName = isOJPv1 ? 'LegId' : 'Id';
+    tripLegNode.ele(ojpPrefix + legIdTagName, this.legID);
   }
 }
