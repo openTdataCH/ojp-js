@@ -19,7 +19,7 @@ interface ContinuousLegService {
   personalModeOfOperation: PersonalModeOfOperation;
 }
 
-export class TripContinousLeg extends TripLeg {
+export class TripContinuousLeg extends TripLeg {
   public legTransportMode: IndividualTransportMode | null
   public legDistance: number
   public pathGuidance: PathGuidance | null
@@ -45,6 +45,7 @@ export class TripContinousLeg extends TripLeg {
     if (treeNode === null) {
       return null;
     }
+
     const legStartPlaceRefTreeNode = treeNode.findChildNamed('LegStart');
     const legEndPlaceRefTreeNode = treeNode.findChildNamed('LegEnd');
     if (legStartPlaceRefTreeNode === null || legEndPlaceRefTreeNode === null) {
@@ -60,7 +61,7 @@ export class TripContinousLeg extends TripLeg {
     let distanceS = treeNode.findTextFromChildNamed('Length') ?? '0';
     const legDistance = parseInt(distanceS);
 
-    const tripLeg = new TripContinousLeg(legType, legIDx, legDistance, legStartPlaceRef, legEndPlaceRef);
+    const tripLeg = new TripContinuousLeg(legType, legIDx, legDistance, legStartPlaceRef, legEndPlaceRef);
     tripLeg.legDuration = Duration.initWithTreeNode(treeNode);
 
     tripLeg.pathGuidance = PathGuidance.initWithTreeNode(treeNode);
@@ -97,7 +98,7 @@ export class TripContinousLeg extends TripLeg {
       return null;
     }
 
-    if (legType === 'TimedLeg' || legType === 'ContinousLeg') {
+    if (legType === 'ContinuousLeg') {
       legModeS = treeNode.findTextFromChildNamed('Service/IndividualMode');
       if (legModeS === null) {
         const personalModeParts: string[] = [];
