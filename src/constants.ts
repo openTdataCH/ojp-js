@@ -43,3 +43,4 @@ export const XML_Config_OJPv2: XML_Config = {
     },
 };
 
+export const REQUESTOR_REF = 'OJPv' + OJP_VERSION + '_JS_SDK_v' + SDK_VERSION;
