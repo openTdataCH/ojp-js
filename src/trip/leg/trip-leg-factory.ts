@@ -11,28 +11,19 @@ export class TripLegFactory {
     }
     const legID = parseInt(legID_string, 10);
 
-    const transferLegTreeNode = treeNode.findChildNamed('TransferLeg');
-    if (transferLegTreeNode) {
-      const transferLeg = TripContinousLeg.initWithTreeNode(legID, transferLegTreeNode, 'TransferLeg');
-      if (transferLeg) {
-        return transferLeg;
-      }
+    const transferLeg = TripContinuousLeg.initWithTreeNode(legID, treeNode, 'TransferLeg');
+    if (transferLeg) {
+      return transferLeg;
     }
 
-    const timedLegTreeNode = treeNode.findChildNamed('TimedLeg');
-    if (timedLegTreeNode) {
-      const timedLeg = TripTimedLeg.initWithTreeNode(legID, timedLegTreeNode);
-      if (timedLeg) {
-        return timedLeg;
-      }
+    const timedLeg = TripTimedLeg.initWithTreeNode(legID, treeNode);
+    if (timedLeg) {
+      return timedLeg;
     }
 
-    const tripContinousLegTreeNode = treeNode.findChildNamed('ContinuousLeg');
-    if (tripContinousLegTreeNode) {
-      const tripContinousLeg = TripContinousLeg.initWithTreeNode(legID, tripContinousLegTreeNode, 'ContinousLeg');
-      if (tripContinousLeg) {
-        return tripContinousLeg;
-      }
+    const tripContinousLeg = TripContinuousLeg.initWithTreeNode(legID, treeNode, 'ContinuousLeg');
+    if (tripContinousLeg) {
+      return tripContinousLeg;
     }
 
     return null;
