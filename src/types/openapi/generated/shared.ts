@@ -233,16 +233,6 @@ export interface components {
       noBoardingAtStop?: boolean;
       noAlightingAtStop?: boolean;
     };
-    Mode: {
-      ptMode: string;
-      railSubmode?: string;
-      name: {
-        text: string;
-      };
-      shortName: {
-        text: string;
-      };
-    };
     ProductCategory: {
       name?: {
         text: string;
