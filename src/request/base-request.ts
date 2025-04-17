@@ -4,21 +4,28 @@ import * as xmlbuilder from "xmlbuilder";
 import { ApiConfig } from '../types/stage-config';
 import { RequestInfo } from './types/request-info.type';
 import { Language } from '../types/language-type';
+import { XML_Config } from '../types/_all';
+import { REQUESTOR_REF, XML_Config_OJPv2 } from '../constants';
 
 export class OJPBaseRequest {
   private stageConfig: ApiConfig;
   private language: Language;
+  protected xmlConfig: XML_Config;
+  private requestorRef: string;
   protected serviceRequestNode: xmlbuilder.XMLElement;
 
   public requestInfo: RequestInfo;
 
-  public logRequests: boolean
+  public logRequests: boolean;
   protected mockRequestXML: string | null;
   protected mockResponseXML: string | null;
 
-  constructor(stageConfig: ApiConfig, language: Language) {
+  constructor(stageConfig: ApiConfig, language: Language, xmlConfig: XML_Config = XML_Config_OJPv2, requestorRef = REQUESTOR_REF) {
     this.stageConfig = stageConfig;
     this.language = language;
+    this.xmlConfig = xmlConfig;
+    this.requestorRef = requestorRef;
+
     this.serviceRequestNode = this.computeBaseServiceRequestNode();
     
     this.requestInfo = {
