@@ -11,6 +11,8 @@ import { ServiceBooking } from './continous-leg/service-booking'
 import { TreeNode } from '../../xml/tree-node'
 import { XMLElement } from 'xmlbuilder'
 import { XML_Config } from '../../types/_all'
+import { StopPointType } from '../../types/stop-point-type';
+
 type PersonalModeEnum = 'foot' | 'bicycle' | 'car' | 'motorcycle' | 'truck' | 'scooter' | 'other';
 type PersonalModeOfOperation = 'self' | 'own' | 'otherOwned' | 'privateLift' | 'lease';
 interface ContinuousLegService {
@@ -239,5 +241,53 @@ export class TripContinuousLeg extends TripLeg {
     
     const legIdTagName = isOJPv1 ? 'LegId' : 'Id';
     tripLegNode.ele(ojpPrefix + legIdTagName, this.legID);
+
+    const legDurationF = this.legDuration?.asOJPFormattedText() ?? null;
+    if (legDurationF) {
+      tripLegNode.ele(ojpPrefix + 'Duration', legDurationF);
+    }
+
+    const tripLegNodeType = tripLegNode.ele(ojpPrefix + this.legType);
+
+    if (this.legType === 'TransferLeg') {
+      tripLegNodeType.ele(ojpPrefix + 'TransferType', this.transferMode ?? 'walk');
+    }
+
+    const stopPointTypes: StopPointType[] = ['From', 'To'];
+    stopPointTypes.forEach(stopPointType => {
+      const isFrom = stopPointType === 'From';
+
+      const legEndpointTag = isFrom ? 'LegStart' : 'LegEnd';
+      const legEndpointNode = tripLegNodeType.ele(ojpPrefix + legEndpointTag);
+
+      const location = isFrom ? this.fromLocation : this.toLocation;
+      const stopPlace = location.stopPlace;
+      if (stopPlace === null) {
+        if (location.geoPosition) {
+          const geoPositionNode = legEndpointNode.ele(ojpPrefix + 'GeoPosition');
+          geoPositionNode.ele(siriPrefix + 'Longitude', location.geoPosition.longitude);
+          geoPositionNode.ele(siriPrefix + 'Latitude', location.geoPosition.latitude);
+
+          legEndpointNode.ele(ojpPrefix + 'Name').ele(ojpPrefix + 'Text', location.geoPosition.asLatLngString());
+        }
+      } else {
+        legEndpointNode.ele(siriPrefix + 'StopPointRef', stopPlace.stopPlaceRef);
+        legEndpointNode.ele(ojpPrefix + 'Name').ele(ojpPrefix + 'Text', stopPlace.stopPlaceName ?? 'n/a');
+      }
+    });
+
+    if (this.legType === 'ContinuousLeg') {
+      if (this.continousLegService) {
+        const serviceNode = tripLegNodeType.ele(ojpPrefix + 'Service');
+        serviceNode.ele(ojpPrefix + 'PersonalMode', this.continousLegService.personalMode);
+        serviceNode.ele(ojpPrefix + 'PersonalModeOfOperation', this.continousLegService.personalModeOfOperation);
+      }
+    }
+
+    if (legDurationF) {
+      tripLegNodeType.ele(ojpPrefix + 'Duration', legDurationF);
+    }
+
+    tripLegNodeType.ele(ojpPrefix + 'Length', this.legDistance);
   }
 }
