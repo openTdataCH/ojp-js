@@ -124,24 +124,29 @@ export class OJPBaseRequest {
     return responsePromise;
   }
 
-  private computeBaseServiceRequestNode(): xmlbuilder.XMLElement {
-    const ojpNode = xmlbuilder.create("OJP", {
-      version: "1.0",
-      encoding: "utf-8",
+  private computeBaseServiceRequestNode(requestDate: Date = new Date()) {
+    const rootNode = xmlbuilder.create('OJP', {
+      version: '1.0',
+      encoding: 'utf-8',
     });
 
-    ojpNode.att("xmlns", "http://www.vdv.de/ojp");
-    ojpNode.att("xmlns:siri", "http://www.siri.org.uk/siri");
-    ojpNode.att("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
-    ojpNode.att("xmlns:xsd", "http://www.w3.org/2001/XMLSchema");
-    ojpNode.att("xsi:schemaLocation", "http://www.vdv.de/ojp");
-    ojpNode.att("version", "2.0");
+    for (const ns in this.xmlConfig.mapNS) {
+      const key = ns === this.xmlConfig.defaultNS ? 'xmlns' : 'xmlns:' + ns;
+      rootNode.att(key, this.xmlConfig.mapNS[ns]);
+    }
+    
+    rootNode.att('version', this.xmlConfig.ojpVersion);
 
-    const serviceRequestNode = ojpNode
-      .ele("OJPRequest")
-      .ele("siri:ServiceRequest");
+    const siriPrefix = this.xmlConfig.defaultNS === 'siri' ? '' : 'siri:';
+    
+    const serviceRequestNode = rootNode.ele('OJPRequest').ele(siriPrefix + 'ServiceRequest');
 
     serviceRequestNode.ele('siri:ServiceRequestContext').ele('siri:Language', this.language);
+    
+    const dateF = requestDate.toISOString();
+    serviceRequestNode.ele(siriPrefix + 'RequestTimestamp', dateF);
+
+    serviceRequestNode.ele(siriPrefix + 'RequestorRef', this.requestorRef);
 
     return serviceRequestNode;
   }
