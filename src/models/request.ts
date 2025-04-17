@@ -1,4 +1,4 @@
-import { InitialInputSchema, LIR_RequestParamsSchema, LocationInformationRequestOJP, LocationInformationRequestSchema, PlaceContextSchema, PlaceTypeEnum, SER_RequestLocationSchema, SER_RequestOJP, SER_RequestParamsSchema, StopEventRequestSchema, TripParamsSchema, TripRequestOJP, TripRequestSchema, TripResultSchema, TRR_RequestOJP, TRR_RequestSchema, ViaPointSchema } from "../types/openapi/index";
+import { InitialInputSchema, LIR_RequestParamsSchema, LocationInformationRequestOJP, LocationInformationRequestSchema, PlaceContextSchema, PlaceTypeEnum, SER_RequestLocationSchema, SER_RequestOJP, SER_RequestParamsSchema, StopEventRequestSchema, TripParamsSchema, TripRequestOJP, TripRequestSchema, TripResultSchema, TRR_RequestOJP, TRR_RequestParamsSchema, TRR_RequestSchema, ViaPointSchema } from "../types/openapi/index";
 
 import { Language, RequestInfo } from "../types/_all";
 import { Place, PlaceRef, Trip } from './ojp';
@@ -383,15 +383,28 @@ export class StopEventRequest extends BaseRequest implements StopEventRequestSch
 
 export class TripRefineRequest extends BaseRequest implements TRR_RequestSchema {
   public requestTimestamp: string;
+  public refineParams?: TRR_RequestParamsSchema;
   public tripResult: TripResultSchema;
 
-  private constructor(tripResult: TripResultSchema) {
+  private constructor(tripResult: TripResultSchema, refineParams?: TRR_RequestParamsSchema) {
     super();
 
     const now = new Date();
     this.requestTimestamp = now.toISOString();
-
+    
+    this.refineParams = refineParams;
     this.tripResult = tripResult;
+  }
+
+  private static DefaultRequestParams(): TRR_RequestParamsSchema {
+    const params: TRR_RequestParamsSchema = {
+      numberOfResults: undefined,
+      useRealtimeData: 'explanatory',
+      includeAllRestrictedLines: true,
+      includeIntermediateStops: true,
+    };
+
+    return params;
   }
 
   public static initWithTrip(trip: Trip): TripRefineRequest {
@@ -400,7 +413,8 @@ export class TripRefineRequest extends BaseRequest implements TRR_RequestSchema 
       trip: trip,
     };
 
-    const request = new TripRefineRequest(tripResult);
+    const params = TripRefineRequest.DefaultRequestParams();
+    const request = new TripRefineRequest(tripResult, params);
     
     return request;
   }

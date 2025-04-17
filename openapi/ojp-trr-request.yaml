@@ -24,6 +24,29 @@ paths:
 
 components:
   schemas:
+    # https://vdvde.github.io/OJP/develop/documentation-tables/ojp.html#type_ojp__TripRefineParamStructure
+    TripRefineParam:
+      type: object
+      xml:
+        name: TripRefineParam
+      properties:
+        numberOfResults:
+          type: number
+          xml:
+            name: NumberOfResults
+        useRealtimeData:
+          $ref: "./shared.yml#/components/schemas/UseRealtimeDataEnum"
+          xml:
+            name: UseRealtimeData
+        includeAllRestrictedLines:
+          type: boolean
+          xml:
+            name: IncludeAllRestrictedLines
+        includeIntermediateStops:
+          type: boolean
+          xml:
+            name: IncludeIntermediateStops
+
     # https://vdvde.github.io/OJP/release/2.0/documentation-tables/ojp.html#type_ojp__OJPTripRefineRequestStructure
     OJPTripRefineRequest:
       type: object
@@ -39,6 +62,10 @@ components:
             name: RequestTimestamp
             namespace: "http://www.siri.org.uk/siri"
             prefix: siri
+        refineParams:
+          $ref: '#/components/schemas/TripRefineParam'
+          xml:
+            name: RefineParams
         tripResult:
           $ref: './ojp-trip-response.yaml#/components/schemas/TripResult'
           xml:
