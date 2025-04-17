@@ -40,7 +40,11 @@ export class TripContinousLeg extends TripLeg {
     this.continousLegService = null;
   }
 
-  public static initWithTreeNode(legIDx: number, treeNode: TreeNode, legType: LegType): TripContinousLeg | null {
+  public static initWithTreeNode(legIDx: number, parentTreeNode: TreeNode, legType: LegType): TripContinuousLeg | null {
+    const treeNode = parentTreeNode.findChildNamed(legType);
+    if (treeNode === null) {
+      return null;
+    }
     const legStartPlaceRefTreeNode = treeNode.findChildNamed('LegStart');
     const legEndPlaceRefTreeNode = treeNode.findChildNamed('LegEnd');
     if (legStartPlaceRefTreeNode === null || legEndPlaceRefTreeNode === null) {
