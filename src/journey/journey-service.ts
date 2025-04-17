@@ -12,6 +12,12 @@ interface ServiceAttribute {
   extra: Record<string, string>
 }
 
+interface ProductCategory {
+  name: string,
+  shortName: string,
+  productCategoryRef: string,
+}
+
 export class JourneyService {
   public journeyRef: string;
   public lineRef: string | null;
@@ -24,6 +30,8 @@ export class JourneyService {
   public destinationStopPlace: StopPlace | null;
   public serviceLineNumber: string | null
   public journeyNumber: string | null
+  public productCategory: ProductCategory | null;
+
   
   public siriSituationIds: string[]
   public siriSituations: PtSituationElement[]
@@ -45,6 +53,9 @@ export class JourneyService {
     
     this.originStopPlace = null;
     this.destinationStopPlace = null;
+
+    this.productCategory = null;
+
     this.serviceLineNumber = null;
     this.journeyNumber = null;
 
@@ -89,6 +100,15 @@ export class JourneyService {
 
     legService.originStopPlace = StopPlace.initWithServiceTreeNode(serviceTreeNode, 'Origin');
     legService.destinationStopPlace = StopPlace.initWithServiceTreeNode(serviceTreeNode, 'Destination');
+
+    const productCategoryNode = serviceTreeNode.findChildNamed('ProductCategory');
+    if (productCategoryNode) {
+      legService.productCategory = {
+        name: productCategoryNode.findTextFromChildNamed('Name/Text') ?? 'n/a Name',
+        shortName: productCategoryNode.findTextFromChildNamed('ShortName/Text') ?? 'n/a ShortName',
+        productCategoryRef: productCategoryNode.findTextFromChildNamed('ProductCategoryRef') ?? 'n/a ProductCategoryRef',
+      };
+    }
 
     legService.serviceLineNumber = serviceTreeNode.findTextFromChildNamed('PublishedServiceName/Text');
     legService.journeyNumber = serviceTreeNode.findTextFromChildNamed('TrainNumber');
