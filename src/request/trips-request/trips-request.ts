@@ -175,6 +175,9 @@ export class TripRequest extends OJPBaseRequest {
   protected buildRequestNode(): void {
     super.buildRequestNode();
 
+    // TODO - use XML_Config, see Trip asXML()
+    // console.log(this.xmlConfig);
+
     const tripRequestNode = this.serviceRequestNode.ele("ojp:OJPTripRequest");
     
     const now = new Date();

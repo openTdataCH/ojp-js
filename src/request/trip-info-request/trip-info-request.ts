@@ -50,6 +50,8 @@ export class TripInfoRequest extends OJPBaseRequest {
     protected buildRequestNode(): void {
         super.buildRequestNode();
 
+        // TODO - use XML_Config, see Trip asXML()
+        // console.log(this.xmlConfig);
 
         const requestNode = this.serviceRequestNode.ele('ojp:OJPTripInfoRequest');
 

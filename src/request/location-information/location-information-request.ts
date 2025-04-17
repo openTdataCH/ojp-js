@@ -129,6 +129,9 @@ export class LocationInformationRequest extends OJPBaseRequest {
   protected buildRequestNode() {
     super.buildRequestNode();
 
+    // TODO - use XML_Config, see Trip asXML()
+    // console.log(this.xmlConfig);
+
     const now = new Date();
     const dateF = now.toISOString();
 
