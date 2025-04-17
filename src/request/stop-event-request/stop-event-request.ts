@@ -6,7 +6,6 @@ import { StopEventType } from '../../types/stop-event-type';
 import { StopEventRequest_Response } from '../types/stop-event-request.type';
 import { StopEventRequestParser } from './stop-event-request-parser';
 import { Language } from '../../types/language-type';
-import { OJP_Helpers } from '../../helpers/ojp-helpers';
 import { GeoPosition } from '../../location/geoposition';
 import { OJP_VERSION } from '../../constants';
 import { UseRealtimeDataEnumeration } from '../../types/_all';
@@ -76,12 +75,7 @@ export class StopEventRequest extends OJPBaseRequest {
         super.buildRequestNode();
 
         const dateNowF = new Date().toISOString();
-        const dateF = this.depArrTime.toISOString();
        
-        this.serviceRequestNode.ele('siri:RequestTimestamp', dateNowF);
-
-        this.serviceRequestNode.ele("siri:RequestorRef", OJP_Helpers.buildRequestorRef());
-
         const requestNode = this.serviceRequestNode.ele('OJPStopEventRequest');
         requestNode.ele('siri:RequestTimestamp', dateNowF);
 
@@ -93,6 +87,7 @@ export class StopEventRequest extends OJPBaseRequest {
             requestPlaceRefNode.ele('Name').ele('Text', 'n/a');
         }
 
+        const dateF = this.depArrTime.toISOString();
         locationNode.ele('DepArrTime', dateF);
 
         const requestParamsNode = requestNode.ele('Params');

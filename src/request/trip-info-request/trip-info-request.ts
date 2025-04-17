@@ -4,7 +4,6 @@ import { OJPBaseRequest } from '../base-request'
 import { TripInfoRequest_Response } from '../types/trip-info-request.type';
 import { TripInfoRequestParser } from './trip-info-request-parser';
 import { Language } from '../../types/language-type';
-import { OJP_Helpers } from '../../helpers/ojp-helpers';
 
 export class TripInfoRequest extends OJPBaseRequest {
     public journeyRef: string;
@@ -51,12 +50,10 @@ export class TripInfoRequest extends OJPBaseRequest {
     protected buildRequestNode(): void {
         super.buildRequestNode();
 
-        const dateNowF = new Date().toISOString();
-       
-        this.serviceRequestNode.ele('siri:RequestTimestamp', dateNowF);
-        this.serviceRequestNode.ele("siri:RequestorRef", OJP_Helpers.buildRequestorRef());
 
         const requestNode = this.serviceRequestNode.ele('OJPTripInfoRequest');
+
+        const dateNowF = new Date().toISOString();
         requestNode.ele('siri:RequestTimestamp', dateNowF);
 
         requestNode.ele('JourneyRef', this.journeyRef);
