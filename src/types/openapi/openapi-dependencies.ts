@@ -106,7 +106,7 @@ export const MapModelKeepPropertiesXML: Record<string, string[]> = {
   'OJPLocationInformationRequest': ['requestTimestamp', 'initialInput', 'placeRef', 'restrictions'],
   'OJPTripRequest': ['requestTimestamp', 'origin', 'destination', 'via', 'params'],
   'OJPStopEventRequest': ['requestTimestamp', 'location', 'params'],
-  'OJPTripRefineRequest': ['requestTimestamp', 'tripResult'],
+  'OJPTripRefineRequest': ['requestTimestamp', 'refineParams', 'tripResult'],
   'geoPosition': ['longitude', 'latitude'],
 };
 
