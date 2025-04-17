@@ -132,6 +132,12 @@ export class TripTimedLeg extends TripLeg {
 
     const legIdTagName = isOJPv1 ? 'LegId' : 'Id';
     tripLegNode.ele(ojpPrefix + legIdTagName, this.legID);
+
+    const legDurationF = this.legDuration?.asOJPFormattedText() ?? null;
+    if (legDurationF) {
+      tripLegNode.ele(ojpPrefix + 'Duration', legDurationF);
+    }
+
     const timedLeg = tripLegNode.ele(ojpPrefix + 'TimedLeg');
     
     const boardingTypes: TripRequestBoardingType[] = ['Arr', 'Dep'];
@@ -157,6 +163,18 @@ export class TripTimedLeg extends TripLeg {
         legEndpoint.ele(ojpPrefix + 'StopPointName').ele(ojpPrefix + 'Text', stopPlace.stopPlaceName ?? 'n/a');
       }
 
+      if (stopPoint.vehicleAccessType) {
+        legEndpoint.ele(ojpPrefix + 'NameSuffix').ele(ojpPrefix + 'Text', stopPoint.vehicleAccessType);
+      }
+
+      if (stopPoint.plannedPlatform) {
+        legEndpoint.ele(ojpPrefix + 'PlannedQuay').ele(ojpPrefix + 'Text', stopPoint.plannedPlatform);
+      }
+
+      if (stopPoint.actualPlatform) {
+        legEndpoint.ele(ojpPrefix + 'EstimatedQuay').ele(ojpPrefix + 'Text', stopPoint.actualPlatform);
+      }
+
       boardingTypes.forEach(boardingType => {
         const isArrival = boardingType === 'Arr';
         const serviceDepArrData = isArrival ? stopPoint.arrivalData : stopPoint.departureData;
@@ -165,10 +183,18 @@ export class TripTimedLeg extends TripLeg {
           const serviceDepArrTagName = isArrival ? 'ServiceArrival' : 'ServiceDeparture';
           const serviceDepArrNode = legEndpoint.ele(ojpPrefix + serviceDepArrTagName);
           serviceDepArrNode.ele(ojpPrefix + 'TimetabledTime', serviceDepArrData.timetableTime.toISOString());
+
+          if (serviceDepArrData.estimatedTime) {
+            serviceDepArrNode.ele(ojpPrefix + 'EstimatedTime', serviceDepArrData.estimatedTime.toISOString());
+          }
         }
       });
+
+      legEndpoint.ele(ojpPrefix + 'Order', legOrder);
+      legOrder = legOrder + 1;
     };
 
+    let legOrder = 1;
     addStopPoint(this.fromStopPoint, 'From');
     this.intermediateStopPoints.forEach(stopPoint => {
       addStopPoint(stopPoint, 'Intermediate');

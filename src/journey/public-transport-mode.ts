@@ -81,6 +81,10 @@ export class PublicTransportMode {
 
     const modeNode = parentNode.ele(ojpPrefix + 'Mode');
     modeNode.ele(ojpPrefix + 'PtMode', this.ptMode);
+
+    if (this.subMode) {
+      modeNode.ele(siriPrefix + this.subMode.key, this.subMode.value);
+    }
     
     if (this.name) {
       modeNode.ele(ojpPrefix + 'Name').ele(ojpPrefix + 'Text', this.name);

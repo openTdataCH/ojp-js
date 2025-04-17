@@ -216,6 +216,7 @@ export class JourneyService {
     const serviceNode = parentNode.ele(ojpPrefix + 'Service');
     
     serviceNode.ele(ojpPrefix + 'JourneyRef', this.journeyRef);
+    serviceNode.ele(ojpPrefix + 'OperatingDayRef', this.operatingDayRef);
 
     if (this.lineRef) {
       serviceNode.ele(siriPrefix + 'LineRef', this.lineRef);
@@ -226,9 +227,28 @@ export class JourneyService {
     
     this.ptMode.addToXMLNode(serviceNode, xmlConfig);
 
+    if (this.productCategory) {
+      const productCategoryNode = serviceNode.ele(ojpPrefix + 'ProductCategory');
+      productCategoryNode.ele('Name').ele('Text', this.productCategory.name);
+      productCategoryNode.ele('ShortName').ele('Text', this.productCategory.shortName);
+      productCategoryNode.ele('ProductCategoryRef', this.productCategory.productCategoryRef);
+    }
+
     if (this.serviceLineNumber) {
       const serviceTagName = isOJPv1 ? 'PublishedLineName' : 'PublishedServiceName';
       serviceNode.ele(ojpPrefix + serviceTagName).ele(ojpPrefix + 'Text', this.serviceLineNumber);
+    }
+
+    if (this.journeyNumber) {
+      serviceNode.ele(ojpPrefix + 'TrainNumber', this.journeyNumber);
+    }
+
+    for (const key in this.serviceAttributes) {
+      const attrData = this.serviceAttributes[key];
+
+      const attributeNode = serviceNode.ele(ojpPrefix + 'Attribute');
+      attributeNode.ele(ojpPrefix + 'UserText').ele(ojpPrefix + 'Text', attrData.text);
+      attributeNode.ele(ojpPrefix + 'Code', attrData.code);
     }
 
     let agencyID_s = this.agencyID;
