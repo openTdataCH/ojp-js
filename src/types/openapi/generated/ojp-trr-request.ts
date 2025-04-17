@@ -28,6 +28,13 @@ export interface paths {
                   requestorRef: string;
                   OJPTripRefineRequest?: {
                     requestTimestamp: string;
+                    refineParams?: {
+                      numberOfResults?: number;
+                      /** @enum {string} */
+                      useRealtimeData?: "full" | "explanatory" | "none";
+                      includeAllRestrictedLines?: boolean;
+                      includeIntermediateStops?: boolean;
+                    };
                     tripResult: {
                       id: string;
                       trip: {
@@ -292,8 +299,22 @@ export type webhooks = Record<string, never>;
 
 export interface components {
   schemas: {
+    TripRefineParam: {
+      numberOfResults?: number;
+      /** @enum {string} */
+      useRealtimeData?: "full" | "explanatory" | "none";
+      includeAllRestrictedLines?: boolean;
+      includeIntermediateStops?: boolean;
+    };
     OJPTripRefineRequest: {
       requestTimestamp: string;
+      refineParams?: {
+        numberOfResults?: number;
+        /** @enum {string} */
+        useRealtimeData?: "full" | "explanatory" | "none";
+        includeAllRestrictedLines?: boolean;
+        includeIntermediateStops?: boolean;
+      };
       tripResult: {
         id: string;
         trip: {
@@ -552,6 +573,13 @@ export interface components {
           requestorRef: string;
           OJPTripRefineRequest?: {
             requestTimestamp: string;
+            refineParams?: {
+              numberOfResults?: number;
+              /** @enum {string} */
+              useRealtimeData?: "full" | "explanatory" | "none";
+              includeAllRestrictedLines?: boolean;
+              includeIntermediateStops?: boolean;
+            };
             tripResult: {
               id: string;
               trip: {
