@@ -3,20 +3,27 @@ import { PublicTransportMode } from './public-transport-mode';
 import { StopPlace } from '../location/stopplace';
 import { PtSituationElement } from '../situation/situation-element';
 import { TreeNode } from '../xml/tree-node';
+import { XML_Config } from '../types/_all';
 interface ServiceAttribute {
     code: string;
     text: string;
     extra: Record<string, string>;
 }
+interface ProductCategory {
+    name: string;
+    shortName: string;
+    productCategoryRef: string;
+}
 export declare class JourneyService {
     journeyRef: string;
     lineRef: string | null;
     directionRef: string | null;
-    operatingDayRef: string | null;
+    operatingDayRef: string;
     ptMode: PublicTransportMode;
     agencyCode: string;
     originStopPlace: StopPlace | null;
     destinationStopPlace: StopPlace | null;
+    productCategory: ProductCategory | null;
     serviceLineNumber: string | null;
     journeyNumber: string | null;
     siriSituationIds: string[];
@@ -25,9 +32,9 @@ export declare class JourneyService {
     hasCancellation: boolean | null;
     hasDeviation: boolean | null;
     isUnplanned: boolean | null;
-    constructor(journeyRef: string, ptMode: PublicTransportMode, agencyCode: string);
+    constructor(journeyRef: string, operatingDayRef: string, ptMode: PublicTransportMode, agencyCode: string);
     static initWithTreeNode(treeNode: TreeNode): JourneyService | null;
     formatServiceName(): string;
-    addToXMLNode(parentNode: XMLElement): void;
+    addToXMLNode(parentNode: XMLElement, xmlConfig: XML_Config): void;
 }
 export {};

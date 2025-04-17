@@ -1,5 +1,6 @@
 import { XMLElement } from 'xmlbuilder';
 import { TreeNode } from '../xml/tree-node';
+import { XML_Config } from '../types/_all';
 interface PublicTransportSubMode {
     key: string;
     value: string;
@@ -14,6 +15,6 @@ export declare class PublicTransportMode {
     static initWithServiceTreeNode(serviceTreeNode: TreeNode): PublicTransportMode | null;
     isRail(): boolean;
     hasPrecisePolyline(): boolean;
-    addToXMLNode(parentNode: XMLElement): void;
+    addToXMLNode(parentNode: XMLElement, xmlConfig: XML_Config): void;
 }
 export {};

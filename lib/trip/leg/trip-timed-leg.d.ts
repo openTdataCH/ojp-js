@@ -5,17 +5,18 @@ import { Location } from '../../location/location';
 import { PtSituationElement } from '../../situation/situation-element';
 import { TreeNode } from '../../xml/tree-node';
 import { XMLElement } from 'xmlbuilder';
+import { XML_Config } from '../../types/_all';
 export declare class TripTimedLeg extends TripLeg {
     service: JourneyService;
     fromStopPoint: StopPoint;
     toStopPoint: StopPoint;
     intermediateStopPoints: StopPoint[];
     constructor(legIDx: number, service: JourneyService, fromStopPoint: StopPoint, toStopPoint: StopPoint, intermediateStopPoints?: StopPoint[]);
-    static initWithTreeNode(legIDx: number, treeNode: TreeNode): TripTimedLeg | null;
+    static initWithTreeNode(legIDx: number, parentTreeNode: TreeNode): TripTimedLeg | null;
     patchLocations(mapContextLocations: Record<string, Location>): void;
     computeDepartureTime(): Date | null;
     computeArrivalTime(): Date | null;
     private computeStopPointTime;
     patchSituations(mapContextSituations: Record<string, PtSituationElement>): void;
-    addToXMLNode(parentNode: XMLElement): void;
+    addToXMLNode(parentNode: XMLElement, xmlConfig: XML_Config): void;
 }

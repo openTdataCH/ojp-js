@@ -1,8 +1,9 @@
+import { XMLElement } from 'xmlbuilder';
 import { TripStats } from '../types/trip-stats';
 import { TripLeg } from './leg/trip-leg';
 import { TreeNode } from '../xml/tree-node';
 import { TripFareResult } from '../fare/fare';
-import { XMLElement } from 'xmlbuilder';
+import { XML_Config } from '../types/_all';
 export declare class Trip {
     id: string;
     legs: TripLeg[];
@@ -12,5 +13,6 @@ export declare class Trip {
     static initFromTreeNode(treeNode: TreeNode): Trip | null;
     computeDepartureTime(): Date | null;
     computeArrivalTime(): Date | null;
-    addToXMLNode(parentNode: XMLElement): void;
+    asXMLNode(xmlConfig: XML_Config): XMLElement;
+    asXML(): string;
 }
