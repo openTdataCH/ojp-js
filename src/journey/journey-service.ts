@@ -28,19 +28,18 @@ export class JourneyService {
   public agencyID: string;
   public originStopPlace: StopPlace | null;
   public destinationStopPlace: StopPlace | null;
-  public serviceLineNumber: string | null
-  public journeyNumber: string | null
+
   public productCategory: ProductCategory | null;
 
   
-  public siriSituationIds: string[]
-  public siriSituations: PtSituationElement[]
+  public siriSituationIds: string[];
+  public siriSituations: PtSituationElement[];
 
-  public serviceAttributes: Record<string, ServiceAttribute>
+  public serviceAttributes: Record<string, ServiceAttribute>;
 
-  public hasCancellation: boolean | null
-  public hasDeviation: boolean | null
-  public isUnplanned: boolean | null
+  public hasCancellation: boolean | null;
+  public hasDeviation: boolean | null;
+  public isUnplanned: boolean | null;
 
   constructor(journeyRef: string, ptMode: PublicTransportMode, agencyID: string) {
     this.journeyRef = journeyRef;
@@ -77,12 +76,11 @@ export class JourneyService {
 
     const journeyRef = serviceTreeNode.findTextFromChildNamed('JourneyRef');
     const ptMode = PublicTransportMode.initWithServiceTreeNode(serviceTreeNode);
-
     
     const agencyID = (() => {
       const ojpAgencyId = serviceTreeNode.findTextFromChildNamed('OperatorRef');
       if (ojpAgencyId === null) {
-        return 'n/a OperatorRef'
+        return 'n/a OperatorRef';
       }
 
       return ojpAgencyId.replace('ojp:', '');
