@@ -6,13 +6,22 @@ import { NovaFare_Response, NovaFareParser } from "./nova-request-parser";
 import { ApiConfig } from '../types/stage-config';
 import { OJP_Helpers } from '../helpers/ojp-helpers';
 import { XML_Config } from '../types/_all';
+import { REQUESTOR_REF, XML_Config_OJPv1 } from '../constants';
+import { Language } from '../types/language-type';
 
 export class NovaRequest {
   private stageConfig: ApiConfig;
+  private language: Language;
+  private xmlConfig: XML_Config;
+  private requestorRef: string;
+  
   public requestInfo: RequestInfo;
 
-  constructor(stageConfig: ApiConfig) {
+  constructor(stageConfig: ApiConfig, language: Language = 'de', xmlConfig: XML_Config = XML_Config_OJPv1, requestorRef = REQUESTOR_REF) {
     this.stageConfig = stageConfig;
+    this.language = language;
+    this.xmlConfig = xmlConfig;
+    this.requestorRef = requestorRef;
 
     this.requestInfo = {
       requestDateTime: null,
