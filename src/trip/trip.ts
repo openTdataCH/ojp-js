@@ -1,3 +1,5 @@
+import xmlbuilder, { XMLElement } from 'xmlbuilder'
+
 import { DistanceSource, TripStats } from '../types/trip-stats'
 
 import { TripLeg } from './leg/trip-leg'
@@ -7,7 +9,6 @@ import { Duration } from '../shared/duration'
 import { TreeNode } from '../xml/tree-node'
 import { TripFareResult } from '../fare/fare'
 
-import { XMLElement } from 'xmlbuilder'
 import { DEBUG_LEVEL } from '../constants'
 import { XML_Config } from '../types/_all'
 
@@ -164,9 +165,10 @@ export class Trip {
     return stopPointDate;
   }
 
-  public addToXMLNode(parentNode: XMLElement) {
-    const tripNode = parentNode.ele('ojp:Trip');
+  public asXMLNode(xmlConfig: XML_Config): XMLElement {
     const ojpPrefix = xmlConfig.defaultNS === 'ojp' ? '' : 'ojp:';
+
+    const tripNode = xmlbuilder.create(ojpPrefix + 'Trip');
 
     const tripIdTagName = xmlConfig.ojpVersion === '1.0' ? 'TripId' : 'Id';
     tripNode.ele(ojpPrefix + tripIdTagName, this.id);
@@ -180,5 +182,26 @@ export class Trip {
     this.legs.forEach(leg => {
       leg.addToXMLNode(tripNode, xmlConfig);
     });
+
+    return tripNode;
+  }
+
+  public asXML(): string {
+    const ojpV2_XML_Config: XML_Config = {
+      ojpVersion: '2.0',
+      defaultNS: 'ojp',
+      mapNS: {
+        'ojp': 'http://www.vdv.de/ojp',
+        'siri': 'http://www.siri.org.uk/siri',
+      },
+    };
+
+    const tripNode = this.asXMLNode(ojpV2_XML_Config);
+
+    const xml = tripNode.end({
+      pretty: true,
+    });
+
+    return xml;
   }
 }
