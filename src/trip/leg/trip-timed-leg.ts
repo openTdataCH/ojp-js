@@ -35,7 +35,12 @@ export class TripTimedLeg extends TripLeg {
     this.intermediateStopPoints = intermediateStopPoints
   }
 
-  public static initWithTreeNode(legIDx: number, treeNode: TreeNode): TripTimedLeg | null {
+  public static initWithTreeNode(legIDx: number, parentTreeNode: TreeNode): TripTimedLeg | null {
+    const treeNode = parentTreeNode.findChildNamed('TimedLeg');
+    if (treeNode === null) {
+      return null;
+    }
+
     const service = JourneyService.initWithTreeNode(treeNode);
     if (service === null) {
       return null;
