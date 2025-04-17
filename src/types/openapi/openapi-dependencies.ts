@@ -28,7 +28,15 @@ export const MapNS_Tags: Record<string, string> = {
   'LegIntermediate.StopPointRef': 'siri',
   'LegAlight.StopPointRef': 'siri',
   
+  'Mode.AirSubmode': 'siri',
+  'Mode.BusSubmode': 'siri',
+  'Mode.CoachSubmode': 'siri',
+  'Mode.FunicularSubmode': 'siri',
+  'Mode.MetroSubmode': 'siri',
+  'Mode.TramSubmode': 'siri',
+  'Mode.TelecabinSubmode': 'siri',
   'Mode.RailSubmode': 'siri',
+  'Mode.WaterSubmode': 'siri',
 
   'Service.LineRef': 'siri',
   'Service.OperatorRef': 'siri',
