@@ -245,7 +245,7 @@ components:
           $ref: '#/components/schemas/ContinuousLeg'
           xml:
             name: ContinuousLeg
-    
+
     Trip:
       type: object
       xml:
@@ -286,6 +286,26 @@ components:
             name: Leg
           items:
             $ref: "#/components/schemas/Leg"
+        unplanned: 
+          type: boolean
+          xml:
+            name: Unplanned
+        cancelled: 
+          type: boolean
+          xml:
+            name: Cancelled
+        deviation: 
+          type: boolean
+          xml:
+            name: Deviation
+        delayed: 
+          type: boolean
+          xml:
+            name: delayed
+        infeasible: 
+          type: boolean
+          xml:
+            name: Infeasible
 
     # https://vdvde.github.io/OJP/develop/documentation-tables/ojp.html#type_ojp__TripResultStructure
     TripResult:

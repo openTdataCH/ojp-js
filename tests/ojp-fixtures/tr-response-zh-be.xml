@@ -1388,6 +1388,7 @@
             <StartTime>2025-03-31T13:58:00Z</StartTime>
             <EndTime>2025-03-31T14:14:00Z</EndTime>
             <Transfers>1</Transfers>
+            <Infeasible>true</Infeasible>
             <Leg>
               <Id>1</Id>
               <Duration>PT3M</Duration>

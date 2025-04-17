@@ -273,6 +273,11 @@ export interface paths {
                                 duration: string;
                               };
                             })[];
+                          unplanned?: boolean;
+                          cancelled?: boolean;
+                          deviation?: boolean;
+                          delayed?: boolean;
+                          infeasible?: boolean;
                         };
                       })[];
                   };
@@ -1160,6 +1165,11 @@ export interface components {
             duration: string;
           };
         })[];
+      unplanned?: boolean;
+      cancelled?: boolean;
+      deviation?: boolean;
+      delayed?: boolean;
+      infeasible?: boolean;
     };
     TripResult: {
       id: string;
@@ -1406,6 +1416,11 @@ export interface components {
               duration: string;
             };
           })[];
+        unplanned?: boolean;
+        cancelled?: boolean;
+        deviation?: boolean;
+        delayed?: boolean;
+        infeasible?: boolean;
       };
     };
     OJPTripDelivery: {
@@ -1658,6 +1673,11 @@ export interface components {
                   duration: string;
                 };
               })[];
+            unplanned?: boolean;
+            cancelled?: boolean;
+            deviation?: boolean;
+            delayed?: boolean;
+            infeasible?: boolean;
           };
         })[];
     };
@@ -1916,6 +1936,11 @@ export interface components {
                         duration: string;
                       };
                     })[];
+                  unplanned?: boolean;
+                  cancelled?: boolean;
+                  deviation?: boolean;
+                  delayed?: boolean;
+                  infeasible?: boolean;
                 };
               })[];
           };
