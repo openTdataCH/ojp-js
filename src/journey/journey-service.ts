@@ -22,7 +22,7 @@ export class JourneyService {
   public journeyRef: string;
   public lineRef: string | null;
   public directionRef: string | null;
-  public operatingDayRef: string | null;
+  public operatingDayRef: string;
 
   public ptMode: PublicTransportMode;
   public agencyCode: string;
@@ -41,10 +41,10 @@ export class JourneyService {
   public hasDeviation: boolean | null;
   public isUnplanned: boolean | null;
 
-  constructor(journeyRef: string, ptMode: PublicTransportMode, agencyCode: string) {
+  constructor(journeyRef: string, operatingDayRef: string, ptMode: PublicTransportMode, agencyCode: string) {
     this.journeyRef = journeyRef;
+    this.operatingDayRef = operatingDayRef;
     this.lineRef = null;
-    this.operatingDayRef = null;
     this.directionRef = null;
 
     this.ptMode = ptMode;
@@ -86,15 +86,16 @@ export class JourneyService {
       return ojpAgencyId.replace('ojp:', '');
     })();
 
-    if (!(journeyRef && ptMode)) {
+    const operatingDayRef = serviceTreeNode.findTextFromChildNamed('OperatingDayRef');
+
+    if (!(journeyRef && ptMode && operatingDayRef)) {
       return null;
     }
 
-    const legService = new JourneyService(journeyRef, ptMode, agencyCode);
+    const legService = new JourneyService(journeyRef, operatingDayRef, ptMode, agencyCode);
 
     legService.lineRef = serviceTreeNode.findTextFromChildNamed('siri:LineRef');
     legService.directionRef = serviceTreeNode.findTextFromChildNamed('siri:DirectionRef');
-    legService.operatingDayRef = serviceTreeNode.findTextFromChildNamed('OperatingDayRef');
 
     legService.originStopPlace = StopPlace.initWithServiceTreeNode(serviceTreeNode, 'Origin');
     legService.destinationStopPlace = StopPlace.initWithServiceTreeNode(serviceTreeNode, 'Destination');
