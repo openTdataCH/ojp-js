@@ -41,15 +41,15 @@ export class TripLeg {
       this.patchLocation(location, mapContextLocations);
 
       if (location.geoPosition) {
-        return
+        return;
       }
 
       if (this.legTrack?.hasGeoData) {
-        const isFrom = location === this.fromLocation
+        const isFrom = location === this.fromLocation;
         if (isFrom) {
-          this.fromLocation.geoPosition = this.legTrack.fromGeoPosition()
+          this.fromLocation.geoPosition = this.legTrack.fromGeoPosition();
         } else {
-          this.toLocation.geoPosition = this.legTrack.toGeoPosition()
+          this.toLocation.geoPosition = this.legTrack.toGeoPosition();
         }
       }
     })
@@ -61,7 +61,7 @@ export class TripLeg {
 
   protected patchLocation(location: Location, mapContextLocations: Record<string, Location>) {
     if (location.geoPosition) {
-      return
+      return;
     }
 
     let stopRef = location.stopPlace?.stopPlaceRef ?? null;
@@ -100,6 +100,5 @@ export class TripLeg {
     // override
     debugger;
   }
-
 }
 
