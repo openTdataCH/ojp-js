@@ -12,7 +12,7 @@ import { Duration } from '../../shared/duration'
 import { PtSituationElement } from '../../situation/situation-element'
 import { DEBUG_LEVEL } from '../../constants'
 
-export type LegType = 'ContinousLeg' | 'TimedLeg' | 'TransferLeg'
+export type LegType = 'ContinuousLeg' | 'TimedLeg' | 'TransferLeg'
 
 export interface LinePointData {
   type: StopPointType,
