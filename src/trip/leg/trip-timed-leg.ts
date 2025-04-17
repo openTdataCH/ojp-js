@@ -2,7 +2,7 @@ import { JourneyService } from '../../journey/journey-service'
 import { StopPoint } from './timed-leg/stop-point'
 import { LegTrack } from './leg-track'
 
-import { TripLeg, LegType, LinePointData } from "./trip-leg"
+import { TripLeg, LegType } from "./trip-leg"
 
 import { StopPointTime } from './timed-leg/stop-point-time';
 
@@ -12,6 +12,7 @@ import { TreeNode } from '../../xml/tree-node'
 import { XMLElement } from 'xmlbuilder'
 import { StopPointType } from '../../types/stop-point-type'
 import { TripRequestBoardingType } from '../../request'
+import { XML_Config } from '../../types/_all';
 import { Duration } from '../../shared/duration';
 
 export class TripTimedLeg extends TripLeg {
@@ -121,32 +122,39 @@ export class TripTimedLeg extends TripLeg {
     })
   }
 
-  public addToXMLNode(parentNode: XMLElement) {
-    const tripLegNode = parentNode.ele('ojp:TripLeg');
-    tripLegNode.ele('ojp:LegId', this.legID);
-    
-    const timedLeg = tripLegNode.ele('ojp:TimedLeg');
+  public addToXMLNode(parentNode: XMLElement, xmlConfig: XML_Config) {
+    const isOJPv1 = xmlConfig.ojpVersion === '1.0';
+    const ojpPrefix = xmlConfig.defaultNS === 'ojp' ? '' : 'ojp:';
+    const siriPrefix = xmlConfig.defaultNS === 'siri' ? '' : 'siri:';
+
+    const legNodeName = isOJPv1 ? 'TripLeg' : 'Leg';
+    const tripLegNode = parentNode.ele(ojpPrefix + legNodeName);
+
+    const legIdTagName = isOJPv1 ? 'LegId' : 'Id';
+    tripLegNode.ele(ojpPrefix + legIdTagName, this.legID);
+    const timedLeg = tripLegNode.ele(ojpPrefix + 'TimedLeg');
     
     const boardingTypes: TripRequestBoardingType[] = ['Arr', 'Dep'];
-
+    
     const addStopPoint = (stopPoint: StopPoint, stopPointType: StopPointType) => {
       const legEndpointName: string = (() => {
         if (stopPointType === 'From') {
-          return 'ojp:LegBoard';
+          return ojpPrefix + 'LegBoard';
         }
         if (stopPointType === 'To') {
-          return 'ojp:LegAlight';
+          return ojpPrefix + 'LegAlight';
         }
 
-        return 'ojp:LegIntermediates';
+        const tagName = isOJPv1 ? 'LegIntermediates' : 'LegIntermediate';
+        return ojpPrefix + tagName;
       })();
 
       const legEndpoint = timedLeg.ele(legEndpointName);
 
       const stopPlace = stopPoint.location.stopPlace;
       if (stopPlace) {
-        legEndpoint.ele('StopPointRef', stopPlace.stopPlaceRef);
-        legEndpoint.ele('ojp:StopPointName').ele('ojp:Text', stopPlace.stopPlaceName ?? 'n/a');
+        legEndpoint.ele(siriPrefix + 'StopPointRef', stopPlace.stopPlaceRef);
+        legEndpoint.ele(ojpPrefix + 'StopPointName').ele(ojpPrefix + 'Text', stopPlace.stopPlaceName ?? 'n/a');
       }
 
       boardingTypes.forEach(boardingType => {
@@ -154,8 +162,9 @@ export class TripTimedLeg extends TripLeg {
         const serviceDepArrData = isArrival ? stopPoint.arrivalData : stopPoint.departureData;
 
         if (serviceDepArrData) {
-          const serviceDepArrName = isArrival ? 'ojp:ServiceArrival' : 'ojp:ServiceDeparture';
-          legEndpoint.ele(serviceDepArrName).ele('ojp:TimetabledTime', serviceDepArrData.timetableTime.toISOString());
+          const serviceDepArrTagName = isArrival ? 'ServiceArrival' : 'ServiceDeparture';
+          const serviceDepArrNode = legEndpoint.ele(ojpPrefix + serviceDepArrTagName);
+          serviceDepArrNode.ele(ojpPrefix + 'TimetabledTime', serviceDepArrData.timetableTime.toISOString());
         }
       });
     };
@@ -166,6 +175,6 @@ export class TripTimedLeg extends TripLeg {
     });
     addStopPoint(this.toStopPoint, 'To');
 
-    this.service.addToXMLNode(timedLeg);
+    this.service.addToXMLNode(timedLeg, xmlConfig);
   }
 }

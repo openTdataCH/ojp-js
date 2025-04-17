@@ -9,6 +9,7 @@ import { TripFareResult } from '../fare/fare'
 
 import { XMLElement } from 'xmlbuilder'
 import { DEBUG_LEVEL } from '../constants'
+import { XML_Config } from '../types/_all'
 
 export class Trip {
   public id: string
@@ -165,16 +166,19 @@ export class Trip {
 
   public addToXMLNode(parentNode: XMLElement) {
     const tripNode = parentNode.ele('ojp:Trip');
+    const ojpPrefix = xmlConfig.defaultNS === 'ojp' ? '' : 'ojp:';
+
+    const tripIdTagName = xmlConfig.ojpVersion === '1.0' ? 'TripId' : 'Id';
+    tripNode.ele(ojpPrefix + tripIdTagName, this.id);
     
-    tripNode.ele('ojp:TripId', this.id);
-    tripNode.ele('ojp:Duration', this.stats.duration.asOJPFormattedText());
-    tripNode.ele('ojp:StartTime', this.stats.startDatetime.toISOString());
-    tripNode.ele('ojp:EndTime', this.stats.endDatetime.toISOString());
-    tripNode.ele('ojp:Transfers', this.stats.transferNo);
-    tripNode.ele('ojp:Distance', this.stats.distanceMeters);
+    tripNode.ele(ojpPrefix + 'Duration', this.stats.duration.asOJPFormattedText());
+    tripNode.ele(ojpPrefix + 'StartTime', this.stats.startDatetime.toISOString());
+    tripNode.ele(ojpPrefix + 'EndTime', this.stats.endDatetime.toISOString());
+    tripNode.ele(ojpPrefix + 'Transfers', this.stats.transferNo);
+    tripNode.ele(ojpPrefix + 'Distance', this.stats.distanceMeters);
 
     this.legs.forEach(leg => {
-      leg.addToXMLNode(tripNode);
+      leg.addToXMLNode(tripNode, xmlConfig);
     });
   }
 }

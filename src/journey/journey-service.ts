@@ -5,6 +5,7 @@ import { PublicTransportMode } from './public-transport-mode'
 import { StopPlace } from '../location/stopplace';
 import { PtSituationElement } from '../situation/situation-element';
 import { TreeNode } from '../xml/tree-node';
+import { XML_Config } from '../types/_all';
 
 interface ServiceAttribute {
   code: string
@@ -210,22 +211,27 @@ export class JourneyService {
     return nameParts.join(' ')
   }
 
-  public addToXMLNode(parentNode: XMLElement) {
-    const serviceNode = parentNode.ele('ojp:Service');
+  public addToXMLNode(parentNode: XMLElement, xmlConfig: XML_Config) {
+    const ojpPrefix = xmlConfig.defaultNS === 'ojp' ? '' : 'ojp:';
+    const siriPrefix = xmlConfig.defaultNS === 'siri' ? '' : 'siri:';
+    const isOJPv1 = xmlConfig.ojpVersion === '1.0';
+
+    const serviceNode = parentNode.ele(ojpPrefix + 'Service');
     
-    serviceNode.ele('ojp:JourneyRef', this.journeyRef);
+    serviceNode.ele(ojpPrefix + 'JourneyRef', this.journeyRef);
 
     if (this.lineRef) {
-      serviceNode.ele('LineRef', this.lineRef);
+      serviceNode.ele(siriPrefix + 'LineRef', this.lineRef);
     }
     if (this.directionRef) {
-      serviceNode.ele('DirectionRef', this.directionRef);
+      serviceNode.ele(siriPrefix + 'DirectionRef', this.directionRef);
     }
     
-    this.ptMode.addToXMLNode(serviceNode);
+    this.ptMode.addToXMLNode(serviceNode, xmlConfig);
 
     if (this.serviceLineNumber) {
-      serviceNode.ele('ojp:PublishedLineName').ele('ojp:Text', this.serviceLineNumber);
+      const serviceTagName = isOJPv1 ? 'PublishedLineName' : 'PublishedServiceName';
+      serviceNode.ele(ojpPrefix + serviceTagName).ele(ojpPrefix + 'Text', this.serviceLineNumber);
     }
 
     let agencyID_s = this.agencyCode;
@@ -233,6 +239,6 @@ export class JourneyService {
       agencyID_s = 'ojp:' + agencyID_s;
     }
 
-    serviceNode.ele('ojp:OperatorRef', agencyID_s);
+    serviceNode.ele(ojpPrefix + 'OperatorRef', agencyID_s);
   }
 }

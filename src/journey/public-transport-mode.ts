@@ -1,6 +1,7 @@
 import { XMLElement } from 'xmlbuilder';
 
 import { TreeNode } from '../xml/tree-node';
+import { XML_Config } from '../types/_all';
 
 interface PublicTransportSubMode {
   key: string
@@ -74,16 +75,19 @@ export class PublicTransportMode {
     return true;
   }
 
-  public addToXMLNode(parentNode: XMLElement) {
-    const modeNode = parentNode.ele('ojp:Mode');
-    modeNode.ele('ojp:PtMode', this.ptMode);
+  public addToXMLNode(parentNode: XMLElement, xmlConfig: XML_Config) {
+    const ojpPrefix = xmlConfig.defaultNS === 'ojp' ? '' : 'ojp:';
+    const siriPrefix = xmlConfig.defaultNS === 'siri' ? '' : 'siri:';
+
+    const modeNode = parentNode.ele(ojpPrefix + 'Mode');
+    modeNode.ele(ojpPrefix + 'PtMode', this.ptMode);
     
     if (this.name) {
-      modeNode.ele('ojp:Name').ele('ojp:Text', this.name);
+      modeNode.ele(ojpPrefix + 'Name').ele(ojpPrefix + 'Text', this.name);
     }
 
     if (this.shortName) {
-      modeNode.ele('ojp:ShortName').ele('ojp:Text', this.shortName);
+      modeNode.ele(ojpPrefix + 'ShortName').ele(ojpPrefix + 'Text', this.shortName);
     }
   }
 }
