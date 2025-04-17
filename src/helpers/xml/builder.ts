@@ -65,12 +65,12 @@ export function buildXML(obj: Record<string, any>, xmlConfig: XML_Config = Defau
     if (parentKey !== null) {
       const tagNS_Key = parentKey.replace(/^.*:/, '') + '.' + newKey;
       const tagNS = (() => {
-        const tagNS = MapNS_Tags[tagNS_Key] ?? 'ojp';
-        if (xmlConfig.defaultNS === tagNS) {
+        const tagNSConfig = MapNS_Tags[tagNS_Key] ?? 'ojp';
+        if (xmlConfig.defaultNS === tagNSConfig) {
           return '';
         }
 
-        return tagNS + ':';
+        return tagNSConfig + ':';
       })();
 
       if (tagNS !== null) {
