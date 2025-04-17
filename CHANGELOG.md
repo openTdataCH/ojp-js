@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## 0.20.9 - 16.04.2025
+## 0.20.10 - 17.04.2025
 - refactor/next version of the SDK (continued) - [PR #139](https://github.com/openTdataCH/ojp-js/pull/139)
   - [Adds TripRefinementRequest #151](https://github.com/openTdataCH/ojp-js/pull/151)
   - TR - [Feature/trip response status #152](https://github.com/openTdataCH/ojp-js/pull/152)
