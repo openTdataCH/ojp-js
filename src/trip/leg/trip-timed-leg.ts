@@ -12,6 +12,7 @@ import { TreeNode } from '../../xml/tree-node'
 import { XMLElement } from 'xmlbuilder'
 import { StopPointType } from '../../types/stop-point-type'
 import { TripRequestBoardingType } from '../../request'
+import { Duration } from '../../shared/duration';
 
 export class TripTimedLeg extends TripLeg {
   public service: JourneyService
@@ -70,9 +71,17 @@ export class TripTimedLeg extends TripLeg {
     const timedLeg = new TripTimedLeg(legIDx, service, fromStopPoint, toStopPoint, intermediateStopPoints);
 
     timedLeg.legTrack = LegTrack.initWithLegTreeNode(treeNode);
-    if (timedLeg.legTrack && timedLeg.legDuration === null) {
-      timedLeg.legDuration = timedLeg.legTrack.duration;
-    }
+
+    timedLeg.legDuration = (() => {
+      // for TimedLeg Duration is at the parent level
+      const timedLegDuration = Duration.initWithTreeNode(parentTreeNode);
+      if (timedLegDuration !== null) {
+        return timedLegDuration;
+      }
+
+      // rely on legtrack if present
+      return timedLeg.legTrack?.duration ?? null;
+    })();
     
     return timedLeg;
   }
