@@ -31,6 +31,8 @@ export class JourneyService {
 
   public productCategory: ProductCategory | null;
 
+  public serviceLineNumber: string | null;
+  public journeyNumber: string | null;
   
   public siriSituationIds: string[];
   public siriSituations: PtSituationElement[];
