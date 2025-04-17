@@ -14,5 +14,5 @@ export declare class Trip {
     computeDepartureTime(): Date | null;
     computeArrivalTime(): Date | null;
     asXMLNode(xmlConfig: XML_Config): XMLElement;
-    asXML(): string;
+    asXML(xmlConfig?: XML_Config): string;
 }
