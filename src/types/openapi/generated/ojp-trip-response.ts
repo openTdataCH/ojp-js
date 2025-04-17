@@ -137,8 +137,17 @@ export interface paths {
                                   lineRef: string;
                                   directionRef?: string;
                                   mode: {
-                                    ptMode: string;
+                                    /** @enum {string} */
+                                    ptMode: "air" | "bus" | "coach" | "trolleyBus" | "metro" | "rail" | "tram" | "water" | "ferry" | "cableway" | "funicular" | "lift" | "other" | "unknown";
+                                    airSubmode?: string;
+                                    busSubmode?: string;
+                                    coachSubmode?: string;
+                                    funicularSubmode?: string;
+                                    metroSubmode?: string;
+                                    tramSubmode?: string;
+                                    telecabinSubmode?: string;
                                     railSubmode?: string;
+                                    waterSubmode?: string;
                                     name?: {
                                       text: string;
                                     };
@@ -538,8 +547,17 @@ export interface components {
         lineRef: string;
         directionRef?: string;
         mode: {
-          ptMode: string;
+          /** @enum {string} */
+          ptMode: "air" | "bus" | "coach" | "trolleyBus" | "metro" | "rail" | "tram" | "water" | "ferry" | "cableway" | "funicular" | "lift" | "other" | "unknown";
+          airSubmode?: string;
+          busSubmode?: string;
+          coachSubmode?: string;
+          funicularSubmode?: string;
+          metroSubmode?: string;
+          tramSubmode?: string;
+          telecabinSubmode?: string;
           railSubmode?: string;
+          waterSubmode?: string;
           name?: {
             text: string;
           };
@@ -763,8 +781,17 @@ export interface components {
           lineRef: string;
           directionRef?: string;
           mode: {
-            ptMode: string;
+            /** @enum {string} */
+            ptMode: "air" | "bus" | "coach" | "trolleyBus" | "metro" | "rail" | "tram" | "water" | "ferry" | "cableway" | "funicular" | "lift" | "other" | "unknown";
+            airSubmode?: string;
+            busSubmode?: string;
+            coachSubmode?: string;
+            funicularSubmode?: string;
+            metroSubmode?: string;
+            tramSubmode?: string;
+            telecabinSubmode?: string;
             railSubmode?: string;
+            waterSubmode?: string;
             name?: {
               text: string;
             };
@@ -997,8 +1024,17 @@ export interface components {
               lineRef: string;
               directionRef?: string;
               mode: {
-                ptMode: string;
+                /** @enum {string} */
+                ptMode: "air" | "bus" | "coach" | "trolleyBus" | "metro" | "rail" | "tram" | "water" | "ferry" | "cableway" | "funicular" | "lift" | "other" | "unknown";
+                airSubmode?: string;
+                busSubmode?: string;
+                coachSubmode?: string;
+                funicularSubmode?: string;
+                metroSubmode?: string;
+                tramSubmode?: string;
+                telecabinSubmode?: string;
                 railSubmode?: string;
+                waterSubmode?: string;
                 name?: {
                   text: string;
                 };
@@ -1234,8 +1270,17 @@ export interface components {
                 lineRef: string;
                 directionRef?: string;
                 mode: {
-                  ptMode: string;
+                  /** @enum {string} */
+                  ptMode: "air" | "bus" | "coach" | "trolleyBus" | "metro" | "rail" | "tram" | "water" | "ferry" | "cableway" | "funicular" | "lift" | "other" | "unknown";
+                  airSubmode?: string;
+                  busSubmode?: string;
+                  coachSubmode?: string;
+                  funicularSubmode?: string;
+                  metroSubmode?: string;
+                  tramSubmode?: string;
+                  telecabinSubmode?: string;
                   railSubmode?: string;
+                  waterSubmode?: string;
                   name?: {
                     text: string;
                   };
@@ -1477,8 +1522,17 @@ export interface components {
                     lineRef: string;
                     directionRef?: string;
                     mode: {
-                      ptMode: string;
+                      /** @enum {string} */
+                      ptMode: "air" | "bus" | "coach" | "trolleyBus" | "metro" | "rail" | "tram" | "water" | "ferry" | "cableway" | "funicular" | "lift" | "other" | "unknown";
+                      airSubmode?: string;
+                      busSubmode?: string;
+                      coachSubmode?: string;
+                      funicularSubmode?: string;
+                      metroSubmode?: string;
+                      tramSubmode?: string;
+                      telecabinSubmode?: string;
                       railSubmode?: string;
+                      waterSubmode?: string;
                       name?: {
                         text: string;
                       };
@@ -1726,8 +1780,17 @@ export interface components {
                           lineRef: string;
                           directionRef?: string;
                           mode: {
-                            ptMode: string;
+                            /** @enum {string} */
+                            ptMode: "air" | "bus" | "coach" | "trolleyBus" | "metro" | "rail" | "tram" | "water" | "ferry" | "cableway" | "funicular" | "lift" | "other" | "unknown";
+                            airSubmode?: string;
+                            busSubmode?: string;
+                            coachSubmode?: string;
+                            funicularSubmode?: string;
+                            metroSubmode?: string;
+                            tramSubmode?: string;
+                            telecabinSubmode?: string;
                             railSubmode?: string;
+                            waterSubmode?: string;
                             name?: {
                               text: string;
                             };
