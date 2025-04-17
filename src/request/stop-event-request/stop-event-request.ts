@@ -74,6 +74,9 @@ export class StopEventRequest extends OJPBaseRequest {
     protected buildRequestNode() {
         super.buildRequestNode();
 
+        // TODO - use XML_Config, see Trip asXML()
+        // console.log(this.xmlConfig);
+
         const dateNowF = new Date().toISOString();
        
         const requestNode = this.serviceRequestNode.ele('ojp:OJPStopEventRequest');
