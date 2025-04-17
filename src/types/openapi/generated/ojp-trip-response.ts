@@ -139,10 +139,10 @@ export interface paths {
                                   mode: {
                                     ptMode: string;
                                     railSubmode?: string;
-                                    name: {
+                                    name?: {
                                       text: string;
                                     };
-                                    shortName: {
+                                    shortName?: {
                                       text: string;
                                     };
                                   };
@@ -540,10 +540,10 @@ export interface components {
         mode: {
           ptMode: string;
           railSubmode?: string;
-          name: {
+          name?: {
             text: string;
           };
-          shortName: {
+          shortName?: {
             text: string;
           };
         };
@@ -765,10 +765,10 @@ export interface components {
           mode: {
             ptMode: string;
             railSubmode?: string;
-            name: {
+            name?: {
               text: string;
             };
-            shortName: {
+            shortName?: {
               text: string;
             };
           };
@@ -999,10 +999,10 @@ export interface components {
               mode: {
                 ptMode: string;
                 railSubmode?: string;
-                name: {
+                name?: {
                   text: string;
                 };
-                shortName: {
+                shortName?: {
                   text: string;
                 };
               };
@@ -1236,10 +1236,10 @@ export interface components {
                 mode: {
                   ptMode: string;
                   railSubmode?: string;
-                  name: {
+                  name?: {
                     text: string;
                   };
-                  shortName: {
+                  shortName?: {
                     text: string;
                   };
                 };
@@ -1479,10 +1479,10 @@ export interface components {
                     mode: {
                       ptMode: string;
                       railSubmode?: string;
-                      name: {
+                      name?: {
                         text: string;
                       };
-                      shortName: {
+                      shortName?: {
                         text: string;
                       };
                     };
@@ -1728,10 +1728,10 @@ export interface components {
                           mode: {
                             ptMode: string;
                             railSubmode?: string;
-                            name: {
+                            name?: {
                               text: string;
                             };
-                            shortName: {
+                            shortName?: {
                               text: string;
                             };
                           };
