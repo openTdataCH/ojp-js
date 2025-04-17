@@ -10,6 +10,14 @@ import { IndividualTransportMode, TransferMode } from '../../types/individual-mo
 import { ServiceBooking } from './continous-leg/service-booking'
 import { TreeNode } from '../../xml/tree-node'
 import { XMLElement } from 'xmlbuilder'
+type PersonalModeEnum = 'foot' | 'bicycle' | 'car' | 'motorcycle' | 'truck' | 'scooter' | 'other';
+type PersonalModeOfOperation = 'self' | 'own' | 'otherOwned' | 'privateLift' | 'lease';
+interface ContinuousLegService {
+  // https://vdvde.github.io/OJP/develop/documentation-tables/ojp.html#type_ojp__PersonalModesEnumeration
+  personalMode: PersonalModeEnum;
+  // https://vdvde.github.io/OJP/develop/documentation-tables/ojp.html#type_ojp__PersonalModesOfOperationEnumeration
+  personalModeOfOperation: PersonalModeOfOperation;
+}
 
 export class TripContinousLeg extends TripLeg {
   public legTransportMode: IndividualTransportMode | null
@@ -17,10 +25,11 @@ export class TripContinousLeg extends TripLeg {
   public pathGuidance: PathGuidance | null
   public walkDuration: Duration | null
   public serviceBooking: ServiceBooking | null;
-  public transferMode: TransferMode | null
+  public transferMode: TransferMode | null;
+  public continousLegService: ContinuousLegService | null;
 
   constructor(legType: LegType, legIDx: number, legDistance: number, fromLocation: Location, toLocation: Location) {
-    super(legType, legIDx, fromLocation, toLocation)
+    super(legType, legIDx, fromLocation, toLocation);
 
     this.legTransportMode = null
     this.legDistance = legDistance
@@ -28,6 +37,7 @@ export class TripContinousLeg extends TripLeg {
     this.walkDuration = null;
     this.serviceBooking = null;
     this.transferMode = null;
+    this.continousLegService = null;
   }
 
   public static initWithTreeNode(legIDx: number, treeNode: TreeNode, legType: LegType): TripContinousLeg | null {
@@ -64,6 +74,13 @@ export class TripContinousLeg extends TripLeg {
 
     if (legType === 'TransferLeg') {
       tripLeg.walkDuration = Duration.initWithTreeNode(treeNode, 'WalkDuration');
+    }
+
+    if (legType === 'ContinuousLeg') {
+      tripLeg.continousLegService = {
+        personalMode: (treeNode.findTextFromChildNamed('Service/PersonalMode') as PersonalModeEnum) ?? 'other',
+        personalModeOfOperation: (treeNode.findTextFromChildNamed('Service/PersonalModeOfOperation') as PersonalModeOfOperation) ?? 'other',
+      };
     }
 
     return tripLeg;
