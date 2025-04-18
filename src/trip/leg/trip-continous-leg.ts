@@ -12,6 +12,7 @@ import { TreeNode } from '../../xml/tree-node'
 import { XMLElement } from 'xmlbuilder'
 import { XML_Config } from '../../types/_all'
 import { StopPointType } from '../../types/stop-point-type';
+import { OJP_VERSION } from '../../constants'
 
 type PersonalModeEnum = 'foot' | 'bicycle' | 'car' | 'motorcycle' | 'truck' | 'scooter' | 'other';
 type PersonalModeOfOperation = 'self' | 'own' | 'otherOwned' | 'privateLift' | 'lease';
@@ -138,7 +139,10 @@ export class TripContinuousLeg extends TripLeg {
   }
 
   private computeLegTransferModeFromTreeNode(treeNode: TreeNode): TransferMode | null {
-    const transferModeS = treeNode.findTextFromChildNamed('TransferType');
+    const isOJPv2 = OJP_VERSION === '2.0';
+
+    const transferModeNodeName = isOJPv2 ? 'TransferType' : 'TransferMode';
+    const transferModeS = treeNode.findTextFromChildNamed(transferModeNodeName);
     if (transferModeS === null) {
       return null;
     }

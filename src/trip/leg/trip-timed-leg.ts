@@ -14,6 +14,7 @@ import { StopPointType } from '../../types/stop-point-type'
 import { TripRequestBoardingType } from '../../request'
 import { XML_Config } from '../../types/_all';
 import { Duration } from '../../shared/duration';
+import { OJP_VERSION } from '../../constants';
 
 export class TripTimedLeg extends TripLeg {
   public service: JourneyService
@@ -38,6 +39,8 @@ export class TripTimedLeg extends TripLeg {
   }
 
   public static initWithTreeNode(legIDx: number, parentTreeNode: TreeNode): TripTimedLeg | null {
+    const isOJPv2 = OJP_VERSION === '2.0';
+
     const treeNode = parentTreeNode.findChildNamed('TimedLeg');
     if (treeNode === null) {
       return null;
@@ -61,7 +64,9 @@ export class TripTimedLeg extends TripLeg {
     }
 
     const intermediateStopPoints: StopPoint[] = []
-    const intermediaryStopTreeNodes: TreeNode[] = treeNode.findChildrenNamed('LegIntermediate');
+
+    const intermediaryStopTreeNodeName = isOJPv2 ? 'LegIntermediate' : 'LegIntermediates';
+    const intermediaryStopTreeNodes = treeNode.findChildrenNamed(intermediaryStopTreeNodeName);
     intermediaryStopTreeNodes.forEach(intermediaryStopTreeNode => {
       const stopPoint = StopPoint.initWithTreeNode(intermediaryStopTreeNode, 'Intermediate');
       if (stopPoint) {

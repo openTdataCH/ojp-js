@@ -1,3 +1,4 @@
+import { OJP_VERSION } from "../../constants";
 import { GeoPosition } from "../../location/geoposition";
 import { Location } from "../../location/location"
 import { Duration } from "../../shared/duration";
@@ -106,8 +107,13 @@ class TrackSection {
   }
 
   public static initWithTreeNode(treeNode: TreeNode): TrackSection | null {
-    const trackStartTreeNode = treeNode.findChildNamed('TrackSectionStart');
-    const trackEndTreeNode = treeNode.findChildNamed('TrackSectionEnd');
+    const isOJPv2 = OJP_VERSION === '2.0';
+
+    const trackStartNodeName = isOJPv2 ? 'TrackSectionStart' : 'TrackStart';
+    const trackStartTreeNode = treeNode.findChildNamed(trackStartNodeName);
+    
+    const trackEndNodeName = isOJPv2 ? 'TrackSectionEnd' : 'TrackEnd';
+    const trackEndTreeNode = treeNode.findChildNamed(trackEndNodeName);
 
     if (!(trackStartTreeNode && trackEndTreeNode)) {
       return null;
