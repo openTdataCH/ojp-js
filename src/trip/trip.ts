@@ -21,7 +21,7 @@ export class Trip {
   constructor(tripID: string, legs: TripLeg[], tripStats: TripStats) {
     this.id = tripID;
     this.legs = legs;
-    this.stats = tripStats
+    this.stats = tripStats;
     this.tripFareResults = [];
   }
 
