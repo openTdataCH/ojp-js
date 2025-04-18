@@ -5,7 +5,7 @@ export class Duration {
   public minutes: number
   public totalMinutes: number
 
-  private constructor(hours: number, minutes: number) {
+  constructor(hours: number, minutes: number) {
     this.hours = hours
     this.minutes = minutes
     this.totalMinutes = hours * 60 + minutes
