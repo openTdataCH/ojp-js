@@ -1,3 +1,4 @@
+import { OJP_VERSION } from "../../constants";
 import { Location } from "../../location/location";
 import { PtSituationElement } from "../../situation/situation-element";
 import { TripInfoResult } from "../../trip/trip-info/trip-info-result";
@@ -30,6 +31,8 @@ export class TripInfoRequestParser extends BaseParser {
   }
 
   protected onCloseTag(nodeName: string): void {
+    const isOJPv2 = OJP_VERSION === '2.0';
+
     if (nodeName === 'TripInfoResult') {
       const tripInfoResult = TripInfoResult.initFromTreeNode(this.currentNode);
       if (tripInfoResult) {
@@ -43,8 +46,9 @@ export class TripInfoRequestParser extends BaseParser {
       const placesTreeNode = this.currentNode.findChildNamed('Places');
       if (placesTreeNode) {
         this.mapContextLocations = {};
-            
-        const locationTreeNodes = placesTreeNode.findChildrenNamed('Location');
+        
+        const locationNodeName = isOJPv2 ? 'Place' : 'Location';
+        const locationTreeNodes = placesTreeNode.findChildrenNamed(locationNodeName);
         locationTreeNodes.forEach(locationTreeNode => {
           const location = Location.initWithTreeNode(locationTreeNode);
           const stopPlaceRef = location.stopPlace?.stopPlaceRef ?? null;
