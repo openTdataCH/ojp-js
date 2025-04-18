@@ -85,7 +85,7 @@ export class StopEventRequest extends OJPBaseRequest {
         const locationNode = requestNode.ele(ojpPrefix + 'Location');
 
         if (this.stopPlaceRef) {
-            const requestPlaceRefNode = requestNode.ele(ojpPrefix + "PlaceRef");
+            const requestPlaceRefNode = locationNode.ele(ojpPrefix + "PlaceRef");
             const stopPointRefNode = isOJPv2 ? (siriPrefix + 'StopPointRef') : (ojpPrefix + 'StopPlaceRef');
             requestPlaceRefNode.ele(stopPointRefNode, this.stopPlaceRef);
             
