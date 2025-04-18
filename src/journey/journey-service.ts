@@ -82,7 +82,7 @@ export class JourneyService {
     const ptMode = PublicTransportMode.initWithServiceTreeNode(serviceTreeNode);
     
     const operatorRef = (() => {
-      const nodeName = OJP_VERSION === '2.0' ? 'siri:OperatorRef' : 'ojp:OperatorRef';
+      const nodeName = OJP_VERSION === '2.0' ? 'siri:OperatorRef' : 'OperatorRef';
 
       const operatorRefText = serviceTreeNode.findTextFromChildNamed(nodeName);
       if (operatorRefText === null) {
