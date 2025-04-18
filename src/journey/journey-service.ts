@@ -84,12 +84,16 @@ export class JourneyService {
     const operatorRef = (() => {
       const nodeName = OJP_VERSION === '2.0' ? 'siri:OperatorRef' : 'OperatorRef';
 
-      const operatorRefText = serviceTreeNode.findTextFromChildNamed(nodeName);
+      let operatorRefText = serviceTreeNode.findTextFromChildNamed(nodeName);
       if (operatorRefText === null) {
         return 'n/a OperatorRef';
       }
+      
+      // Cleanup OJP v1.0 requirements 
+      // - see https://github.com/openTdataCH/ojp-js/issues/154
+      operatorRefText = operatorRefText.replace('ojp:', '');
 
-      return operatorRefText.replace('ojp:', '');
+      return operatorRefText;
     })();
 
     const operatingDayRef = serviceTreeNode.findTextFromChildNamed('OperatingDayRef');
