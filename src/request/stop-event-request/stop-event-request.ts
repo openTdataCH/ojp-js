@@ -70,7 +70,7 @@ export class StopEventRequest extends OJPBaseRequest {
         return stopEventRequest;
     }
 
-    protected buildRequestNode() {
+    protected buildRequestNode(): void {
         super.buildRequestNode();
 
         const siriPrefix = this.xmlConfig.defaultNS === 'siri' ? '' : 'siri:';
