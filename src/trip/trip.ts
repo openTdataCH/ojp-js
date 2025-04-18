@@ -9,7 +9,7 @@ import { Duration } from '../shared/duration'
 import { TreeNode } from '../xml/tree-node'
 import { TripFareResult } from '../fare/fare'
 
-import { DEBUG_LEVEL, XML_Config_Default } from '../constants';
+import { DEBUG_LEVEL, OJP_VERSION, XML_Config_Default } from '../constants';
 import { XML_Config } from '../types/_all'
 
 export class Trip {
@@ -26,7 +26,10 @@ export class Trip {
   }
 
   public static initFromTreeNode(treeNode: TreeNode): Trip | null {
-    let tripId = treeNode.findTextFromChildNamed('TripId');
+    const isOJPv2 = OJP_VERSION === '2.0';
+
+    const tripIdNodeName = isOJPv2 ? 'Id' : 'TripId';
+    let tripId = treeNode.findTextFromChildNamed(tripIdNodeName);
 
     // HACK for solution demo, backend sometimes delivers Trip with empty Id
     // TODO: revert when backend is ready, DONT merge to main
