@@ -5,7 +5,7 @@ import { ApiConfig } from '../types/stage-config';
 import { RequestInfo } from './types/request-info.type';
 import { Language } from '../types/language-type';
 import { XML_Config } from '../types/_all';
-import { REQUESTOR_REF, XML_Config_OJPv2 } from '../constants';
+import { REQUESTOR_REF, XML_Config_OJPv1 } from '../constants';
 
 export class OJPBaseRequest {
   private stageConfig: ApiConfig;
@@ -20,7 +20,7 @@ export class OJPBaseRequest {
   protected mockRequestXML: string | null;
   protected mockResponseXML: string | null;
 
-  constructor(stageConfig: ApiConfig, language: Language, xmlConfig: XML_Config = XML_Config_OJPv2, requestorRef = REQUESTOR_REF) {
+  constructor(stageConfig: ApiConfig, language: Language, xmlConfig: XML_Config = XML_Config_OJPv1, requestorRef = REQUESTOR_REF) {
     this.stageConfig = stageConfig;
     this.language = language;
     this.xmlConfig = xmlConfig;
