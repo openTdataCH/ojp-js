@@ -234,12 +234,12 @@ export class TripContinuousLeg extends TripLeg {
   public addToXMLNode(parentNode: XMLElement, xmlConfig: XML_Config) {
     const ojpPrefix = xmlConfig.defaultNS === 'ojp' ? '' : 'ojp:';
     const siriPrefix = xmlConfig.defaultNS === 'siri' ? '' : 'siri:';
-    const isOJPv1 = xmlConfig.ojpVersion === '1.0';
+    const isOJPv2 = xmlConfig.ojpVersion === '2.0';
 
-    const legNodeName = isOJPv1 ? 'TripLeg' : 'Leg';
+    const legNodeName = isOJPv2 ? 'Leg' : 'TripLeg';
     const tripLegNode = parentNode.ele(ojpPrefix + legNodeName);
     
-    const legIdTagName = isOJPv1 ? 'LegId' : 'Id';
+    const legIdTagName = isOJPv2 ? 'Id' : 'LegId';
     tripLegNode.ele(ojpPrefix + legIdTagName, this.legID);
 
     const legDurationF = this.legDuration?.asOJPFormattedText() ?? null;
