@@ -1,19 +1,22 @@
 import * as sax from 'sax';
 
 import { TreeNode } from "../xml/tree-node";
-import { IS_NODE_CLI } from '../constants';
+import { IS_NODE_CLI, XML_Config_Default } from '../constants';
 
 export class BaseParser {
   protected rootNode: TreeNode;
   protected currentNode: TreeNode;
   protected stack: TreeNode[];
 
-  private mapUriNS: Record<string, string> = {
-    "http://www.vdv.de/ojp": "",
-    "http://www.siri.org.uk/siri": "siri",
-  };
+  private mapUriNS: Record<string, string> = {};
 
   constructor() {
+    for (const ns in XML_Config_Default.mapNS) {
+      const uri = XML_Config_Default.mapNS[ns];
+      const uriNS = ns === XML_Config_Default.defaultNS ? '' : ns;
+      this.mapUriNS[uri] = uriNS;
+    }
+
     this.rootNode = new TreeNode("root", null, {}, [], null);
     this.currentNode = this.rootNode;
     this.stack = [];
