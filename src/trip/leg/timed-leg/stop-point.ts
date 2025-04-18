@@ -78,7 +78,7 @@ export class StopPoint {
     stopPoint.siriSituationIds = [];
     const situationFullRefTreeNodes = treeNode.findChildrenNamed('SituationFullRef');
     situationFullRefTreeNodes.forEach(situationFullRefTreeNode => {
-      const situationNumber = situationFullRefTreeNode.findTextFromChildNamed('SituationNumber');
+      const situationNumber = situationFullRefTreeNode.findTextFromChildNamed('siri:SituationNumber');
       if (situationNumber) {
         stopPoint.siriSituationIds.push(situationNumber);
       }
