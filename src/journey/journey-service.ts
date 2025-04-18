@@ -6,6 +6,7 @@ import { StopPlace } from '../location/stopplace';
 import { PtSituationElement } from '../situation/situation-element';
 import { TreeNode } from '../xml/tree-node';
 import { XML_Config } from '../types/_all';
+import { OJP_VERSION } from '../constants';
 
 interface ServiceAttribute {
   code: string
@@ -81,12 +82,14 @@ export class JourneyService {
     const ptMode = PublicTransportMode.initWithServiceTreeNode(serviceTreeNode);
     
     const operatorRef = (() => {
-      const ojpAgencyId = serviceTreeNode.findTextFromChildNamed('OperatorRef');
-      if (ojpAgencyId === null) {
+      const nodeName = OJP_VERSION === '2.0' ? 'siri:OperatorRef' : 'ojp:OperatorRef';
+
+      const operatorRefText = serviceTreeNode.findTextFromChildNamed(nodeName);
+      if (operatorRefText === null) {
         return 'n/a OperatorRef';
       }
 
-      return ojpAgencyId.replace('ojp:', '');
+      return operatorRefText.replace('ojp:', '');
     })();
 
     const operatingDayRef = serviceTreeNode.findTextFromChildNamed('OperatingDayRef');
