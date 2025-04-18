@@ -226,7 +226,7 @@ export class JourneyService {
   public addToXMLNode(parentNode: XMLElement, xmlConfig: XML_Config) {
     const ojpPrefix = xmlConfig.defaultNS === 'ojp' ? '' : 'ojp:';
     const siriPrefix = xmlConfig.defaultNS === 'siri' ? '' : 'siri:';
-    const isOJPv1 = xmlConfig.ojpVersion === '1.0';
+    const isOJPv2 = xmlConfig.ojpVersion === '2.0';
 
     const serviceNode = parentNode.ele(ojpPrefix + 'Service');
     
@@ -250,7 +250,7 @@ export class JourneyService {
     }
 
     if (this.serviceLineNumber) {
-      const serviceTagName = isOJPv1 ? 'PublishedLineName' : 'PublishedServiceName';
+      const serviceTagName = isOJPv2 ? 'PublishedServiceName' : 'PublishedLineName';
       serviceNode.ele(ojpPrefix + serviceTagName).ele(ojpPrefix + 'Text', this.serviceLineNumber);
     }
 
