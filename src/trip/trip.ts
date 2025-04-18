@@ -9,7 +9,7 @@ import { Duration } from '../shared/duration'
 import { TreeNode } from '../xml/tree-node'
 import { TripFareResult } from '../fare/fare'
 
-import { DEBUG_LEVEL } from '../constants'
+import { DEBUG_LEVEL, XML_Config_OJPv1 } from '../constants';
 import { XML_Config } from '../types/_all'
 
 export class Trip {
@@ -186,17 +186,8 @@ export class Trip {
     return tripNode;
   }
 
-  public asXML(): string {
-    const ojpV2_XML_Config: XML_Config = {
-      ojpVersion: '2.0',
-      defaultNS: 'ojp',
-      mapNS: {
-        'ojp': 'http://www.vdv.de/ojp',
-        'siri': 'http://www.siri.org.uk/siri',
-      },
-    };
-
-    const tripNode = this.asXMLNode(ojpV2_XML_Config);
+  public asXML(xmlConfig: XML_Config = XML_Config_OJPv1): string {
+    const tripNode = this.asXMLNode(xmlConfig);
 
     const xml = tripNode.end({
       pretty: true,
