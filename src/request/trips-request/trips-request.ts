@@ -199,8 +199,7 @@ export class TripRequest extends OJPBaseRequest {
         : this.toTripLocation;
       const location = tripLocation.location;
 
-      let tagName = isFrom ? "ojp:Origin" : "ojp:Destination";
-
+      const tagName = isFrom ? "Origin" : "Destination";
       const endPointNode = tripRequestNode.ele(ojpPrefix + tagName);
       const placeRefNode = endPointNode.ele(ojpPrefix + "PlaceRef");
 
