@@ -50,20 +50,20 @@ export class TripInfoRequest extends OJPBaseRequest {
     protected buildRequestNode(): void {
         super.buildRequestNode();
 
-        // TODO - use XML_Config, see Trip asXML()
-        // console.log(this.xmlConfig);
+        const siriPrefix = this.xmlConfig.defaultNS === 'siri' ? '' : 'siri:';
+        const ojpPrefix = this.xmlConfig.defaultNS === 'ojp' ? '' : 'ojp:';
 
-        const requestNode = this.serviceRequestNode.ele('ojp:OJPTripInfoRequest');
+        const requestNode = this.serviceRequestNode.ele(ojpPrefix + 'OJPTripInfoRequest');
 
         const dateNowF = new Date().toISOString();
-        requestNode.ele('RequestTimestamp', dateNowF);
+        requestNode.ele(siriPrefix + 'RequestTimestamp', dateNowF);
 
-        requestNode.ele('ojp:JourneyRef', this.journeyRef);
-        requestNode.ele('ojp:OperatingDayRef', this.operatingDayRef);
+        requestNode.ele(ojpPrefix + 'JourneyRef', this.journeyRef);
+        requestNode.ele(ojpPrefix + 'OperatingDayRef', this.operatingDayRef);
 
-        const paramsNode = requestNode.ele('ojp:Params');
-        paramsNode.ele('ojp:IncludeCalls', true);
-        paramsNode.ele('ojp:IncludeService', true);
+        const paramsNode = requestNode.ele(ojpPrefix + 'Params');
+        paramsNode.ele(ojpPrefix + 'IncludeCalls', true);
+        paramsNode.ele(ojpPrefix + 'IncludeService', true);
     }
 
     public async fetchResponse(): Promise<TripInfoRequest_Response> {

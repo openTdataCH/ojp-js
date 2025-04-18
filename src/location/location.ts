@@ -6,6 +6,7 @@ import { Address } from "./address";
 import { PointOfInterest } from "./poi";
 import { TopographicPlace } from "./topographic-place";
 import { TreeNode } from '../xml/tree-node';
+import { OJP_VERSION } from '../constants';
 
 interface NearbyLocation {
   distance: number
@@ -45,7 +46,10 @@ export class Location {
     
     location.address = Address.initWithLocationTreeNode(treeNode);
     location.geoPosition = GeoPosition.initWithLocationTreeNode(treeNode);
-    location.locationName = treeNode.findTextFromChildNamed('LocationName/Text');
+    
+    const locationNamePath = OJP_VERSION === '2.0' ? 'Name/Text' : 'LocationName/Text';
+    location.locationName = treeNode.findTextFromChildNamed(locationNamePath);
+    
     location.poi = PointOfInterest.initWithLocationTreeNode(treeNode);
     location.stopPlace = StopPlace.initWithLocationTreeNode(treeNode);
     location.topographicPlace = TopographicPlace.initWithLocationTreeNode(treeNode);
@@ -56,7 +60,8 @@ export class Location {
   }
 
   public static initWithLocationResultTreeNode(locationResultTreeNode: TreeNode): Location | null {
-    const locationTreeNode = locationResultTreeNode.findChildNamed('Location');
+    const childName = OJP_VERSION === '2.0' ? 'Place' : 'Location';
+    const locationTreeNode = locationResultTreeNode.findChildNamed(childName);
     if (locationTreeNode === null) {
       return null;
     }
