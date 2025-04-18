@@ -266,11 +266,19 @@ export class JourneyService {
       attributeNode.ele(ojpPrefix + 'Code', attrData.code);
     }
 
-    let agencyID_s = this.operatorRef;
-    if (!agencyID_s.startsWith('ojp:')) {
-      agencyID_s = 'ojp:' + agencyID_s;
-    }
+    const operatorRef = (() => {
+      if (xmlConfig.ojpVersion === '2.0') {
+        return this.operatorRef;
+      }
 
-    serviceNode.ele(ojpPrefix + 'OperatorRef', agencyID_s);
+      // in OJP1.0 we need to prefix the value with ojp:
+      if (this.operatorRef.startsWith('ojp:')) {
+        return this.operatorRef;
+      } else {
+        return 'ojp:' +  this.operatorRef;
+      }
+    })();
+
+    serviceNode.ele(ojpPrefix + 'OperatorRef', operatorRef);
   }
 }
