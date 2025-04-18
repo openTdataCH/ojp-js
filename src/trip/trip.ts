@@ -62,7 +62,8 @@ export class Trip {
     const legs: TripLeg[] = [];
     let tripLegsTotalDistance = 0;
 
-    const tripLegTreeNodes = treeNode.findChildrenNamed('TripLeg');
+    const tripLegTreeNodeName = isOJPv2 ? 'Leg' : 'TripLeg';
+    const tripLegTreeNodes = treeNode.findChildrenNamed(tripLegTreeNodeName);
     tripLegTreeNodes.forEach(tripLegTreeNode => {
       const tripLeg = TripLegFactory.initWithTreeNode(tripLegTreeNode);
       if (tripLeg === null) {
