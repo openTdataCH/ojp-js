@@ -26,7 +26,7 @@ export class JourneyService {
   public operatingDayRef: string;
 
   public ptMode: PublicTransportMode;
-  public agencyCode: string;
+  public operatorRef: string;
   public originStopPlace: StopPlace | null;
   public destinationStopPlace: StopPlace | null;
 
@@ -44,14 +44,14 @@ export class JourneyService {
   public hasDeviation: boolean | null;
   public isUnplanned: boolean | null;
 
-  constructor(journeyRef: string, operatingDayRef: string, ptMode: PublicTransportMode, agencyCode: string) {
+  constructor(journeyRef: string, operatingDayRef: string, ptMode: PublicTransportMode, operatorRef: string) {
     this.journeyRef = journeyRef;
     this.operatingDayRef = operatingDayRef;
     this.lineRef = null;
     this.directionRef = null;
 
     this.ptMode = ptMode;
-    this.agencyCode = agencyCode;
+    this.operatorRef = operatorRef;
     
     this.originStopPlace = null;
     this.destinationStopPlace = null;
@@ -80,9 +80,9 @@ export class JourneyService {
     const journeyRef = serviceTreeNode.findTextFromChildNamed('JourneyRef');
     const ptMode = PublicTransportMode.initWithServiceTreeNode(serviceTreeNode);
     
-    const agencyCode = (() => {
       const ojpAgencyId = serviceTreeNode.findTextFromChildNamed('siri:OperatorRef');
       if (ojpAgencyId === null) {
+    const operatorRef = (() => {
         return 'n/a OperatorRef';
       }
 
@@ -95,7 +95,7 @@ export class JourneyService {
       return null;
     }
 
-    const legService = new JourneyService(journeyRef, operatingDayRef, ptMode, agencyCode);
+    const legService = new JourneyService(journeyRef, operatingDayRef, ptMode, operatorRef);
 
     legService.lineRef = serviceTreeNode.findTextFromChildNamed('siri:LineRef');
     legService.directionRef = serviceTreeNode.findTextFromChildNamed('siri:DirectionRef');
@@ -206,7 +206,7 @@ export class JourneyService {
       nameParts.push(this.ptMode.shortName ?? this.ptMode.ptMode)
     }
 
-    nameParts.push('(' + this.agencyCode + ')')
+    nameParts.push('(' + this.operatorRef + ')')
 
     return nameParts.join(' ')
   }
@@ -254,7 +254,7 @@ export class JourneyService {
       attributeNode.ele(ojpPrefix + 'Code', attrData.code);
     }
 
-    let agencyID_s = this.agencyCode;
+    let agencyID_s = this.operatorRef;
     if (!agencyID_s.startsWith('ojp:')) {
       agencyID_s = 'ojp:' + agencyID_s;
     }
