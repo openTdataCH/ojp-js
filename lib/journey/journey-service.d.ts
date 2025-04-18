@@ -20,7 +20,7 @@ export declare class JourneyService {
     directionRef: string | null;
     operatingDayRef: string;
     ptMode: PublicTransportMode;
-    agencyCode: string;
+    operatorRef: string;
     originStopPlace: StopPlace | null;
     destinationStopPlace: StopPlace | null;
     productCategory: ProductCategory | null;
@@ -32,7 +32,7 @@ export declare class JourneyService {
     hasCancellation: boolean | null;
     hasDeviation: boolean | null;
     isUnplanned: boolean | null;
-    constructor(journeyRef: string, operatingDayRef: string, ptMode: PublicTransportMode, agencyCode: string);
+    constructor(journeyRef: string, operatingDayRef: string, ptMode: PublicTransportMode, operatorRef: string);
     static initWithTreeNode(treeNode: TreeNode): JourneyService | null;
     formatServiceName(): string;
     addToXMLNode(parentNode: XMLElement, xmlConfig: XML_Config): void;

@@ -7,5 +7,6 @@ export declare const SDK_VERSION = "0.17.4";
 export declare const IS_NODE_CLI: string | false;
 export declare const XML_Config_OJPv1: XML_Config;
 export declare const XML_Config_OJPv2: XML_Config;
+export declare const XML_Config_Default: XML_Config;
 export declare const REQUESTOR_REF: string;
 export {};
