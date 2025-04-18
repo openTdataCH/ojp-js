@@ -115,17 +115,24 @@ export class JourneyService {
       };
     }
 
-    legService.serviceLineNumber = serviceTreeNode.findTextFromChildNamed('PublishedLineName/Text');
-    legService.journeyNumber = treeNode.findTextFromChildNamed('Extension/PublishedJourneyNumber/Text');
+    const serviceLineNumberNodeName = OJP_VERSION === '2.0' ? 'PublishedServiceName' : 'PublishedLineName';
+    legService.serviceLineNumber = serviceTreeNode.findTextFromChildNamed(serviceLineNumberNodeName + '/Text');
+
+    const journeyNumberNodePath = OJP_VERSION === '2.0' ? 'TrainNumber' : 'PublishedJourneyNumber/Text';
+    legService.journeyNumber = serviceTreeNode.findTextFromChildNamed(journeyNumberNodePath);
 
     legService.siriSituationIds = [];
-    const situationFullRefTreeNodes = serviceTreeNode.findChildrenNamed('SituationFullRef');
-    situationFullRefTreeNodes.forEach(situationFullRefTreeNode => {
-      const situationNumber = situationFullRefTreeNode.findTextFromChildNamed('siri:SituationNumber');
-      if (situationNumber) {
-        legService.siriSituationIds.push(situationNumber);
-      }
-    }); 
+    // in OJP2.0 there is a container that holds the situations
+    const situationsParentNode = OJP_VERSION === '2.0' ? serviceTreeNode.findChildNamed('SituationFullRefs') : serviceTreeNode;
+    if (situationsParentNode) {
+      const situationFullRefTreeNodes = situationsParentNode.findChildrenNamed('SituationFullRef');
+      situationFullRefTreeNodes.forEach(situationFullRefTreeNode => {
+        const situationNumber = situationFullRefTreeNode.findTextFromChildNamed('siri:SituationNumber');
+        if (situationNumber) {
+          legService.siriSituationIds.push(situationNumber);
+        }
+      });  
+    }
 
     legService.serviceAttributes = {};
     serviceTreeNode.findChildrenNamed('Attribute').forEach(attributeTreeNode => {
@@ -136,7 +143,8 @@ export class JourneyService {
         return;
       }
 
-      const text = attributeTreeNode.findTextFromChildNamed('Text/Text');
+      const textPath = OJP_VERSION === '2.0' ? 'UserText/Text' : 'Text/Text';
+      const text = attributeTreeNode.findTextFromChildNamed(textPath);
 
       if (text === null) {
         console.error('ERROR - cant find code/text for Attribute');
