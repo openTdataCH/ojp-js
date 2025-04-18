@@ -7,7 +7,6 @@ import { StopEventRequest_Response } from '../types/stop-event-request.type';
 import { StopEventRequestParser } from './stop-event-request-parser';
 import { Language } from '../../types/language-type';
 import { GeoPosition } from '../../location/geoposition';
-import { OJP_VERSION } from '../../constants';
 import { UseRealtimeDataEnumeration } from '../../types/_all';
 
 export class StopEventRequest extends OJPBaseRequest {
@@ -74,41 +73,44 @@ export class StopEventRequest extends OJPBaseRequest {
     protected buildRequestNode(): void {
         super.buildRequestNode();
 
-        // TODO - use XML_Config, see Trip asXML()
-        // console.log(this.xmlConfig);
+        const siriPrefix = this.xmlConfig.defaultNS === 'siri' ? '' : 'siri:';
+        const ojpPrefix = this.xmlConfig.defaultNS === 'ojp' ? '' : 'ojp:';
+        const isOJPv2 = this.xmlConfig.ojpVersion === '2.0';
 
         const dateNowF = new Date().toISOString();
        
-        const requestNode = this.serviceRequestNode.ele('OJPStopEventRequest');
-        requestNode.ele('siri:RequestTimestamp', dateNowF);
+        const requestNode = this.serviceRequestNode.ele(ojpPrefix + 'OJPStopEventRequest');
+        requestNode.ele(siriPrefix + 'RequestTimestamp', dateNowF);
 
-        const locationNode = requestNode.ele('Location');
+        const locationNode = requestNode.ele(ojpPrefix + 'Location');
 
         if (this.stopPlaceRef) {
-            const requestPlaceRefNode = locationNode.ele('PlaceRef');
-            requestPlaceRefNode.ele('siri:StopPointRef', this.stopPlaceRef);
-            requestPlaceRefNode.ele('Name').ele('Text', 'n/a');
+            const requestPlaceRefNode = requestNode.ele(ojpPrefix + "PlaceRef");
+            const stopPointRefNode = isOJPv2 ? (siriPrefix + 'StopPointRef') : (ojpPrefix + 'StopPlaceRef');
+            requestPlaceRefNode.ele(stopPointRefNode, this.stopPlaceRef);
+            
+            requestPlaceRefNode.ele(ojpPrefix + 'Name').ele(ojpPrefix + 'Text', 'n/a');
         }
 
         const dateF = this.depArrTime.toISOString();
-        locationNode.ele('DepArrTime', dateF);
+        locationNode.ele(ojpPrefix + 'DepArrTime', dateF);
 
-        const requestParamsNode = requestNode.ele('Params');
+        const requestParamsNode = requestNode.ele(ojpPrefix + 'Params');
 
-        requestParamsNode.ele('IncludeAllRestrictedLines', true);
-        requestParamsNode.ele('NumberOfResults', this.numberOfResults);
-        requestParamsNode.ele('StopEventType', this.stopEventType);
-        requestParamsNode.ele('IncludePreviousCalls', this.includePreviousCalls);
-        requestParamsNode.ele('IncludeOnwardCalls', this.includeOnwardCalls);
+        requestParamsNode.ele(ojpPrefix + 'IncludeAllRestrictedLines', true);
+        requestParamsNode.ele(ojpPrefix + 'NumberOfResults', this.numberOfResults);
+        requestParamsNode.ele(ojpPrefix + 'StopEventType', this.stopEventType);
+        requestParamsNode.ele(ojpPrefix + 'IncludePreviousCalls', this.includePreviousCalls);
+        requestParamsNode.ele(ojpPrefix + 'IncludeOnwardCalls', this.includeOnwardCalls);
 
-        if (OJP_VERSION === '2.0') {
-            requestParamsNode.ele('IncludeRealtimeData', this.includeRealtimeData);
-            requestParamsNode.ele("UseRealtimeData", this.useRealTimeDataType);
+        if (isOJPv2) {
+            requestParamsNode.ele(ojpPrefix + 'IncludeRealtimeData', this.includeRealtimeData);
+            requestParamsNode.ele(ojpPrefix + "UseRealtimeData", this.useRealTimeDataType);
         }
 
         if (this.enableExtensions) {
-            const extensionsNode = requestNode.ele('siri:Extensions');
-            extensionsNode.ele('ParamsExtension').ele('PrivateModeFilter').ele('Exclude', 'false');
+            const extensionsNode = requestNode.ele(siriPrefix + 'Extensions');
+            extensionsNode.ele(ojpPrefix + 'ParamsExtension').ele(ojpPrefix + 'PrivateModeFilter').ele(ojpPrefix + 'Exclude', 'false');
         }
     }
 
