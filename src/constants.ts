@@ -25,16 +25,28 @@ if (DEBUG_LEVEL === 'DEBUG') {
     console.log('OJP-SDK            : DEBUG features are enabled');
 }
 
-export const XML_Config_OJPv1: XML_Config = {
+// XML builder in OJPv1 siri: default
+export const XML_BuilderConfigOJPv1: XML_Config = {
     ojpVersion: '1.0',
-    defaultNS: null,
+    defaultNS: 'siri',
     mapNS: {
         'ojp': 'http://www.vdv.de/ojp',
         'siri': 'http://www.siri.org.uk/siri',
     },
 };
 
-export const XML_Config_OJPv2: XML_Config = {
+// XML parser in OJPv1 ojp: default
+const XML_ParserConfigOJPv1: XML_Config = {
+    ojpVersion: '1.0',
+    defaultNS: 'ojp',
+    mapNS: {
+        'ojp': 'http://www.vdv.de/ojp',
+        'siri': 'http://www.siri.org.uk/siri',
+    },
+};
+
+// XML builder/parser in OJPv2 ojp: default
+const XML_ConfigOJPv2: XML_Config = {
     ojpVersion: '2.0',
     defaultNS: 'ojp',
     mapNS: {
@@ -43,6 +55,7 @@ export const XML_Config_OJPv2: XML_Config = {
     },
 };
 
-export const XML_Config_Default: XML_Config = XML_Config_OJPv1;
+export const XML_BuilderConfig: XML_Config = XML_BuilderConfigOJPv1;
+export const XML_ParserConfig: XML_Config = XML_ParserConfigOJPv1;
 
 export const REQUESTOR_REF = 'OJPv' + OJP_VERSION + '_JS_SDK_v' + SDK_VERSION;
