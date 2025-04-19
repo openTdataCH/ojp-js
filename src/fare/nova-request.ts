@@ -33,32 +33,30 @@ export class NovaRequest {
   }
 
   public fetchResponseForTrips(trips: Trip[]) {
-    const xmlConfig = XML_Config_OJPv1;
-
     const now = new Date();
-    const serviceRequestNode = this.buildServiceRequestNode(xmlConfig, now);
+    const serviceRequestNode = this.buildServiceRequestNode(now);
 
     trips.forEach(trip => {
-      this.addTripToServiceRequestNode(serviceRequestNode, xmlConfig, trip, now);
+      this.addTripToServiceRequestNode(serviceRequestNode, trip, now);
     });
 
     return this.fetchResponse(serviceRequestNode);
   }
 
-  private buildServiceRequestNode(xmlConfig: XML_Config, requestDate: Date) {
+  private buildServiceRequestNode(requestDate: Date) {
     const rootNode = xmlbuilder.create('OJP', {
       version: '1.0',
       encoding: 'utf-8',
     });
 
-    for (const ns in xmlConfig.mapNS) {
-      const key = ns === xmlConfig.defaultNS ? 'xmlns' : 'xmlns:' + ns;
-      rootNode.att(key, xmlConfig.mapNS[ns]);
+    for (const ns in this.xmlConfig.mapNS) {
+      const key = ns === this.xmlConfig.defaultNS ? 'xmlns' : 'xmlns:' + ns;
+      rootNode.att(key, this.xmlConfig.mapNS[ns]);
     }
     
-    rootNode.att('version', xmlConfig.ojpVersion);
+    rootNode.att('version', this.xmlConfig.ojpVersion);
 
-    const siriPrefix = xmlConfig.defaultNS === 'siri' ? '' : 'siri:';
+    const siriPrefix = this.xmlConfig.defaultNS === 'siri' ? '' : 'siri:';
 
     const serviceRequestNode = rootNode.ele(siriPrefix + 'OJPRequest').ele(siriPrefix + 'ServiceRequest');
     
@@ -70,9 +68,9 @@ export class NovaRequest {
     return serviceRequestNode;
   }
 
-  private addTripToServiceRequestNode(serviceRequestNode: xmlbuilder.XMLElement, xmlConfig: XML_Config, trip: Trip, requestDate: Date) {
-    const siriPrefix = xmlConfig.defaultNS === 'siri' ? '' : 'siri:';
-    const ojpPrefix = xmlConfig.defaultNS === 'ojp' ? '' : 'ojp:';
+  private addTripToServiceRequestNode(serviceRequestNode: xmlbuilder.XMLElement, trip: Trip, requestDate: Date) {
+    const siriPrefix = this.xmlConfig.defaultNS === 'siri' ? '' : 'siri:';
+    const ojpPrefix = this.xmlConfig.defaultNS === 'ojp' ? '' : 'ojp:';
 
     const fareRequestNode = serviceRequestNode.ele(ojpPrefix + 'OJPFareRequest');
 
@@ -80,7 +78,7 @@ export class NovaRequest {
     fareRequestNode.ele(siriPrefix + 'RequestTimestamp', dateF);
 
     const tripFareRequest = fareRequestNode.ele(ojpPrefix + 'TripFareRequest');
-    const tripNode = trip.asXMLNode(xmlConfig);
+    const tripNode = trip.asXMLNode(this.xmlConfig);
 
     tripFareRequest.importDocument(tripNode);
 
