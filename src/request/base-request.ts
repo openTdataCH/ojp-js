@@ -141,7 +141,7 @@ export class OJPBaseRequest {
     
     const serviceRequestNode = rootNode.ele('OJPRequest').ele(siriPrefix + 'ServiceRequest');
 
-    serviceRequestNode.ele('siri:ServiceRequestContext').ele('siri:Language', this.language);
+    serviceRequestNode.ele(siriPrefix + 'ServiceRequestContext').ele(siriPrefix + 'Language', this.language);
     
     const dateF = requestDate.toISOString();
     serviceRequestNode.ele(siriPrefix + 'RequestTimestamp', dateF);
