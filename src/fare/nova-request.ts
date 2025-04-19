@@ -5,7 +5,7 @@ import { Trip } from "../trip";
 import { NovaFare_Response, NovaFareParser } from "./nova-request-parser";
 import { ApiConfig } from '../types/stage-config';
 import { XML_Config } from '../types/_all';
-import { REQUESTOR_REF, XML_Config_OJPv1 } from '../constants';
+import { REQUESTOR_REF, XML_BuilderConfigOJPv1 } from '../constants';
 import { Language } from '../types/language-type';
 
 export class NovaRequest {
@@ -16,7 +16,7 @@ export class NovaRequest {
   
   public requestInfo: RequestInfo;
 
-  constructor(stageConfig: ApiConfig, language: Language = 'de', xmlConfig: XML_Config = XML_Config_OJPv1, requestorRef = REQUESTOR_REF) {
+  constructor(stageConfig: ApiConfig, language: Language = 'de', xmlConfig: XML_Config = XML_BuilderConfigOJPv1, requestorRef = REQUESTOR_REF) {
     this.stageConfig = stageConfig;
     this.language = language;
     this.xmlConfig = xmlConfig;
