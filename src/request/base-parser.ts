@@ -1,7 +1,7 @@
 import * as sax from 'sax';
 
 import { TreeNode } from "../xml/tree-node";
-import { IS_NODE_CLI, XML_Config_Default } from '../constants';
+import { IS_NODE_CLI, XML_ParserConfig } from '../constants';
 
 export class BaseParser {
   protected rootNode: TreeNode;
@@ -11,9 +11,9 @@ export class BaseParser {
   private mapUriNS: Record<string, string> = {};
 
   constructor() {
-    for (const ns in XML_Config_Default.mapNS) {
-      const uri = XML_Config_Default.mapNS[ns];
-      const uriNS = ns === XML_Config_Default.defaultNS ? '' : ns;
+    for (const ns in XML_ParserConfig.mapNS) {
+      const uri = XML_ParserConfig.mapNS[ns];
+      const uriNS = ns === XML_ParserConfig.defaultNS ? '' : ns;
       this.mapUriNS[uri] = uriNS;
     }
 
