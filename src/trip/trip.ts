@@ -9,7 +9,7 @@ import { Duration } from '../shared/duration'
 import { TreeNode } from '../xml/tree-node'
 import { TripFareResult } from '../fare/fare'
 
-import { DEBUG_LEVEL, OJP_VERSION, XML_Config_Default } from '../constants';
+import { DEBUG_LEVEL, OJP_VERSION, XML_BuilderConfig } from '../constants';
 import { XML_Config } from '../types/_all'
 
 export class Trip {
@@ -190,7 +190,7 @@ export class Trip {
     return tripNode;
   }
 
-  public asXML(xmlConfig: XML_Config = XML_Config_Default): string {
+  public asXML(xmlConfig: XML_Config = XML_BuilderConfig): string {
     const tripNode = this.asXMLNode(xmlConfig);
 
     const xml = tripNode.end({
