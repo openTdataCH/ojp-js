@@ -4,7 +4,6 @@ import { OJPBaseRequest } from '../base-request'
 import { TripInfoRequest_Response } from '../types/trip-info-request.type';
 import { TripInfoRequestParser } from './trip-info-request-parser';
 import { Language } from '../../types/language-type';
-import { OJP_Helpers } from '../../helpers/ojp-helpers';
 
 export class TripInfoRequest extends OJPBaseRequest {
     public journeyRef: string;
@@ -51,20 +50,20 @@ export class TripInfoRequest extends OJPBaseRequest {
     protected buildRequestNode(): void {
         super.buildRequestNode();
 
+        const siriPrefix = this.xmlConfig.defaultNS === 'siri' ? '' : 'siri:';
+        const ojpPrefix = this.xmlConfig.defaultNS === 'ojp' ? '' : 'ojp:';
+
+        const requestNode = this.serviceRequestNode.ele(ojpPrefix + 'OJPTripInfoRequest');
+
         const dateNowF = new Date().toISOString();
-        
-        this.serviceRequestNode.ele('RequestTimestamp', dateNowF);
-        this.serviceRequestNode.ele("RequestorRef", OJP_Helpers.buildRequestorRef());
+        requestNode.ele(siriPrefix + 'RequestTimestamp', dateNowF);
 
-        const requestNode = this.serviceRequestNode.ele('ojp:OJPTripInfoRequest');
-        requestNode.ele('RequestTimestamp', dateNowF);
+        requestNode.ele(ojpPrefix + 'JourneyRef', this.journeyRef);
+        requestNode.ele(ojpPrefix + 'OperatingDayRef', this.operatingDayRef);
 
-        requestNode.ele('ojp:JourneyRef', this.journeyRef);
-        requestNode.ele('ojp:OperatingDayRef', this.operatingDayRef);
-
-        const paramsNode = requestNode.ele('ojp:Params');
-        paramsNode.ele('ojp:IncludeCalls', true);
-        paramsNode.ele('ojp:IncludeService', true);
+        const paramsNode = requestNode.ele(ojpPrefix + 'Params');
+        paramsNode.ele(ojpPrefix + 'IncludeCalls', true);
+        paramsNode.ele(ojpPrefix + 'IncludeService', true);
     }
 
     public async fetchResponse(): Promise<TripInfoRequest_Response> {

@@ -1,3 +1,4 @@
+import { OJP_VERSION } from "../constants";
 import { TreeNode } from "../xml/tree-node";
 
 export class Address {
@@ -28,14 +29,16 @@ export class Address {
       return null;
     }
 
-    const addressCode = addressTreeNode.findTextFromChildNamed('AddressCode');
+    const addresCodeNodeName = OJP_VERSION === '2.0' ? 'PublicCode' : 'AddressCode';
+    const addressCode = addressTreeNode.findTextFromChildNamed(addresCodeNodeName);
     if (addressCode === null) {
       return null
     }
 
     const address = new Address(addressCode);
 
-    address.addressName = addressTreeNode.findTextFromChildNamed('AddressName/Text')
+    const addressNamePath = OJP_VERSION === '2.0' ? 'Name/Text' : 'AddressName/Text';
+    address.addressName = addressTreeNode.findTextFromChildNamed(addressNamePath);
 
     address.topographicPlaceRef = addressTreeNode.findTextFromChildNamed('TopographicPlaceRef');
     address.topographicPlaceName = addressTreeNode.findTextFromChildNamed('TopographicPlaceName');

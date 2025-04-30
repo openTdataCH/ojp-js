@@ -1,3 +1,5 @@
+import xmlbuilder, { XMLElement } from 'xmlbuilder'
+
 import { DistanceSource, TripStats } from '../types/trip-stats'
 
 import { TripLeg } from './leg/trip-leg'
@@ -7,8 +9,8 @@ import { Duration } from '../shared/duration'
 import { TreeNode } from '../xml/tree-node'
 import { TripFareResult } from '../fare/fare'
 
-import { XMLElement } from 'xmlbuilder'
-import { DEBUG_LEVEL } from '../constants'
+import { DEBUG_LEVEL, OJP_VERSION, XML_BuilderConfig } from '../constants';
+import { XML_Config } from '../types/_all'
 
 export class Trip {
   public id: string
@@ -19,12 +21,15 @@ export class Trip {
   constructor(tripID: string, legs: TripLeg[], tripStats: TripStats) {
     this.id = tripID;
     this.legs = legs;
-    this.stats = tripStats
-    this.tripFareResults = []
+    this.stats = tripStats;
+    this.tripFareResults = [];
   }
 
   public static initFromTreeNode(treeNode: TreeNode): Trip | null {
-    let tripId = treeNode.findTextFromChildNamed('TripId');
+    const isOJPv2 = OJP_VERSION === '2.0';
+
+    const tripIdNodeName = isOJPv2 ? 'Id' : 'TripId';
+    let tripId = treeNode.findTextFromChildNamed(tripIdNodeName);
 
     // HACK for solution demo, backend sometimes delivers Trip with empty Id
     // TODO: revert when backend is ready, DONT merge to main
@@ -57,7 +62,8 @@ export class Trip {
     const legs: TripLeg[] = [];
     let tripLegsTotalDistance = 0;
 
-    const tripLegTreeNodes = treeNode.findChildrenNamed('TripLeg');
+    const tripLegTreeNodeName = isOJPv2 ? 'Leg' : 'TripLeg';
+    const tripLegTreeNodes = treeNode.findChildrenNamed(tripLegTreeNodeName);
     tripLegTreeNodes.forEach(tripLegTreeNode => {
       const tripLeg = TripLegFactory.initWithTreeNode(tripLegTreeNode);
       if (tripLeg === null) {
@@ -163,18 +169,34 @@ export class Trip {
     return stopPointDate;
   }
 
-  public addToXMLNode(parentNode: XMLElement) {
-    const tripNode = parentNode.ele('ojp:Trip');
+  public asXMLNode(xmlConfig: XML_Config): XMLElement {
+    const ojpPrefix = xmlConfig.defaultNS === 'ojp' ? '' : 'ojp:';
+
+    const tripNode = xmlbuilder.create(ojpPrefix + 'Trip');
+
+    const tripIdTagName = xmlConfig.ojpVersion === '1.0' ? 'TripId' : 'Id';
+    tripNode.ele(ojpPrefix + tripIdTagName, this.id);
     
-    tripNode.ele('ojp:TripId', this.id);
-    tripNode.ele('ojp:Duration', this.stats.duration.asOJPFormattedText());
-    tripNode.ele('ojp:StartTime', this.stats.startDatetime.toISOString());
-    tripNode.ele('ojp:EndTime', this.stats.endDatetime.toISOString());
-    tripNode.ele('ojp:Transfers', this.stats.transferNo);
-    tripNode.ele('ojp:Distance', this.stats.distanceMeters);
+    tripNode.ele(ojpPrefix + 'Duration', this.stats.duration.asOJPFormattedText());
+    tripNode.ele(ojpPrefix + 'StartTime', this.stats.startDatetime.toISOString());
+    tripNode.ele(ojpPrefix + 'EndTime', this.stats.endDatetime.toISOString());
+    tripNode.ele(ojpPrefix + 'Transfers', this.stats.transferNo);
+    tripNode.ele(ojpPrefix + 'Distance', this.stats.distanceMeters);
 
     this.legs.forEach(leg => {
-      leg.addToXMLNode(tripNode);
+      leg.addToXMLNode(tripNode, xmlConfig);
     });
+
+    return tripNode;
+  }
+
+  public asXML(xmlConfig: XML_Config = XML_BuilderConfig): string {
+    const tripNode = this.asXMLNode(xmlConfig);
+
+    const xml = tripNode.end({
+      pretty: true,
+    });
+
+    return xml;
   }
 }

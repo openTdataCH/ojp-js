@@ -4,14 +4,23 @@ import { RequestInfo } from "../request";
 import { Trip } from "../trip";
 import { NovaFare_Response, NovaFareParser } from "./nova-request-parser";
 import { ApiConfig } from '../types/stage-config';
-import { OJP_Helpers } from '../helpers/ojp-helpers';
+import { XML_Config } from '../types/_all';
+import { REQUESTOR_REF, XML_BuilderConfigOJPv1 } from '../constants';
+import { Language } from '../types/language-type';
 
 export class NovaRequest {
   private stageConfig: ApiConfig;
+  private language: Language;
+  private xmlConfig: XML_Config;
+  private requestorRef: string;
+  
   public requestInfo: RequestInfo;
 
-  constructor(stageConfig: ApiConfig) {
+  constructor(stageConfig: ApiConfig, language: Language = 'de', xmlConfig: XML_Config = XML_BuilderConfigOJPv1, requestorRef = REQUESTOR_REF) {
     this.stageConfig = stageConfig;
+    this.language = language;
+    this.xmlConfig = xmlConfig;
+    this.requestorRef = requestorRef;
 
     this.requestInfo = {
       requestDateTime: null,
@@ -40,45 +49,52 @@ export class NovaRequest {
       encoding: 'utf-8',
     });
 
-    rootNode.att('xmlns', 'http://www.siri.org.uk/siri');
-    rootNode.att('xmlns:ojp', 'http://www.vdv.de/ojp');
-    rootNode.att('version', '1.0');
+    for (const ns in this.xmlConfig.mapNS) {
+      const key = ns === this.xmlConfig.defaultNS ? 'xmlns' : 'xmlns:' + ns;
+      rootNode.att(key, this.xmlConfig.mapNS[ns]);
+    }
+    
+    rootNode.att('version', this.xmlConfig.ojpVersion);
 
-    const serviceRequestNode = rootNode.ele('OJPRequest').ele('ServiceRequest');
+    const siriPrefix = this.xmlConfig.defaultNS === 'siri' ? '' : 'siri:';
+
+    const serviceRequestNode = rootNode.ele(siriPrefix + 'OJPRequest').ele(siriPrefix + 'ServiceRequest');
     
     const dateF = requestDate.toISOString();
-    serviceRequestNode.ele('RequestTimestamp', dateF);
+    serviceRequestNode.ele(siriPrefix + 'RequestTimestamp', dateF);
 
-    const requestorRef = OJP_Helpers.buildRequestorRef();
-    serviceRequestNode.ele("RequestorRef", requestorRef);
+    serviceRequestNode.ele(siriPrefix + "RequestorRef", this.requestorRef);
 
     return serviceRequestNode;
   }
 
   private addTripToServiceRequestNode(serviceRequestNode: xmlbuilder.XMLElement, trip: Trip, requestDate: Date) {
-    const fareRequestNode = serviceRequestNode.ele('ojp:OJPFareRequest');
+    const siriPrefix = this.xmlConfig.defaultNS === 'siri' ? '' : 'siri:';
+    const ojpPrefix = this.xmlConfig.defaultNS === 'ojp' ? '' : 'ojp:';
+
+    const fareRequestNode = serviceRequestNode.ele(ojpPrefix + 'OJPFareRequest');
 
     const dateF = requestDate.toISOString();
-    fareRequestNode.ele('RequestTimestamp', dateF);
+    fareRequestNode.ele(siriPrefix + 'RequestTimestamp', dateF);
 
-    const tripFareRequest = fareRequestNode.ele('ojp:TripFareRequest');
-    trip.addToXMLNode(tripFareRequest);
+    const tripFareRequest = fareRequestNode.ele(ojpPrefix + 'TripFareRequest');
+    const tripNode = trip.asXMLNode(this.xmlConfig);
 
-    const paramsNode = fareRequestNode.ele('ojp:Params');
-    paramsNode.ele('ojp:FareAuthorityFilter', 'ch:1:NOVA');
-    paramsNode.ele('ojp:PassengerCategory', 'Adult');
-    paramsNode.ele('ojp:TravelClass', 'second');
+    tripFareRequest.importDocument(tripNode);
 
-    const travellerNode = paramsNode.ele('ojp:Traveller');
-    travellerNode.ele('ojp:Age', '25');
-    travellerNode.ele('ojp:PassengerCategory', 'Adult');
-    travellerNode.ele('ojp:Age', '25');
-    travellerNode.ele('ojp:Age', '25');
+    const paramsNode = fareRequestNode.ele(ojpPrefix + 'Params');
+    paramsNode.ele(ojpPrefix + 'FareAuthorityFilter', 'ch:1:NOVA');
+    paramsNode.ele(ojpPrefix + 'PassengerCategory', 'Adult');
+    paramsNode.ele(ojpPrefix + 'TravelClass', 'second');
 
-    const entitlementProductNode = travellerNode.ele('ojp:EntitlementProducts').ele('ojp:EntitlementProduct');
-    entitlementProductNode.ele('ojp:FareAuthorityRef', 'ch:1:NOVA');
-    entitlementProductNode.ele('ojp:EntitlementProductRef', 'HTA');
-    entitlementProductNode.ele('ojp:EntitlementProductName', 'Halbtax-Abonnement');
+    const travellerNode = paramsNode.ele(ojpPrefix + 'Traveller');
+    travellerNode.ele(ojpPrefix + 'Age', '25');
+    travellerNode.ele(ojpPrefix + 'PassengerCategory', 'Adult');
+
+    const entitlementProductNode = travellerNode.ele(ojpPrefix + 'EntitlementProducts').ele(ojpPrefix + 'EntitlementProduct');
+    entitlementProductNode.ele(ojpPrefix + 'FareAuthorityRef', 'ch:1:NOVA');
+    entitlementProductNode.ele(ojpPrefix + 'EntitlementProductRef', 'HTA');
+    entitlementProductNode.ele(ojpPrefix + 'EntitlementProductName', 'Halbtax-Abonnement');
   }
 
   private fetchResponse(serviceRequestNode: xmlbuilder.XMLElement): Promise<NovaFare_Response> {

@@ -74,7 +74,9 @@ export class Duration {
     const parts: string[] = [];
 
     parts.push('PT');
-    parts.push('' + this.hours + 'H');
+    if (this.hours > 0) {
+      parts.push('' + this.hours + 'H');
+    }
     parts.push('' + this.minutes + 'M');
 
     return parts.join('');

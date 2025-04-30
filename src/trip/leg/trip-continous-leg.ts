@@ -10,17 +10,30 @@ import { IndividualTransportMode, TransferMode } from '../../types/individual-mo
 import { ServiceBooking } from './continous-leg/service-booking'
 import { TreeNode } from '../../xml/tree-node'
 import { XMLElement } from 'xmlbuilder'
+import { XML_Config } from '../../types/_all'
+import { StopPointType } from '../../types/stop-point-type';
+import { OJP_VERSION } from '../../constants'
 
-export class TripContinousLeg extends TripLeg {
+type PersonalModeEnum = 'foot' | 'bicycle' | 'car' | 'motorcycle' | 'truck' | 'scooter' | 'other';
+type PersonalModeOfOperation = 'self' | 'own' | 'otherOwned' | 'privateLift' | 'lease';
+interface ContinuousLegService {
+  // https://vdvde.github.io/OJP/develop/documentation-tables/ojp.html#type_ojp__PersonalModesEnumeration
+  personalMode: PersonalModeEnum;
+  // https://vdvde.github.io/OJP/develop/documentation-tables/ojp.html#type_ojp__PersonalModesOfOperationEnumeration
+  personalModeOfOperation: PersonalModeOfOperation;
+}
+
+export class TripContinuousLeg extends TripLeg {
   public legTransportMode: IndividualTransportMode | null
   public legDistance: number
   public pathGuidance: PathGuidance | null
   public walkDuration: Duration | null
   public serviceBooking: ServiceBooking | null;
-  public transferMode: TransferMode | null
+  public transferMode: TransferMode | null;
+  public continousLegService: ContinuousLegService | null;
 
   constructor(legType: LegType, legIDx: number, legDistance: number, fromLocation: Location, toLocation: Location) {
-    super(legType, legIDx, fromLocation, toLocation)
+    super(legType, legIDx, fromLocation, toLocation);
 
     this.legTransportMode = null
     this.legDistance = legDistance
@@ -28,9 +41,15 @@ export class TripContinousLeg extends TripLeg {
     this.walkDuration = null;
     this.serviceBooking = null;
     this.transferMode = null;
+    this.continousLegService = null;
   }
 
-  public static initWithTreeNode(legIDx: number, treeNode: TreeNode, legType: LegType): TripContinousLeg | null {
+  public static initWithTreeNode(legIDx: number, parentTreeNode: TreeNode, legType: LegType): TripContinuousLeg | null {
+    const treeNode = parentTreeNode.findChildNamed(legType);
+    if (treeNode === null) {
+      return null;
+    }
+
     const legStartPlaceRefTreeNode = treeNode.findChildNamed('LegStart');
     const legEndPlaceRefTreeNode = treeNode.findChildNamed('LegEnd');
     if (legStartPlaceRefTreeNode === null || legEndPlaceRefTreeNode === null) {
@@ -46,7 +65,7 @@ export class TripContinousLeg extends TripLeg {
     let distanceS = treeNode.findTextFromChildNamed('Length') ?? '0';
     const legDistance = parseInt(distanceS);
 
-    const tripLeg = new TripContinousLeg(legType, legIDx, legDistance, legStartPlaceRef, legEndPlaceRef);
+    const tripLeg = new TripContinuousLeg(legType, legIDx, legDistance, legStartPlaceRef, legEndPlaceRef);
     tripLeg.legDuration = Duration.initWithTreeNode(treeNode);
 
     tripLeg.pathGuidance = PathGuidance.initWithTreeNode(treeNode);
@@ -66,6 +85,13 @@ export class TripContinousLeg extends TripLeg {
       tripLeg.walkDuration = Duration.initWithTreeNode(treeNode, 'WalkDuration');
     }
 
+    if (legType === 'ContinuousLeg') {
+      tripLeg.continousLegService = {
+        personalMode: (treeNode.findTextFromChildNamed('Service/PersonalMode') as PersonalModeEnum) ?? 'other',
+        personalModeOfOperation: (treeNode.findTextFromChildNamed('Service/PersonalModeOfOperation') as PersonalModeOfOperation) ?? 'other',
+      };
+    }
+
     return tripLeg;
   }
 
@@ -76,7 +102,7 @@ export class TripContinousLeg extends TripLeg {
       return null;
     }
 
-    if (legType === 'TimedLeg' || legType === 'ContinousLeg') {
+    if (legType === 'ContinuousLeg') {
       legModeS = treeNode.findTextFromChildNamed('Service/IndividualMode');
       if (legModeS === null) {
         const personalModeParts: string[] = [];
@@ -113,7 +139,10 @@ export class TripContinousLeg extends TripLeg {
   }
 
   private computeLegTransferModeFromTreeNode(treeNode: TreeNode): TransferMode | null {
-    const transferModeS = treeNode.findTextFromChildNamed('TransferMode');
+    const isOJPv2 = OJP_VERSION === '2.0';
+
+    const transferModeNodeName = isOJPv2 ? 'TransferType' : 'TransferMode';
+    const transferModeS = treeNode.findTextFromChildNamed(transferModeNodeName);
     if (transferModeS === null) {
       return null;
     }
@@ -167,6 +196,10 @@ export class TripContinousLeg extends TripLeg {
       return 'car-ferry'
     }
 
+    if (legModeS === 'foot.own') {
+      return 'walk';
+    }
+
     return null
   }
 
@@ -202,9 +235,63 @@ export class TripContinousLeg extends TripLeg {
     return this.legDistance + ' m'
   }
 
-  public addToXMLNode(parentNode: XMLElement) {
-    const tripLegNode = parentNode.ele('ojp:TripLeg');
-    tripLegNode.ele('ojp:LegId', this.legID);
-    tripLegNode.ele('ojp:' + this.legType);
+  public addToXMLNode(parentNode: XMLElement, xmlConfig: XML_Config) {
+    const ojpPrefix = xmlConfig.defaultNS === 'ojp' ? '' : 'ojp:';
+    const siriPrefix = xmlConfig.defaultNS === 'siri' ? '' : 'siri:';
+    const isOJPv2 = xmlConfig.ojpVersion === '2.0';
+
+    const legNodeName = isOJPv2 ? 'Leg' : 'TripLeg';
+    const tripLegNode = parentNode.ele(ojpPrefix + legNodeName);
+    
+    const legIdTagName = isOJPv2 ? 'Id' : 'LegId';
+    tripLegNode.ele(ojpPrefix + legIdTagName, this.legID);
+
+    const legDurationF = this.legDuration?.asOJPFormattedText() ?? null;
+    if (legDurationF) {
+      tripLegNode.ele(ojpPrefix + 'Duration', legDurationF);
+    }
+
+    const tripLegNodeType = tripLegNode.ele(ojpPrefix + this.legType);
+
+    if (this.legType === 'TransferLeg') {
+      tripLegNodeType.ele(ojpPrefix + 'TransferType', this.transferMode ?? 'walk');
+    }
+
+    const stopPointTypes: StopPointType[] = ['From', 'To'];
+    stopPointTypes.forEach(stopPointType => {
+      const isFrom = stopPointType === 'From';
+
+      const legEndpointTag = isFrom ? 'LegStart' : 'LegEnd';
+      const legEndpointNode = tripLegNodeType.ele(ojpPrefix + legEndpointTag);
+
+      const location = isFrom ? this.fromLocation : this.toLocation;
+      const stopPlace = location.stopPlace;
+      if (stopPlace === null) {
+        if (location.geoPosition) {
+          const geoPositionNode = legEndpointNode.ele(ojpPrefix + 'GeoPosition');
+          geoPositionNode.ele(siriPrefix + 'Longitude', location.geoPosition.longitude);
+          geoPositionNode.ele(siriPrefix + 'Latitude', location.geoPosition.latitude);
+
+          legEndpointNode.ele(ojpPrefix + 'Name').ele(ojpPrefix + 'Text', location.geoPosition.asLatLngString());
+        }
+      } else {
+        legEndpointNode.ele(siriPrefix + 'StopPointRef', stopPlace.stopPlaceRef);
+        legEndpointNode.ele(ojpPrefix + 'Name').ele(ojpPrefix + 'Text', stopPlace.stopPlaceName ?? 'n/a');
+      }
+    });
+
+    if (this.legType === 'ContinuousLeg') {
+      if (this.continousLegService) {
+        const serviceNode = tripLegNodeType.ele(ojpPrefix + 'Service');
+        serviceNode.ele(ojpPrefix + 'PersonalMode', this.continousLegService.personalMode);
+        serviceNode.ele(ojpPrefix + 'PersonalModeOfOperation', this.continousLegService.personalModeOfOperation);
+      }
+    }
+
+    if (legDurationF) {
+      tripLegNodeType.ele(ojpPrefix + 'Duration', legDurationF);
+    }
+
+    tripLegNodeType.ele(ojpPrefix + 'Length', this.legDistance);
   }
 }
