@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 0.18.1 - 30.04.2025
+- Unify OJP 1.0 and 2.0 SDK code - [PR #155](https://github.com/openTdataCH/ojp-js/pull/155)
+  - adds conditional code to handle between OJP v1.0 and OJP v2.0 logic
+    - difference between branches will be only in `constants.ts`
+  - adds config-based XML builder / parser 
+  - fixed `Continous` as `Continuous` typo
+  - serialise more Trip/Service XML members - needed for TRR
+  - more formatting and code consolidation between SDKs
+
 ## 0.17.4 - 3.04.2025
 - fix Journey Service attribute codes - [PR #144](https://github.com/openTdataCH/ojp-js/pull/144)
   - [TR: catch attributes that are not standard #210](https://github.com/openTdataCH/ojp-demo-app-src/issues/210)
