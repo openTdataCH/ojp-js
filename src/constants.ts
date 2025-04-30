@@ -55,7 +55,8 @@ const XML_ConfigOJPv2: XML_Config = {
     },
 };
 
-export const XML_BuilderConfig: XML_Config = XML_ConfigOJPv2;
-export const XML_ParserConfig: XML_Config = XML_ConfigOJPv2;
+const isOJPv2 = (OJP_VERSION as OJP_VERSION_Type) === '2.0'; // needs casting otherwise TS compiler complains
+export const XML_BuilderConfig: XML_Config = isOJPv2 ? XML_ConfigOJPv2 : XML_BuilderConfigOJPv1;
+export const XML_ParserConfig: XML_Config = isOJPv2 ? XML_ConfigOJPv2 : XML_ParserConfigOJPv1;
 
 export const REQUESTOR_REF = 'OJPv' + OJP_VERSION + '_JS_SDK_v' + SDK_VERSION;
