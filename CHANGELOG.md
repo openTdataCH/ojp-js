@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 0.18.2 - 02.05.2025
+- extends `TransferType` to parse also `changeWithinVehicle` enum - [Visualisation of "ChangeWithinVehicle" #215](https://github.com/openTdataCH/ojp-demo-app-src/issues/215), [PR #156](https://github.com/openTdataCH/ojp-js/pull/156)
+
 ## 0.18.1 - 30.04.2025
 - Unify OJP 1.0 and 2.0 SDK code - [PR #155](https://github.com/openTdataCH/ojp-js/pull/155)
   - adds conditional code to handle between OJP v1.0 and OJP v2.0 logic
