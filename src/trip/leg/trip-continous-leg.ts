@@ -148,10 +148,13 @@ export class TripContinuousLeg extends TripLeg {
     }
 
     if (transferModeS === 'walk') {
-      return 'walk'
+      return 'walk';
     }
     if (transferModeS === 'remainInVehicle') {
-      return 'remainInVehicle'
+      return 'remainInVehicle';
+    }
+    if (transferModeS === 'changeWithinVehicle') {
+      return 'changeWithinVehicle';
     }
 
     console.error('CANT map TransferMode from ==' + transferModeS + '==');
