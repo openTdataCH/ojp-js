@@ -3,7 +3,7 @@
 ## 0.18.4 - 09.05.2025
 - parse OccupancyLevel - [Occupancy in OJP 2.0 #223](https://github.com/openTdataCH/ojp-demo-app-src/issues/223), [PR #160](https://github.com/openTdataCH/ojp-js/pull/160)
 - adds `InfoLink` to `PassengerInformationAction` - [TR / Siri Situations - Display labels / hyperlinks #224](https://github.com/openTdataCH/ojp-demo-app-src/issues/224), [PR #161](https://github.com/openTdataCH/ojp-js/pull/161)
-- fix `StopEventRequest` request - [Fix SER Request #162](https://github.com/openTdataCH/ojp-js/issues/162)
+- fix `StopEventRequest` request - [Fix SER Request #162](https://github.com/openTdataCH/ojp-js/issues/162), [PR #163](https://github.com/openTdataCH/ojp-js/pull/163)
 
 ## 0.18.2 - 02.05.2025
 - extends `TransferType` to parse also `changeWithinVehicle` enum - [Visualisation of "ChangeWithinVehicle" #215](https://github.com/openTdataCH/ojp-demo-app-src/issues/215), [PR #156](https://github.com/openTdataCH/ojp-js/pull/156)
