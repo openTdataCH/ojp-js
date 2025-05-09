@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## 0.18.3 - 09.05.2025
+## 0.18.4 - 09.05.2025
 - parse OccupancyLevel - [Occupancy in OJP 2.0 #223](https://github.com/openTdataCH/ojp-demo-app-src/issues/223), [PR #160](https://github.com/openTdataCH/ojp-js/pull/160)
 - adds `InfoLink` to `PassengerInformationAction` - [TR / Siri Situations - Display labels / hyperlinks #224](https://github.com/openTdataCH/ojp-demo-app-src/issues/224), [PR #161](https://github.com/openTdataCH/ojp-js/pull/161)
 
