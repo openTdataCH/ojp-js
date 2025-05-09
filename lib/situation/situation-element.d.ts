@@ -5,11 +5,16 @@ interface TimeInterval {
     endDate: Date;
 }
 type ScopeType = 'line' | 'stopPlace' | 'vehicleJourney' | 'unknown';
+interface InfoLink {
+    uri: string;
+    label: string;
+}
 interface PassengerInformationAction {
     actionRef: string | null;
     ownerRef: string | null;
     perspectives: string[];
     mapTextualContent: Record<string, string[]>;
+    infoLink: InfoLink | null;
 }
 interface StopPlace {
     stopPlaceRef: string;
