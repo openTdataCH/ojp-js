@@ -1,3 +1,4 @@
+import { DEBUG_LEVEL } from "../constants"
 import { TreeNode } from "../xml/tree-node"
 
 import { PtSituationSource } from './situation-source'
@@ -9,11 +10,17 @@ interface TimeInterval {
 
 type ScopeType = 'line' | 'stopPlace' | 'vehicleJourney' | 'unknown'
 
+interface InfoLink {
+    uri: string,
+    label: string,
+};
+
 interface PassengerInformationAction {
     actionRef: string | null
     ownerRef: string | null
     perspectives: string[]    
     mapTextualContent: Record<string, string[]>
+    infoLink: InfoLink | null,
 }
 
 interface StopPlace {
@@ -284,10 +291,11 @@ export class PtSituationElement {
             }
         });
 
+        let infoLink: InfoLink | null = null;
+
         const textualContentTreeNode = publishingActionTreeNode.findChildNamed('siri:PassengerInformationAction/siri:TextualContent');
-        let mapTextualContent: Record<string, string[]> = {};
+        const mapTextualContent: Record<string, string[]> = {};
         if (textualContentTreeNode) {
-            mapTextualContent = {};
             textualContentTreeNode.children.forEach(childTreeNode => {
                 const textKey = childTreeNode.name.replace('siri:', '').replace('Content', '');
                 if (!(textKey in mapTextualContent)) {
@@ -300,7 +308,27 @@ export class PtSituationElement {
                         mapTextualContent[textKey].push(textValue.trim());
                     }
                 }
+
+                if (DEBUG_LEVEL === 'DEBUG') {
+                    if (!['InfoLink'].includes(textKey) && (childTreeNode.children.length > 1)) {
+                        console.log('computePublishingAction. mapTextualContent + ' + textKey + ': first text property was used');
+                        console.log(childTreeNode);
+                    }
+                }
             });
+
+            const infoLinkNode = textualContentTreeNode.findChildNamed('siri:InfoLink');
+            if (infoLinkNode) {
+                const uriText = infoLinkNode.findTextFromChildNamed('siri:Uri');
+                const labelText = infoLinkNode.findTextFromChildNamed('siri:Label');
+
+                if (uriText && labelText) {
+                    infoLink = {
+                        uri: uriText,
+                        label: labelText,
+                    };
+                };
+            }
         }
 
         const actionAffects = PtSituationElement.computeAffects(situationNumber, scopeType, publishingActionTreeNode);
@@ -312,6 +340,7 @@ export class PtSituationElement {
                 ownerRef: ownerRef,
                 perspectives: perspectives,
                 mapTextualContent: mapTextualContent,
+                infoLink: infoLink,
             },
         }
 
