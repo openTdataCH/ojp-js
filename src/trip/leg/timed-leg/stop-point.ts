@@ -5,11 +5,14 @@ import { PtSituationElement } from "../../../situation/situation-element"
 import { TreeNode } from "../../../xml/tree-node"
 import { StopPlace } from "../../../location/stopplace"
 import { DEBUG_LEVEL } from "../../../constants"
+import { FareClassType, OccupancyLevel } from "../../../types/_all"
 
 
 type VehicleAccessType = 
   'PLATFORM_ACCESS_WITHOUT_ASSISTANCE' | 'PLATFORM_ACCESS_WITH_ASSISTANCE' | 'PLATFORM_ACCESS_WITH_ASSISTANCE_WHEN_NOTIFIED' 
   | 'PLATFORM_NOT_WHEELCHAIR_ACCESSIBLE' | 'ALTERNATIVE_TRANSPORT' | 'NO_DATA';
+
+type MapFareClassOccupancy = Record<FareClassType, OccupancyLevel | null>;
 
 export class StopPoint {
   public stopPointType: StopPointType
@@ -25,7 +28,9 @@ export class StopPoint {
   public siriSituationIds: string[]
   public siriSituations: PtSituationElement[]
 
-  public vehicleAccessType: VehicleAccessType | null
+  public vehicleAccessType: VehicleAccessType | null;
+
+  public mapFareClassOccupancy: MapFareClassOccupancy;
 
   constructor(
     stopPointType: StopPointType, 
@@ -47,6 +52,10 @@ export class StopPoint {
     this.siriSituations = [];
 
     this.vehicleAccessType = null;
+    this.mapFareClassOccupancy = {
+      firstClass: null,
+      secondClass: null,
+    };
   }
 
   public static initWithTreeNode(treeNode: TreeNode, stopPointType: StopPointType): StopPoint | null {
@@ -85,6 +94,7 @@ export class StopPoint {
     });
 
     stopPoint.vehicleAccessType = StopPoint.computePlatformAssistance(treeNode);
+    stopPoint.mapFareClassOccupancy = StopPoint.computeMapFareClassOccupancy(treeNode);
 
     return stopPoint;
   }
@@ -124,5 +134,65 @@ export class StopPoint {
     }
 
     return null;
+  }
+
+  private static computeMapFareClassOccupancy(treeNode: TreeNode): MapFareClassOccupancy {
+    const mapFareClassOccupancy: MapFareClassOccupancy = {
+      firstClass: null,
+      secondClass: null,
+    };
+
+    const expectedDepartureOccupancyNodes = treeNode.findChildrenNamed('siri:ExpectedDepartureOccupancy');
+    expectedDepartureOccupancyNodes.forEach(occupancyNode => {
+      const fareClass: FareClassType | null = (() => {
+        const fareClassText = occupancyNode.findTextFromChildNamed('siri:FareClass');
+        if (fareClassText === 'firstClass') {
+          return 'firstClass';
+        }
+
+        if (fareClassText === 'secondClass') {
+          return 'secondClass';
+        }
+
+        return null;
+      })();
+
+      if (fareClass === null) {
+        console.error('computeMapFareClassOccupancy: unexpected fareClass');
+        console.log(occupancyNode);
+        return;
+      }
+
+      const occupancyLevelValue: OccupancyLevel | null = (() => {
+        const occupancyLevelText = occupancyNode.findTextFromChildNamed('siri:OccupancyLevel');
+        if (occupancyLevelText === 'fewSeatsAvailable') {
+          return 'fewSeatsAvailable';
+        }
+
+        if (occupancyLevelText === 'manySeatsAvailable') {
+          return 'manySeatsAvailable';
+        }
+
+        if (occupancyLevelText === 'standingRoomOnly') {
+          return 'standingRoomOnly';
+        }
+
+        if (occupancyLevelText === 'unknown') {
+          return 'unknown';
+        }
+
+        return null;
+      })();
+
+      if (occupancyLevelValue === null) {
+        console.error('computeMapFareClassOccupancy: unexpected occupancy level');
+        console.log(occupancyNode);
+        return;
+      }
+
+      mapFareClassOccupancy[fareClass] = occupancyLevelValue;
+    });
+
+    return mapFareClassOccupancy;
   }
 }
