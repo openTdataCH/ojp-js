@@ -1,7 +1,7 @@
 # CHANGELOG
 
 ## 0.18.3 - 09.05.2025
-- parse OccupancyLevel - [Occupancy in OJP 2.0 #223](https://github.com/openTdataCH/ojp-demo-app-src/issues/223)
+- parse OccupancyLevel - [Occupancy in OJP 2.0 #223](https://github.com/openTdataCH/ojp-demo-app-src/issues/223), [PR #160](https://github.com/openTdataCH/ojp-js/pull/160)
 
 ## 0.18.2 - 02.05.2025
 - extends `TransferType` to parse also `changeWithinVehicle` enum - [Visualisation of "ChangeWithinVehicle" #215](https://github.com/openTdataCH/ojp-demo-app-src/issues/215), [PR #156](https://github.com/openTdataCH/ojp-js/pull/156)
