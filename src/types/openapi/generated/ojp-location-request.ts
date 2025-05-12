@@ -54,6 +54,10 @@ export interface paths {
                     restrictions?: {
                       type: ("stop" | "address" | "poi" | "location" | "topographicPlace")[];
                       numberOfResults?: number;
+                      modeAndModeOfOperationFilter?: ({
+                          exclude?: boolean;
+                          ptMode?: ("air" | "bus" | "coach" | "trolleyBus" | "metro" | "rail" | "tram" | "water" | "ferry" | "cableway" | "funicular" | "lift" | "other" | "unknown")[];
+                        })[];
                       includePtModes?: boolean;
                     };
                   };
@@ -73,9 +77,17 @@ export type webhooks = Record<string, never>;
 
 export interface components {
   schemas: {
+    ModeAndModeOfOperationFilter: {
+      exclude?: boolean;
+      ptMode?: ("air" | "bus" | "coach" | "trolleyBus" | "metro" | "rail" | "tram" | "water" | "ferry" | "cableway" | "funicular" | "lift" | "other" | "unknown")[];
+    };
     PlaceParam: {
       type: ("stop" | "address" | "poi" | "location" | "topographicPlace")[];
       numberOfResults?: number;
+      modeAndModeOfOperationFilter?: ({
+          exclude?: boolean;
+          ptMode?: ("air" | "bus" | "coach" | "trolleyBus" | "metro" | "rail" | "tram" | "water" | "ferry" | "cableway" | "funicular" | "lift" | "other" | "unknown")[];
+        })[];
       includePtModes?: boolean;
     };
     InitialInput: {
@@ -124,6 +136,10 @@ export interface components {
       restrictions?: {
         type: ("stop" | "address" | "poi" | "location" | "topographicPlace")[];
         numberOfResults?: number;
+        modeAndModeOfOperationFilter?: ({
+            exclude?: boolean;
+            ptMode?: ("air" | "bus" | "coach" | "trolleyBus" | "metro" | "rail" | "tram" | "water" | "ferry" | "cableway" | "funicular" | "lift" | "other" | "unknown")[];
+          })[];
         includePtModes?: boolean;
       };
     };
@@ -166,6 +182,10 @@ export interface components {
             restrictions?: {
               type: ("stop" | "address" | "poi" | "location" | "topographicPlace")[];
               numberOfResults?: number;
+              modeAndModeOfOperationFilter?: ({
+                  exclude?: boolean;
+                  ptMode?: ("air" | "bus" | "coach" | "trolleyBus" | "metro" | "rail" | "tram" | "water" | "ferry" | "cableway" | "funicular" | "lift" | "other" | "unknown")[];
+                })[];
               includePtModes?: boolean;
             };
           };
