@@ -81,4 +81,34 @@ describe('OJP Test Request', () => {
     expect(rectangle2_JSON['UpperLeft']['siri:Longitude']).toBe(7.433259);
     expect(rectangle2_JSON['LowerRight']['siri:Latitude']).toBe(46.937798);
   });
+
+  test('Test LIR Modes', () => {
+    let request = OJP.LocationInformationRequest.initWithLocationName('Thun');
+    request.restrictions = {
+      type: ['stop'],
+      numberOfResults: 5,
+      modeAndModeOfOperationFilter: [
+        {
+          exclude: false,
+          ptMode: ['water'],
+        },
+      ],
+      includePtModes: false,
+    };
+
+    const requestXML = request.buildRequestXML('de', 'test.requestorRef');
+    const requestJSON = parser.parse(requestXML);
+    const requestNodeJSON = requestJSON['OJP']['OJPRequest']['siri:ServiceRequest']['OJPLocationInformationRequest'];
+
+    const requestName = requestNodeJSON['InitialInput']['Name'];
+    expect(requestName).toBe('Thun');
+
+    const requestNumberOfResults = requestNodeJSON['Restrictions']['NumberOfResults'];
+    expect(requestNumberOfResults).toBe(5);
+
+    const requestModesExclude = requestNodeJSON['Restrictions']['ModeAndModeOfOperationFilter']['Exclude'];
+    const requestModes = requestNodeJSON['Restrictions']['ModeAndModeOfOperationFilter']['PtMode'];
+    expect(requestModesExclude).toBe(false);
+    expect(requestModes).toBe('water');
+  });
 });
