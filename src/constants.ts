@@ -1,6 +1,6 @@
 import { XML_Config } from "./types/_all";
 
-export const SDK_VERSION = '0.20.10';
+export const SDK_VERSION = '0.20.11';
 
 export const DefaultXML_Config: XML_Config = {
   ojpVersion: '2.0',
