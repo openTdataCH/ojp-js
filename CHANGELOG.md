@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 0.20.11 - 13.05.2025
+- use [ojp-shared-types](https://github.com/openTdataCH/ojp-shared-types) package - [PR #166](https://github.com/openTdataCH/ojp-js/pull/166)
+
 ## 0.20.10 - 17.04.2025
 - refactor/next version of the SDK (continued) - [PR #139](https://github.com/openTdataCH/ojp-js/pull/139)
   - [Adds TripRefinementRequest #151](https://github.com/openTdataCH/ojp-js/pull/151)
