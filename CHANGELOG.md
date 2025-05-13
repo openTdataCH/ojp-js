@@ -1,7 +1,7 @@
 # CHANGELOG
 
 ## 0.18.5 - 13.05.2025
-- remove OJP Fare APIs, they will be replaced with standalone [ojp-fares-js](https://github.com/openTdataCH/ojp-fares-js) SDK
+- remove OJP FareRequest, will be replaced with standalone [ojp-fares-js](https://github.com/openTdataCH/ojp-fares-js) SDK - [PR #165](https://github.com/openTdataCH/ojp-js/pull/165)
 
 ## 0.18.4 - 09.05.2025
 - parse OccupancyLevel - [Occupancy in OJP 2.0 #223](https://github.com/openTdataCH/ojp-demo-app-src/issues/223), [PR #160](https://github.com/openTdataCH/ojp-js/pull/160)
