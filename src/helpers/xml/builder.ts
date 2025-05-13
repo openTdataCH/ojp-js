@@ -39,6 +39,29 @@ function transformKeys<T extends Record<string, any>>(obj: T, path: string[] = [
   }, {} as Record<string, any>);
 }
 
+export function buildRootXML(obj: Record<string, any>, xmlConfig: XML_Config = DefaultXML_Config, callbackTransformedObj: ((obj: Record<string, any>) => void) | null = null): string {
+  const rootXML = buildXML(obj, xmlConfig, (objTransformed => {
+    const rootKeys = Object.keys(objTransformed);
+    if (typeof objTransformed === 'object' && (rootKeys.length === 1)) {
+      const rootKeyParts = rootKeys[0].split(':');
+      if (rootKeyParts.length === 2) {
+        // HACK - OJP v1.0 - keep the root element without namespaces
+        const oldKey = rootKeys[0];
+        const newKey = rootKeyParts[1];
+        
+        objTransformed[newKey] = objTransformed[oldKey];
+        delete objTransformed[oldKey];
+      }
+    }
+
+    if (callbackTransformedObj) {
+      callbackTransformedObj(objTransformed);
+    }
+  }));
+
+  return rootXML;
+}
+
 export function buildXML(obj: Record<string, any>, xmlConfig: XML_Config = DefaultXML_Config, callbackTransformedObj: ((obj: Record<string, any>) => void) | null = null): string {
   const objCopy = JSON.parse(JSON.stringify(obj));
 
