@@ -14,10 +14,11 @@ See [docs](./docs/) and [examples](./examples/) for usage.
 
 **Note:** 26.Mar - a different package name is used for test purpose: `ojp-sdk-next`. This package will replace the current `ojp-sdk` package.
 
-- include the `ojp-sdk-next` package in the `./package.json` dependencies of the project 
+- include [ojp-sdk-next](https://www.npmjs.com/package/ojp-sdk-next), [ojp-shared-types](https://www.npmjs.com/package/ojp-shared-types) packages in the `./package.json` dependencies of the project 
 ```
   "dependencies": {
-    "ojp-sdk-next": "0.20.11"
+    "ojp-shared-types": "0.0.2",
+    "ojp-sdk-next": "0.20.11",
   }
 ```
 
