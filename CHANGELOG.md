@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## 0.20.12 - 13.05.2025
+## 0.20.13 - 13.05.2025
 - (re-)adds FareRequest - [PR #167](https://github.com/openTdataCH/ojp-js/pull/167)
 
 ## 0.20.11 - 13.05.2025
