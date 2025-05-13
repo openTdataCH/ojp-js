@@ -1,17 +1,3 @@
-// These exports - ./types/openapi - should be kept at minimum as possible
-export { 
-  VehicleModesOfTransportEnum,
-  PlaceTypeEnum,
-
-  StopEventSchema as StopEvent,
-  CallAtStopSchema as CallAtStop,
-  DatedJourneySchema as DatedJourney,
-  
-  TimedLegSchema as TimedLeg, 
-  TransferLegSchema as TransferLeg, 
-  ContinuousLegSchema as ContinuousLeg,
-} from './types/openapi/index';
-
 export { 
   LocationInformationRequest, 
   StopEventRequest, 

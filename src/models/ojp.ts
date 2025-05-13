@@ -1,32 +1,16 @@
-import { parseXML } from '../helpers/xml/parser';
+import * as OJP_Types from 'ojp-shared-types';
 
-import { 
-  GeoPositionSchema, PlaceRefSchema, InternationalTextSchema, 
-  
-  TripSchema,
-  LegSchema,
-  PlaceResultSchema,
-  PlaceSchema,
-  PlaceTypeEnum,
-  StopEventResultSchema,
-  StopEventSchema,
-  StopPointSchema,
-  StopPlaceSchema,
-  TopographicPlaceSchema,
-  PointOfInterestSchema,
-  AddressSchema,
-  PlaceModeStructureSchema,
-} from '../types/openapi/index';
+import { parseXML } from '../helpers/xml/parser';
 
 import { GeoPosition, GeoPositionLike } from "./geoposition";
 
-export class PlaceRef implements PlaceRefSchema {
+export class PlaceRef implements OJP_Types.PlaceRefSchema {
   public stopPointRef?: string;
   public stopPlaceRef?: string;
-  public geoPosition?: GeoPositionSchema;
-  public name: InternationalTextSchema;
+  public geoPosition?: OJP_Types.GeoPositionSchema;
+  public name: OJP_Types.InternationalTextSchema;
   
-  private constructor(name: InternationalTextSchema) {
+  private constructor(name: OJP_Types.InternationalTextSchema) {
     this.stopPointRef = undefined;
     this.stopPlaceRef = undefined;
     this.geoPosition = undefined;
@@ -49,7 +33,7 @@ export class PlaceRef implements PlaceRefSchema {
 
       return placeRef;
     } else {
-      const name: InternationalTextSchema = {
+      const name: OJP_Types.InternationalTextSchema = {
         text: nameS ?? 'n/a',
       };
       const placeRef = new PlaceRef(name);
@@ -60,13 +44,13 @@ export class PlaceRef implements PlaceRefSchema {
   }
 }
 
-export class Trip implements TripSchema {
+export class Trip implements OJP_Types.TripSchema {
   public id: string;
   public duration: string;
   public startTime: string;
   public endTime: string;
   public transfers: number;
-  public leg: LegSchema[];
+  public leg: OJP_Types.LegSchema[];
   public cancelled?: boolean;
   public delayed?: boolean;
   public deviation?: boolean;
@@ -79,7 +63,7 @@ export class Trip implements TripSchema {
     startTime: string,
     endTime: string,
     transfers: number,
-    leg: LegSchema[],
+    leg: OJP_Types.LegSchema[],
     cancelled?: boolean,
     delayed?: boolean,
     deviation?: boolean,
@@ -101,7 +85,7 @@ export class Trip implements TripSchema {
 
   public static initWithTripXML(tripXML: string): Trip {
     const parentTagName = 'TripResult';
-    const parsedTrip = parseXML<{ trip: TripSchema }>(tripXML, parentTagName);
+    const parsedTrip = parseXML<{ trip: OJP_Types.TripSchema }>(tripXML, parentTagName);
     const trip = new Trip(
       parsedTrip.trip.id,
       parsedTrip.trip.duration,
@@ -125,19 +109,19 @@ interface NearbyPlace {
   object: Place 
 }
 
-export class Place implements PlaceSchema {
-  public stopPoint?: StopPointSchema;
-  public stopPlace?: StopPlaceSchema;
-  public topographicPlace?: TopographicPlaceSchema;
-  public pointOfInterest?: PointOfInterestSchema;
-  public address?: AddressSchema;
-  public name: InternationalTextSchema;
+export class Place implements OJP_Types.PlaceSchema {
+  public stopPoint?: OJP_Types.StopPointSchema;
+  public stopPlace?: OJP_Types.StopPlaceSchema;
+  public topographicPlace?: OJP_Types.TopographicPlaceSchema;
+  public pointOfInterest?: OJP_Types.PointOfInterestSchema;
+  public address?: OJP_Types.AddressSchema;
+  public name: OJP_Types.InternationalTextSchema;
   public geoPosition: GeoPosition;
-  public mode: PlaceModeStructureSchema[];
+  public mode: OJP_Types.PlaceModeStructureSchema[];
 
-  public placeType: PlaceTypeEnum | null;
+  public placeType: OJP_Types.PlaceTypeEnum | null;
 
-  private constructor(stopPoint: StopPointSchema | undefined, stopPlace: StopPlaceSchema | undefined, topographicPlace: TopographicPlaceSchema | undefined, pointOfInterest: PointOfInterestSchema | undefined, address: AddressSchema | undefined, name: InternationalTextSchema, geoPosition: GeoPosition, mode: PlaceModeStructureSchema[]) {
+  private constructor(stopPoint: OJP_Types.StopPointSchema | undefined, stopPlace: OJP_Types.StopPlaceSchema | undefined, topographicPlace: OJP_Types.TopographicPlaceSchema | undefined, pointOfInterest: OJP_Types.PointOfInterestSchema | undefined, address: OJP_Types.AddressSchema | undefined, name: OJP_Types.InternationalTextSchema, geoPosition: GeoPosition, mode: OJP_Types.PlaceModeStructureSchema[]) {
     this.stopPoint = stopPoint;
     this.stopPlace = stopPlace;
     this.topographicPlace = topographicPlace;
@@ -162,7 +146,7 @@ export class Place implements PlaceSchema {
     }
   }
 
-  public static initWithXMLSchema(placeSchema: PlaceSchema): Place {
+  public static initWithXMLSchema(placeSchema: OJP_Types.PlaceSchema): Place {
     const geoPosition = new GeoPosition(placeSchema.geoPosition);
     const place = new Place(placeSchema.stopPoint, placeSchema.stopPlace, placeSchema.topographicPlace, placeSchema.pointOfInterest, placeSchema.address, placeSchema.name, geoPosition, placeSchema.mode);
     return place;
@@ -171,7 +155,7 @@ export class Place implements PlaceSchema {
   public static initWithCoords(geoPositionArg: GeoPositionLike | number, optionalLatitude: number | null = null): Place {
     const geoPosition = new GeoPosition(geoPositionArg, optionalLatitude);
 
-    const name: InternationalTextSchema = {
+    const name: OJP_Types.InternationalTextSchema = {
       text: geoPosition.latitude + ',' + geoPosition.longitude
     };
     
@@ -181,7 +165,7 @@ export class Place implements PlaceSchema {
   }
 
   public static Empty() {
-    const name: InternationalTextSchema = {
+    const name: OJP_Types.InternationalTextSchema = {
       text: 'n/a Empty'
     };
     const geoPosition = new GeoPosition('0,0');
@@ -227,7 +211,7 @@ export class Place implements PlaceSchema {
   }
 }
 
-export class PlaceResult implements PlaceResultSchema {
+export class PlaceResult implements OJP_Types.PlaceResultSchema {
   public place: Place;
   public complete: boolean;
   public probability?: number;
@@ -240,7 +224,7 @@ export class PlaceResult implements PlaceResultSchema {
 
   public static initWithXML(nodeXML: string): PlaceResult {
     const parentTagName = 'PlaceResult';
-    const parsedObj = parseXML<{ placeResult: PlaceResultSchema }>(nodeXML, parentTagName);
+    const parsedObj = parseXML<{ placeResult: OJP_Types.PlaceResultSchema }>(nodeXML, parentTagName);
     
     const placeSchema = parsedObj.placeResult.place;
     const place = Place.initWithXMLSchema(placeSchema);
@@ -251,18 +235,18 @@ export class PlaceResult implements PlaceResultSchema {
   }
 }
 
-export class StopEventResult implements StopEventResultSchema {
+export class StopEventResult implements OJP_Types.StopEventResultSchema {
   public id: string;
-  public stopEvent: StopEventSchema;
+  public stopEvent: OJP_Types.StopEventSchema;
 
-  private constructor(id: string, stopEvent: StopEventSchema) {
+  private constructor(id: string, stopEvent: OJP_Types.StopEventSchema) {
     this.id = id;
     this.stopEvent = stopEvent;
   }
 
   public static initWithXML(nodeXML: string): StopEventResult {
     const parentTagName = 'StopEventResult';
-    const parsedObj = parseXML<{ stopEventResult: StopEventResultSchema }>(nodeXML, parentTagName);
+    const parsedObj = parseXML<{ stopEventResult: OJP_Types.StopEventResultSchema }>(nodeXML, parentTagName);
     const result = new StopEventResult(parsedObj.stopEventResult.id, parsedObj.stopEventResult.stopEvent);
 
     return result;

@@ -138,7 +138,7 @@ export class DeparturesComponent implements OnInit {
         const serviceLineParts: string[] = []
         
         // prepend B (for bus)
-        serviceLineParts.push(journeyService.mode.shortName.text)
+        serviceLineParts.push(journeyService.mode.shortName?.text ?? 'n/a shortName');
         
         // then line number
         serviceLineParts.push(serviceLineNumber)

@@ -83,6 +83,10 @@ export class PlaygroundComponent implements OnInit {
     const toCoordsRef = '46.931849,7.485132';
 
     const request2 = OJP.TripRequest.initWithPlaceRefsOrCoords(fromCoordsRef, toCoordsRef);
+    if (request2.params) {
+      request2.params.includeLegProjection = true;
+    }
+
     const response2 = await this.ojpSDK.fetchTrips(request2);
     console.log('B) TR using await/async')
     console.log(response2);

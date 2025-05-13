@@ -1,5 +1,6 @@
+import * as OJP_Types from 'ojp-shared-types';
+
 import { XMLParser } from "fast-xml-parser";
-import { MapArrayTags, MapParentArrayTags, MapStringValues } from "../../types/openapi/openapi-dependencies";
 
 const transformTagNameHandler = (tagName: string) => {
   if (tagName.startsWith('OJP')) {
@@ -22,7 +23,7 @@ const isArrayHandler = (tagName: string, jPath: string) => {
   const jPathParts = jPath.split('.');
   if (jPathParts.length > 1) {
     const pathPart = jPathParts.slice(-2).join('.');
-    if (pathPart in MapArrayTags) {
+    if (pathPart in OJP_Types.OpenAPI_Dependencies.MapArrayTags) {
       return true;
     }
   }
@@ -70,8 +71,8 @@ export function parseXML<T>(xml: string, parentPath: string = ''): T {
       if (path.length > 1) {
         const pathPart = path.slice(-2).join('.');
         
-        if (pathPart in MapParentArrayTags) {
-          const enforceChildTags = MapParentArrayTags[pathPart];
+        if (pathPart in OJP_Types.OpenAPI_Dependencies.MapParentArrayTags) {
+          const enforceChildTags = OJP_Types.OpenAPI_Dependencies.MapParentArrayTags[pathPart];
           enforceChildTags.forEach(childTagName => {
             value[childTagName] ??= [];
           });
@@ -82,7 +83,7 @@ export function parseXML<T>(xml: string, parentPath: string = ''): T {
         const lastItem = (path.at(-1) ?? '');
         const stringKey = lastItem + '.' + key1;
 
-        if (stringKey in MapStringValues) {
+        if (stringKey in OJP_Types.OpenAPI_Dependencies.MapStringValues) {
           // fast-xml-parser attempts to converts everything
           //    conform to schema id needed, i.e. String values
           value[key1] = String(value[key1]);

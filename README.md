@@ -17,7 +17,7 @@ See [docs](./docs/) and [examples](./examples/) for usage.
 - include the `ojp-sdk-next` package in the `./package.json` dependencies of the project 
 ```
   "dependencies": {
-    "ojp-sdk-next": "0.20.2"
+    "ojp-sdk-next": "0.20.11"
   }
 ```
 
