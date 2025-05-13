@@ -15,14 +15,14 @@ export class SDK {
   private language: Language;
   private xmlConfig: XML_Config;
 
-  constructor(requestorRef: string, httpConfig: HTTPConfig, language: Language) {
+  constructor(requestorRef: string, httpConfig: HTTPConfig, language: Language, xmlConfig: XML_Config = DefaultXML_Config) {
     this.requestorRef = requestorRef;
     // TODO - do some validation on the format? [0-9a-zA-Z_\.] ?
 
     this.httpConfig = httpConfig;
     this.language = language;
     
-    this.xmlConfig = DefaultXML_Config;
+    this.xmlConfig = xmlConfig;
   }
 
   private async computeResponse(request: OJP_RequestType): Promise<string> {
