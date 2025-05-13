@@ -1,4 +1,5 @@
 export { 
+  FareRequest,
   LocationInformationRequest, 
   StopEventRequest, 
   TripRequest,
