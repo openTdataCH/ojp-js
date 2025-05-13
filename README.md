@@ -18,7 +18,7 @@ See [docs](./docs/) and [examples](./examples/) for usage.
 ```
   "dependencies": {
     "ojp-shared-types": "0.0.2",
-    "ojp-sdk-next": "0.20.11",
+    "ojp-sdk-next": "0.20.12",
   }
 ```
 
