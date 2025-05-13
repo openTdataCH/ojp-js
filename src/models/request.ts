@@ -526,6 +526,10 @@ export class FareRequest extends BaseRequest implements OJP_Types.FareRequestsSc
       },
     };
 
+    if (xmlConfig.ojpVersion !== '1.0') {
+      console.error('FareRequest.buildRequestXML() error - v1 XML_Config is missing');
+    }
+
     const xmlS = buildRootXML(requestOJP, xmlConfig, (objTransformed => {
       const siriPrefix = xmlConfig.defaultNS !== 'siri' ? 'siri:' : '';
       const ojpPrefix = xmlConfig.defaultNS !== 'ojp' ? 'ojp:' : '';
