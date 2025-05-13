@@ -511,4 +511,42 @@ export class FareRequest extends BaseRequest implements OJP_Types.FareRequestsSc
     const request = FareRequest.initWithOJPv1Trips(newTrips);
     return request;
   }
+
+  public buildRequestXML(language: Language, requestorRef: string, xmlConfig: XML_Config = DefaultXML_Config): string {
+    const requestOJP: OJP_Types.FareRequestOJP = {
+      OJPRequest: {
+        serviceRequest: {
+          serviceRequestContext: {
+            language: language
+          },
+          requestTimestamp: this.requestTimestamp,
+          requestorRef: requestorRef,
+          OJPFareRequest: this.itemsWrapper,
+        }
+      },
+    };
+
+    const xmlS = buildRootXML(requestOJP, xmlConfig, (objTransformed => {
+      const siriPrefix = xmlConfig.defaultNS !== 'siri' ? 'siri:' : '';
+      const ojpPrefix = xmlConfig.defaultNS !== 'ojp' ? 'ojp:' : '';
+
+      // Hack to patch the Service.OperatorRef
+      //   - in OJP1 is under ojp: namespace
+      //   - value needs a prefix ojp: otherwise FareService throws an error
+      //    -> ojp:11
+      const fareRequests = objTransformed[siriPrefix + 'OJPRequest'][siriPrefix + 'ServiceRequest'][ojpPrefix + 'OJPFareRequest'] as any[];
+      fareRequests.forEach(fareRequest => {
+        const trip = fareRequest[ojpPrefix + 'TripFareRequest'][ojpPrefix + 'Trip'];
+        (trip[ojpPrefix + 'TripLeg'] as any[]).forEach(leg => {
+          if (ojpPrefix + 'TimedLeg' in leg) {
+            const service = leg[ojpPrefix + 'TimedLeg'][ojpPrefix + 'Service'];
+            service[ojpPrefix + 'OperatorRef'] = 'ojp:' +  service[siriPrefix + 'OperatorRef'];
+            delete service[siriPrefix + 'OperatorRef'];
+          }
+        });
+      });
+    }));
+
+    return xmlS;
+  }
 }

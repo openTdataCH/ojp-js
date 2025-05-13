@@ -1,11 +1,14 @@
 import axios, { AxiosHeaders, AxiosRequestConfig } from "axios";
 
+import * as OJP_Types from 'ojp-shared-types';
+
+import { parseXML } from './helpers/xml/parser';
 import { PlaceResult, StopEventResult, Trip } from "./models/ojp";
 import { XML_Config, HTTPConfig, Language } from "./types/_all";
-import { LocationInformationRequest, StopEventRequest, TripRefineRequest, TripRequest } from "./models/request";
+import { FareRequest, LocationInformationRequest, StopEventRequest, TripRefineRequest, TripRequest } from "./models/request";
 import { DefaultXML_Config } from "./constants";
 
-type OJP_RequestType = TripRequest | LocationInformationRequest | StopEventRequest | TripRefineRequest;
+type OJP_RequestType = TripRequest | LocationInformationRequest | StopEventRequest | TripRefineRequest | FareRequest;
 export class SDK {
   private requestorRef: string;
   private httpConfig: HTTPConfig;
@@ -154,5 +157,14 @@ export class SDK {
     request.requestInfo.parseDateTime = new Date();
 
     return trips;
+  }
+
+  public async fetchFareResults(request: FareRequest): Promise<OJP_Types.FareResultSchema[]> {
+    const responseXML = await this.computeResponse(request);
+
+    const parsedObj = parseXML<{ OJP: OJP_Types.FareResponseOJP }>(responseXML, 'OJP');
+    const fareResults = parsedObj.OJP.OJPResponse.serviceDelivery.OJPFareDelivery.fareResult;
+
+    return fareResults;
   }
 }
