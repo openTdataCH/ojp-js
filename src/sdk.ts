@@ -29,7 +29,7 @@ export class SDK {
         return request.mockRequestXML;
       }
 
-      const xml = request.buildRequestXML(this.language, this.requestorRef);
+      const xml = request.buildRequestXML(this.language, this.requestorRef, this.xmlConfig);
       return xml;
     })();
 

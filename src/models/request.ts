@@ -1,8 +1,9 @@
 import { InitialInputSchema, LIR_RequestParamsSchema, LocationInformationRequestOJP, LocationInformationRequestSchema, PlaceContextSchema, PlaceTypeEnum, SER_RequestLocationSchema, SER_RequestOJP, SER_RequestParamsSchema, StopEventRequestSchema, TripParamsSchema, TripRequestOJP, TripRequestSchema, TripResultSchema, TRR_RequestOJP, TRR_RequestParamsSchema, TRR_RequestSchema, ViaPointSchema } from "../types/openapi/index";
 
-import { Language, RequestInfo } from "../types/_all";
+import { Language, RequestInfo, XML_Config } from "../types/_all";
 import { Place, PlaceRef, Trip } from './ojp';
 import { buildXML } from "../helpers/xml/builder";
+import { DefaultXML_Config } from "../constants";
 
 class BaseRequest {
   public requestInfo: RequestInfo;
@@ -138,7 +139,7 @@ export class TripRequest extends BaseRequest implements TripRequestSchema {
     this.origin.depArrTime = newDatetime.toISOString();
   }
 
-  public buildRequestXML(language: Language, requestorRef: string): string {
+  public buildRequestXML(language: Language, requestorRef: string, xmlConfig: XML_Config = DefaultXML_Config): string {
     const requestOJP: TripRequestOJP = {
       OJPRequest: {
         serviceRequest: {
@@ -152,7 +153,7 @@ export class TripRequest extends BaseRequest implements TripRequestSchema {
       },
     };
 
-    const xmlS = buildXML(requestOJP);
+    const xmlS = buildXML(requestOJP, xmlConfig);
 
     return xmlS;
   }
