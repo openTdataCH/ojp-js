@@ -1,5 +1,6 @@
+import * as OJP_Types from 'ojp-shared-types';
+
 import { XMLBuilder } from "fast-xml-parser";
-import { MapModelKeepPropertiesXML, MapNS_Tags } from "../../types/openapi/openapi-dependencies";
 import { XML_Config } from "../../types/_all";
 import { DefaultXML_Config } from "../../constants";
 
@@ -45,7 +46,7 @@ export function buildXML(obj: Record<string, any>, xmlConfig: XML_Config = Defau
     // capitalize first letter
     let newKey = key.charAt(0).toUpperCase() + key.slice(1);
 
-    const keysToKeep = MapModelKeepPropertiesXML[key] ?? null;
+    const keysToKeep = OJP_Types.OpenAPI_Dependencies.MapModelKeepPropertiesXML[key] ?? null;
     if (keysToKeep !== null) {
       if (typeof value === 'object') {
         const objKeys = Object.keys(value);
@@ -65,7 +66,7 @@ export function buildXML(obj: Record<string, any>, xmlConfig: XML_Config = Defau
     if (parentKey !== null) {
       const tagNS_Key = parentKey.replace(/^.*:/, '') + '.' + newKey;
       const tagNS = (() => {
-        const tagNSConfig = MapNS_Tags[tagNS_Key] ?? 'ojp';
+        const tagNSConfig = OJP_Types.OpenAPI_Dependencies.MapNS_Tags[tagNS_Key] ?? 'ojp';
         if (xmlConfig.defaultNS === tagNSConfig) {
           return '';
         }

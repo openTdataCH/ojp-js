@@ -1,4 +1,4 @@
-import { InitialInputSchema, LIR_RequestParamsSchema, LocationInformationRequestOJP, LocationInformationRequestSchema, PlaceContextSchema, PlaceTypeEnum, SER_RequestLocationSchema, SER_RequestOJP, SER_RequestParamsSchema, StopEventRequestSchema, TripParamsSchema, TripRequestOJP, TripRequestSchema, TripResultSchema, TRR_RequestOJP, TRR_RequestParamsSchema, TRR_RequestSchema, ViaPointSchema } from "../types/openapi/index";
+import * as OJP_Types from 'ojp-shared-types';
 
 import { Language, RequestInfo, XML_Config } from "../types/_all";
 import { Place, PlaceRef, Trip } from './ojp';
@@ -28,21 +28,21 @@ class BaseRequest {
   }
 }
 
-export class TripRequest extends BaseRequest implements TripRequestSchema {
+export class TripRequest extends BaseRequest implements OJP_Types.TripRequestSchema {
   public requestTimestamp: string;
   
-  public origin: PlaceContextSchema;
-  public destination: PlaceContextSchema;
-  public via: ViaPointSchema[];
+  public origin: OJP_Types.PlaceContextSchema;
+  public destination: OJP_Types.PlaceContextSchema;
+  public via: OJP_Types.ViaPointSchema[];
   
-  public params?: TripParamsSchema;
+  public params?: OJP_Types.TripParamsSchema;
 
   private constructor(
-    origin: PlaceContextSchema, 
-    destination: PlaceContextSchema, 
-    via: ViaPointSchema[] = [],
+    origin: OJP_Types.PlaceContextSchema, 
+    destination: OJP_Types.PlaceContextSchema, 
+    via: OJP_Types.ViaPointSchema[] = [],
     
-    params: TripParamsSchema | null = null, 
+    params: OJP_Types.TripParamsSchema | null = null, 
   ) {
     super();
 
@@ -59,8 +59,8 @@ export class TripRequest extends BaseRequest implements TripRequestSchema {
     this.mockResponseXML = null;
   }
 
-  private static DefaultRequestParams(): TripParamsSchema {
-    const requestParams: TripParamsSchema = {
+  private static DefaultRequestParams(): OJP_Types.TripParamsSchema {
+    const requestParams: OJP_Types.TripParamsSchema = {
       modeAndModeOfOperationFilter: [],
       
       numberOfResults: 5,
@@ -80,11 +80,11 @@ export class TripRequest extends BaseRequest implements TripRequestSchema {
 
   private static Default(): TripRequest {
     const date = new Date();
-    const origin: PlaceContextSchema = {
+    const origin: OJP_Types.PlaceContextSchema = {
       placeRef: PlaceRef.initWithPlaceRefsOrCoords('8503000', 'Zürich'),
       depArrTime: date.toISOString(),
     };
-    const destination: PlaceContextSchema = {
+    const destination: OJP_Types.PlaceContextSchema = {
       placeRef: PlaceRef.initWithPlaceRefsOrCoords('8507000', 'Bern'),
     };
     const params = TripRequest.DefaultRequestParams();
@@ -106,10 +106,10 @@ export class TripRequest extends BaseRequest implements TripRequestSchema {
   }
 
   public static initWithPlaceRefsOrCoords(originPlaceRefS: string, destinationPlaceRefS: string): TripRequest {
-    const origin: PlaceContextSchema = {
+    const origin: OJP_Types.PlaceContextSchema = {
       placeRef: PlaceRef.initWithPlaceRefsOrCoords(originPlaceRefS),
     };
-    const destination: PlaceContextSchema = {
+    const destination: OJP_Types.PlaceContextSchema = {
       placeRef: PlaceRef.initWithPlaceRefsOrCoords(destinationPlaceRefS),
     };
 
@@ -140,7 +140,7 @@ export class TripRequest extends BaseRequest implements TripRequestSchema {
   }
 
   public buildRequestXML(language: Language, requestorRef: string, xmlConfig: XML_Config = DefaultXML_Config): string {
-    const requestOJP: TripRequestOJP = {
+    const requestOJP: OJP_Types.TripRequestOJP = {
       OJPRequest: {
         serviceRequest: {
           serviceRequestContext: {
@@ -159,13 +159,13 @@ export class TripRequest extends BaseRequest implements TripRequestSchema {
   }
 }
 
-export class LocationInformationRequest extends BaseRequest implements LocationInformationRequestSchema {
+export class LocationInformationRequest extends BaseRequest implements OJP_Types.LocationInformationRequestSchema {
   public requestTimestamp: string;
-  public initialInput?: InitialInputSchema;
+  public initialInput?: OJP_Types.InitialInputSchema;
   public placeRef?: PlaceRef;
-  public restrictions?: LIR_RequestParamsSchema;
+  public restrictions?: OJP_Types.LIR_RequestParamsSchema;
 
-  private constructor(initialInput: InitialInputSchema | undefined, placeRef: PlaceRef | undefined, restrictions: LIR_RequestParamsSchema | undefined) {
+  private constructor(initialInput: OJP_Types.InitialInputSchema | undefined, placeRef: PlaceRef | undefined, restrictions: OJP_Types.LIR_RequestParamsSchema | undefined) {
     super();
 
     const now = new Date();
@@ -176,8 +176,8 @@ export class LocationInformationRequest extends BaseRequest implements LocationI
     this.restrictions = restrictions;
   }
 
-  private static DefaultRequestParams(): LIR_RequestParamsSchema {
-    const params: LIR_RequestParamsSchema = {
+  private static DefaultRequestParams(): OJP_Types.LIR_RequestParamsSchema {
+    const params: OJP_Types.LIR_RequestParamsSchema = {
       type: [],
       numberOfResults: 10,
     };
@@ -221,7 +221,7 @@ export class LocationInformationRequest extends BaseRequest implements LocationI
     return request;
   }
 
-  public static initWithBBOX(bboxData: string | number[], placeType: PlaceTypeEnum[], numberOfResults: number = 10): LocationInformationRequest {
+  public static initWithBBOX(bboxData: string | number[], placeType: OJP_Types.PlaceTypeEnum[], numberOfResults: number = 10): LocationInformationRequest {
     const bboxDataParts: number[] = (() => {
       if (Array.isArray(bboxData)) {
         return bboxData;
@@ -267,7 +267,7 @@ export class LocationInformationRequest extends BaseRequest implements LocationI
   }
 
   public buildRequestXML(language: Language, requestorRef: string): string {
-    const requestOJP: LocationInformationRequestOJP = {
+    const requestOJP: OJP_Types.LocationInformationRequestOJP = {
       OJPRequest: {
         serviceRequest: {
           serviceRequestContext: {
@@ -286,12 +286,12 @@ export class LocationInformationRequest extends BaseRequest implements LocationI
   }
 }
 
-export class StopEventRequest extends BaseRequest implements StopEventRequestSchema {
+export class StopEventRequest extends BaseRequest implements OJP_Types.StopEventRequestSchema {
   public requestTimestamp: string;
-  public location: SER_RequestLocationSchema;
-  public params?: SER_RequestParamsSchema;
+  public location: OJP_Types.SER_RequestLocationSchema;
+  public params?: OJP_Types.SER_RequestParamsSchema;
 
-  private constructor(location: SER_RequestLocationSchema, params: SER_RequestParamsSchema | undefined = undefined) {
+  private constructor(location: OJP_Types.SER_RequestLocationSchema, params: OJP_Types.SER_RequestParamsSchema | undefined = undefined) {
     super();
 
     const now = new Date();
@@ -301,8 +301,8 @@ export class StopEventRequest extends BaseRequest implements StopEventRequestSch
     this.params = params;
   }
 
-  private static DefaultRequestParams(): SER_RequestParamsSchema {
-    const params: SER_RequestParamsSchema = {
+  private static DefaultRequestParams(): OJP_Types.SER_RequestParamsSchema {
+    const params: OJP_Types.SER_RequestParamsSchema = {
       includeAllRestrictedLines: true,
       numberOfResults: 10,
       stopEventType: 'departure',
@@ -316,7 +316,7 @@ export class StopEventRequest extends BaseRequest implements StopEventRequestSch
 
   private static Default(): StopEventRequest {
     const date = new Date();
-    const location: SER_RequestLocationSchema = {
+    const location: OJP_Types.SER_RequestLocationSchema = {
       placeRef: {
         stopPointRef: '8507000',
         name: {
@@ -345,7 +345,7 @@ export class StopEventRequest extends BaseRequest implements StopEventRequestSch
   }
 
   public static initWithPlaceRefAndDate(placeRefS: string, date: Date = new Date()): StopEventRequest {
-    const location: SER_RequestLocationSchema = {
+    const location: OJP_Types.SER_RequestLocationSchema = {
       placeRef: {
         stopPointRef: placeRefS,
         name: {
@@ -363,7 +363,7 @@ export class StopEventRequest extends BaseRequest implements StopEventRequestSch
   }
 
   public buildRequestXML(language: Language, requestorRef: string): string {
-    const requestOJP: SER_RequestOJP = {
+    const requestOJP: OJP_Types.SER_RequestOJP = {
       OJPRequest: {
         serviceRequest: {
           serviceRequestContext: {
@@ -382,12 +382,12 @@ export class StopEventRequest extends BaseRequest implements StopEventRequestSch
   }
 }
 
-export class TripRefineRequest extends BaseRequest implements TRR_RequestSchema {
+export class TripRefineRequest extends BaseRequest implements OJP_Types.TRR_RequestSchema {
   public requestTimestamp: string;
-  public refineParams?: TRR_RequestParamsSchema;
-  public tripResult: TripResultSchema;
+  public refineParams?: OJP_Types.TRR_RequestParamsSchema;
+  public tripResult: OJP_Types.TripResultSchema;
 
-  private constructor(tripResult: TripResultSchema, refineParams?: TRR_RequestParamsSchema) {
+  private constructor(tripResult: OJP_Types.TripResultSchema, refineParams?: OJP_Types.TRR_RequestParamsSchema) {
     super();
 
     const now = new Date();
@@ -397,8 +397,8 @@ export class TripRefineRequest extends BaseRequest implements TRR_RequestSchema 
     this.tripResult = tripResult;
   }
 
-  private static DefaultRequestParams(): TRR_RequestParamsSchema {
-    const params: TRR_RequestParamsSchema = {
+  private static DefaultRequestParams(): OJP_Types.TRR_RequestParamsSchema {
+    const params: OJP_Types.TRR_RequestParamsSchema = {
       numberOfResults: undefined,
       useRealtimeData: 'explanatory',
       includeAllRestrictedLines: true,
@@ -409,7 +409,7 @@ export class TripRefineRequest extends BaseRequest implements TRR_RequestSchema 
   }
 
   public static initWithTrip(trip: Trip): TripRefineRequest {
-    const tripResult: TripResultSchema = {
+    const tripResult: OJP_Types.TripResultSchema = {
       id: trip.id,
       trip: trip,
     };
@@ -421,7 +421,7 @@ export class TripRefineRequest extends BaseRequest implements TRR_RequestSchema 
   }
 
   public buildRequestXML(language: Language, requestorRef: string): string {
-    const requestOJP: TRR_RequestOJP = {
+    const requestOJP: OJP_Types.TRR_RequestOJP = {
       OJPRequest: {
         serviceRequest: {
           serviceRequestContext: {

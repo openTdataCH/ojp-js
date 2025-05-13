@@ -1,8 +1,8 @@
-import { GeoPositionSchema } from "../types/openapi/index.js";
+import * as OJP_Types from 'ojp-shared-types';
 
-export type GeoPositionLike = GeoPositionSchema | number[] | string;
+export type GeoPositionLike = OJP_Types.GeoPositionSchema | number[] | string;
 
-export class GeoPosition implements GeoPositionSchema {
+export class GeoPosition implements OJP_Types.GeoPositionSchema {
   public longitude: number;
   public latitude: number;
   public properties: Record<string, any>;
@@ -40,8 +40,8 @@ export class GeoPosition implements GeoPositionSchema {
       if (typeof geoPositionArg === 'object') {
         const geoPositionObj = geoPositionArg as Object;
         if (geoPositionObj.hasOwnProperty('longitude') && geoPositionObj.hasOwnProperty('latitude')) {
-          const longitude = (geoPositionArg as GeoPositionSchema).longitude;
-          const latitude = (geoPositionArg as GeoPositionSchema).latitude;
+          const longitude = (geoPositionArg as OJP_Types.GeoPositionSchema).longitude;
+          const latitude = (geoPositionArg as OJP_Types.GeoPositionSchema).latitude;
           return [Number(longitude), Number(latitude)];
         }
       }
