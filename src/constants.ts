@@ -46,7 +46,7 @@ const XML_ParserConfigOJPv1: XML_Config = {
 };
 
 // XML builder/parser in OJPv2 ojp: default
-const XML_ConfigOJPv2: XML_Config = {
+export const XML_ConfigOJPv2: XML_Config = {
     ojpVersion: '2.0',
     defaultNS: 'ojp',
     mapNS: {
