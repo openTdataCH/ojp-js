@@ -7,7 +7,6 @@ import { TripLegFactory } from './leg/trip-leg-factory'
 import { TripTimedLeg } from './leg/trip-timed-leg'
 import { Duration } from '../shared/duration'
 import { TreeNode } from '../xml/tree-node'
-import { TripFareResult } from '../fare/fare'
 
 import { DEBUG_LEVEL, OJP_VERSION, XML_BuilderConfig } from '../constants';
 import { XML_Config } from '../types/_all'
@@ -16,13 +15,11 @@ export class Trip {
   public id: string
   public legs: TripLeg[]
   public stats: TripStats
-  public tripFareResults: TripFareResult[]
 
   constructor(tripID: string, legs: TripLeg[], tripStats: TripStats) {
     this.id = tripID;
     this.legs = legs;
     this.stats = tripStats;
-    this.tripFareResults = [];
   }
 
   public static initFromTreeNode(treeNode: TreeNode): Trip | null {
