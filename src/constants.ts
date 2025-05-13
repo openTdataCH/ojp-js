@@ -1,4 +1,4 @@
-import { XML_Config } from "./types/_all.js";
+import { XML_Config } from "./types/_all";
 
 export const SDK_VERSION = '0.20.10';
 
