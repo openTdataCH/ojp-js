@@ -27,7 +27,7 @@ See [Reference](./docs/reference.md) and [examples](./examples/) for usage.
 - include the `ojp-sdk` package in the `./package.json` dependencies of your project 
 ```
   "dependencies": {
-    "ojp-sdk-v2": "0.18.4"
+    "ojp-sdk-v2": "0.18.5"
   }
 ```
 

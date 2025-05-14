@@ -1,8 +1,5 @@
 export * from './constants'
 
-export * from './fare/fare'
-export * from './fare/nova-request'
-
 export * from './helpers/date-helpers'
 export * from './helpers/xml-helpers'
 
