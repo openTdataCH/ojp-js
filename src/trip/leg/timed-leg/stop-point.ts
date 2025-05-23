@@ -4,8 +4,7 @@ import { StopPointType } from "../../../types/stop-point-type"
 import { PtSituationElement } from "../../../situation/situation-element"
 import { TreeNode } from "../../../xml/tree-node"
 import { StopPlace } from "../../../location/stopplace"
-import { FareClassType, OccupancyLevel } from "../../../types/_all"
-type MapFareClassOccupancy = Record<FareClassType, OccupancyLevel | null>;
+import { FareClassType, OccupancyLevel, MapFareClassOccupancy } from "../../../types/_all"
 
 export class StopPoint {
   public stopPointType: StopPointType
