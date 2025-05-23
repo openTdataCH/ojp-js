@@ -4,14 +4,7 @@ import { StopPointType } from "../../../types/stop-point-type"
 import { PtSituationElement } from "../../../situation/situation-element"
 import { TreeNode } from "../../../xml/tree-node"
 import { StopPlace } from "../../../location/stopplace"
-import { DEBUG_LEVEL } from "../../../constants"
 import { FareClassType, OccupancyLevel } from "../../../types/_all"
-
-
-type VehicleAccessType = 
-  'PLATFORM_ACCESS_WITHOUT_ASSISTANCE' | 'PLATFORM_ACCESS_WITH_ASSISTANCE' | 'PLATFORM_ACCESS_WITH_ASSISTANCE_WHEN_NOTIFIED' 
-  | 'PLATFORM_NOT_WHEELCHAIR_ACCESSIBLE' | 'ALTERNATIVE_TRANSPORT' | 'NO_DATA';
-
 type MapFareClassOccupancy = Record<FareClassType, OccupancyLevel | null>;
 
 export class StopPoint {
@@ -28,7 +21,7 @@ export class StopPoint {
   public siriSituationIds: string[]
   public siriSituations: PtSituationElement[]
 
-  public vehicleAccessType: VehicleAccessType | null;
+  public vehicleAccessType: string | null;
 
   public mapFareClassOccupancy: MapFareClassOccupancy;
 
@@ -93,47 +86,10 @@ export class StopPoint {
       }
     });
 
-    stopPoint.vehicleAccessType = StopPoint.computePlatformAssistance(treeNode);
+    stopPoint.vehicleAccessType = treeNode.findTextFromChildNamed('NameSuffix/Text');
     stopPoint.mapFareClassOccupancy = StopPoint.computeMapFareClassOccupancy(treeNode);
 
     return stopPoint;
-  }
-
-  private static computePlatformAssistance(treeNode: TreeNode): VehicleAccessType | null {
-    const platformText = treeNode.findTextFromChildNamed('NameSuffix/Text');
-    if (platformText === null) {
-      return null;
-    }
-
-    if (platformText === 'PLATFORM_ACCESS_WITH_ASSISTANCE') {
-      return 'PLATFORM_ACCESS_WITH_ASSISTANCE';
-    }
-
-    if (platformText === 'PLATFORM_ACCESS_WITH_ASSISTANCE_WHEN_NOTIFIED') {
-      return 'PLATFORM_ACCESS_WITH_ASSISTANCE_WHEN_NOTIFIED';
-    }
-
-    if (platformText === 'PLATFORM_NOT_WHEELCHAIR_ACCESSIBLE') {
-      return 'PLATFORM_NOT_WHEELCHAIR_ACCESSIBLE';
-    }
-
-    if (platformText === 'PLATFORM_ACCESS_WITHOUT_ASSISTANCE') {
-      return 'PLATFORM_ACCESS_WITHOUT_ASSISTANCE';
-    }
-
-    if (platformText === 'NO_DATA') {
-      return 'NO_DATA';
-    }
-
-    if (platformText === 'ALTERNATIVE_TRANSPORT') {
-      return 'ALTERNATIVE_TRANSPORT';
-    }
-
-    if (DEBUG_LEVEL === 'DEBUG') {
-      console.log('StopPoint.computePlatformAssistance - cant compute platform from text:--' + platformText + '--');
-    }
-
-    return null;
   }
 
   private static computeMapFareClassOccupancy(treeNode: TreeNode): MapFareClassOccupancy {
