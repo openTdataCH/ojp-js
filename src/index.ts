@@ -1,24 +1,24 @@
-export * from './constants'
+export * from './constants';
 
-export * from './helpers/date-helpers'
-export * from './helpers/xml-helpers'
+export * from './helpers/date-helpers';
+export * from './helpers/xml-helpers';
 
-export * from './journey/journey-service'
-export * from './journey/public-transport-mode'
+export * from './journey/journey-service';
+export * from './journey/public-transport-mode';
 
-export * from './location/location'
-export * from './location/geoposition-bbox'
-export * from './location/geoposition'
+export * from './location/location';
+export * from './location/geoposition-bbox';
+export * from './location/geoposition';
 
-export * from './shared/duration'
+export * from './shared/duration';
 
-export * from './situation/situation-element'
+export * from './situation/situation-element';
 
-export * from './stop-event/stop-event'
+export * from './stop-event/stop-event';
 
-export * from './request/index'
+export * from './request/index';
 
-export * from './trip/index'
+export * from './trip/index';
 
 export { UseRealtimeDataEnumeration, FareClassType, OccupancyLevel } from './types/_all'
 export * from './types/lir-restrictions.type'
