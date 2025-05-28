@@ -124,8 +124,11 @@ export class JourneyService {
     const serviceLineNumberNodeName = isOJPv2 ? 'PublishedServiceName' : 'PublishedLineName';
     legService.serviceLineNumber = serviceTreeNode.findTextFromChildNamed(serviceLineNumberNodeName + '/Text');
 
-    const journeyNumberNodePath = OJP_VERSION === '2.0' ? 'TrainNumber' : 'PublishedJourneyNumber/Text';
-    legService.journeyNumber = serviceTreeNode.findTextFromChildNamed(journeyNumberNodePath);
+    if (isOJPv2) {
+      legService.journeyNumber = serviceTreeNode.findTextFromChildNamed('TrainNumber');
+    } else {
+      legService.journeyNumber = treeNode.findTextFromChildNamed('Extension/PublishedJourneyNumber/Text');
+    }
 
     legService.siriSituationIds = [];
     // in OJP2.0 there is a container that holds the situations
