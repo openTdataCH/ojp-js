@@ -73,6 +73,8 @@ export class JourneyService {
   }
 
   public static initWithTreeNode(treeNode: TreeNode): JourneyService | null {
+    const isOJPv2 = OJP_VERSION === '2.0';
+
     const serviceTreeNode = treeNode.findChildNamed('Service');
     if (serviceTreeNode === null) {
       return null;
@@ -82,7 +84,7 @@ export class JourneyService {
     const ptMode = PublicTransportMode.initWithServiceTreeNode(serviceTreeNode);
     
     const operatorRef = (() => {
-      const nodeName = OJP_VERSION === '2.0' ? 'siri:OperatorRef' : 'OperatorRef';
+      const nodeName = isOJPv2 ? 'siri:OperatorRef' : 'OperatorRef';
 
       let operatorRefText = serviceTreeNode.findTextFromChildNamed(nodeName);
       if (operatorRefText === null) {
@@ -119,7 +121,7 @@ export class JourneyService {
       };
     }
 
-    const serviceLineNumberNodeName = OJP_VERSION === '2.0' ? 'PublishedServiceName' : 'PublishedLineName';
+    const serviceLineNumberNodeName = isOJPv2 ? 'PublishedServiceName' : 'PublishedLineName';
     legService.serviceLineNumber = serviceTreeNode.findTextFromChildNamed(serviceLineNumberNodeName + '/Text');
 
     const journeyNumberNodePath = OJP_VERSION === '2.0' ? 'TrainNumber' : 'PublishedJourneyNumber/Text';
@@ -127,7 +129,7 @@ export class JourneyService {
 
     legService.siriSituationIds = [];
     // in OJP2.0 there is a container that holds the situations
-    const situationsParentNode = OJP_VERSION === '2.0' ? serviceTreeNode.findChildNamed('SituationFullRefs') : serviceTreeNode;
+    const situationsParentNode = isOJPv2 ? serviceTreeNode.findChildNamed('SituationFullRefs') : serviceTreeNode;
     if (situationsParentNode) {
       const situationFullRefTreeNodes = situationsParentNode.findChildrenNamed('SituationFullRef');
       situationFullRefTreeNodes.forEach(situationFullRefTreeNode => {
@@ -147,7 +149,7 @@ export class JourneyService {
         return;
       }
 
-      const textPath = OJP_VERSION === '2.0' ? 'UserText/Text' : 'Text/Text';
+      const textPath = isOJPv2 ? 'UserText/Text' : 'Text/Text';
       const text = attributeTreeNode.findTextFromChildNamed(textPath);
 
       if (text === null) {
