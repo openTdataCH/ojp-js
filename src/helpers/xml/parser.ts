@@ -87,14 +87,20 @@ export function parseXML<T>(xml: string, parentPath: string = ''): T {
     
     if (typeof value === 'object') {    
       // enforce empty arrays if the array items are not present
-      if (path.length > 1) {
-        const pathPart = path.slice(-2).join('.');
-        
-        if (pathPart in OJP_Types.OpenAPI_Dependencies.MapParentArrayTags) {
-          const enforceChildTags = OJP_Types.OpenAPI_Dependencies.MapParentArrayTags[pathPart];
-          enforceChildTags.forEach(childTagName => {
-            value[childTagName] ??= [];
-          });
+      if (path.length >= 2) {
+        if (key in MapParentArrayTags) {
+          const enforceChildTags = MapParentArrayTags[key];
+          if (Array.isArray(value)) {
+            value.forEach(childValue => {
+              enforceChildTags.forEach(childTagName => {
+                childValue[childTagName] ??= [];
+              });
+            });
+          } else {
+            enforceChildTags.forEach(childTagName => {
+              value[childTagName] ??= [];
+            });
+          }
         }
       }
 
