@@ -21,7 +21,7 @@ const isArrayHandler = (tagName: string, jPath: string) => {
   // console.log('handleArrayNodes:       ' + tagName +  ' -- ' + jPath);
 
   const jPathParts = jPath.split('.');
-  if (jPathParts.length > 1) {
+  if (jPathParts.length >= 2) {
     const pathPart = jPathParts.slice(-2).join('.');
     if (pathPart in OJP_Types.OpenAPI_Dependencies.MapArrayTags) {
       return true;
