@@ -86,8 +86,13 @@ export class SDK {
 
   public async fetchTrips(tripRequest: TripRequest): Promise<Trip[]> {
     const responseXML = await this.computeResponse(tripRequest);
+    
+    const ojpPrefix = this.xmlConfig.defaultNS === 'ojp' ? '' : 'ojp:';
 
-    const tripMatches: string[] = responseXML.match(/<Trip\b[^>]*>.*?<\/Trip>/gs) ?? [];
+
+    const tripPattern = '<' + ojpPrefix + 'Trip\\b[^>]*>.*?<\\/' + ojpPrefix + 'Trip>';
+    const tripRegexp = new RegExp(tripPattern, 'gs');
+    const tripMatches: string[] = responseXML.match(tripRegexp) ?? [];
     
     // console.log('fetchTrips - regexp matches - found ' + tripMatches.length + ' trips');
 
