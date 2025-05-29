@@ -176,4 +176,23 @@ export class SDK {
 
     return fareResults;
   }
+
+  public async fetchTripInfoRequestResponse(request: TripInfoRequest): Promise<OJP_Response<OJP_Types.TripInfoDeliverySchema | OJP_Types.OJPv1_TripInfoDeliverySchema, Error>> {
+    const responseXML = await this.computeResponse(request);
+
+    try {
+      const parsedObj = parseXML<{ OJP: OJP_Types.TripInfoResponseOJP | OJP_Types.OJPv1_TripInfoResponseOJP }>(responseXML, 'OJP');
+      const response = parsedObj.OJP.OJPResponse.serviceDelivery.OJPTripInfoDelivery;
+
+      return {
+        ok: true,
+        value: response,
+      };
+    } catch (error) {
+      return {
+        ok: false,
+        error: error instanceof Error ? error : new Error('Unknown error'),
+      };
+    }
+  }
 }
