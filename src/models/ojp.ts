@@ -121,11 +121,11 @@ export class Place implements OJP_Types.PlaceSchema {
   public address?: OJP_Types.AddressSchema;
   public name: OJP_Types.InternationalTextSchema;
   public geoPosition: GeoPosition;
-  public mode: OJP_Types.PlaceModeStructureSchema[];
+  public mode: OJP_Types.ModeStructureSchema[];
 
   public placeType: OJP_Types.PlaceTypeEnum | null;
 
-  private constructor(stopPoint: OJP_Types.StopPointSchema | undefined, stopPlace: OJP_Types.StopPlaceSchema | undefined, topographicPlace: OJP_Types.TopographicPlaceSchema | undefined, pointOfInterest: OJP_Types.PointOfInterestSchema | undefined, address: OJP_Types.AddressSchema | undefined, name: OJP_Types.InternationalTextSchema, geoPosition: GeoPosition, mode: OJP_Types.PlaceModeStructureSchema[]) {
+  private constructor(stopPoint: OJP_Types.StopPointSchema | undefined, stopPlace: OJP_Types.StopPlaceSchema | undefined, topographicPlace: OJP_Types.TopographicPlaceSchema | undefined, pointOfInterest: OJP_Types.PointOfInterestSchema | undefined, address: OJP_Types.AddressSchema | undefined, name: OJP_Types.InternationalTextSchema, geoPosition: GeoPosition, mode: OJP_Types.ModeStructureSchema[]) {
     this.stopPoint = stopPoint;
     this.stopPlace = stopPlace;
     this.topographicPlace = topographicPlace;
