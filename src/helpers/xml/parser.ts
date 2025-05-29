@@ -64,7 +64,7 @@ export function parseXML<T>(xml: string, parentPath: string = ''): T {
   let response = parser.parse(xml) as T;
 
   traverseJSON(response, [parentPath], (key: string, value: any, path: string[]) => {
-    // console.log('traverseJSON_> ' + jPath + ' k: ' + key + ' v: ' + value);
+    // console.log('traverseJSON_> ' + path.join('.') + ' k: ' + key + ' v: ' + value);
     
     if (typeof value === 'object') {    
       // enforce empty arrays if the array items are not present
