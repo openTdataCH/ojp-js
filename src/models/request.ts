@@ -5,6 +5,7 @@ import { Place, PlaceRef, Trip } from './ojp';
 import { OJPv1_Helpers } from '../helpers/ojp-v1';
 import { buildRootXML, buildXML } from "../helpers/xml/builder";
 import { DefaultXML_Config } from "../constants";
+import { DateHelpers } from '../helpers';
 
 class BaseRequest {
   public requestInfo: RequestInfo;
@@ -552,5 +553,97 @@ export class FareRequest extends BaseRequest implements OJP_Types.FareRequestsSc
     }));
 
     return xmlS;
+  }
+}
+
+export class TripInfoRequest extends BaseRequest implements OJP_Types.TIR_RequestSchema {
+  public requestTimestamp: string;
+  public journeyRef: string;
+  public operatingDayRef: string;
+  public params?: OJP_Types.TIR_RequestParamsSchema;
+
+  private constructor(journeyRef: string, operatingDayRef: string, params?: OJP_Types.TIR_RequestParamsSchema) {
+    super();
+
+    const now = new Date();
+    this.requestTimestamp = now.toISOString();
+    
+    this.journeyRef = journeyRef;
+    this.operatingDayRef = operatingDayRef;
+    this.params = params;
+  }
+
+  private static Default(): TripInfoRequest {
+    const request = new TripInfoRequest('n/a', 'n/a', TripInfoRequest.DefaultRequestParams());
+    return request;
+  }
+
+  private static DefaultRequestParams(): OJP_Types.TIR_RequestParamsSchema {
+    const params: OJP_Types.TIR_RequestParamsSchema = {
+      includeCalls: true,
+      includeService: true,
+      includeTrackProjection: false,
+      includePlacesContext: true,
+      includeSituationsContext: true,
+    };
+
+    return params;
+  }
+
+  public static initWithJourneyRef(journeyRef: string, journeyDate: Date = new Date()): TripInfoRequest {
+    const operatingDayRef = DateHelpers.formatDate(journeyDate).substring(0, 10);
+
+    const params = TripInfoRequest.DefaultRequestParams();
+    const request = new TripInfoRequest(journeyRef, operatingDayRef, params);
+    
+    return request;
+  }
+
+  public static initWithRequestMock(mockText: string): TripInfoRequest {
+    const request = TripInfoRequest.Default();
+    request.mockRequestXML = mockText;
+    return request;
+  }
+
+  public static initWithResponseMock(mockText: string): TripInfoRequest {
+    const request = TripInfoRequest.Default();
+    request.mockResponseXML = mockText;
+    return request;
+  }
+
+  public buildRequestXML(language: Language, requestorRef: string, xmlConfig: XML_Config) {
+    if (xmlConfig.ojpVersion === '1.0') {
+      this.patchV1();
+    }
+
+    const requestOJP: OJP_Types.TIR_RequestOJP = {
+      OJPRequest: {
+        serviceRequest: {
+          serviceRequestContext: {
+            language: language,
+          },
+          requestTimestamp: this.requestTimestamp,
+          requestorRef: requestorRef,
+          OJPTripInfoRequest: this,
+        },
+      },
+    };
+
+    const xmlS = buildRootXML(requestOJP, xmlConfig);
+
+    return xmlS;
+  }
+
+  public enableTrackProjection() {
+    if (this.params) {
+      this.params.includeTrackProjection = true;
+    }
+  }
+
+  // disable params that are not available on v1
+  private patchV1() {
+    if (this.params) {
+      this.params.includeSituationsContext = undefined;
+    }
   }
 }
