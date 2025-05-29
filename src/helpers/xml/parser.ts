@@ -2,6 +2,25 @@ import * as OJP_Types from 'ojp-shared-types';
 
 import { XMLParser } from "fast-xml-parser";
 
+const MapParentArrayTags: Record<string, string[]> = {};
+for (const key in OJP_Types.OpenAPI_Dependencies.MapArrayTags) {
+  const keyParts = key.split('.');
+  if (keyParts.length !== 2) {
+    console.error('invalid OpenAPI_Dependencies.MapArrayTags key: ' + key);
+    continue;
+  }
+
+  const parentTagName = keyParts[0];
+  const childTagName = keyParts[1];
+
+  if (!(parentTagName in MapParentArrayTags)) {
+    MapParentArrayTags[parentTagName] = [];
+  }
+
+  MapParentArrayTags[parentTagName].push(childTagName);
+}
+
+
 const transformTagNameHandler = (tagName: string) => {
   if (tagName.startsWith('OJP')) {
     return tagName;
