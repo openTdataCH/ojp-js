@@ -5,10 +5,14 @@ import * as OJP_Types from 'ojp-shared-types';
 import { parseXML } from './helpers/xml/parser';
 import { PlaceResult, StopEventResult, Trip } from "./models/ojp";
 import { XML_Config, HTTPConfig, Language } from "./types/_all";
-import { FareRequest, LocationInformationRequest, StopEventRequest, TripRefineRequest, TripRequest } from "./models/request";
+import { FareRequest, LocationInformationRequest, StopEventRequest, TripInfoRequest, TripRefineRequest, TripRequest } from "./models/request";
 import { DefaultXML_Config } from "./constants";
 
-type OJP_RequestType = TripRequest | LocationInformationRequest | StopEventRequest | TripRefineRequest | FareRequest;
+type ResponseOk<T> = { ok: true; value: T };
+type ResponseError<E> = { ok: false; error: E };
+type OJP_Response<T, E> = ResponseOk<T> | ResponseError<E>;
+
+type OJP_RequestType = TripRequest | LocationInformationRequest | StopEventRequest | TripRefineRequest | FareRequest | TripInfoRequest;
 export class SDK {
   private requestorRef: string;
   private httpConfig: HTTPConfig;
@@ -86,8 +90,13 @@ export class SDK {
 
   public async fetchTrips(tripRequest: TripRequest): Promise<Trip[]> {
     const responseXML = await this.computeResponse(tripRequest);
+    
+    const ojpPrefix = this.xmlConfig.defaultNS === 'ojp' ? '' : 'ojp:';
 
-    const tripMatches: string[] = responseXML.match(/<Trip\b[^>]*>.*?<\/Trip>/gs) ?? [];
+
+    const tripPattern = '<' + ojpPrefix + 'Trip\\b[^>]*>.*?<\\/' + ojpPrefix + 'Trip>';
+    const tripRegexp = new RegExp(tripPattern, 'gs');
+    const tripMatches: string[] = responseXML.match(tripRegexp) ?? [];
     
     // console.log('fetchTrips - regexp matches - found ' + tripMatches.length + ' trips');
 
@@ -166,5 +175,24 @@ export class SDK {
     const fareResults = parsedObj.OJP.OJPResponse.serviceDelivery.OJPFareDelivery.fareResult;
 
     return fareResults;
+  }
+
+  public async fetchTripInfoRequestResponse(request: TripInfoRequest): Promise<OJP_Response<OJP_Types.TripInfoDeliverySchema | OJP_Types.OJPv1_TripInfoDeliverySchema, Error>> {
+    const responseXML = await this.computeResponse(request);
+
+    try {
+      const parsedObj = parseXML<{ OJP: OJP_Types.TripInfoResponseOJP | OJP_Types.OJPv1_TripInfoResponseOJP }>(responseXML, 'OJP');
+      const response = parsedObj.OJP.OJPResponse.serviceDelivery.OJPTripInfoDelivery;
+
+      return {
+        ok: true,
+        value: response,
+      };
+    } catch (error) {
+      return {
+        ok: false,
+        error: error instanceof Error ? error : new Error('Unknown error'),
+      };
+    }
   }
 }

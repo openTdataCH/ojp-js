@@ -2,6 +2,25 @@ import * as OJP_Types from 'ojp-shared-types';
 
 import { XMLParser } from "fast-xml-parser";
 
+const MapParentArrayTags: Record<string, string[]> = {};
+for (const key in OJP_Types.OpenAPI_Dependencies.MapArrayTags) {
+  const keyParts = key.split('.');
+  if (keyParts.length !== 2) {
+    console.error('invalid OpenAPI_Dependencies.MapArrayTags key: ' + key);
+    continue;
+  }
+
+  const parentTagName = keyParts[0];
+  const childTagName = keyParts[1];
+
+  if (!(parentTagName in MapParentArrayTags)) {
+    MapParentArrayTags[parentTagName] = [];
+  }
+
+  MapParentArrayTags[parentTagName].push(childTagName);
+}
+
+
 const transformTagNameHandler = (tagName: string) => {
   if (tagName.startsWith('OJP')) {
     return tagName;
@@ -21,7 +40,7 @@ const isArrayHandler = (tagName: string, jPath: string) => {
   // console.log('handleArrayNodes:       ' + tagName +  ' -- ' + jPath);
 
   const jPathParts = jPath.split('.');
-  if (jPathParts.length > 1) {
+  if (jPathParts.length >= 2) {
     const pathPart = jPathParts.slice(-2).join('.');
     if (pathPart in OJP_Types.OpenAPI_Dependencies.MapArrayTags) {
       return true;
@@ -64,18 +83,24 @@ export function parseXML<T>(xml: string, parentPath: string = ''): T {
   let response = parser.parse(xml) as T;
 
   traverseJSON(response, [parentPath], (key: string, value: any, path: string[]) => {
-    // console.log('traverseJSON_> ' + jPath + ' k: ' + key + ' v: ' + value);
+    // console.log('traverseJSON_> ' + path.join('.') + ' k: ' + key + ' v: ' + value);
     
     if (typeof value === 'object') {    
       // enforce empty arrays if the array items are not present
-      if (path.length > 1) {
-        const pathPart = path.slice(-2).join('.');
-        
-        if (pathPart in OJP_Types.OpenAPI_Dependencies.MapParentArrayTags) {
-          const enforceChildTags = OJP_Types.OpenAPI_Dependencies.MapParentArrayTags[pathPart];
-          enforceChildTags.forEach(childTagName => {
-            value[childTagName] ??= [];
-          });
+      if (path.length >= 2) {
+        if (key in MapParentArrayTags) {
+          const enforceChildTags = MapParentArrayTags[key];
+          if (Array.isArray(value)) {
+            value.forEach(childValue => {
+              enforceChildTags.forEach(childTagName => {
+                childValue[childTagName] ??= [];
+              });
+            });
+          } else {
+            enforceChildTags.forEach(childTagName => {
+              value[childTagName] ??= [];
+            });
+          }
         }
       }
 

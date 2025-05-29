@@ -1,7 +1,7 @@
 {
   "name": "ojp-sdk-next",
   "description": "OJP (Open Journey Planner) Javascript SDK",
-  "version": "0.20.15",
+  "version": "0.20.16",
   "type": "module",
   "main": "./lib/index.cjs",
   "module": "./lib/index.js",
@@ -32,7 +32,7 @@
   "dependencies": {
     "axios": "1.8.3",
     "fast-xml-parser": "5.0.8",
-    "ojp-shared-types": "0.0.2"
+    "ojp-shared-types": "0.0.5"
   },
   "devDependencies": {
     "@types/geojson": "7946.0.16",
