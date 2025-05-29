@@ -8,6 +8,10 @@ import { XML_Config, HTTPConfig, Language } from "./types/_all";
 import { FareRequest, LocationInformationRequest, StopEventRequest, TripInfoRequest, TripRefineRequest, TripRequest } from "./models/request";
 import { DefaultXML_Config } from "./constants";
 
+type ResponseOk<T> = { ok: true; value: T };
+type ResponseError<E> = { ok: false; error: E };
+type OJP_Response<T, E> = ResponseOk<T> | ResponseError<E>;
+
 type OJP_RequestType = TripRequest | LocationInformationRequest | StopEventRequest | TripRefineRequest | FareRequest | TripInfoRequest;
 export class SDK {
   private requestorRef: string;
