@@ -5,10 +5,10 @@ import * as OJP_Types from 'ojp-shared-types';
 import { parseXML } from './helpers/xml/parser';
 import { PlaceResult, StopEventResult, Trip } from "./models/ojp";
 import { XML_Config, HTTPConfig, Language } from "./types/_all";
-import { FareRequest, LocationInformationRequest, StopEventRequest, TripRefineRequest, TripRequest } from "./models/request";
+import { FareRequest, LocationInformationRequest, StopEventRequest, TripInfoRequest, TripRefineRequest, TripRequest } from "./models/request";
 import { DefaultXML_Config } from "./constants";
 
-type OJP_RequestType = TripRequest | LocationInformationRequest | StopEventRequest | TripRefineRequest | FareRequest;
+type OJP_RequestType = TripRequest | LocationInformationRequest | StopEventRequest | TripRefineRequest | FareRequest | TripInfoRequest;
 export class SDK {
   private requestorRef: string;
   private httpConfig: HTTPConfig;
