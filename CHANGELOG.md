@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 0.20.16 - 29.05.2025
+- adds TripInfoRequest request / response
+
 ## 0.20.15 - 27.05.2025
 - save raw XML for `Trip` - [PR #169](https://github.com/openTdataCH/ojp-js/pull/169)
 
