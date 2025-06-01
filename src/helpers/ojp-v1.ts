@@ -23,7 +23,7 @@ export class OJPv1_Helpers {
       };
 
       if (legV2.timedLeg) {
-        const timedLegServiceV1: OJP_Types.OJPv1_TimedLegServiceSchema = {
+        const timedLegServiceV1: OJP_Types.OJPv1_DatedJourneySchema = {
           conventionalModeOfOperation: legV2.timedLeg.service.conventionalModeOfOperation,
           operatingDayRef: legV2.timedLeg.service.operatingDayRef,
           journeyRef: legV2.timedLeg.service.journeyRef,
