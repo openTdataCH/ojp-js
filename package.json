@@ -14,8 +14,7 @@
   "scripts": {
     "test": "jest",
     "build": "rm -rf lib && tsup src/index.ts --dts --format esm,cjs --out-dir lib",
-    "dev": "tsup src/index.ts --dts --format esm,cjs --out-dir lib --watch",
-    "build:models": "bash scripts/generate_models.sh"
+    "dev": "tsup src/index.ts --dts --format esm,cjs --out-dir lib --watch"
   },
   "repository": {
     "type": "git",
