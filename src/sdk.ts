@@ -108,6 +108,8 @@ export class SDK {
   }
 
   public async fetchTrips(tripRequest: TripRequest): Promise<Trip[]> {
+    console.log('WARNING: deprecated method, it might be removed at a later version, use fetchTripRequestResponse() instead');
+
     const responseXML = await this.computeResponse(tripRequest);
     
     const ojpPrefix = this.xmlConfig.defaultNS === 'ojp' ? '' : 'ojp:';
@@ -152,6 +154,8 @@ export class SDK {
   }
 
   public async fetchPlaceResults(lirRequest: LocationInformationRequest): Promise<PlaceResult[]> {
+    console.log('WARNING: deprecated method, it might be removed at a later version, use fetchLocationInformationRequestResponse() instead');
+
     const responseXML = await this.computeResponse(lirRequest);
 
     // console.log('fetchLocations ... done fetchResponse');
@@ -191,6 +195,8 @@ export class SDK {
   }
 
   public async fetchStopEvents(request: StopEventRequest): Promise<StopEventResult[]> {
+    console.log('WARNING: deprecated method, it might be removed at a later version, use fetchStopEventRequestResponse() instead');
+
     const responseXML = await this.computeResponse(request);
 
     // console.log('fetchStopEvents ... done fetchResponse');
@@ -229,6 +235,8 @@ export class SDK {
   }
 
   public async fetchTRR_Trips(request: TripRefineRequest): Promise<Trip[]> {
+    console.log('WARNING: deprecated method, it might be removed at a later version, use fetchTripRefineRequestResponse() instead');
+
     const responseXML = await this.computeResponse(request);
 
     const tripMatches: string[] = responseXML.match(/<Trip\b[^>]*>.*?<\/Trip>/gs) ?? [];
