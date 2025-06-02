@@ -88,6 +88,25 @@ export class SDK {
     return responseXML;
   }
 
+  public async fetchTripRequestResponse(request: TripRequest): Promise<OJP_Response<OJP_Types.TripDeliverySchema, Error>> {
+    const responseXML = await this.computeResponse(request);
+
+    try {
+      const parsedObj = parseXML<{ OJP: OJP_Types.TripRequestResponseOJP }>(responseXML, 'OJP');
+      const response = parsedObj.OJP.OJPResponse.serviceDelivery.OJPTripDelivery;
+
+      return {
+        ok: true,
+        value: response,
+      };
+    } catch (error) {
+      return {
+        ok: false,
+        error: error instanceof Error ? error : new Error('Unknown error'),
+      };
+    }
+  }
+
   public async fetchTrips(tripRequest: TripRequest): Promise<Trip[]> {
     const responseXML = await this.computeResponse(tripRequest);
     
@@ -113,6 +132,25 @@ export class SDK {
     return trips;
   }
 
+  public async fetchLocationInformationRequestResponse(request: LocationInformationRequest): Promise<OJP_Response<OJP_Types.LocationInformationDeliverySchema, Error>> {
+    const responseXML = await this.computeResponse(request);
+
+    try {
+      const parsedObj = parseXML<{ OJP: OJP_Types.LocationInformationRequestResponseOJP }>(responseXML, 'OJP');
+      const response = parsedObj.OJP.OJPResponse.serviceDelivery.OJPLocationInformationDelivery;
+
+      return {
+        ok: true,
+        value: response,
+      };
+    } catch (error) {
+      return {
+        ok: false,
+        error: error instanceof Error ? error : new Error('Unknown error'),
+      };
+    }
+  }
+
   public async fetchPlaceResults(lirRequest: LocationInformationRequest): Promise<PlaceResult[]> {
     const responseXML = await this.computeResponse(lirRequest);
 
@@ -133,6 +171,25 @@ export class SDK {
     return placeResults;
   }
 
+  public async fetchStopEventRequestResponse(request: StopEventRequest): Promise<OJP_Response<OJP_Types.StopEventDeliverySchema, Error>> {
+    const responseXML = await this.computeResponse(request);
+
+    try {
+      const parsedObj = parseXML<{ OJP: OJP_Types.StopEventRequestResponseOJP }>(responseXML, 'OJP');
+      const response = parsedObj.OJP.OJPResponse.serviceDelivery.OJPStopEventDelivery;
+
+      return {
+        ok: true,
+        value: response,
+      };
+    } catch (error) {
+      return {
+        ok: false,
+        error: error instanceof Error ? error : new Error('Unknown error'),
+      };
+    }
+  }
+
   public async fetchStopEvents(request: StopEventRequest): Promise<StopEventResult[]> {
     const responseXML = await this.computeResponse(request);
 
@@ -150,6 +207,25 @@ export class SDK {
     request.requestInfo.parseDateTime = new Date();
 
     return results;
+  }
+
+  public async fetchTripRefineRequestResponse(request: TripRefineRequest): Promise<OJP_Response<OJP_Types.TRR_DeliverySchema, Error>> {
+    const responseXML = await this.computeResponse(request);
+
+    try {
+      const parsedObj = parseXML<{ OJP: OJP_Types.TRR_ResponseOJP }>(responseXML, 'OJP');
+      const response = parsedObj.OJP.OJPResponse.serviceDelivery.OJPTripRefineDelivery;
+
+      return {
+        ok: true,
+        value: response,
+      };
+    } catch (error) {
+      return {
+        ok: false,
+        error: error instanceof Error ? error : new Error('Unknown error'),
+      };
+    }
   }
 
   public async fetchTRR_Trips(request: TripRefineRequest): Promise<Trip[]> {
