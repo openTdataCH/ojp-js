@@ -88,7 +88,115 @@ export class SDK {
     return responseXML;
   }
 
+  public async fetchTripRequestResponse(request: TripRequest): Promise<OJP_Response<OJP_Types.TripDeliverySchema, Error>> {
+    const responseXML = await this.computeResponse(request);
+
+    try {
+      const parsedObj = parseXML<{ OJP: OJP_Types.TripRequestResponseOJP }>(responseXML, 'OJP');
+      const response = parsedObj.OJP.OJPResponse.serviceDelivery.OJPTripDelivery;
+
+      return {
+        ok: true,
+        value: response,
+      };
+    } catch (error) {
+      return {
+        ok: false,
+        error: error instanceof Error ? error : new Error('Unknown error'),
+      };
+    }
+  }
+
+  public async fetchLocationInformationRequestResponse(request: LocationInformationRequest): Promise<OJP_Response<OJP_Types.LocationInformationDeliverySchema, Error>> {
+    const responseXML = await this.computeResponse(request);
+
+    try {
+      const parsedObj = parseXML<{ OJP: OJP_Types.LocationInformationRequestResponseOJP }>(responseXML, 'OJP');
+      const response = parsedObj.OJP.OJPResponse.serviceDelivery.OJPLocationInformationDelivery;
+
+      return {
+        ok: true,
+        value: response,
+      };
+    } catch (error) {
+      return {
+        ok: false,
+        error: error instanceof Error ? error : new Error('Unknown error'),
+      };
+    }
+  }
+
+  public async fetchStopEventRequestResponse(request: StopEventRequest): Promise<OJP_Response<OJP_Types.StopEventDeliverySchema, Error>> {
+    const responseXML = await this.computeResponse(request);
+
+    try {
+      const parsedObj = parseXML<{ OJP: OJP_Types.StopEventRequestResponseOJP }>(responseXML, 'OJP');
+      const response = parsedObj.OJP.OJPResponse.serviceDelivery.OJPStopEventDelivery;
+
+      return {
+        ok: true,
+        value: response,
+      };
+    } catch (error) {
+      return {
+        ok: false,
+        error: error instanceof Error ? error : new Error('Unknown error'),
+      };
+    }
+  }
+
+  public async fetchTripRefineRequestResponse(request: TripRefineRequest): Promise<OJP_Response<OJP_Types.TRR_DeliverySchema, Error>> {
+    const responseXML = await this.computeResponse(request);
+
+    try {
+      const parsedObj = parseXML<{ OJP: OJP_Types.TRR_ResponseOJP }>(responseXML, 'OJP');
+      const response = parsedObj.OJP.OJPResponse.serviceDelivery.OJPTripRefineDelivery;
+
+      return {
+        ok: true,
+        value: response,
+      };
+    } catch (error) {
+      return {
+        ok: false,
+        error: error instanceof Error ? error : new Error('Unknown error'),
+      };
+    }
+  }
+
+  public async fetchTripInfoRequestResponse(request: TripInfoRequest): Promise<OJP_Response<OJP_Types.TripInfoDeliverySchema | OJP_Types.OJPv1_TripInfoDeliverySchema, Error>> {
+    const responseXML = await this.computeResponse(request);
+
+    try {
+      const parsedObj = parseXML<{ OJP: OJP_Types.TripInfoResponseOJP | OJP_Types.OJPv1_TripInfoResponseOJP }>(responseXML, 'OJP');
+      const response = parsedObj.OJP.OJPResponse.serviceDelivery.OJPTripInfoDelivery;
+
+      return {
+        ok: true,
+        value: response,
+      };
+    } catch (error) {
+      return {
+        ok: false,
+        error: error instanceof Error ? error : new Error('Unknown error'),
+      };
+    }
+  }
+
+  public async fetchFareResults(request: FareRequest): Promise<OJP_Types.FareResultSchema[]> {
+    const responseXML = await this.computeResponse(request);
+
+    const parsedObj = parseXML<{ OJP: OJP_Types.FareResponseOJP }>(responseXML, 'OJP');
+    const fareResults = parsedObj.OJP.OJPResponse.serviceDelivery.OJPFareDelivery.fareResult;
+
+    return fareResults;
+  }
+
+  // Deprecated methods below
+
   public async fetchTrips(tripRequest: TripRequest): Promise<Trip[]> {
+    console.log('WARNING: deprecated method, it might be removed at a later version, use fetchTripRequestResponse() instead');
+
     const responseXML = await this.computeResponse(tripRequest);
     
     const ojpPrefix = this.xmlConfig.defaultNS === 'ojp' ? '' : 'ojp:';
@@ -114,6 +222,8 @@ export class SDK {
   }
 
   public async fetchPlaceResults(lirRequest: LocationInformationRequest): Promise<PlaceResult[]> {
+    console.log('WARNING: deprecated method, it might be removed at a later version, use fetchLocationInformationRequestResponse() instead');
+
     const responseXML = await this.computeResponse(lirRequest);
 
     // console.log('fetchLocations ... done fetchResponse');
@@ -134,6 +244,8 @@ export class SDK {
   }
 
   public async fetchStopEvents(request: StopEventRequest): Promise<StopEventResult[]> {
+    console.log('WARNING: deprecated method, it might be removed at a later version, use fetchStopEventRequestResponse() instead');
+
     const responseXML = await this.computeResponse(request);
 
     // console.log('fetchStopEvents ... done fetchResponse');
@@ -153,6 +265,8 @@ export class SDK {
   }
 
   public async fetchTRR_Trips(request: TripRefineRequest): Promise<Trip[]> {
+    console.log('WARNING: deprecated method, it might be removed at a later version, use fetchTripRefineRequestResponse() instead');
+
     const responseXML = await this.computeResponse(request);
 
     const tripMatches: string[] = responseXML.match(/<Trip\b[^>]*>.*?<\/Trip>/gs) ?? [];
@@ -166,33 +280,5 @@ export class SDK {
     request.requestInfo.parseDateTime = new Date();
 
     return trips;
-  }
-
-  public async fetchFareResults(request: FareRequest): Promise<OJP_Types.FareResultSchema[]> {
-    const responseXML = await this.computeResponse(request);
-
-    const parsedObj = parseXML<{ OJP: OJP_Types.FareResponseOJP }>(responseXML, 'OJP');
-    const fareResults = parsedObj.OJP.OJPResponse.serviceDelivery.OJPFareDelivery.fareResult;
-
-    return fareResults;
-  }
-
-  public async fetchTripInfoRequestResponse(request: TripInfoRequest): Promise<OJP_Response<OJP_Types.TripInfoDeliverySchema | OJP_Types.OJPv1_TripInfoDeliverySchema, Error>> {
-    const responseXML = await this.computeResponse(request);
-
-    try {
-      const parsedObj = parseXML<{ OJP: OJP_Types.TripInfoResponseOJP | OJP_Types.OJPv1_TripInfoResponseOJP }>(responseXML, 'OJP');
-      const response = parsedObj.OJP.OJPResponse.serviceDelivery.OJPTripInfoDelivery;
-
-      return {
-        ok: true,
-        value: response,
-      };
-    } catch (error) {
-      return {
-        ok: false,
-        error: error instanceof Error ? error : new Error('Unknown error'),
-      };
-    }
   }
 }
