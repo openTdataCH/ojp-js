@@ -23,7 +23,7 @@
     "zone.js": "~0.13.0",
     
     "ojp-shared-types": "0.0.6",
-    "ojp-sdk": "../../lib"
+    "ojp-sdk": "../.."
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^16.2.4",
