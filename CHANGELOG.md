@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 0.20.17 - 02.06.2025
+- harmonise SDK Response - [PR #171](https://github.com/openTdataCH/ojp-js/pull/171)
+  - harmonise SDK response, use `Promise<OJP_Response<OJP_Types.(LIR | TR | SER TIR), Error>>` response type
+  - deprecate older methods (i.e. the ones fetching individual Trip[])
+  - adds tests for SIRI-SX situation models
+
 ## 0.20.16 - 29.05.2025
 - adds TripInfoRequest request / response - [PR #170](https://github.com/openTdataCH/ojp-js/pull/170)
 - dynamically build `MapParentArrayTags`, dont rely on `ojp-shared-types` package
