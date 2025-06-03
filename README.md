@@ -17,7 +17,7 @@ See [docs](./docs/) and [examples](./examples/) for usage.
 - include [ojp-sdk-next](https://www.npmjs.com/package/ojp-sdk-next), [ojp-shared-types](https://www.npmjs.com/package/ojp-shared-types) packages in the `./package.json` dependencies of the project 
 ```
   "dependencies": {
-    "ojp-shared-types": "0.0.2",
+    "ojp-shared-types": "0.0.6",
     "ojp-sdk-next": "0.20.17",
   }
 ```
