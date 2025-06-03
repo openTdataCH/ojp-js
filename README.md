@@ -41,7 +41,7 @@ See [Reference](./docs/reference.md) and [examples](./examples/) for usage.
 
 ## Install
 
-- include the `ojp-sdk` package in the `./package.json` dependencies of your project 
+- include the `ojp-sdk-v1` package in the `./package.json` dependencies of your project 
 ```
   "dependencies": {
     "ojp-sdk-v1": "0.18.5"
@@ -57,7 +57,7 @@ $ npm install
 
 - include OJP SDK in the Typescript / Javascript code
 ```
-import * as OJP from 'ojp-sdk'
+import * as OJP from 'ojp-sdk-v1'
 ```
 
 - for more details check:
