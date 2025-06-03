@@ -96,7 +96,7 @@ export class PlaygroundComponent implements OnInit {
       console.log(response1.error);
       return;
     }
-    console.log('A) TR with from/to coords')
+    console.log('A) TR with from/to stopRefs');
     console.log(response1.value);
 
     // b) from fromCoordsRef to StopPlaceRef
@@ -115,7 +115,7 @@ export class PlaygroundComponent implements OnInit {
       console.log(response2.error);
       return;
     }
-    console.log('B) TR using await/async')
+    console.log('B) TR with from/to coords');
     console.log(response2.value);
   }
 
