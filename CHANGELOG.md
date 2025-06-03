@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 0.18.6 - 03.06.2025
+- JourneyService Updates - [PR #172](https://github.com/openTdataCH/ojp-js/pull/172)
+  - compute correct `journeyNumber` for OJP v1.0
+  - remove `computePlatformAssistance` helper outside of the SDK, will be used by consumers
+  - expose `MapFareClassOccupancy`
+
 ## 0.18.5 - 13.05.2025
 - remove OJP FareRequest, will be replaced with standalone [ojp-fares-js](https://github.com/openTdataCH/ojp-fares-js) SDK - [PR #165](https://github.com/openTdataCH/ojp-js/pull/165)
 
