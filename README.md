@@ -62,11 +62,17 @@ const request3 =  OJP.LocationInformationRequest.initWithBBOX(bbox, ['stop']);
 // fetch the results
 async myMethod() {
   // ...
-  const placeResults = await this.ojpSDK.fetchPlaceResults(request1);
+  const response = await this.ojpSDK.fetchLocationInformationRequestResponse(request1);
 
-  // do something with the placeResult
+  if (!response.ok) {
+    // handle error
+    console.log(response.error);
+    return;
+  }
 
-  placeResults1.forEach(placeResult => {
+  // do something with the value
+  comnst placeResults = response.value.placeResult ?? [];
+  placeResults.forEach(placeResult => {
 
   });
 }
