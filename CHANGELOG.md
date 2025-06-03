@@ -1,7 +1,7 @@
 # CHANGELOG
 
 ## 0.18.6 - 03.06.2025
-- JourneyService Updates - [PR #172](https://github.com/openTdataCH/ojp-js/pull/172)
+- JourneyService Updates - [PR #174](https://github.com/openTdataCH/ojp-js/pull/174)
   - compute correct `journeyNumber` for OJP v1.0
   - remove `computePlatformAssistance` helper outside of the SDK, will be used by consumers
   - expose `MapFareClassOccupancy`
