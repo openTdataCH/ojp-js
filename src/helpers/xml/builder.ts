@@ -61,7 +61,14 @@ export function buildRootXML(obj: Record<string, any>, xmlConfig: XML_Config = D
     }
   }));
 
-  return rootXML;
+  const wrapperRootXML_Lines: string[] = [
+    '<?xml version="1.0" encoding="utf-8"?>',
+    rootXML,
+  ];
+
+  const wrapperRootXML = wrapperRootXML_Lines.join('\n');
+
+  return wrapperRootXML;
 }
 
 export function buildXML(obj: Record<string, any>, wrapperNodeName: string = 'OJP', xmlConfig: XML_Config = DefaultXML_Config, callbackTransformedObj: ((obj: Record<string, any>) => void) | null = null): string {
