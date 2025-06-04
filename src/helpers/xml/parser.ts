@@ -20,7 +20,6 @@ for (const key in OJP_Types.OpenAPI_Dependencies.MapArrayTags) {
   MapParentArrayTags[parentTagName].push(childTagName);
 }
 
-
 const transformTagNameHandler = (tagName: string) => {
   if (tagName.startsWith('OJP')) {
     return tagName;
@@ -80,7 +79,7 @@ export function parseXML<T>(xml: string, parentPath: string = ''): T {
     // parseTagValue: false,
   });
 
-  let response = parser.parse(xml) as T;
+  const response = parser.parse(xml) as T;
 
   traverseJSON(response, [parentPath], (key: string, value: any, path: string[]) => {
     // console.log('traverseJSON_> ' + path.join('.') + ' k: ' + key + ' v: ' + value);
