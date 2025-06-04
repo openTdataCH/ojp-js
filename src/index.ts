@@ -16,6 +16,10 @@ export {
   Trip,
 } from "./models/ojp";
 
+export  {
+  XmlSerializer,
+} from './models/xml-serializer';
+
 export { SDK_VERSION } from './constants';
 export { DateHelpers } from './helpers/index';
 export { HTTPConfig, Language, RequestInfo } from "./types/_all";
