@@ -223,6 +223,12 @@ export class PlaceResult implements OJP_Types.PlaceResultSchema {
     this.probability = probability;
   }
 
+  public static initWithXMLSchema(placeResultSchema: OJP_Types.PlaceResultSchema): PlaceResult {
+    const place = Place.initWithXMLSchema(placeResultSchema.place);
+    const placeResult = new PlaceResult(place, placeResultSchema.complete, placeResultSchema.probability);
+    return placeResult;
+  } 
+
   public static initWithXML(nodeXML: string): PlaceResult {
     const parentTagName = 'PlaceResult';
     const parsedObj = parseXML<{ placeResult: OJP_Types.PlaceResultSchema }>(nodeXML, parentTagName);
