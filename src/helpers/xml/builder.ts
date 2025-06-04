@@ -40,7 +40,9 @@ function transformKeys<T extends Record<string, any>>(obj: T, path: string[] = [
 }
 
 export function buildRootXML(obj: Record<string, any>, xmlConfig: XML_Config = DefaultXML_Config, callbackTransformedObj: ((obj: Record<string, any>) => void) | null = null): string {
-  const rootXML = buildXML(obj, xmlConfig, (objTransformed => {
+  const wrapperNodeName = 'OJP';
+
+  const rootXML = buildXML(obj, wrapperNodeName, xmlConfig, (objTransformed => {
     const rootKeys = Object.keys(objTransformed);
     if (typeof objTransformed === 'object' && (rootKeys.length === 1)) {
       const rootKeyParts = rootKeys[0].split(':');
