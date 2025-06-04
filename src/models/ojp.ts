@@ -45,7 +45,6 @@ export class PlaceRef implements OJP_Types.PlaceRefSchema {
 }
 
 export class Trip implements OJP_Types.TripSchema {
-  public rawXML: string;
   public id: string;
   public duration: string;
   public startTime: string;
@@ -59,7 +58,6 @@ export class Trip implements OJP_Types.TripSchema {
   public unplanned?: boolean;
 
   private constructor(
-    rawTrip: string,
     id: string, 
     duration: string,
     startTime: string,
@@ -72,7 +70,6 @@ export class Trip implements OJP_Types.TripSchema {
     infeasible?: boolean,
     unplanned?: boolean
   ) {
-    this.rawXML = rawTrip;
     this.id = id;
     this.duration = duration;
     this.startTime = startTime;
@@ -90,7 +87,6 @@ export class Trip implements OJP_Types.TripSchema {
     const parentTagName = 'TripResult';
     const parsedTrip = parseXML<{ trip: OJP_Types.TripSchema }>(rawXML, parentTagName);
     const trip = new Trip(
-      rawXML,
       parsedTrip.trip.id,
       parsedTrip.trip.duration,
       parsedTrip.trip.startTime,
@@ -103,6 +99,7 @@ export class Trip implements OJP_Types.TripSchema {
       parsedTrip.trip.infeasible, 
       parsedTrip.trip.unplanned,
     );
+    
     return trip;
   }
 }
