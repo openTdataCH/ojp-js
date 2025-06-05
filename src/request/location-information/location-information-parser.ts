@@ -1,5 +1,5 @@
-import { OJP_VERSION } from "../../constants";
 import { Location } from "../../location/location";
+import { XML_Config } from "../../types/_all";
 import { BaseParser } from "../base-parser";
 import { LIR_Callback as ParserCallback } from "../types/location-information-request.type";
 
@@ -7,8 +7,8 @@ export class LocationInformationParser extends BaseParser {
   private locations: Location[];
   public callback: ParserCallback | null = null;
 
-  constructor() {
-    super();
+  constructor(xmlConfig: XML_Config) {
+    super(xmlConfig);
     this.locations = [];
   }
 

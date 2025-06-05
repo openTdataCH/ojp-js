@@ -2,6 +2,7 @@ import { DEBUG_LEVEL, OJP_VERSION } from "../../constants";
 import { Location } from "../../location/location";
 import { PtSituationElement } from "../../situation/situation-element";
 import { StopEvent } from "../../stop-event/stop-event";
+import { XML_Config } from "../../types/_all";
 import { BaseParser } from "../base-parser";
 import { StopEventRequest_Callback as ParserCallback } from "../types/stop-event-request.type";
 
@@ -11,8 +12,8 @@ export class StopEventRequestParser extends BaseParser {
   private mapContextSituations: Record<string, PtSituationElement>;
   public callback: ParserCallback | null = null;
 
-  constructor() {
-    super();
+  constructor(xmlConfig: XML_Config) {
+    super(xmlConfig);
 
     this.stopEvents = [];
     this.mapContextLocations = {};

@@ -2,6 +2,7 @@ import { DEBUG_LEVEL, OJP_VERSION } from "../../constants";
 import { Location } from "../../location/location";
 import { PtSituationElement } from "../../situation/situation-element";
 import { Trip, TripTimedLeg } from "../../trip";
+import { XML_Config } from "../../types/_all";
 import { BaseParser } from "../base-parser";
 import { TripRequest_Callback as ParserCallback } from "../types/trip-request.type";
 
@@ -12,8 +13,8 @@ export class TripRequestParser extends BaseParser {
   private mapContextSituations: Record<string, PtSituationElement>;
   public callback: ParserCallback | null = null;
 
-  constructor() {
-    super();
+  constructor(xmlConfig: XML_Config) {
+    super(xmlConfig);
 
     this.trips = [];
     this.tripsNo = 0;
