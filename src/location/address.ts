@@ -1,4 +1,4 @@
-import { OJP_VERSION } from "../constants";
+import { XML_Config } from "../types/_all";
 import { TreeNode } from "../xml/tree-node";
 
 export class Address {
@@ -23,13 +23,15 @@ export class Address {
     this.postCode = null;
   }
 
-  public static initWithLocationTreeNode(locationTreeNode: TreeNode): Address | null {
+  public static initWithLocationTreeNode(locationTreeNode: TreeNode, xmlConfig: XML_Config): Address | null {
+    const isOJPv2 = xmlConfig.ojpVersion === '2.0';
+
     const addressTreeNode = locationTreeNode.findChildNamed('Address');
     if (addressTreeNode === null) {
       return null;
     }
 
-    const addresCodeNodeName = OJP_VERSION === '2.0' ? 'PublicCode' : 'AddressCode';
+    const addresCodeNodeName = isOJPv2 ? 'PublicCode' : 'AddressCode';
     const addressCode = addressTreeNode.findTextFromChildNamed(addresCodeNodeName);
     if (addressCode === null) {
       return null
@@ -37,7 +39,7 @@ export class Address {
 
     const address = new Address(addressCode);
 
-    const addressNamePath = OJP_VERSION === '2.0' ? 'Name/Text' : 'AddressName/Text';
+    const addressNamePath = isOJPv2 ? 'Name/Text' : 'AddressName/Text';
     address.addressName = addressTreeNode.findTextFromChildNamed(addressNamePath);
 
     address.topographicPlaceRef = addressTreeNode.findTextFromChildNamed('TopographicPlaceRef');

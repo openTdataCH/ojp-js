@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 0.18.7 - 05.06.2025
+- Unify OJP branches - [PR #174](https://github.com/openTdataCH/ojp-js/pull/177)
+  - use new package name `ojp-sdk-legacy` - https://www.npmjs.com/package/ojp-sdk-legacy
+  - Remove `OJP_VERSION`, `REQUESTOR_REF` - they will be used in the integrators
+  - allow the OJP version `1.0` | `2.0` to be set from the integrators
+
 ## 0.18.6 - 03.06.2025
 - JourneyService Updates - [PR #174](https://github.com/openTdataCH/ojp-js/pull/174)
   - compute correct `journeyNumber` for OJP v1.0

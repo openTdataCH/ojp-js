@@ -1,7 +1,8 @@
-import { DEBUG_LEVEL, OJP_VERSION } from "../../constants";
+import { DEBUG_LEVEL } from "../../constants";
 import { Location } from "../../location/location";
 import { PtSituationElement } from "../../situation/situation-element";
 import { Trip, TripTimedLeg } from "../../trip";
+import { XML_Config } from "../../types/_all";
 import { BaseParser } from "../base-parser";
 import { TripRequest_Callback as ParserCallback } from "../types/trip-request.type";
 
@@ -12,8 +13,8 @@ export class TripRequestParser extends BaseParser {
   private mapContextSituations: Record<string, PtSituationElement>;
   public callback: ParserCallback | null = null;
 
-  constructor() {
-    super();
+  constructor(xmlConfig: XML_Config) {
+    super(xmlConfig);
 
     this.trips = [];
     this.tripsNo = 0;
@@ -49,10 +50,10 @@ export class TripRequestParser extends BaseParser {
   }
 
   protected onCloseTag(nodeName: string): void {
-    const isOJPv2 = OJP_VERSION === '2.0';
+    const isOJPv2 = this.xmlParserConfig.ojpVersion === '2.0';
 
     if (nodeName === "Trip" && this.currentNode.parentName === "TripResult") {
-      const trip = Trip.initFromTreeNode(this.currentNode);
+      const trip = Trip.initFromTreeNode(this.currentNode, this.xmlParserConfig);
       if (trip) {
         trip.legs.forEach((leg) => {
           leg.patchLocations(this.mapContextLocations);
@@ -79,7 +80,7 @@ export class TripRequestParser extends BaseParser {
         const locationNodeName = isOJPv2 ? 'Place' : 'Location';
         const locationTreeNodes = placesTreeNode.findChildrenNamed(locationNodeName);
         locationTreeNodes.forEach(locationTreeNode => {
-          const location = Location.initWithTreeNode(locationTreeNode);
+          const location = Location.initWithTreeNode(locationTreeNode, this.xmlParserConfig);
           const stopPlaceRef = location.stopPlace?.stopPlaceRef ?? null;
           if (stopPlaceRef !== null) {
             this.mapContextLocations[stopPlaceRef] = location;

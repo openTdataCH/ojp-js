@@ -1,7 +1,8 @@
-import { DEBUG_LEVEL, OJP_VERSION } from "../../constants";
+import { DEBUG_LEVEL } from "../../constants";
 import { Location } from "../../location/location";
 import { PtSituationElement } from "../../situation/situation-element";
 import { StopEvent } from "../../stop-event/stop-event";
+import { XML_Config } from "../../types/_all";
 import { BaseParser } from "../base-parser";
 import { StopEventRequest_Callback as ParserCallback } from "../types/stop-event-request.type";
 
@@ -11,8 +12,8 @@ export class StopEventRequestParser extends BaseParser {
   private mapContextSituations: Record<string, PtSituationElement>;
   public callback: ParserCallback | null = null;
 
-  constructor() {
-    super();
+  constructor(xmlConfig: XML_Config) {
+    super(xmlConfig);
 
     this.stopEvents = [];
     this.mapContextLocations = {};
@@ -31,10 +32,10 @@ export class StopEventRequestParser extends BaseParser {
   }
 
   protected onCloseTag(nodeName: string): void {
-    const isOJPv2 = OJP_VERSION === '2.0';
+    const isOJPv2 = this.xmlParserConfig.ojpVersion === '2.0';
 
     if (nodeName === 'StopEventResult') {
-      const stopEvent = StopEvent.initWithTreeNode(this.currentNode);
+      const stopEvent = StopEvent.initWithTreeNode(this.currentNode, this.xmlParserConfig);
       if (stopEvent) {
         stopEvent.patchStopEventLocations(this.mapContextLocations);
         stopEvent.patchSituations(this.mapContextSituations);
@@ -50,7 +51,7 @@ export class StopEventRequestParser extends BaseParser {
         const locationNodeName = isOJPv2 ? 'Place' : 'Location';
         const locationTreeNodes = placesTreeNode.findChildrenNamed(locationNodeName);
         locationTreeNodes.forEach(locationTreeNode => {
-          const location = Location.initWithTreeNode(locationTreeNode);
+          const location = Location.initWithTreeNode(locationTreeNode, this.xmlParserConfig);
           const stopPlaceRef = location.stopPlace?.stopPlaceRef ?? null;
           if (stopPlaceRef !== null) {
             this.mapContextLocations[stopPlaceRef] = location;

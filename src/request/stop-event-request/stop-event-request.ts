@@ -7,7 +7,7 @@ import { StopEventRequest_Response } from '../types/stop-event-request.type';
 import { StopEventRequestParser } from './stop-event-request-parser';
 import { Language } from '../../types/language-type';
 import { GeoPosition } from '../../location/geoposition';
-import { UseRealtimeDataEnumeration } from '../../types/_all';
+import { UseRealtimeDataEnumeration, XML_Config } from '../../types/_all';
 
 export class StopEventRequest extends OJPBaseRequest {
     public stopPlaceRef: string | null;
@@ -25,8 +25,8 @@ export class StopEventRequest extends OJPBaseRequest {
     public enableExtensions: boolean;
     public useRealTimeDataType: UseRealtimeDataEnumeration;
 
-    constructor(stageConfig: ApiConfig, language: Language, stopPlaceRef: string | null, geoPosition: GeoPosition | null, stopEventType: StopEventType, stopEventDate: Date) {
-        super(stageConfig, language);
+    constructor(stageConfig: ApiConfig, language: Language, xmlConfig: XML_Config, requestorRef: string, stopPlaceRef: string | null, geoPosition: GeoPosition | null, stopEventType: StopEventType, stopEventDate: Date) {
+        super(stageConfig, language, xmlConfig, requestorRef);
 
         this.stopPlaceRef = stopPlaceRef;
         this.geoPosition = geoPosition;
@@ -44,28 +44,28 @@ export class StopEventRequest extends OJPBaseRequest {
         this.useRealTimeDataType = 'explanatory';
     }
 
-    public static Empty(stageConfig: ApiConfig = EMPTY_API_CONFIG): StopEventRequest {
-        const request = new StopEventRequest(stageConfig, 'en', null, null, 'departure', new Date());
+    public static Empty(stageConfig: ApiConfig, xmlConfig: XML_Config, requestorRef: string): StopEventRequest {
+        const request = new StopEventRequest(stageConfig, 'en', xmlConfig, requestorRef, null, null, 'departure', new Date());
 
         return request;
     }
 
-    public static initWithMock(mockText: string) {
-        const request = StopEventRequest.Empty();
+    public static initWithMock(mockText: string, xmlConfig: XML_Config, requestorRef: string) {
+        const request = StopEventRequest.Empty(EMPTY_API_CONFIG, xmlConfig, requestorRef);
         request.mockResponseXML = mockText;
         
         return request;
     }
 
-    public static initWithRequestMock(mockText: string, stageConfig: ApiConfig = EMPTY_API_CONFIG) {
-        const request = StopEventRequest.Empty(stageConfig);
+    public static initWithRequestMock(mockText: string, stageConfig: ApiConfig, xmlConfig: XML_Config, requestorRef: string) {
+        const request = StopEventRequest.Empty(stageConfig, xmlConfig, requestorRef);
         request.mockRequestXML = mockText;
         
         return request;
       }
 
-    public static initWithStopPlaceRef(stageConfig: ApiConfig, language: Language, stopPlaceRef: string, stopEventType: StopEventType, stopEventDate: Date): StopEventRequest {
-        const stopEventRequest = new StopEventRequest(stageConfig, language, stopPlaceRef, null, stopEventType, stopEventDate);
+    public static initWithStopPlaceRef(stageConfig: ApiConfig, language: Language, xmlConfig: XML_Config, requestorRef: string, stopPlaceRef: string, stopEventType: StopEventType, stopEventDate: Date): StopEventRequest {
+        const stopEventRequest = new StopEventRequest(stageConfig, language, xmlConfig, requestorRef, stopPlaceRef, null, stopEventType, stopEventDate);
         
         return stopEventRequest;
     }
@@ -130,7 +130,7 @@ export class StopEventRequest extends OJPBaseRequest {
                 return;
             }
 
-            const parser = new StopEventRequestParser();
+            const parser = new StopEventRequestParser(this.xmlConfig);
             parser.callback = ({ stopEvents, message }) => {
                 response.stopEvents = stopEvents;
                 response.message = message;

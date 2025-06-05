@@ -12,7 +12,6 @@ import { TreeNode } from '../../xml/tree-node'
 import { XMLElement } from 'xmlbuilder'
 import { XML_Config } from '../../types/_all'
 import { StopPointType } from '../../types/stop-point-type';
-import { OJP_VERSION } from '../../constants'
 
 type PersonalModeEnum = 'foot' | 'bicycle' | 'car' | 'motorcycle' | 'truck' | 'scooter' | 'other';
 type PersonalModeOfOperation = 'self' | 'own' | 'otherOwned' | 'privateLift' | 'lease';
@@ -44,7 +43,7 @@ export class TripContinuousLeg extends TripLeg {
     this.continousLegService = null;
   }
 
-  public static initWithTreeNode(legIDx: number, parentTreeNode: TreeNode, legType: LegType): TripContinuousLeg | null {
+  public static initWithTreeNode(legIDx: number, parentTreeNode: TreeNode, legType: LegType, xmlConfig: XML_Config): TripContinuousLeg | null {
     const treeNode = parentTreeNode.findChildNamed(legType);
     if (treeNode === null) {
       return null;
@@ -56,8 +55,8 @@ export class TripContinuousLeg extends TripLeg {
       return null;
     }
 
-    const legStartPlaceRef = Location.initWithTreeNode(legStartPlaceRefTreeNode);
-    const legEndPlaceRef = Location.initWithTreeNode(legEndPlaceRefTreeNode);
+    const legStartPlaceRef = Location.initWithTreeNode(legStartPlaceRefTreeNode, xmlConfig);
+    const legEndPlaceRef = Location.initWithTreeNode(legEndPlaceRefTreeNode, xmlConfig);
     if (legStartPlaceRef === null || legEndPlaceRef === null) {
       return null;
     }
@@ -71,7 +70,7 @@ export class TripContinuousLeg extends TripLeg {
     tripLeg.pathGuidance = PathGuidance.initWithTreeNode(treeNode);
     
     tripLeg.legTransportMode = tripLeg.computeLegTransportModeFromTreeNode(treeNode, legType);
-    tripLeg.transferMode = tripLeg.computeLegTransferModeFromTreeNode(treeNode);
+    tripLeg.transferMode = tripLeg.computeLegTransferModeFromTreeNode(treeNode, xmlConfig);
 
     const isOthersDriveCar = tripLeg.legTransportMode === 'taxi' || tripLeg.legTransportMode === 'others-drive-car';
     
@@ -79,7 +78,7 @@ export class TripContinuousLeg extends TripLeg {
       tripLeg.serviceBooking = ServiceBooking.initWithLegTreeNode(treeNode);
     }
 
-    tripLeg.legTrack = LegTrack.initWithLegTreeNode(treeNode);
+    tripLeg.legTrack = LegTrack.initWithLegTreeNode(treeNode, xmlConfig);
 
     if (legType === 'TransferLeg') {
       tripLeg.walkDuration = Duration.initWithTreeNode(treeNode, 'WalkDuration');
@@ -138,8 +137,8 @@ export class TripContinuousLeg extends TripLeg {
     return legMode;
   }
 
-  private computeLegTransferModeFromTreeNode(treeNode: TreeNode): TransferMode | null {
-    const isOJPv2 = OJP_VERSION === '2.0';
+  private computeLegTransferModeFromTreeNode(treeNode: TreeNode, xmlConfig: XML_Config): TransferMode | null {
+    const isOJPv2 = xmlConfig.ojpVersion === '2.0';
 
     const transferModeNodeName = isOJPv2 ? 'TransferType' : 'TransferMode';
     const transferModeS = treeNode.findTextFromChildNamed(transferModeNodeName);

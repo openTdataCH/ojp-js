@@ -7,6 +7,7 @@ import { StopPoint } from '../trip/leg/timed-leg/stop-point'
 import { JourneyService } from '../journey/journey-service'
 import { Location } from '../location/location';
 import { PtSituationElement } from '../situation/situation-element';
+import { XML_Config } from '../types/_all';
 
 export type StationBoardType = 'Departures' | 'Arrivals'
 
@@ -23,7 +24,7 @@ export class StopEvent {
         this.nextStopPoints = [];
     }
 
-    public static initWithTreeNode(treeNode: TreeNode): StopEvent | null {
+    public static initWithTreeNode(treeNode: TreeNode, xmlConfig: XML_Config): StopEvent | null {
         const stopEventTreeNode = treeNode.findChildNamed('StopEvent');
         if (stopEventTreeNode === null) {
             return null;
@@ -39,7 +40,7 @@ export class StopEvent {
             return null;
         }
 
-        const journeyService = JourneyService.initWithTreeNode(stopEventTreeNode);
+        const journeyService = JourneyService.initWithTreeNode(stopEventTreeNode, xmlConfig);
         if (journeyService === null) {
             return null;
         }

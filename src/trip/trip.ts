@@ -8,7 +8,7 @@ import { TripTimedLeg } from './leg/trip-timed-leg'
 import { Duration } from '../shared/duration'
 import { TreeNode } from '../xml/tree-node'
 
-import { DEBUG_LEVEL, OJP_VERSION, XML_BuilderConfig } from '../constants';
+import { DEBUG_LEVEL } from '../constants';
 import { XML_Config } from '../types/_all'
 
 export class Trip {
@@ -22,8 +22,8 @@ export class Trip {
     this.stats = tripStats;
   }
 
-  public static initFromTreeNode(treeNode: TreeNode): Trip | null {
-    const isOJPv2 = OJP_VERSION === '2.0';
+  public static initFromTreeNode(treeNode: TreeNode, xmlConfig: XML_Config): Trip | null {
+    const isOJPv2 = xmlConfig.ojpVersion === '2.0';
 
     const tripIdNodeName = isOJPv2 ? 'Id' : 'TripId';
     let tripId = treeNode.findTextFromChildNamed(tripIdNodeName);
@@ -62,7 +62,7 @@ export class Trip {
     const tripLegTreeNodeName = isOJPv2 ? 'Leg' : 'TripLeg';
     const tripLegTreeNodes = treeNode.findChildrenNamed(tripLegTreeNodeName);
     tripLegTreeNodes.forEach(tripLegTreeNode => {
-      const tripLeg = TripLegFactory.initWithTreeNode(tripLegTreeNode);
+      const tripLeg = TripLegFactory.initWithTreeNode(tripLegTreeNode, xmlConfig);
       if (tripLeg === null) {
         return;
       }
@@ -187,7 +187,7 @@ export class Trip {
     return tripNode;
   }
 
-  public asXML(xmlConfig: XML_Config = XML_BuilderConfig): string {
+  public asXML(xmlConfig: XML_Config): string {
     const tripNode = this.asXMLNode(xmlConfig);
 
     const xml = tripNode.end({

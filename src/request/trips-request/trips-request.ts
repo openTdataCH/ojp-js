@@ -12,7 +12,7 @@ import { TripModeType } from '../../types/trip-mode-type';
 import { IndividualTransportMode } from '../../types/individual-mode.types';
 import { ModeOfTransportType } from '../../types/mode-of-transport.type';
 import { JourneyPointType } from '../../types/journey-points';
-import { UseRealtimeDataEnumeration } from "../../types/_all";
+import { UseRealtimeDataEnumeration, XML_Config } from "../../types/_all";
 
 export type TripRequestBoardingType = 'Dep' | 'Arr'
 
@@ -42,6 +42,8 @@ export class TripRequest extends OJPBaseRequest {
   constructor(
     stageConfig: ApiConfig, 
     language: Language,
+    xmlConfig: XML_Config,
+    requestorRef: string,
     fromTripLocation: TripLocationPoint,
     toTripLocation: TripLocationPoint,
     departureDate: Date = new Date(),
@@ -51,7 +53,7 @@ export class TripRequest extends OJPBaseRequest {
     numberOfResultsAfter: number | null = null,
     publicTransportModes: ModeOfTransportType[] = [],
   ) {
-    super(stageConfig, language);
+    super(stageConfig, language, xmlConfig, requestorRef);
 
     this.fromTripLocation = fromTripLocation;
     this.toTripLocation = toTripLocation;
@@ -76,51 +78,53 @@ export class TripRequest extends OJPBaseRequest {
     this.response = null;
   }
 
-  private static Empty(): TripRequest {
+  private static Empty(xmlConfig: XML_Config, requestorRef: string): TripRequest {
     const emptyTripLocationPoint = TripLocationPoint.Empty();
-    const request = new TripRequest(EMPTY_API_CONFIG, 'en', emptyTripLocationPoint, emptyTripLocationPoint, new Date(), 'Dep');
+    const request = new TripRequest(EMPTY_API_CONFIG, 'en', xmlConfig, requestorRef, emptyTripLocationPoint, emptyTripLocationPoint, new Date(), 'Dep');
 
     return request;
   }
 
-  public static initWithResponseMock(mockText: string) {
-    const request = TripRequest.Empty();
+  public static initWithResponseMock(mockText: string, xmlConfig: XML_Config, requestorRef: string) {
+    const request = TripRequest.Empty(xmlConfig, requestorRef);
     request.mockResponseXML = mockText;
     
     return request;
   }
 
-  public static initWithRequestMock(mockText: string, stageConfig: ApiConfig = EMPTY_API_CONFIG) {
-    const request = TripRequest.Empty();
+  public static initWithRequestMock(mockText: string, xmlConfig: XML_Config, requestorRef: string) {
+    const request = TripRequest.Empty(xmlConfig, requestorRef);
     request.mockRequestXML = mockText;
     request.requestInfo.requestXML = mockText;
     
     return request;
   }
 
-  public static initWithStopRefs(stageConfig: ApiConfig, language: Language, fromStopRef: string, toStopRef: string, departureDate: Date = new Date(), tripRequestBoardingType: TripRequestBoardingType = 'Dep') {
+  public static initWithStopRefs(stageConfig: ApiConfig, language: Language, xmlConfig: XML_Config, requestorRef: string, fromStopRef: string, toStopRef: string, departureDate: Date = new Date(), tripRequestBoardingType: TripRequestBoardingType = 'Dep') {
     const fromLocation = Location.initWithStopPlaceRef(fromStopRef);
     const toLocation = Location.initWithStopPlaceRef(toStopRef);
     const fromTripLocationPoint = new TripLocationPoint(fromLocation);
     const toTripLocationPoint = new TripLocationPoint(toLocation);
 
-    const request = new TripRequest(stageConfig, language, fromTripLocationPoint, toTripLocationPoint, departureDate, tripRequestBoardingType);
+    const request = new TripRequest(stageConfig, language, xmlConfig, requestorRef, fromTripLocationPoint, toTripLocationPoint, departureDate, tripRequestBoardingType);
     
     return request;
   }
 
-  public static initWithLocationsAndDate(stageConfig: ApiConfig, language: Language, fromLocation: Location, toLocation: Location, departureDate: Date, tripRequestBoardingType: TripRequestBoardingType = 'Dep') {
+  public static initWithLocationsAndDate(stageConfig: ApiConfig, language: Language, xmlConfig: XML_Config, requestorRef: string, fromLocation: Location, toLocation: Location, departureDate: Date, tripRequestBoardingType: TripRequestBoardingType = 'Dep') {
     const fromTripLocationPoint = new TripLocationPoint(fromLocation);
     const toTripLocationPoint = new TripLocationPoint(toLocation);
     
-    const request = new TripRequest(stageConfig, language, fromTripLocationPoint, toTripLocationPoint, departureDate, tripRequestBoardingType);
+    const request = new TripRequest(stageConfig, language, xmlConfig, requestorRef, fromTripLocationPoint, toTripLocationPoint, departureDate, tripRequestBoardingType);
 
     return request;
   }
 
   public static initWithTripLocationsAndDate(
     stageConfig: ApiConfig, 
-    language: Language, 
+    language: Language,
+    xmlConfig: XML_Config,
+    requestorRef: string,
     fromTripLocation: TripLocationPoint | null, 
     toTripLocation: TripLocationPoint | null, 
     departureDate: Date, 
@@ -152,6 +156,9 @@ export class TripRequest extends OJPBaseRequest {
     const request = new TripRequest(
       stageConfig,
       language, 
+      xmlConfig,
+      requestorRef,
+
       fromTripLocation, 
       toTripLocation, 
       departureDate, 
@@ -453,7 +460,7 @@ export class TripRequest extends OJPBaseRequest {
       return;
     }
 
-    const parser = new TripRequestParser();
+    const parser = new TripRequestParser(this.xmlConfig);
     parser.callback = (parserResponse) => {
       if (parserResponse.message === 'TripRequest.Trip' && parserResponse.trips.length === 1) {
         this.requestInfo.parseDateTime = new Date();
