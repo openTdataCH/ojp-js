@@ -1,4 +1,4 @@
-import { DEBUG_LEVEL, OJP_VERSION } from "../../constants";
+import { DEBUG_LEVEL } from "../../constants";
 import { Location } from "../../location/location";
 import { PtSituationElement } from "../../situation/situation-element";
 import { Trip, TripTimedLeg } from "../../trip";
@@ -50,7 +50,7 @@ export class TripRequestParser extends BaseParser {
   }
 
   protected onCloseTag(nodeName: string): void {
-    const isOJPv2 = OJP_VERSION === '2.0';
+    const isOJPv2 = this.xmlParserConfig.ojpVersion === '2.0';
 
     if (nodeName === "Trip" && this.currentNode.parentName === "TripResult") {
       const trip = Trip.initFromTreeNode(this.currentNode);
