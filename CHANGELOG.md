@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 0.20.18 - 05.06.2025
+- Improve serialising - [PR #178](https://github.com/openTdataCH/ojp-js/pull/178)
+
 ## 0.20.17 - 02.06.2025
 - harmonise SDK Response - [PR #171](https://github.com/openTdataCH/ojp-js/pull/171)
   - harmonise SDK response, use `Promise<OJP_Response<OJP_Types.(LIR | TR | SER TIR), Error>>` response type
