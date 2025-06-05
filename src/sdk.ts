@@ -183,7 +183,7 @@ export class SDK {
     }
   }
 
-  public async fetchFareResults(request: FareRequest): Promise<OJP_Response<OJP_Types.FareDeliverySchema, Error>> {
+  public async fetchFareRequestResponse(request: FareRequest): Promise<OJP_Response<OJP_Types.FareDeliverySchema, Error>> {
     const responseXML = await this.computeResponse(request);
 
     try {
