@@ -12,7 +12,7 @@ export declare class TripTimedLeg extends TripLeg {
     toStopPoint: StopPoint;
     intermediateStopPoints: StopPoint[];
     constructor(legIDx: number, service: JourneyService, fromStopPoint: StopPoint, toStopPoint: StopPoint, intermediateStopPoints?: StopPoint[]);
-    static initWithTreeNode(legIDx: number, parentTreeNode: TreeNode): TripTimedLeg | null;
+    static initWithTreeNode(legIDx: number, parentTreeNode: TreeNode, xmlConfig: XML_Config): TripTimedLeg | null;
     patchLocations(mapContextLocations: Record<string, Location>): void;
     computeDepartureTime(): Date | null;
     computeArrivalTime(): Date | null;

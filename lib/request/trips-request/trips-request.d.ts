@@ -7,7 +7,7 @@ import { Language } from '../../types/language-type';
 import { TripModeType } from '../../types/trip-mode-type';
 import { IndividualTransportMode } from '../../types/individual-mode.types';
 import { ModeOfTransportType } from '../../types/mode-of-transport.type';
-import { UseRealtimeDataEnumeration } from "../../types/_all";
+import { UseRealtimeDataEnumeration, XML_Config } from "../../types/_all";
 export type TripRequestBoardingType = 'Dep' | 'Arr';
 export declare class TripRequest extends OJPBaseRequest {
     fromTripLocation: TripLocationPoint;
@@ -25,13 +25,13 @@ export declare class TripRequest extends OJPBaseRequest {
     response: TripRequest_Response | null;
     enableExtensions: boolean;
     useRealTimeDataType: UseRealtimeDataEnumeration;
-    constructor(stageConfig: ApiConfig, language: Language, fromTripLocation: TripLocationPoint, toTripLocation: TripLocationPoint, departureDate?: Date, tripRequestBoardingType?: TripRequestBoardingType, numberOfResults?: number | null, numberOfResultsBefore?: number | null, numberOfResultsAfter?: number | null, publicTransportModes?: ModeOfTransportType[]);
+    constructor(stageConfig: ApiConfig, language: Language, xmlConfig: XML_Config, requestorRef: string, fromTripLocation: TripLocationPoint, toTripLocation: TripLocationPoint, departureDate?: Date, tripRequestBoardingType?: TripRequestBoardingType, numberOfResults?: number | null, numberOfResultsBefore?: number | null, numberOfResultsAfter?: number | null, publicTransportModes?: ModeOfTransportType[]);
     private static Empty;
-    static initWithResponseMock(mockText: string): TripRequest;
-    static initWithRequestMock(mockText: string, stageConfig?: ApiConfig): TripRequest;
-    static initWithStopRefs(stageConfig: ApiConfig, language: Language, fromStopRef: string, toStopRef: string, departureDate?: Date, tripRequestBoardingType?: TripRequestBoardingType): TripRequest;
-    static initWithLocationsAndDate(stageConfig: ApiConfig, language: Language, fromLocation: Location, toLocation: Location, departureDate: Date, tripRequestBoardingType?: TripRequestBoardingType): TripRequest;
-    static initWithTripLocationsAndDate(stageConfig: ApiConfig, language: Language, fromTripLocation: TripLocationPoint | null, toTripLocation: TripLocationPoint | null, departureDate: Date, tripRequestBoardingType?: TripRequestBoardingType, includeLegProjection?: boolean, modeType?: TripModeType, transportMode?: IndividualTransportMode, viaTripLocations?: TripLocationPoint[], numberOfResults?: number | null, numberOfResultsBefore?: number | null, numberOfResultsAfter?: number | null, publicTransportModes?: ModeOfTransportType[]): TripRequest | null;
+    static initWithResponseMock(mockText: string, xmlConfig: XML_Config, requestorRef: string): TripRequest;
+    static initWithRequestMock(mockText: string, xmlConfig: XML_Config, requestorRef: string): TripRequest;
+    static initWithStopRefs(stageConfig: ApiConfig, language: Language, xmlConfig: XML_Config, requestorRef: string, fromStopRef: string, toStopRef: string, departureDate?: Date, tripRequestBoardingType?: TripRequestBoardingType): TripRequest;
+    static initWithLocationsAndDate(stageConfig: ApiConfig, language: Language, xmlConfig: XML_Config, requestorRef: string, fromLocation: Location, toLocation: Location, departureDate: Date, tripRequestBoardingType?: TripRequestBoardingType): TripRequest;
+    static initWithTripLocationsAndDate(stageConfig: ApiConfig, language: Language, xmlConfig: XML_Config, requestorRef: string, fromTripLocation: TripLocationPoint | null, toTripLocation: TripLocationPoint | null, departureDate: Date, tripRequestBoardingType?: TripRequestBoardingType, includeLegProjection?: boolean, modeType?: TripModeType, transportMode?: IndividualTransportMode, viaTripLocations?: TripLocationPoint[], numberOfResults?: number | null, numberOfResultsBefore?: number | null, numberOfResultsAfter?: number | null, publicTransportModes?: ModeOfTransportType[]): TripRequest | null;
     protected buildRequestNode(): void;
     private addAdditionalRestrictions;
     fetchResponse(): Promise<TripRequest_Response>;

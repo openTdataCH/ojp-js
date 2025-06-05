@@ -5,6 +5,7 @@ import { Address } from "./address";
 import { PointOfInterest } from "./poi";
 import { TopographicPlace } from "./topographic-place";
 import { TreeNode } from '../xml/tree-node';
+import { XML_Config } from '../types/_all';
 interface NearbyLocation {
     distance: number;
     location: Location;
@@ -21,8 +22,8 @@ export declare class Location {
     probability: number | null;
     originSystem: string | null;
     constructor();
-    static initWithTreeNode(treeNode: TreeNode): Location;
-    static initWithLocationResultTreeNode(locationResultTreeNode: TreeNode): Location | null;
+    static initWithTreeNode(treeNode: TreeNode, xmlConfig: XML_Config): Location;
+    static initWithLocationResultTreeNode(locationResultTreeNode: TreeNode, xmlConfig: XML_Config): Location | null;
     static initWithStopPlaceRef(stopPlaceRef: string, stopPlaceName?: string): Location;
     static initWithLngLat(longitude: number, latitude: number): Location;
     private static computeAttributes;

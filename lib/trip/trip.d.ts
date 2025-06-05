@@ -8,9 +8,9 @@ export declare class Trip {
     legs: TripLeg[];
     stats: TripStats;
     constructor(tripID: string, legs: TripLeg[], tripStats: TripStats);
-    static initFromTreeNode(treeNode: TreeNode): Trip | null;
+    static initFromTreeNode(treeNode: TreeNode, xmlConfig: XML_Config): Trip | null;
     computeDepartureTime(): Date | null;
     computeArrivalTime(): Date | null;
     asXMLNode(xmlConfig: XML_Config): XMLElement;
-    asXML(xmlConfig?: XML_Config): string;
+    asXML(xmlConfig: XML_Config): string;
 }

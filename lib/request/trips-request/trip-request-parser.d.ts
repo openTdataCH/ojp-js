@@ -1,3 +1,4 @@
+import { XML_Config } from "../../types/_all";
 import { BaseParser } from "../base-parser";
 import { TripRequest_Callback as ParserCallback } from "../types/trip-request.type";
 export declare class TripRequestParser extends BaseParser {
@@ -6,7 +7,7 @@ export declare class TripRequestParser extends BaseParser {
     private mapContextLocations;
     private mapContextSituations;
     callback: ParserCallback | null;
-    constructor();
+    constructor(xmlConfig: XML_Config);
     private reset;
     parseXML(responseXMLText: string): void;
     protected onCloseTag(nodeName: string): void;

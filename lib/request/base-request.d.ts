@@ -13,7 +13,7 @@ export declare class OJPBaseRequest {
     logRequests: boolean;
     protected mockRequestXML: string | null;
     protected mockResponseXML: string | null;
-    constructor(stageConfig: ApiConfig, language: Language, xmlConfig?: XML_Config, requestorRef?: string);
+    constructor(stageConfig: ApiConfig, language: Language, xmlConfig: XML_Config, requestorRef: string);
     private buildRequestXML;
     updateRequestXML(): void;
     protected fetchOJPResponse(): Promise<RequestInfo>;

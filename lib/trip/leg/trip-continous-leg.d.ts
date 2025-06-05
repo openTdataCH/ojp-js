@@ -22,7 +22,7 @@ export declare class TripContinuousLeg extends TripLeg {
     transferMode: TransferMode | null;
     continousLegService: ContinuousLegService | null;
     constructor(legType: LegType, legIDx: number, legDistance: number, fromLocation: Location, toLocation: Location);
-    static initWithTreeNode(legIDx: number, parentTreeNode: TreeNode, legType: LegType): TripContinuousLeg | null;
+    static initWithTreeNode(legIDx: number, parentTreeNode: TreeNode, legType: LegType, xmlConfig: XML_Config): TripContinuousLeg | null;
     private computeLegTransportModeFromTreeNode;
     private computeLegTransferModeFromTreeNode;
     private computeLegTransportModeFromString;

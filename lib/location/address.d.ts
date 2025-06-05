@@ -1,3 +1,4 @@
+import { XML_Config } from "../types/_all";
 import { TreeNode } from "../xml/tree-node";
 export declare class Address {
     addressCode: string;
@@ -8,5 +9,5 @@ export declare class Address {
     houseNumber: string | null;
     postCode: string | null;
     constructor(addressCode: string);
-    static initWithLocationTreeNode(locationTreeNode: TreeNode): Address | null;
+    static initWithLocationTreeNode(locationTreeNode: TreeNode, xmlConfig: XML_Config): Address | null;
 }

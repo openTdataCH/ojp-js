@@ -5,6 +5,7 @@ import { LIR_Response } from '../types/location-information-request.type';
 import { Location } from '../../location/location';
 import { Language } from '../../types/language-type';
 import { GeoPosition } from '../../location/geoposition';
+import { XML_Config } from '../../types/_all';
 export declare class LocationInformationRequest extends OJPBaseRequest {
     locationName: string | null;
     stopPlaceRef: string | null;
@@ -18,13 +19,13 @@ export declare class LocationInformationRequest extends OJPBaseRequest {
     circleCenter: GeoPosition | null;
     circleRadius: number | null;
     enableExtensions: boolean;
-    constructor(stageConfig: ApiConfig, language: Language);
-    static initWithResponseMock(mockText: string): LocationInformationRequest;
-    static initWithRequestMock(mockText: string, stageConfig?: ApiConfig): LocationInformationRequest;
-    static initWithLocationName(stageConfig: ApiConfig, language: Language, locationName: string, restrictionTypes: RestrictionType[], limit?: number): LocationInformationRequest;
-    static initWithStopPlaceRef(stageConfig: ApiConfig, language: Language, stopPlaceRef: string): LocationInformationRequest;
-    static initWithCircleLngLatRadius(stageConfig: ApiConfig, language: Language, circleLongitude: number, circleLatitude: number, circleRadius: number, restrictionTypes?: RestrictionType[], numberOfResults?: number): LocationInformationRequest;
-    static initWithBBOXAndType(stageConfig: ApiConfig, language: Language, bboxWest: number, bboxNorth: number, bboxEast: number, bboxSouth: number, restrictionTypes: RestrictionType[], limit?: number, poiRestriction?: POI_Restriction | null): LocationInformationRequest;
+    constructor(stageConfig: ApiConfig, language: Language, xmlConfig: XML_Config, requestorRef: string);
+    static initWithResponseMock(mockText: string, xmlConfig: XML_Config, requestorRef: string): LocationInformationRequest;
+    static initWithRequestMock(mockText: string, stageConfig: ApiConfig, xmlConfig: XML_Config, requestorRef: string): LocationInformationRequest;
+    static initWithLocationName(stageConfig: ApiConfig, language: Language, xmlConfig: XML_Config, requestorRef: string, locationName: string, restrictionTypes: RestrictionType[], limit?: number): LocationInformationRequest;
+    static initWithStopPlaceRef(stageConfig: ApiConfig, language: Language, xmlConfig: XML_Config, requestorRef: string, stopPlaceRef: string): LocationInformationRequest;
+    static initWithCircleLngLatRadius(stageConfig: ApiConfig, language: Language, xmlConfig: XML_Config, requestorRef: string, circleLongitude: number, circleLatitude: number, circleRadius: number, restrictionTypes?: RestrictionType[], numberOfResults?: number): LocationInformationRequest;
+    static initWithBBOXAndType(stageConfig: ApiConfig, language: Language, xmlConfig: XML_Config, requestorRef: string, bboxWest: number, bboxNorth: number, bboxEast: number, bboxSouth: number, restrictionTypes: RestrictionType[], limit?: number, poiRestriction?: POI_Restriction | null): LocationInformationRequest;
     protected buildRequestNode(): void;
     fetchResponse(): Promise<LIR_Response>;
     fetchLocations(): Promise<Location[]>;

@@ -33,7 +33,7 @@ export declare class JourneyService {
     hasDeviation: boolean | null;
     isUnplanned: boolean | null;
     constructor(journeyRef: string, operatingDayRef: string, ptMode: PublicTransportMode, operatorRef: string);
-    static initWithTreeNode(treeNode: TreeNode): JourneyService | null;
+    static initWithTreeNode(treeNode: TreeNode, xmlConfig: XML_Config): JourneyService | null;
     formatServiceName(): string;
     addToXMLNode(parentNode: XMLElement, xmlConfig: XML_Config): void;
 }

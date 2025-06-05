@@ -3,6 +3,7 @@ import { StopPoint } from '../trip/leg/timed-leg/stop-point';
 import { JourneyService } from '../journey/journey-service';
 import { Location } from '../location/location';
 import { PtSituationElement } from '../situation/situation-element';
+import { XML_Config } from '../types/_all';
 export type StationBoardType = 'Departures' | 'Arrivals';
 export declare class StopEvent {
     journeyService: JourneyService;
@@ -10,7 +11,7 @@ export declare class StopEvent {
     prevStopPoints: StopPoint[];
     nextStopPoints: StopPoint[];
     constructor(stopPoint: StopPoint, journeyService: JourneyService);
-    static initWithTreeNode(treeNode: TreeNode): StopEvent | null;
+    static initWithTreeNode(treeNode: TreeNode, xmlConfig: XML_Config): StopEvent | null;
     patchStopEventLocations(mapContextLocations: Record<string, Location>): void;
     patchSituations(mapContextSituations: Record<string, PtSituationElement>): void;
 }
