@@ -1,19 +1,25 @@
 import * as sax from 'sax';
 
 import { TreeNode } from "../xml/tree-node";
-import { IS_NODE_CLI, XML_ParserConfig } from '../constants';
+import { IS_NODE_CLI, XML_ConfigOJPv2, XML_ParserConfigOJPv1 } from '../constants';
+import { XML_Config } from '../types/_all';
 
 export class BaseParser {
+  protected xmlParserConfig: XML_Config;
+
   protected rootNode: TreeNode;
   protected currentNode: TreeNode;
   protected stack: TreeNode[];
 
   private mapUriNS: Record<string, string> = {};
 
-  constructor() {
-    for (const ns in XML_ParserConfig.mapNS) {
-      const uri = XML_ParserConfig.mapNS[ns];
-      const uriNS = ns === XML_ParserConfig.defaultNS ? '' : ns;
+  constructor(xmlBuilderConfig: XML_Config) {
+    const isOJPv2 = xmlBuilderConfig.ojpVersion === '2.0';
+    this.xmlParserConfig = isOJPv2 ? XML_ConfigOJPv2 : XML_ParserConfigOJPv1;
+
+    for (const ns in this.xmlParserConfig.mapNS) {
+      const uri = this.xmlParserConfig.mapNS[ns];
+      const uriNS = ns === this.xmlParserConfig.defaultNS ? '' : ns;
       this.mapUriNS[uri] = uriNS;
     }
 
