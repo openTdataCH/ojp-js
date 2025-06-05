@@ -130,7 +130,7 @@ export class StopEventRequest extends OJPBaseRequest {
                 return;
             }
 
-            const parser = new StopEventRequestParser();
+            const parser = new StopEventRequestParser(this.xmlConfig);
             parser.callback = ({ stopEvents, message }) => {
                 response.stopEvents = stopEvents;
                 response.message = message;

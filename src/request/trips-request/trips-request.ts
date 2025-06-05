@@ -453,7 +453,7 @@ export class TripRequest extends OJPBaseRequest {
       return;
     }
 
-    const parser = new TripRequestParser();
+    const parser = new TripRequestParser(this.xmlConfig);
     parser.callback = (parserResponse) => {
       if (parserResponse.message === 'TripRequest.Trip' && parserResponse.trips.length === 1) {
         this.requestInfo.parseDateTime = new Date();

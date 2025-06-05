@@ -233,7 +233,7 @@ export class LocationInformationRequest extends OJPBaseRequest {
         return;
       }
 
-      const parser = new LocationInformationParser();
+      const parser = new LocationInformationParser(this.xmlConfig);
       parser.callback = ({ locations, message }) => {
         response.locations = locations;
         response.message = message;
