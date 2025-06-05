@@ -6,7 +6,6 @@ import { StopPlace } from '../location/stopplace';
 import { PtSituationElement } from '../situation/situation-element';
 import { TreeNode } from '../xml/tree-node';
 import { XML_Config } from '../types/_all';
-import { OJP_VERSION } from '../constants';
 
 interface ServiceAttribute {
   code: string
@@ -72,8 +71,8 @@ export class JourneyService {
     this.isUnplanned = null;
   }
 
-  public static initWithTreeNode(treeNode: TreeNode): JourneyService | null {
-    const isOJPv2 = OJP_VERSION === '2.0';
+  public static initWithTreeNode(treeNode: TreeNode, xmlConfig: XML_Config): JourneyService | null {
+    const isOJPv2 = xmlConfig.ojpVersion === '2.0';
 
     const serviceTreeNode = treeNode.findChildNamed('Service');
     if (serviceTreeNode === null) {

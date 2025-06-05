@@ -1,7 +1,7 @@
-import { OJP_VERSION } from "../../constants";
 import { GeoPosition } from "../../location/geoposition";
 import { Location } from "../../location/location"
 import { Duration } from "../../shared/duration";
+import { XML_Config } from "../../types/_all";
 import { TreeNode } from "../../xml/tree-node";
 import { LinkProjection } from "../link-projection";
 
@@ -41,7 +41,7 @@ export class LegTrack {
     return this;
   }
 
-  public static initWithLegTreeNode(treeNode: TreeNode): LegTrack | null {
+  public static initWithLegTreeNode(treeNode: TreeNode, xmlConfig: XML_Config): LegTrack | null {
     const legTrackTreeNode = treeNode.findChildNamed('LegTrack');
     if (legTrackTreeNode === null) {
       return null;
@@ -51,7 +51,7 @@ export class LegTrack {
     
     const trackSectionTreeNodes = legTrackTreeNode.findChildrenNamed('TrackSection');
     trackSectionTreeNodes.forEach(trackSectionTreeNode => {
-      const trackSection = TrackSection.initWithTreeNode(trackSectionTreeNode);
+      const trackSection = TrackSection.initWithTreeNode(trackSectionTreeNode, xmlConfig);
       if (trackSection) {
         trackSections.push(trackSection);
       }
@@ -106,8 +106,8 @@ class TrackSection {
     this.linkProjection = null
   }
 
-  public static initWithTreeNode(treeNode: TreeNode): TrackSection | null {
-    const isOJPv2 = OJP_VERSION === '2.0';
+  public static initWithTreeNode(treeNode: TreeNode, xmlConfig: XML_Config): TrackSection | null {
+    const isOJPv2 = xmlConfig.ojpVersion === '2.0';
 
     const trackStartNodeName = isOJPv2 ? 'TrackSectionStart' : 'TrackStart';
     const trackStartTreeNode = treeNode.findChildNamed(trackStartNodeName);
@@ -119,8 +119,8 @@ class TrackSection {
       return null;
     }
 
-    const fromLocation = Location.initWithTreeNode(trackStartTreeNode);
-    const toLocation = Location.initWithTreeNode(trackEndTreeNode);
+    const fromLocation = Location.initWithTreeNode(trackStartTreeNode, xmlConfig);
+    const toLocation = Location.initWithTreeNode(trackEndTreeNode, xmlConfig);
 
     if (!(fromLocation && toLocation)) {
       console.error('CANT instantiate TrackSection.initWithTreeNode');

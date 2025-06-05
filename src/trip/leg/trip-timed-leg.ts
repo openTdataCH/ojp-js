@@ -14,7 +14,6 @@ import { StopPointType } from '../../types/stop-point-type'
 import { TripRequestBoardingType } from '../../request'
 import { XML_Config } from '../../types/_all';
 import { Duration } from '../../shared/duration';
-import { OJP_VERSION } from '../../constants';
 
 export class TripTimedLeg extends TripLeg {
   public service: JourneyService
@@ -38,15 +37,15 @@ export class TripTimedLeg extends TripLeg {
     this.intermediateStopPoints = intermediateStopPoints
   }
 
-  public static initWithTreeNode(legIDx: number, parentTreeNode: TreeNode): TripTimedLeg | null {
-    const isOJPv2 = OJP_VERSION === '2.0';
+  public static initWithTreeNode(legIDx: number, parentTreeNode: TreeNode, xmlConfig: XML_Config): TripTimedLeg | null {
+    const isOJPv2 = xmlConfig.ojpVersion === '2.0';
 
     const treeNode = parentTreeNode.findChildNamed('TimedLeg');
     if (treeNode === null) {
       return null;
     }
 
-    const service = JourneyService.initWithTreeNode(treeNode);
+    const service = JourneyService.initWithTreeNode(treeNode, xmlConfig);
     if (service === null) {
       return null;
     }
@@ -76,7 +75,7 @@ export class TripTimedLeg extends TripLeg {
 
     const timedLeg = new TripTimedLeg(legIDx, service, fromStopPoint, toStopPoint, intermediateStopPoints);
 
-    timedLeg.legTrack = LegTrack.initWithLegTreeNode(treeNode);
+    timedLeg.legTrack = LegTrack.initWithLegTreeNode(treeNode, xmlConfig);
 
     timedLeg.legDuration = (() => {
       // for TimedLeg Duration is at the parent level

@@ -53,7 +53,7 @@ export class TripRequestParser extends BaseParser {
     const isOJPv2 = this.xmlParserConfig.ojpVersion === '2.0';
 
     if (nodeName === "Trip" && this.currentNode.parentName === "TripResult") {
-      const trip = Trip.initFromTreeNode(this.currentNode);
+      const trip = Trip.initFromTreeNode(this.currentNode, this.xmlParserConfig);
       if (trip) {
         trip.legs.forEach((leg) => {
           leg.patchLocations(this.mapContextLocations);
@@ -80,7 +80,7 @@ export class TripRequestParser extends BaseParser {
         const locationNodeName = isOJPv2 ? 'Place' : 'Location';
         const locationTreeNodes = placesTreeNode.findChildrenNamed(locationNodeName);
         locationTreeNodes.forEach(locationTreeNode => {
-          const location = Location.initWithTreeNode(locationTreeNode);
+          const location = Location.initWithTreeNode(locationTreeNode, this.xmlParserConfig);
           const stopPlaceRef = location.stopPlace?.stopPlaceRef ?? null;
           if (stopPlaceRef !== null) {
             this.mapContextLocations[stopPlaceRef] = location;
