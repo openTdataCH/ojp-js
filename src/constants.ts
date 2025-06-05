@@ -15,9 +15,9 @@ export const DEBUG_LEVEL: DEBUG_LEVEL_Type = (() => {
 })();
 
 export const SDK_VERSION = '0.18.6';
-export const IS_NODE_CLI = typeof process !== 'undefined' && process.versions && process.versions.node;
 export type OJP_VERSION_Type = '1.0' | '2.0';
 
+export const IS_NODE_CLI = typeof process !== 'undefined' && process.versions && process.versions.node;
 
 // XML builder in OJPv1 siri: default
 export const XML_BuilderConfigOJPv1: XML_Config = {
