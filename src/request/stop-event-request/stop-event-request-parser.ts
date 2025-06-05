@@ -35,7 +35,7 @@ export class StopEventRequestParser extends BaseParser {
     const isOJPv2 = this.xmlParserConfig.ojpVersion === '2.0';
 
     if (nodeName === 'StopEventResult') {
-      const stopEvent = StopEvent.initWithTreeNode(this.currentNode);
+      const stopEvent = StopEvent.initWithTreeNode(this.currentNode, this.xmlParserConfig);
       if (stopEvent) {
         stopEvent.patchStopEventLocations(this.mapContextLocations);
         stopEvent.patchSituations(this.mapContextSituations);
@@ -51,7 +51,7 @@ export class StopEventRequestParser extends BaseParser {
         const locationNodeName = isOJPv2 ? 'Place' : 'Location';
         const locationTreeNodes = placesTreeNode.findChildrenNamed(locationNodeName);
         locationTreeNodes.forEach(locationTreeNode => {
-          const location = Location.initWithTreeNode(locationTreeNode);
+          const location = Location.initWithTreeNode(locationTreeNode, this.xmlParserConfig);
           const stopPlaceRef = location.stopPlace?.stopPlaceRef ?? null;
           if (stopPlaceRef !== null) {
             this.mapContextLocations[stopPlaceRef] = location;

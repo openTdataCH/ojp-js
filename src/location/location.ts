@@ -6,7 +6,7 @@ import { Address } from "./address";
 import { PointOfInterest } from "./poi";
 import { TopographicPlace } from "./topographic-place";
 import { TreeNode } from '../xml/tree-node';
-import { OJP_VERSION } from '../constants';
+import { XML_Config } from '../types/_all';
 
 interface NearbyLocation {
   distance: number
@@ -41,13 +41,13 @@ export class Location {
     this.originSystem = null;
   }
 
-  public static initWithTreeNode(treeNode: TreeNode): Location {
+  public static initWithTreeNode(treeNode: TreeNode, xmlConfig: XML_Config): Location {
     const location = new Location();
     
-    location.address = Address.initWithLocationTreeNode(treeNode);
+    location.address = Address.initWithLocationTreeNode(treeNode, xmlConfig);
     location.geoPosition = GeoPosition.initWithLocationTreeNode(treeNode);
     
-    const locationNamePath = OJP_VERSION === '2.0' ? 'Name/Text' : 'LocationName/Text';
+    const locationNamePath = xmlConfig.ojpVersion === '2.0' ? 'Name/Text' : 'LocationName/Text';
     location.locationName = treeNode.findTextFromChildNamed(locationNamePath);
     
     location.poi = PointOfInterest.initWithLocationTreeNode(treeNode);
@@ -59,14 +59,14 @@ export class Location {
     return location;
   }
 
-  public static initWithLocationResultTreeNode(locationResultTreeNode: TreeNode): Location | null {
-    const childName = OJP_VERSION === '2.0' ? 'Place' : 'Location';
+  public static initWithLocationResultTreeNode(locationResultTreeNode: TreeNode, xmlConfig: XML_Config): Location | null {
+    const childName = xmlConfig.ojpVersion === '2.0' ? 'Place' : 'Location';
     const locationTreeNode = locationResultTreeNode.findChildNamed(childName);
     if (locationTreeNode === null) {
       return null;
     }
 
-    const location = Location.initWithTreeNode(locationTreeNode);
+    const location = Location.initWithTreeNode(locationTreeNode, xmlConfig);
 
     const probabilityS = locationResultTreeNode.findTextFromChildNamed('Probability');
     if (probabilityS) {

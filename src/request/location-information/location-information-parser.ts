@@ -21,9 +21,7 @@ export class LocationInformationParser extends BaseParser {
     const ojpNodeName = this.xmlParserConfig.ojpVersion === '2.0' ? 'PlaceResult' : 'Location';
 
     if (nodeName === ojpNodeName && this.currentNode.parentName === 'OJPLocationInformationDelivery') {
-      const location = Location.initWithLocationResultTreeNode(
-        this.currentNode
-      );
+      const location = Location.initWithLocationResultTreeNode(this.currentNode, this.xmlParserConfig);
 
       if (location) {
         this.locations.push(location);
