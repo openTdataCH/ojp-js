@@ -14,16 +14,10 @@ export const DEBUG_LEVEL: DEBUG_LEVEL_Type = (() => {
     return 'DEBUG';
 })();
 
-export const OJP_VERSION: OJP_VERSION_Type = '2.0';
 export const SDK_VERSION = '0.18.6';
 export const IS_NODE_CLI = typeof process !== 'undefined' && process.versions && process.versions.node;
 export type OJP_VERSION_Type = '1.0' | '2.0';
 
-if (DEBUG_LEVEL === 'DEBUG') {
-    console.log('OJP version        : ' + OJP_VERSION);
-    console.log('OJP-JS SDK version : ' + SDK_VERSION);
-    console.log('OJP-SDK            : DEBUG features are enabled');
-}
 
 // XML builder in OJPv1 siri: default
 export const XML_BuilderConfigOJPv1: XML_Config = {
@@ -54,9 +48,3 @@ export const XML_ConfigOJPv2: XML_Config = {
         'siri': 'http://www.siri.org.uk/siri',
     },
 };
-
-const isOJPv2 = (OJP_VERSION as OJP_VERSION_Type) === '2.0'; // needs casting otherwise TS compiler complains
-export const XML_BuilderConfig: XML_Config = isOJPv2 ? XML_ConfigOJPv2 : XML_BuilderConfigOJPv1;
-export const XML_ParserConfig: XML_Config = isOJPv2 ? XML_ConfigOJPv2 : XML_ParserConfigOJPv1;
-
-export const REQUESTOR_REF = 'OJPv' + OJP_VERSION + '_JS_SDK_v' + SDK_VERSION;
