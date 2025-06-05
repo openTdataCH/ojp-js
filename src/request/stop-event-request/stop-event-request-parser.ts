@@ -1,4 +1,4 @@
-import { DEBUG_LEVEL, OJP_VERSION } from "../../constants";
+import { DEBUG_LEVEL } from "../../constants";
 import { Location } from "../../location/location";
 import { PtSituationElement } from "../../situation/situation-element";
 import { StopEvent } from "../../stop-event/stop-event";
@@ -32,7 +32,7 @@ export class StopEventRequestParser extends BaseParser {
   }
 
   protected onCloseTag(nodeName: string): void {
-    const isOJPv2 = OJP_VERSION === '2.0';
+    const isOJPv2 = this.xmlParserConfig.ojpVersion === '2.0';
 
     if (nodeName === 'StopEventResult') {
       const stopEvent = StopEvent.initWithTreeNode(this.currentNode);
