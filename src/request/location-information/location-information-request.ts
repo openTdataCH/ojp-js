@@ -6,6 +6,7 @@ import { LIR_Response } from '../types/location-information-request.type';
 import { Location } from '../../location/location';
 import { Language } from '../../types/language-type';
 import { GeoPosition } from '../../location/geoposition';
+import { XML_Config } from '../../types/_all';
 
 export class LocationInformationRequest extends OJPBaseRequest {
   public locationName: string | null;
@@ -26,8 +27,8 @@ export class LocationInformationRequest extends OJPBaseRequest {
 
   public enableExtensions: boolean;
 
-  constructor(stageConfig: ApiConfig, language: Language) {
-    super(stageConfig, language);
+  constructor(stageConfig: ApiConfig, language: Language, xmlConfig: XML_Config, requestorRef: string) {
+    super(stageConfig, language, xmlConfig, requestorRef);
 
     this.locationName = null;
     this.stopPlaceRef = null;
@@ -48,22 +49,22 @@ export class LocationInformationRequest extends OJPBaseRequest {
     this.enableExtensions = true;
   }
 
-  public static initWithResponseMock(mockText: string) {
-    const request = new LocationInformationRequest(EMPTY_API_CONFIG, 'en');
+  public static initWithResponseMock(mockText: string, xmlConfig: XML_Config, requestorRef: string) {
+    const request = new LocationInformationRequest(EMPTY_API_CONFIG, 'en', xmlConfig, requestorRef);
     request.mockResponseXML = mockText;
     
     return request;
   }
 
-  public static initWithRequestMock(mockText: string, stageConfig: ApiConfig = EMPTY_API_CONFIG) {
-    const request = new LocationInformationRequest(stageConfig, 'en');
+  public static initWithRequestMock(mockText: string, stageConfig: ApiConfig, xmlConfig: XML_Config, requestorRef: string) {
+    const request = new LocationInformationRequest(stageConfig, 'en', xmlConfig, requestorRef);
     request.mockRequestXML = mockText;
     
     return request;
   }
 
-  public static initWithLocationName(stageConfig: ApiConfig, language: Language, locationName: string, restrictionTypes: RestrictionType[], limit: number = 10): LocationInformationRequest {
-    const request = new LocationInformationRequest(stageConfig, language);
+  public static initWithLocationName(stageConfig: ApiConfig, language: Language, xmlConfig: XML_Config, requestorRef: string, locationName: string, restrictionTypes: RestrictionType[], limit: number = 10): LocationInformationRequest {
+    const request = new LocationInformationRequest(stageConfig, language, xmlConfig, requestorRef);
     request.locationName = locationName;
     request.numberOfResults = limit;
 
@@ -74,8 +75,8 @@ export class LocationInformationRequest extends OJPBaseRequest {
     return request;
   }
 
-  public static initWithStopPlaceRef(stageConfig: ApiConfig, language: Language, stopPlaceRef: string): LocationInformationRequest {
-    const request = new LocationInformationRequest(stageConfig, language);
+  public static initWithStopPlaceRef(stageConfig: ApiConfig, language: Language, xmlConfig: XML_Config, requestorRef: string, stopPlaceRef: string): LocationInformationRequest {
+    const request = new LocationInformationRequest(stageConfig, language, xmlConfig, requestorRef);
     request.stopPlaceRef = stopPlaceRef;
     
     return request;
@@ -83,14 +84,17 @@ export class LocationInformationRequest extends OJPBaseRequest {
 
   public static initWithCircleLngLatRadius(
     stageConfig: ApiConfig,
-    language: Language, 
+    language: Language,
+    xmlConfig: XML_Config, 
+    requestorRef: string,
+
     circleLongitude: number, 
     circleLatitude: number,
     circleRadius: number,
     restrictionTypes: RestrictionType[] = [],
     numberOfResults: number = 1000
   ): LocationInformationRequest {
-    const request = new LocationInformationRequest(stageConfig, language);
+    const request = new LocationInformationRequest(stageConfig, language, xmlConfig, requestorRef);
     
     request.circleCenter = new GeoPosition(circleLongitude, circleLatitude);
     request.circleRadius = circleRadius;
@@ -103,6 +107,9 @@ export class LocationInformationRequest extends OJPBaseRequest {
   public static initWithBBOXAndType(
     stageConfig: ApiConfig,
     language: Language, 
+    xmlConfig: XML_Config, 
+    requestorRef: string,
+    
     bboxWest: number,
     bboxNorth: number,
     bboxEast: number,
@@ -111,7 +118,7 @@ export class LocationInformationRequest extends OJPBaseRequest {
     limit: number = 1000,
     poiRestriction: POI_Restriction | null = null,
   ): LocationInformationRequest {
-    const request = new LocationInformationRequest(stageConfig, language);
+    const request = new LocationInformationRequest(stageConfig, language, xmlConfig, requestorRef);
 
     request.numberOfResults = limit;
 
