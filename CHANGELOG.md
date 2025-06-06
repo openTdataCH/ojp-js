@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## 0.20.18 - 05.06.2025
+## 0.20.18 - 06.06.2025
 - Improve serialising - [PR #178](https://github.com/openTdataCH/ojp-js/pull/178)
 
 ## 0.20.17 - 02.06.2025
