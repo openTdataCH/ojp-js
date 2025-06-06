@@ -183,13 +183,23 @@ export class SDK {
     }
   }
 
-  public async fetchFareResults(request: FareRequest): Promise<OJP_Types.FareResultSchema[]> {
+  public async fetchFareRequestResponse(request: FareRequest): Promise<OJP_Response<OJP_Types.FareDeliverySchema, Error>> {
     const responseXML = await this.computeResponse(request);
 
-    const parsedObj = parseXML<{ OJP: OJP_Types.FareResponseOJP }>(responseXML, 'OJP');
-    const fareResults = parsedObj.OJP.OJPResponse.serviceDelivery.OJPFareDelivery.fareResult;
+    try {
+      const parsedObj = parseXML<{ OJP: OJP_Types.FareResponseOJP }>(responseXML, 'OJP');
+      const response = parsedObj.OJP.OJPResponse.serviceDelivery.OJPFareDelivery;
 
-    return fareResults;
+      return {
+        ok: true,
+        value: response,
+      };
+    } catch (error) {
+      return {
+        ok: false,
+        error: error instanceof Error ? error : new Error('Unknown error'),
+      };
+    }
   }
 
   // Deprecated methods below

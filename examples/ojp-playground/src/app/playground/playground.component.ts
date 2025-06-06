@@ -99,6 +99,12 @@ export class PlaygroundComponent implements OnInit {
     console.log('A) TR with from/to stopRefs');
     console.log(response1.value);
 
+    // serialize the object back to XML string
+    const trip1Schema = response1.value.tripResult[0].trip;
+    const serializer = new OJP.XmlSerializer();
+    const tripXML = serializer.serialize(trip1Schema, 'Trip');
+    console.log(tripXML);
+
     // b) from fromCoordsRef to StopPlaceRef
     // coords in strings format, latitude,longitude
     const fromCoordsRef = '46.957522,7.431170';

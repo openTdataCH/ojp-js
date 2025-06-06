@@ -40,7 +40,9 @@ function transformKeys<T extends Record<string, any>>(obj: T, path: string[] = [
 }
 
 export function buildRootXML(obj: Record<string, any>, xmlConfig: XML_Config = DefaultXML_Config, callbackTransformedObj: ((obj: Record<string, any>) => void) | null = null): string {
-  const rootXML = buildXML(obj, xmlConfig, (objTransformed => {
+  const wrapperNodeName = 'OJP';
+
+  const rootXML = buildXML(obj, wrapperNodeName, xmlConfig, (objTransformed => {
     const rootKeys = Object.keys(objTransformed);
     if (typeof objTransformed === 'object' && (rootKeys.length === 1)) {
       const rootKeyParts = rootKeys[0].split(':');
@@ -59,13 +61,20 @@ export function buildRootXML(obj: Record<string, any>, xmlConfig: XML_Config = D
     }
   }));
 
-  return rootXML;
+  const wrapperRootXML_Lines: string[] = [
+    '<?xml version="1.0" encoding="utf-8"?>',
+    rootXML,
+  ];
+
+  const wrapperRootXML = wrapperRootXML_Lines.join('\n');
+
+  return wrapperRootXML;
 }
 
-export function buildXML(obj: Record<string, any>, xmlConfig: XML_Config = DefaultXML_Config, callbackTransformedObj: ((obj: Record<string, any>) => void) | null = null): string {
+export function buildXML(obj: Record<string, any>, wrapperNodeName: string = 'OJP', xmlConfig: XML_Config = DefaultXML_Config, callbackTransformedObj: ((obj: Record<string, any>) => void) | null = null): string {
   const objCopy = JSON.parse(JSON.stringify(obj));
 
-  const objTransformed = transformKeys(objCopy, ['OJP'], (key: string, value: any, path: string[]) => {
+  const objTransformed = transformKeys(objCopy, [wrapperNodeName], (key: string, value: any, path: string[]) => {
     // capitalize first letter
     let newKey = key.charAt(0).toUpperCase() + key.slice(1);
 
@@ -109,30 +118,35 @@ export function buildXML(obj: Record<string, any>, xmlConfig: XML_Config = Defau
     callbackTransformedObj(objTransformed);
   }
 
-  const options = {
+  const xmlParts: string[] = [];
+
+  // By convetion
+  const isRootNode = wrapperNodeName === 'OJP';
+  if (isRootNode) {
+    const xmlAttrs: string[] = [];
+    for (const ns in xmlConfig.mapNS) {
+      const url = xmlConfig.mapNS[ns];
+      const attrNS = ns === xmlConfig.defaultNS ? 'xmlns' : ('xmlns:' + ns);
+      const xmlAttr = attrNS + '="' + url + '"';
+      xmlAttrs.push(xmlAttr);
+    }
+
+    const xmlVersionAttr = 'version="' + xmlConfig.ojpVersion + '"';
+    xmlAttrs.push(xmlVersionAttr);
+
+    xmlParts.push('<OJP ' + xmlAttrs.join(' ') + '>');
+  } else {
+    xmlParts.push('<' + wrapperNodeName + '>');
+  }
+
+  const builder = new XMLBuilder({
     format: true, 
     ignoreAttributes: false,
     suppressEmptyNode: true,
-  };
-  const builder = new XMLBuilder(options);
-
-  const xmlAttrs: string[] = [];
-  for (const ns in xmlConfig.mapNS) {
-    const url = xmlConfig.mapNS[ns];
-    const attrNS = ns === xmlConfig.defaultNS ? 'xmlns' : ('xmlns:' + ns);
-    const xmlAttr = attrNS + '="' + url + '"';
-    xmlAttrs.push(xmlAttr);
-  }
-
-  const xmlVersionAttr = 'version="' + xmlConfig.ojpVersion + '"';
-  xmlAttrs.push(xmlVersionAttr);
-
-  const xmlParts = [
-    '<?xml version="1.0" encoding="utf-8"?>',
-    '<OJP ' + xmlAttrs.join(' ') + '>',
-    builder.build(objTransformed),
-    '</OJP>',
-  ];
+  });
+  xmlParts.push(builder.build(objTransformed));
+  
+  xmlParts.push('</' + wrapperNodeName + '>');
 
   const xmlS = xmlParts.join('\n');
 

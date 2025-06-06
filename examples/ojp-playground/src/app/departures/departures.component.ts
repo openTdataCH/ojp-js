@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import * as OJP from 'ojp-sdk'
+import * as OJP from 'ojp-sdk';
 
 type DepartureRow = {
   service: {
@@ -105,8 +105,17 @@ export class DeparturesComponent implements OnInit {
     }
     const stopRef = this.queryParams.get('stop_id') ?? mapStopRefs.BERN_BAHNHOF;
 
-    const lir = OJP.LocationInformationRequest.initWithPlaceRef(stopRef);
-    const placeResults = await this.ojpSDK.fetchPlaceResults(lir);
+    const request = OJP.LocationInformationRequest.initWithPlaceRef(stopRef);
+    const response = await this.ojpSDK.fetchLocationInformationRequestResponse(request);
+
+    if (!response.ok) {
+      return [];
+    }
+
+    const placeResults: OJP.PlaceResult[] = response.value.placeResult.map(placeResultSchema => {
+      const placeResult = OJP.PlaceResult.initWithXMLSchema(placeResultSchema);
+      return placeResult;
+    });
 
     return placeResults;
   }
@@ -114,8 +123,12 @@ export class DeparturesComponent implements OnInit {
   private async fetchLatestDepartures(placeRef: string) {
     const request = OJP.StopEventRequest.initWithPlaceRefAndDate(placeRef, new Date());
 
-    const results = await this.ojpSDK.fetchStopEvents(request);
-    
+    const response = await this.ojpSDK.fetchStopEventRequestResponse(request);
+    if (!response.ok) {
+      return;
+    }
+
+    const results = response.value.stopEventResult ?? [];
     this.renderModel.departures = [];
     results.forEach(result => {
       const departureRow = this.computeDepartureRow(result);

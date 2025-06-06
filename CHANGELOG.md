@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 0.20.18 - 06.06.2025
+- Improve serialising - [PR #178](https://github.com/openTdataCH/ojp-js/pull/178)
+  - improve internal `buildXML`, adds `XmlSerializer` for outside SDK serialising objects to XML
+  - harmonise FareRequest response, adds `fetchFareRequestResponse` with `FareDeliverySchema` 
+  - remove `Trip.rawXML` property
+  - updates playground associated app
+
 ## 0.20.17 - 02.06.2025
 - harmonise SDK Response - [PR #171](https://github.com/openTdataCH/ojp-js/pull/171)
   - harmonise SDK response, use `Promise<OJP_Response<OJP_Types.(LIR | TR | SER TIR), Error>>` response type

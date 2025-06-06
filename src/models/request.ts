@@ -155,7 +155,7 @@ export class TripRequest extends BaseRequest implements OJP_Types.TripRequestSch
       },
     };
 
-    const xmlS = buildXML(requestOJP, xmlConfig);
+    const xmlS = buildRootXML(requestOJP, xmlConfig);
 
     return xmlS;
   }
@@ -268,7 +268,7 @@ export class LocationInformationRequest extends BaseRequest implements OJP_Types
     return request;
   }
 
-  public buildRequestXML(language: Language, requestorRef: string): string {
+  public buildRequestXML(language: Language, requestorRef: string, xmlConfig: XML_Config): string {
     const requestOJP: OJP_Types.LocationInformationRequestOJP = {
       OJPRequest: {
         serviceRequest: {
@@ -282,7 +282,7 @@ export class LocationInformationRequest extends BaseRequest implements OJP_Types
       },
     };
 
-    const xmlS = buildXML(requestOJP);
+    const xmlS = buildRootXML(requestOJP, xmlConfig);
 
     return xmlS;
   }
@@ -364,7 +364,7 @@ export class StopEventRequest extends BaseRequest implements OJP_Types.StopEvent
     return request;
   }
 
-  public buildRequestXML(language: Language, requestorRef: string): string {
+  public buildRequestXML(language: Language, requestorRef: string, xmlConfig: XML_Config): string {
     const requestOJP: OJP_Types.SER_RequestOJP = {
       OJPRequest: {
         serviceRequest: {
@@ -378,7 +378,7 @@ export class StopEventRequest extends BaseRequest implements OJP_Types.StopEvent
       },
     };
 
-    const xmlS = buildXML(requestOJP);
+    const xmlS = buildRootXML(requestOJP, xmlConfig);
 
     return xmlS;
   }
@@ -422,7 +422,7 @@ export class TripRefineRequest extends BaseRequest implements OJP_Types.TRR_Requ
     return request;
   }
 
-  public buildRequestXML(language: Language, requestorRef: string): string {
+  public buildRequestXML(language: Language, requestorRef: string, xmlConfig: XML_Config): string {
     const requestOJP: OJP_Types.TRR_RequestOJP = {
       OJPRequest: {
         serviceRequest: {
@@ -436,7 +436,7 @@ export class TripRefineRequest extends BaseRequest implements OJP_Types.TRR_Requ
       },
     };
 
-    const xmlS = buildXML(requestOJP);
+    const xmlS = buildRootXML(requestOJP, xmlConfig);
 
     return xmlS;
   }
