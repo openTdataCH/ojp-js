@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.20.19 - 11.06.2025
+- updates SDK - [PR #180](https://github.com/openTdataCH/ojp-js/pull/180)
+  - updates `ojp-shared-types` (TR params `walkSpeed`)
+
 ## 0.20.18 - 06.06.2025
 - Improve serialising - [PR #178](https://github.com/openTdataCH/ojp-js/pull/178)
   - improve internal `buildXML`, adds `XmlSerializer` for outside SDK serialising objects to XML
