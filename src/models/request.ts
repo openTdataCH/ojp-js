@@ -410,6 +410,26 @@ export class TripRefineRequest extends BaseRequest implements OJP_Types.TRR_Requ
     return params;
   }
 
+  private static Default(): TripRefineRequest {
+    const fakeTripResult = <OJP_Types.TripResultSchema>{};
+    const params = TripRefineRequest.DefaultRequestParams();
+    const request = new TripRefineRequest(fakeTripResult, params);
+
+    return request;
+  }
+
+  public static initWithRequestMock(mockText: string): TripRefineRequest {
+    const request = TripRefineRequest.Default();
+    request.mockRequestXML = mockText;
+    return request;
+  }
+
+  public static initWithResponseMock(mockText: string): TripRefineRequest {
+    const request = TripRefineRequest.Default();
+    request.mockResponseXML = mockText;
+    return request;
+  }
+
   public static initWithTrip(trip: Trip): TripRefineRequest {
     const tripResult: OJP_Types.TripResultSchema = {
       id: trip.id,
