@@ -124,6 +124,20 @@ export class PlaygroundComponent implements OnInit {
     }
     console.log('B) TR with from/to coords');
     console.log(response2.value);
+
+    const request3 = OJP.TripRequest.initWithPlaceRefsOrCoords('8507099', '8511418');
+    if (request3.params) {
+      request3.params.walkSpeed = 400;
+    }
+    const response3 = await this.ojpSDK.fetchTripRequestResponse(request3);
+    if (!response3.ok) {
+      console.error('fetchTripRequestResponse ERROR');
+      console.log(response3.error);
+      return;
+    }
+    console.log('C) TR with walkSpeed');
+    console.log(response3.value);
+    console.log(request3.requestInfo.requestXML);
   }
 
   private async runSER() {
