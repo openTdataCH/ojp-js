@@ -11,7 +11,12 @@ describe('OJP Test TripRequest Response', () => {
     const ojp = OJP_Helpers.DefaultSDK();
     const mockXML = FileHelpers.loadMockXML('tr-response-zh-be.xml');
     const mockRequest = OJP.TripRequest.initWithResponseMock(mockXML);
-    trips = await ojp.fetchTrips(mockRequest);
+    const response = await ojp.fetchTripRequestResponse(mockRequest);
+    if (response.ok) {
+      trips = response.value.tripResult.map(el => el.trip);
+    } else {
+      // TODO: handle errors
+    }
   });
 
   test('Test TR response single <Leg> array', () => {

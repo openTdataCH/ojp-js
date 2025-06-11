@@ -11,7 +11,12 @@ describe('OJP Test TripRequest Response', () => {
     const mockXML = FileHelpers.loadMockXML('lir-response-be.xml');
     const mockRequest = OJP.LocationInformationRequest.initWithResponseMock(mockXML);
 
-    placeResults = await ojp.fetchPlaceResults(mockRequest);
+    const response = await ojp.fetchLocationInformationRequestResponse(mockRequest);
+    if (response.ok) {
+      placeResults = response.value.placeResult.map(el => OJP.PlaceResult.initWithXMLSchema(el));
+    } else {
+      // TODO: handle errors
+    }
   });
 
   test('Test LIR response parse strings', () => {
