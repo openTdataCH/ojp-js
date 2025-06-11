@@ -4,6 +4,7 @@ import { XMLParser } from 'fast-xml-parser';
 import * as OJP from '../src'
 
 import { OJP_Helpers } from './helpers/ojp-test.helpers';
+import { DefaultXML_Config } from '../src/constants';
 
 describe('OJP Test Request', () => {
   let ojp: OJP.SDK;
@@ -17,7 +18,7 @@ describe('OJP Test Request', () => {
   test('Test LIR Name', () => {
     const request = OJP.LocationInformationRequest.initWithLocationName('Bern');
     const requestorRef = 'test.requestorRef';
-    const requestXML = request.buildRequestXML('de', requestorRef);
+    const requestXML = request.buildRequestXML('de', requestorRef, DefaultXML_Config);
 
     const requestJSON = parser.parse(requestXML);
 
@@ -36,7 +37,7 @@ describe('OJP Test Request', () => {
   test('Test LIR PlaceRef', () => {
     const request = OJP.LocationInformationRequest.initWithPlaceRef('8507000');
     const requestorRef = 'test.requestorRef';
-    const requestXML = request.buildRequestXML('de', requestorRef);
+    const requestXML = request.buildRequestXML('de', requestorRef, DefaultXML_Config);
 
     const requestJSON = parser.parse(requestXML);
 
@@ -54,7 +55,7 @@ describe('OJP Test Request', () => {
     const request = OJP.LocationInformationRequest.initWithBBOX(bbox1, ['stop'], 536);
 
     const requestorRef = 'test.requestorRef';
-    const requestXML = request.buildRequestXML('de', requestorRef);
+    const requestXML = request.buildRequestXML('de', requestorRef, DefaultXML_Config);
     const requestJSON = parser.parse(requestXML);
 
     const requestRequestorRef = requestJSON['OJP']['OJPRequest']['siri:ServiceRequest']['siri:RequestorRef'];
@@ -72,7 +73,7 @@ describe('OJP Test Request', () => {
     // This is equivalent with bbox1
     const bbox2 = [7.433259, 46.937798, 7.475252, 46.954805];
     const request2 = OJP.LocationInformationRequest.initWithBBOX(bbox2, ['stop'], 536);
-    const request2_XML = request2.buildRequestXML('de', requestorRef);
+    const request2_XML = request2.buildRequestXML('de', requestorRef, DefaultXML_Config);
     const request2_JSON = parser.parse(request2_XML);
 
     const requestNode2_JSON = request2_JSON['OJP']['OJPRequest']['siri:ServiceRequest']['OJPLocationInformationRequest'];
