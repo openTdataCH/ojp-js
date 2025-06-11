@@ -187,7 +187,7 @@ export class LocationInformationRequest extends BaseRequest implements OJP_Types
     return params;
   }
   
-  public static Default(): LocationInformationRequest {
+  private static Default(): LocationInformationRequest {
     const request = new LocationInformationRequest(undefined, undefined, undefined);
 
     request.restrictions = LocationInformationRequest.DefaultRequestParams();
