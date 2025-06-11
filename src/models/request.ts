@@ -187,7 +187,7 @@ export class LocationInformationRequest extends BaseRequest implements OJP_Types
     return params;
   }
   
-  public static Default(): LocationInformationRequest {
+  private static Default(): LocationInformationRequest {
     const request = new LocationInformationRequest(undefined, undefined, undefined);
 
     request.restrictions = LocationInformationRequest.DefaultRequestParams();
@@ -410,6 +410,26 @@ export class TripRefineRequest extends BaseRequest implements OJP_Types.TRR_Requ
     return params;
   }
 
+  private static Default(): TripRefineRequest {
+    const fakeTripResult = <OJP_Types.TripResultSchema>{};
+    const params = TripRefineRequest.DefaultRequestParams();
+    const request = new TripRefineRequest(fakeTripResult, params);
+
+    return request;
+  }
+
+  public static initWithRequestMock(mockText: string): TripRefineRequest {
+    const request = TripRefineRequest.Default();
+    request.mockRequestXML = mockText;
+    return request;
+  }
+
+  public static initWithResponseMock(mockText: string): TripRefineRequest {
+    const request = TripRefineRequest.Default();
+    request.mockResponseXML = mockText;
+    return request;
+  }
+
   public static initWithTrip(trip: Trip): TripRefineRequest {
     const tripResult: OJP_Types.TripResultSchema = {
       id: trip.id,
@@ -475,6 +495,26 @@ export class FareRequest extends BaseRequest implements OJP_Types.FareRequestsSc
     };
 
     return params;
+  }
+
+  private static Default(): FareRequest {
+    const now = new Date();
+    const requestTimestamp = now.toISOString();
+
+    const request = new FareRequest(requestTimestamp, []);
+    return request;
+  }
+
+  public static initWithRequestMock(mockText: string): FareRequest {
+    const request = FareRequest.Default();
+    request.mockRequestXML = mockText;
+    return request;
+  }
+
+  public static initWithResponseMock(mockText: string): FareRequest {
+    const request = FareRequest.Default();
+    request.mockResponseXML = mockText;
+    return request;
   }
 
   private static initWithOJPv1Trips(trips: OJP_Types.OJPv1_TripSchema[]): FareRequest {
@@ -573,11 +613,6 @@ export class TripInfoRequest extends BaseRequest implements OJP_Types.TIR_Reques
     this.params = params;
   }
 
-  private static Default(): TripInfoRequest {
-    const request = new TripInfoRequest('n/a', 'n/a', TripInfoRequest.DefaultRequestParams());
-    return request;
-  }
-
   private static DefaultRequestParams(): OJP_Types.TIR_RequestParamsSchema {
     const params: OJP_Types.TIR_RequestParamsSchema = {
       includeCalls: true,
@@ -590,12 +625,8 @@ export class TripInfoRequest extends BaseRequest implements OJP_Types.TIR_Reques
     return params;
   }
 
-  public static initWithJourneyRef(journeyRef: string, journeyDate: Date = new Date()): TripInfoRequest {
-    const operatingDayRef = DateHelpers.formatDate(journeyDate).substring(0, 10);
-
-    const params = TripInfoRequest.DefaultRequestParams();
-    const request = new TripInfoRequest(journeyRef, operatingDayRef, params);
-    
+  private static Default(): TripInfoRequest {
+    const request = new TripInfoRequest('n/a', 'n/a', TripInfoRequest.DefaultRequestParams());
     return request;
   }
 
@@ -608,6 +639,15 @@ export class TripInfoRequest extends BaseRequest implements OJP_Types.TIR_Reques
   public static initWithResponseMock(mockText: string): TripInfoRequest {
     const request = TripInfoRequest.Default();
     request.mockResponseXML = mockText;
+    return request;
+  }
+
+  public static initWithJourneyRef(journeyRef: string, journeyDate: Date = new Date()): TripInfoRequest {
+    const operatingDayRef = DateHelpers.formatDate(journeyDate).substring(0, 10);
+
+    const params = TripInfoRequest.DefaultRequestParams();
+    const request = new TripInfoRequest(journeyRef, operatingDayRef, params);
+    
     return request;
   }
 
