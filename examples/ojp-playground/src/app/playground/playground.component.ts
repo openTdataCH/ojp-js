@@ -103,6 +103,7 @@ export class PlaygroundComponent implements OnInit {
     const trip1Schema = response1.value.tripResult[0].trip;
     const serializer = new OJP.XmlSerializer();
     const tripXML = serializer.serialize(trip1Schema, 'Trip');
+    console.log('serialized trip XML');
     console.log(tripXML);
 
     // b) from fromCoordsRef to StopPlaceRef
