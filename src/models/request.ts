@@ -477,6 +477,26 @@ export class FareRequest extends BaseRequest implements OJP_Types.FareRequestsSc
     return params;
   }
 
+  private static Default(): FareRequest {
+    const now = new Date();
+    const requestTimestamp = now.toISOString();
+
+    const request = new FareRequest(requestTimestamp, []);
+    return request;
+  }
+
+  public static initWithRequestMock(mockText: string): FareRequest {
+    const request = FareRequest.Default();
+    request.mockRequestXML = mockText;
+    return request;
+  }
+
+  public static initWithResponseMock(mockText: string): FareRequest {
+    const request = FareRequest.Default();
+    request.mockResponseXML = mockText;
+    return request;
+  }
+
   private static initWithOJPv1Trips(trips: OJP_Types.OJPv1_TripSchema[]): FareRequest {
     trips.map(tripV1 => {
       OJPv1_Helpers.cleanTripForFareRequest(tripV1);
