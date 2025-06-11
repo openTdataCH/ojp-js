@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 0.20.20 - 11.06.2025
+- updates SDK - [PR #181](https://github.com/openTdataCH/ojp-js/pull/181)
+  - adds TRR, FareRequest initialisers with mock request / response
+  - adds tests for FareRequest
+
 ## 0.20.19 - 11.06.2025
 - updates SDK - [PR #180](https://github.com/openTdataCH/ojp-js/pull/180)
   - updates `ojp-shared-types` (TR params `walkSpeed`)
