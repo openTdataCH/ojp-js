@@ -45,6 +45,7 @@ export class PlaygroundComponent implements OnInit {
     await this.runLR_LookupByName();
     await this.runLR_LookupByBBOX();
     await this.runLR_LookupByStopRef();
+    await this.runLR_LookupByNameFilterPtMode();
   }
 
   private async runLR_LookupByName() {
@@ -95,11 +96,35 @@ export class PlaygroundComponent implements OnInit {
     }
     console.log(response.value.placeResult);
   }
+
+  private async runLR_LookupByNameFilterPtMode() {
+    // 4) LIR lookup by name with filter by ptMode type
+    const searchTerm = 'Th';
+    const request = OJP.LocationInformationRequest.initWithLocationName(searchTerm);
+    if (request.restrictions) {
+      request.restrictions.type = ['stop'];
+      request.restrictions.includePtModes = true;
+      request.restrictions.modes = {
+        exclude: false,
+        ptMode: ['water'],
+      };
+    }
+
+    console.log('4) LIR lookup by name with filter by ptMode type');
+    const response = await this.ojpINT_SDK.fetchLocationInformationRequestResponse(request);
+    if (!response.ok) {
       console.error('fetchLocationInformationRequestResponse ERROR');
       console.log(response.error);
       return;
     }
+
+    console.log(request.requestInfo.requestXML);
     console.log(response.value.placeResult);
+    response.value.placeResult.forEach((placeResult, idx) => {
+      const name = placeResult.place.name.text;
+      const score = placeResult.probability ?? 'n/a';
+      console.log((idx + 1) + '.' + name + ' - ' + score);
+    });
   }
 
   private async runTR() {
