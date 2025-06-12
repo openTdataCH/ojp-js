@@ -9,16 +9,22 @@ import * as OJP from 'ojp-sdk'
 })
 export class PlaygroundComponent implements OnInit {
   private ojpSDK: OJP.SDK;
+  private ojpINT_SDK: OJP.SDK;
 
   constructor() {
     let httpConfig: OJP.HTTPConfig = {
       url: 'https://api.opentransportdata.swiss/ojp20',
       authToken: null,
     };
+    let httpConfigINT: OJP.HTTPConfig = {
+      url: 'https://odpch-api.clients.liip.ch/ojp20-beta',
+      authToken: null,
+    };
 
 
     const requestorRef = 'PlaygroundApp.v1';
     this.ojpSDK = new OJP.SDK(requestorRef, httpConfig, 'de');
+    this.ojpINT_SDK = new OJP.SDK(requestorRef, httpConfigINT, 'de');
   }
 
   async ngOnInit(): Promise<void> {
