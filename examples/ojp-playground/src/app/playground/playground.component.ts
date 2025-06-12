@@ -36,48 +36,64 @@ export class PlaygroundComponent implements OnInit {
     console.log('LIR Requests');
     console.log('======================');
 
+    await this.runLR_LookupByName();
+    await this.runLR_LookupByBBOX();
+    await this.runLR_LookupByStopRef();
+  }
+
+  private async runLR_LookupByName() {
     // 1) LIR lookup by name
     const searchTerm = 'Bern';
-    const request1 = OJP.LocationInformationRequest.initWithLocationName(searchTerm);
+    const request = OJP.LocationInformationRequest.initWithLocationName(searchTerm);
 
     console.log('1) LIR lookup by name');
-    const lirResponse1 = await this.ojpSDK.fetchLocationInformationRequestResponse(request1);
-    if (!lirResponse1.ok) {
+    const response = await this.ojpSDK.fetchLocationInformationRequestResponse(request);
+    if (!response.ok) {
       console.error('fetchLocationInformationRequestResponse ERROR');
-      console.log(lirResponse1.error);
+      console.log(response.error);
       return;
     }
-    console.log(lirResponse1.value.placeResult);
+    console.log(response.value.placeResult);
+  }
 
+  private async runLR_LookupByBBOX() {
     // 2) LIR lookup by BBOX
     
     // these are equivalent
     let bbox: string | number[] = '7.433259,46.937798,7.475252,46.954805';
     bbox = [7.433259, 46.937798, 7.475252, 46.954805];
     
-    const request2 = OJP.LocationInformationRequest.initWithBBOX(bbox, ['stop']);
+    const request = OJP.LocationInformationRequest.initWithBBOX(bbox, ['stop']);
 
     console.log('2) LIR lookup by BBOX');
-    const lirResponse2 = await this.ojpSDK.fetchLocationInformationRequestResponse(request2);
-    if (!lirResponse2.ok) {
+    const response = await this.ojpSDK.fetchLocationInformationRequestResponse(request);
+    if (!response.ok) {
       console.error('fetchLocationInformationRequestResponse ERROR');
-      console.log(lirResponse2.error);
+      console.log(response.error);
       return;
     }
-    console.log(lirResponse2.value.placeResult);
+    console.log(response.value.placeResult);
+  }
 
+  private async runLR_LookupByStopRef() {
     // 3) LIR lookup by stop reference
     const stopRef = '8507000';
-    const request3 = OJP.LocationInformationRequest.initWithPlaceRef(stopRef);
+    const request = OJP.LocationInformationRequest.initWithPlaceRef(stopRef);
 
     console.log('3) LIR lookup by StopRef');
-    const lirResponse3 = await this.ojpSDK.fetchLocationInformationRequestResponse(request3);
-    if (!lirResponse3.ok) {
+    const response = await this.ojpSDK.fetchLocationInformationRequestResponse(request);
+    if (!response.ok) {
       console.error('fetchLocationInformationRequestResponse ERROR');
-      console.log(lirResponse3.error);
+      console.log(response.error);
       return;
     }
-    console.log(lirResponse3.value.placeResult);
+    console.log(response.value.placeResult);
+  }
+      console.error('fetchLocationInformationRequestResponse ERROR');
+      console.log(response.error);
+      return;
+    }
+    console.log(response.value.placeResult);
   }
 
   private async runTR() {
