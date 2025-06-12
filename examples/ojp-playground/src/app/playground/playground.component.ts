@@ -9,16 +9,22 @@ import * as OJP from 'ojp-sdk'
 })
 export class PlaygroundComponent implements OnInit {
   private ojpSDK: OJP.SDK;
+  private ojpINT_SDK: OJP.SDK;
 
   constructor() {
     let httpConfig: OJP.HTTPConfig = {
       url: 'https://api.opentransportdata.swiss/ojp20',
       authToken: null,
     };
+    let httpConfigINT: OJP.HTTPConfig = {
+      url: 'https://odpch-api.clients.liip.ch/ojp20-beta',
+      authToken: null,
+    };
 
 
     const requestorRef = 'PlaygroundApp.v1';
     this.ojpSDK = new OJP.SDK(requestorRef, httpConfig, 'de');
+    this.ojpINT_SDK = new OJP.SDK(requestorRef, httpConfigINT, 'de');
   }
 
   async ngOnInit(): Promise<void> {
@@ -36,48 +42,89 @@ export class PlaygroundComponent implements OnInit {
     console.log('LIR Requests');
     console.log('======================');
 
+    await this.runLR_LookupByName();
+    await this.runLR_LookupByBBOX();
+    await this.runLR_LookupByStopRef();
+    await this.runLR_LookupByNameFilterPtMode();
+  }
+
+  private async runLR_LookupByName() {
     // 1) LIR lookup by name
     const searchTerm = 'Bern';
-    const request1 = OJP.LocationInformationRequest.initWithLocationName(searchTerm);
+    const request = OJP.LocationInformationRequest.initWithLocationName(searchTerm);
 
     console.log('1) LIR lookup by name');
-    const lirResponse1 = await this.ojpSDK.fetchLocationInformationRequestResponse(request1);
-    if (!lirResponse1.ok) {
+    const response = await this.ojpSDK.fetchLocationInformationRequestResponse(request);
+    if (!response.ok) {
       console.error('fetchLocationInformationRequestResponse ERROR');
-      console.log(lirResponse1.error);
+      console.log(response.error);
       return;
     }
-    console.log(lirResponse1.value.placeResult);
+    console.log(response.value.placeResult);
+  }
 
+  private async runLR_LookupByBBOX() {
     // 2) LIR lookup by BBOX
     
     // these are equivalent
     let bbox: string | number[] = '7.433259,46.937798,7.475252,46.954805';
     bbox = [7.433259, 46.937798, 7.475252, 46.954805];
     
-    const request2 = OJP.LocationInformationRequest.initWithBBOX(bbox, ['stop']);
+    const request = OJP.LocationInformationRequest.initWithBBOX(bbox, ['stop']);
 
     console.log('2) LIR lookup by BBOX');
-    const lirResponse2 = await this.ojpSDK.fetchLocationInformationRequestResponse(request2);
-    if (!lirResponse2.ok) {
+    const response = await this.ojpSDK.fetchLocationInformationRequestResponse(request);
+    if (!response.ok) {
       console.error('fetchLocationInformationRequestResponse ERROR');
-      console.log(lirResponse2.error);
+      console.log(response.error);
       return;
     }
-    console.log(lirResponse2.value.placeResult);
+    console.log(response.value.placeResult);
+  }
 
+  private async runLR_LookupByStopRef() {
     // 3) LIR lookup by stop reference
     const stopRef = '8507000';
-    const request3 = OJP.LocationInformationRequest.initWithPlaceRef(stopRef);
+    const request = OJP.LocationInformationRequest.initWithPlaceRef(stopRef);
 
     console.log('3) LIR lookup by StopRef');
-    const lirResponse3 = await this.ojpSDK.fetchLocationInformationRequestResponse(request3);
-    if (!lirResponse3.ok) {
+    const response = await this.ojpSDK.fetchLocationInformationRequestResponse(request);
+    if (!response.ok) {
       console.error('fetchLocationInformationRequestResponse ERROR');
-      console.log(lirResponse3.error);
+      console.log(response.error);
       return;
     }
-    console.log(lirResponse3.value.placeResult);
+    console.log(response.value.placeResult);
+  }
+
+  private async runLR_LookupByNameFilterPtMode() {
+    // 4) LIR lookup by name with filter by ptMode type
+    const searchTerm = 'Th';
+    const request = OJP.LocationInformationRequest.initWithLocationName(searchTerm);
+    if (request.restrictions) {
+      request.restrictions.type = ['stop'];
+      request.restrictions.includePtModes = true;
+      request.restrictions.modes = {
+        exclude: false,
+        ptMode: ['water'],
+      };
+    }
+
+    console.log('4) LIR lookup by name with filter by ptMode type');
+    const response = await this.ojpINT_SDK.fetchLocationInformationRequestResponse(request);
+    if (!response.ok) {
+      console.error('fetchLocationInformationRequestResponse ERROR');
+      console.log(response.error);
+      return;
+    }
+
+    console.log(request.requestInfo.requestXML);
+    console.log(response.value.placeResult);
+    response.value.placeResult.forEach((placeResult, idx) => {
+      const name = placeResult.place.name.text;
+      const score = placeResult.probability ?? 'n/a';
+      console.log((idx + 1) + '.' + name + ' - ' + score);
+    });
   }
 
   private async runTR() {
@@ -85,59 +132,93 @@ export class PlaygroundComponent implements OnInit {
     console.log('TR Requests');
     console.log('======================');
 
+    await this.runTR_StopsPlaceRef();
+    await this.runTR_Coords();
+    await this.runTR_WalkSpeed();
+    await this.runTR_ModeFilter();
+  }
+
+  private async runTR_StopsPlaceRef() {
     // a) from StopPlaceRef to StopPlaceRef
     const fromStopRef = '8507000';  // Bern
     const toStopRef = '8503000';    // Zürich
 
-    const request1 = OJP.TripRequest.initWithPlaceRefsOrCoords(fromStopRef, toStopRef);
-    const response1 = await this.ojpSDK.fetchTripRequestResponse(request1);
-    if (!response1.ok) {
+    const request = OJP.TripRequest.initWithPlaceRefsOrCoords(fromStopRef, toStopRef);
+    const response = await this.ojpSDK.fetchTripRequestResponse(request);
+    if (!response.ok) {
       console.error('fetchTripRequestResponse ERROR');
-      console.log(response1.error);
+      console.log(response.error);
       return;
     }
     console.log('A) TR with from/to stopRefs');
-    console.log(response1.value);
+    console.log(response.value);
 
     // serialize the object back to XML string
-    const trip1Schema = response1.value.tripResult[0].trip;
+    const trip1Schema = response.value.tripResult[0].trip;
     const serializer = new OJP.XmlSerializer();
     const tripXML = serializer.serialize(trip1Schema, 'Trip');
     console.log('serialized trip XML');
-    console.log(tripXML);
+    // console.log(tripXML);
+  }
 
+  private async runTR_Coords() {
     // b) from fromCoordsRef to StopPlaceRef
     // coords in strings format, latitude,longitude
     const fromCoordsRef = '46.957522,7.431170';
     const toCoordsRef = '46.931849,7.485132';
 
-    const request2 = OJP.TripRequest.initWithPlaceRefsOrCoords(fromCoordsRef, toCoordsRef);
-    if (request2.params) {
-      request2.params.includeLegProjection = true;
+    const request = OJP.TripRequest.initWithPlaceRefsOrCoords(fromCoordsRef, toCoordsRef);
+    if (request.params) {
+      request.params.includeLegProjection = true;
     }
 
-    const response2 = await this.ojpSDK.fetchTripRequestResponse(request2);
-    if (!response2.ok) {
+    const response = await this.ojpSDK.fetchTripRequestResponse(request);
+    if (!response.ok) {
       console.error('fetchTripRequestResponse ERROR');
-      console.log(response2.error);
+      console.log(response.error);
       return;
     }
     console.log('B) TR with from/to coords');
-    console.log(response2.value);
+    console.log(response.value);
+  }
 
-    const request3 = OJP.TripRequest.initWithPlaceRefsOrCoords('8507099', '8511418');
-    if (request3.params) {
-      request3.params.walkSpeed = 400;
+  private async runTR_WalkSpeed() {
+    // C) TR with walkSpeed
+    const request = OJP.TripRequest.initWithPlaceRefsOrCoords('8507099', '8511418');
+    if (request.params) {
+      request.params.walkSpeed = 400;
     }
-    const response3 = await this.ojpSDK.fetchTripRequestResponse(request3);
-    if (!response3.ok) {
+    const response = await this.ojpSDK.fetchTripRequestResponse(request);
+    if (!response.ok) {
       console.error('fetchTripRequestResponse ERROR');
-      console.log(response3.error);
+      console.log(response.error);
       return;
     }
     console.log('C) TR with walkSpeed');
-    console.log(response3.value);
-    console.log(request3.requestInfo.requestXML);
+    console.log(response.value);
+    console.log(request.requestInfo.requestXML);
+  }
+
+  private async runTR_ModeFilter() {
+    // D) TR with modeFilter - Thun(See) - Spiez(See)
+    const request = OJP.TripRequest.initWithPlaceRefsOrCoords('8507150', '8507154');
+    if (request.params) {
+      request.params.modeAndModeOfOperationFilter = [
+        {
+          exclude: false,
+          ptMode: ['water'],
+        }
+      ];
+    }
+    const response = await this.ojpSDK.fetchTripRequestResponse(request);
+    if (!response.ok) {
+      console.error('fetchTripRequestResponse ERROR');
+      console.log(response.error);
+      return;
+    }
+    console.log('D) TR with modeFilter');
+    console.log(request.requestInfo.requestXML);
+    console.log(response.value);
   }
 
   private async runSER() {
@@ -145,6 +226,10 @@ export class PlaygroundComponent implements OnInit {
     console.log('SER Requests');
     console.log('======================');
 
+    await this.runSER_LookupByStopRef();
+  }
+
+  private async runSER_LookupByStopRef() {
     const stopRef = '8507000'; // Bern
     const request1 = OJP.StopEventRequest.initWithPlaceRefAndDate(stopRef, new Date());
     
