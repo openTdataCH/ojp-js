@@ -126,7 +126,7 @@ export class PlaygroundComponent implements OnInit {
     const serializer = new OJP.XmlSerializer();
     const tripXML = serializer.serialize(trip1Schema, 'Trip');
     console.log('serialized trip XML');
-    console.log(tripXML);
+    // console.log(tripXML);
   }
 
   private async runTR_Coords() {
