@@ -101,59 +101,70 @@ export class PlaygroundComponent implements OnInit {
     console.log('TR Requests');
     console.log('======================');
 
+    await this.runTR_StopsPlaceRef();
+    await this.runTR_Coords();
+    await this.runTR_WalkSpeed();
+  }
+
+  private async runTR_StopsPlaceRef() {
     // a) from StopPlaceRef to StopPlaceRef
     const fromStopRef = '8507000';  // Bern
     const toStopRef = '8503000';    // Zürich
 
-    const request1 = OJP.TripRequest.initWithPlaceRefsOrCoords(fromStopRef, toStopRef);
-    const response1 = await this.ojpSDK.fetchTripRequestResponse(request1);
-    if (!response1.ok) {
+    const request = OJP.TripRequest.initWithPlaceRefsOrCoords(fromStopRef, toStopRef);
+    const response = await this.ojpSDK.fetchTripRequestResponse(request);
+    if (!response.ok) {
       console.error('fetchTripRequestResponse ERROR');
-      console.log(response1.error);
+      console.log(response.error);
       return;
     }
     console.log('A) TR with from/to stopRefs');
-    console.log(response1.value);
+    console.log(response.value);
 
     // serialize the object back to XML string
-    const trip1Schema = response1.value.tripResult[0].trip;
+    const trip1Schema = response.value.tripResult[0].trip;
     const serializer = new OJP.XmlSerializer();
     const tripXML = serializer.serialize(trip1Schema, 'Trip');
     console.log('serialized trip XML');
     console.log(tripXML);
+  }
 
+  private async runTR_Coords() {
     // b) from fromCoordsRef to StopPlaceRef
     // coords in strings format, latitude,longitude
     const fromCoordsRef = '46.957522,7.431170';
     const toCoordsRef = '46.931849,7.485132';
 
-    const request2 = OJP.TripRequest.initWithPlaceRefsOrCoords(fromCoordsRef, toCoordsRef);
-    if (request2.params) {
-      request2.params.includeLegProjection = true;
+    const request = OJP.TripRequest.initWithPlaceRefsOrCoords(fromCoordsRef, toCoordsRef);
+    if (request.params) {
+      request.params.includeLegProjection = true;
     }
 
-    const response2 = await this.ojpSDK.fetchTripRequestResponse(request2);
-    if (!response2.ok) {
+    const response = await this.ojpSDK.fetchTripRequestResponse(request);
+    if (!response.ok) {
       console.error('fetchTripRequestResponse ERROR');
-      console.log(response2.error);
+      console.log(response.error);
       return;
     }
     console.log('B) TR with from/to coords');
-    console.log(response2.value);
+    console.log(response.value);
+  }
 
-    const request3 = OJP.TripRequest.initWithPlaceRefsOrCoords('8507099', '8511418');
-    if (request3.params) {
-      request3.params.walkSpeed = 400;
+  private async runTR_WalkSpeed() {
+    // C) TR with walkSpeed
+    const request = OJP.TripRequest.initWithPlaceRefsOrCoords('8507099', '8511418');
+    if (request.params) {
+      request.params.walkSpeed = 400;
     }
-    const response3 = await this.ojpSDK.fetchTripRequestResponse(request3);
-    if (!response3.ok) {
+    const response = await this.ojpSDK.fetchTripRequestResponse(request);
+    if (!response.ok) {
       console.error('fetchTripRequestResponse ERROR');
-      console.log(response3.error);
+      console.log(response.error);
       return;
     }
     console.log('C) TR with walkSpeed');
-    console.log(response3.value);
-    console.log(request3.requestInfo.requestXML);
+    console.log(response.value);
+    console.log(request.requestInfo.requestXML);
   }
 
   private async runSER() {
