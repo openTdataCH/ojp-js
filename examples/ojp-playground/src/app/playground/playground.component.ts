@@ -172,6 +172,10 @@ export class PlaygroundComponent implements OnInit {
     console.log('SER Requests');
     console.log('======================');
 
+    await this.runSER_LookupByStopRef();
+  }
+
+  private async runSER_LookupByStopRef() {
     const stopRef = '8507000'; // Bern
     const request1 = OJP.StopEventRequest.initWithPlaceRefAndDate(stopRef, new Date());
     
