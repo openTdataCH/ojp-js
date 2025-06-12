@@ -104,6 +104,7 @@ export class PlaygroundComponent implements OnInit {
     await this.runTR_StopsPlaceRef();
     await this.runTR_Coords();
     await this.runTR_WalkSpeed();
+    await this.runTR_ModeFilter();
   }
 
   private async runTR_StopsPlaceRef() {
@@ -165,6 +166,28 @@ export class PlaygroundComponent implements OnInit {
     console.log('C) TR with walkSpeed');
     console.log(response.value);
     console.log(request.requestInfo.requestXML);
+  }
+
+  private async runTR_ModeFilter() {
+    // D) TR with modeFilter - Thun(See) - Spiez(See)
+    const request = OJP.TripRequest.initWithPlaceRefsOrCoords('8507150', '8507154');
+    if (request.params) {
+      request.params.modeAndModeOfOperationFilter = [
+        {
+          exclude: false,
+          ptMode: ['water'],
+        }
+      ];
+    }
+    const response = await this.ojpSDK.fetchTripRequestResponse(request);
+    if (!response.ok) {
+      console.error('fetchTripRequestResponse ERROR');
+      console.log(response.error);
+      return;
+    }
+    console.log('D) TR with modeFilter');
+    console.log(request.requestInfo.requestXML);
+    console.log(response.value);
   }
 
   private async runSER() {
