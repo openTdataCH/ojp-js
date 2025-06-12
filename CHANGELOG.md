@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 0.20.21 - 12.06.2025
+- LIR filter with PtMode - [PR #182](https://github.com/openTdataCH/ojp-js/pull/182)
+  - use latest `ojp-shared-types` package
+  - updates examples for PtMode filter (TR, LIR)
+
 ## 0.20.20 - 11.06.2025
 - updates SDK - [PR #181](https://github.com/openTdataCH/ojp-js/pull/181)
   - adds TRR, FareRequest initialisers with mock request / response
