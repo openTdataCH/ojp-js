@@ -67,7 +67,7 @@ export class TripContinuousLeg extends TripLeg {
     const tripLeg = new TripContinuousLeg(legType, legIDx, legDistance, legStartPlaceRef, legEndPlaceRef);
     tripLeg.legDuration = Duration.initWithTreeNode(treeNode);
 
-    tripLeg.pathGuidance = PathGuidance.initWithTreeNode(treeNode);
+    tripLeg.pathGuidance = PathGuidance.initWithTreeNode(treeNode, xmlConfig);
     
     tripLeg.legTransportMode = tripLeg.computeLegTransportModeFromTreeNode(treeNode, legType);
     tripLeg.transferMode = tripLeg.computeLegTransferModeFromTreeNode(treeNode, xmlConfig);
