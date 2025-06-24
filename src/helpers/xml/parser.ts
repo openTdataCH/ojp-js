@@ -104,15 +104,6 @@ export function parseXML<T>(xml: string, parentPath: string = ''): T {
       }
 
       for (const key1 in value) {
-        const lastItem = (path.at(-1) ?? '');
-        const stringKey = lastItem + '.' + key1;
-
-        if (stringKey in OJP_Types.OpenAPI_Dependencies.MapStringValues) {
-          // fast-xml-parser attempts to converts everything
-          //    conform to schema id needed, i.e. String values
-          value[key1] = String(value[key1]);
-        }
-
         if (typeof value[key1] === 'object') {
           // check for #text keys that are added for text nodes that have attributes
           if (Object.keys(value[key1]).includes('#text')) {
@@ -127,6 +118,15 @@ export function parseXML<T>(xml: string, parentPath: string = ''): T {
             // replace the object with literal value of #text
             value[key1] = value[key1]['#text'];
           }
+        }
+
+        // for .text properties we need the before step (#text parsing) to be executed first
+        const lastItem = (path.at(-1) ?? '');
+        const stringKey = lastItem + '.' + key1;
+        if (stringKey in OJP_Types.OpenAPI_Dependencies.MapStringValues) {
+          // fast-xml-parser attempts to converts everything
+          //    conform to schema id needed, i.e. String values
+          value[key1] = String(value[key1]);
         }
       }
     }
