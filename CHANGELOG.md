@@ -1,7 +1,7 @@
 # CHANGELOG
 
 ## 0.20.22 - 24.06.2025
-- use latest `ojp-shared-types`
+- use latest `ojp-shared-types` - [PR #184](https://github.com/openTdataCH/ojp-js/pull/184)
 
 ## 0.20.21 - 12.06.2025
 - LIR filter with PtMode - [PR #182](https://github.com/openTdataCH/ojp-js/pull/182)
