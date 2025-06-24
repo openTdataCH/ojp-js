@@ -1,7 +1,8 @@
 # CHANGELOG
 
 ## 0.18.8 - 24.06.2025
-- Adds conditional code for handling guidance nodes - [PR #186](https://github.com/openTdataCH/ojp-js/pull/186)
+- adds conditional code for handling guidance nodes - [PR #186](https://github.com/openTdataCH/ojp-js/pull/186)
+- adds `WalkSpeed` to TR request params - [PR #187](https://github.com/openTdataCH/ojp-js/pull/187)
 
 ## 0.18.7 - 05.06.2025
 - Unify OJP branches - [PR #174](https://github.com/openTdataCH/ojp-js/pull/177)
