@@ -3,7 +3,7 @@ import * as OJP_Types from 'ojp-shared-types';
 import { Language, RequestInfo, XML_Config } from "../types/_all";
 import { Place, PlaceRef, Trip } from './ojp';
 import { OJPv1_Helpers } from '../helpers/ojp-v1';
-import { buildRootXML, buildXML } from "../helpers/xml/builder";
+import { buildRootXML } from "../helpers/xml/builder";
 import { DefaultXML_Config } from "../constants";
 import { DateHelpers } from '../helpers';
 
