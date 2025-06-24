@@ -1,3 +1,4 @@
+import { XML_Config } from "../types/_all";
 import { TreeNode } from "../xml/tree-node";
 import { LinkProjection } from "./link-projection";
 
@@ -8,7 +9,7 @@ export class PathGuidance {
     this.sections = sections;
   }
 
-  public static initWithTreeNode(treeNode: TreeNode): PathGuidance | null {
+  public static initWithTreeNode(treeNode: TreeNode, xmlConfig: XML_Config): PathGuidance | null {
     const pathGuidanceTreeNode = treeNode.findChildNamed('PathGuidance');
     if (pathGuidanceTreeNode === null) {
       return null;
@@ -18,7 +19,7 @@ export class PathGuidance {
 
     const sectionTreeNodes = pathGuidanceTreeNode.findChildrenNamed('PathGuidanceSection');
     sectionTreeNodes.forEach(sectionTreeNode => {
-      const pathGuidanceSection = PathGuidanceSection.initWithSectionTreeNode(sectionTreeNode);
+      const pathGuidanceSection = PathGuidanceSection.initWithSectionTreeNode(sectionTreeNode, xmlConfig);
       if (pathGuidanceSection) {
         sections.push(pathGuidanceSection)
       }
@@ -41,7 +42,7 @@ class PathGuidanceSection {
     this.turnAction = null
   }
 
-  public static initWithSectionTreeNode(sectionTreeNode: TreeNode): PathGuidanceSection {
+  public static initWithSectionTreeNode(sectionTreeNode: TreeNode, xmlConfig: XML_Config): PathGuidanceSection {
     const pathGuidanceSection = new PathGuidanceSection();
     const trackSectionTreeNode = sectionTreeNode.findChildNamed('TrackSection');
 
@@ -50,7 +51,10 @@ class PathGuidanceSection {
     }
 
     pathGuidanceSection.guidanceAdvice = sectionTreeNode.findTextFromChildNamed('GuidanceAdvice');
-    pathGuidanceSection.turnAction = sectionTreeNode.findTextFromChildNamed('TurnAction');
+
+    const isOJPv2 = xmlConfig.ojpVersion === '2.0';
+    const turnActionNodePath = isOJPv2 ? 'TurnDescription/Text' : 'TurnAction';
+    pathGuidanceSection.turnAction = sectionTreeNode.findTextFromChildNamed(turnActionNodePath);
 
     return pathGuidanceSection;
   }
