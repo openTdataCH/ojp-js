@@ -39,6 +39,8 @@ export class TripRequest extends OJPBaseRequest {
   public enableExtensions: boolean;
   public useRealTimeDataType: UseRealtimeDataEnumeration;
 
+  public walkSpeedDeviation: number | null;
+
   constructor(
     stageConfig: ApiConfig, 
     language: Language,
@@ -74,6 +76,7 @@ export class TripRequest extends OJPBaseRequest {
 
     this.enableExtensions = true;
     this.useRealTimeDataType = 'explanatory';
+    this.walkSpeedDeviation = null;
 
     this.response = null;
   }
@@ -293,6 +296,12 @@ export class TripRequest extends OJPBaseRequest {
       this.publicTransportModes.forEach(publicTransportMode => {
         modeContainerNode.ele(ojpPrefix + 'PtMode', publicTransportMode);
       });
+    }
+
+    if (isOJPv2) {
+      if (this.walkSpeedDeviation !== null) {
+        paramsNode.ele(ojpPrefix + 'WalkSpeed', this.walkSpeedDeviation);
+      }
     }
 
     if (isOJPv2) {
