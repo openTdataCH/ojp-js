@@ -1,7 +1,7 @@
 # CHANGELOG
 
 ## 0.18.8 - 24.06.2025
-- fix OJP 2.0 Guidance text - [PR #186](https://github.com/openTdataCH/ojp-js/pull/186)
+- Adds conditional code for handling guidance nodes - [PR #186](https://github.com/openTdataCH/ojp-js/pull/186)
 
 ## 0.18.7 - 05.06.2025
 - Unify OJP branches - [PR #174](https://github.com/openTdataCH/ojp-js/pull/177)
