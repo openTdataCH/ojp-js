@@ -40,7 +40,7 @@ Code / Demo App Implementation
 ```
   "dependencies": {
     "ojp-shared-types": "0.0.12",
-    "ojp-sdk-next": "0.20.22",
+    "ojp-sdk-next": "0.20.23",
   }
 ```
 
