@@ -39,8 +39,8 @@ Code / Demo App Implementation
 - include [ojp-sdk-next](https://www.npmjs.com/package/ojp-sdk-next), [ojp-shared-types](https://www.npmjs.com/package/ojp-shared-types) packages in the `./package.json` dependencies of the project 
 ```
   "dependencies": {
-    "ojp-shared-types": "0.0.11",
-    "ojp-sdk-next": "0.20.21",
+    "ojp-shared-types": "0.0.12",
+    "ojp-sdk-next": "0.20.22",
   }
 ```
 
