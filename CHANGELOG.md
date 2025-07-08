@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 0.20.24 - 08.07.2025
+- use latest `ojp-shared-types`
+
 ## 0.20.23 - 24.06.2025
 - fix parsing order - [PR #185](https://github.com/openTdataCH/ojp-js/pull/185)
 
