@@ -1,7 +1,7 @@
 {
   "name": "ojp-sdk-next",
   "description": "OJP (Open Journey Planner) Javascript SDK",
-  "version": "0.20.24",
+  "version": "0.20.25",
   "type": "module",
   "main": "./lib/index.cjs",
   "module": "./lib/index.js",
