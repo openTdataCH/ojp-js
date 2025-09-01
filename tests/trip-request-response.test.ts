@@ -78,4 +78,19 @@ describe('OJP Test TripRequest Response', () => {
     expect(trip.delayed).toBeFalsy();
     expect(trip.infeasible).toBe(true);
   })
+
+  test('Test TR response <ExpectedDepartureOccupancy> array', () => {
+    const legBoard = trips[0].leg[0].timedLeg?.legBoard ?? null;
+    const legAlight = trips[0].leg[0].timedLeg?.legAlight ?? null;
+
+    if (legBoard === null || legAlight === null) {
+      throw new Error('Expected leg board / alight');
+    }
+
+    // LegBoard has 2 ExpectedDepartureOccupancy nodes
+    expect(legBoard.expectedDepartureOccupancy?.length).toBe(2);
+
+    // LegAlight has only one ExpectedDepartureOccupancy node
+    expect(legAlight.expectedDepartureOccupancy?.length).toBe(1);
+  });
 });

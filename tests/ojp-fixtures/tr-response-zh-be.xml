@@ -836,6 +836,14 @@
                     <EstimatedTime>2025-03-26T08:31:30Z</EstimatedTime>
                   </ServiceDeparture>
                   <Order>1</Order>
+                  <siri:ExpectedDepartureOccupancy>
+                    <siri:FareClass>firstClass</siri:FareClass>
+                    <siri:OccupancyLevel>manySeatsAvailable</siri:OccupancyLevel>
+                  </siri:ExpectedDepartureOccupancy>
+                  <siri:ExpectedDepartureOccupancy>
+                    <siri:FareClass>secondClass </siri:FareClass>
+                    <siri:OccupancyLevel>fewSeatsAvailable</siri:OccupancyLevel>
+                  </siri:ExpectedDepartureOccupancy>
                 </LegBoard>
                 <LegAlight>
                   <siri:StopPointRef>ch:1:sloid:3000:501:33</siri:StopPointRef>
@@ -856,6 +864,10 @@
                     <EstimatedTime>2025-03-26T09:27:24Z</EstimatedTime>
                   </ServiceArrival>
                   <Order>3</Order>
+                  <siri:ExpectedDepartureOccupancy>
+                    <siri:FareClass>firstClass</siri:FareClass>
+                    <siri:OccupancyLevel>manySeatsAvailable</siri:OccupancyLevel>
+                  </siri:ExpectedDepartureOccupancy>
                 </LegAlight>
                 <Service>
                   <OperatingDayRef>2025-03-26</OperatingDayRef>
