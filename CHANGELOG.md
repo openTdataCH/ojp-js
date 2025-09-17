@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 0.20.27 - 17.09.2025
+- TR car filter - [add car routing support #190](https://github.com/openTdataCH/ojp-js/issues/190) - [PR #193](https://github.com/openTdataCH/ojp-js/pull/194)
+
 ## 0.20.26 - 01.09.2025
 - use latest `ojp-shared-types` - [PR #193](https://github.com/openTdataCH/ojp-js/pull/193)
 
