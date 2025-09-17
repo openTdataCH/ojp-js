@@ -169,6 +169,22 @@ export class TripRequest extends BaseRequest implements OJP_Types.TripRequestSch
 
     this.params.includeLegProjection = true;
   }
+
+  public setCarRequest() {
+    if (!this.params) {
+      return;
+    }
+
+    this.params.numberOfResults = 0;
+
+    this.params.modeAndModeOfOperationFilter = [
+      {
+        railSubmode: 'vehicleTunnelTransportRailService',
+        waterSubmode: 'localCarFerry',
+      }
+    ];
+  }
+
   public buildRequestXML(language: Language, requestorRef: string, xmlConfig: XML_Config = DefaultXML_Config): string {
     const requestOJP: OJP_Types.TripRequestOJP = {
       OJPRequest: {
