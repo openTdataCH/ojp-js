@@ -197,22 +197,28 @@ export class LocationInformationRequest extends OJPBaseRequest {
     const restrictionsNode = requestNode.ele(ojpPrefix + "Restrictions");
 
     this.restrictionTypes.forEach(restrictionType => {
-      restrictionsNode.ele(ojpPrefix + "Type", restrictionType);
-
       const isPOI = restrictionType === 'poi';
-      if (isPOI && this.poiRestriction) {
-        const poiCategoryNode = restrictionsNode.ele(ojpPrefix + "PointOfInterestFilter").ele(ojpPrefix + "PointOfInterestCategory");
+      if (isPOI) {
+        if (this.poiRestriction) {
+          if (isOJPv2) {
+          } else {
+            restrictionsNode.ele(ojpPrefix + "Type", restrictionType);
+            const poiCategoryNode = restrictionsNode.ele(ojpPrefix + "PointOfInterestFilter").ele(ojpPrefix + "PointOfInterestCategory");
 
-        const isSharedMobility = this.poiRestriction.poiType === 'shared_mobility';
-        const poiOsmTagKey = isSharedMobility ? 'amenity' : 'POI';
-        this.poiRestriction.tags.forEach((poiOsmTag) => {
-          const osmTagNode = poiCategoryNode.ele(ojpPrefix + "OsmTag");
-          osmTagNode.ele(ojpPrefix + "Tag", poiOsmTagKey);
-          osmTagNode.ele(ojpPrefix + "Value", poiOsmTag);
-        });
+            const isSharedMobility = this.poiRestriction.poiType === 'shared_mobility';
+            const poiOsmTagKey = isSharedMobility ? 'amenity' : 'POI';
+            this.poiRestriction.tags.forEach((poiOsmTag) => {
+              const osmTagNode = poiCategoryNode.ele(ojpPrefix + "OsmTag");
+              osmTagNode.ele(ojpPrefix + "Tag", poiOsmTagKey);
+              osmTagNode.ele(ojpPrefix + "Value", poiOsmTag);
+            });
+          }
+        }
+      } else {
+        restrictionsNode.ele(ojpPrefix + "Type", restrictionType);
       }
     });
-
+    
     const numberOfResults = this.numberOfResults ?? 10;
     restrictionsNode.ele(ojpPrefix + "NumberOfResults", numberOfResults);
 
