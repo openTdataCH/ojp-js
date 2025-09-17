@@ -236,15 +236,6 @@ export class TripContinuousLeg extends TripLeg {
     return this.legTransportMode === 'taxi' || this.legTransportMode === 'others-drive-car';
   }
 
-  public formatDistance(): string {
-    if (this.legDistance > 1000) {
-      const distanceKmS = (this.legDistance / 1000).toFixed(1) + ' km'
-      return distanceKmS
-    }
-
-    return this.legDistance + ' m'
-  }
-
   public addToXMLNode(parentNode: XMLElement, xmlConfig: XML_Config) {
     const ojpPrefix = xmlConfig.defaultNS === 'ojp' ? '' : 'ojp:';
     const siriPrefix = xmlConfig.defaultNS === 'siri' ? '' : 'siri:';
