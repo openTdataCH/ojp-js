@@ -115,6 +115,7 @@ export class Location {
       });
     }
 
+    // OJP 1.0
     // <ojp:Extension>
     //     <ojp:LocationExtensionStructure>
     //         <ojp:num_vehicles_available>1</ojp:num_vehicles_available>
