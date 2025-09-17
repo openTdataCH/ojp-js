@@ -138,6 +138,22 @@ export class TripRequest extends BaseRequest implements OJP_Types.TripRequestSch
     this.origin.depArrTime = newDatetime.toISOString();
   }
 
+
+  public disableLinkProkection() {
+    if (!this.params) {
+      return;
+    }
+
+    this.params.includeLegProjection = false;
+  }
+
+  public enableLinkProkection() {
+    if (!this.params) {
+      return;
+    }
+
+    this.params.includeLegProjection = true;
+  }
   public buildRequestXML(language: Language, requestorRef: string, xmlConfig: XML_Config = DefaultXML_Config): string {
     const requestOJP: OJP_Types.TripRequestOJP = {
       OJPRequest: {
