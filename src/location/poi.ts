@@ -1,3 +1,4 @@
+import { XML_Config } from "../types/_all"
 import { RestrictionPoiOSMTag } from "../types/lir-restrictions.type"
 import { TreeNode } from "../xml/tree-node"
 
@@ -23,7 +24,7 @@ export class PointOfInterest {
     this.categoryTags = categoryTags
   }
 
-  public static initWithLocationTreeNode(locationTreeNode: TreeNode): PointOfInterest | null {
+  public static initWithLocationTreeNode(locationTreeNode: TreeNode, xmlConfig: XML_Config): PointOfInterest | null {
     const treeNode = locationTreeNode.findChildNamed('PointOfInterest');
     if (treeNode === null) {
       return null;

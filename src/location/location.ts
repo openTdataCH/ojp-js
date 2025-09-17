@@ -50,7 +50,7 @@ export class Location {
     const locationNamePath = xmlConfig.ojpVersion === '2.0' ? 'Name/Text' : 'LocationName/Text';
     location.locationName = treeNode.findTextFromChildNamed(locationNamePath);
     
-    location.poi = PointOfInterest.initWithLocationTreeNode(treeNode);
+    location.poi = PointOfInterest.initWithLocationTreeNode(treeNode, xmlConfig);
     location.stopPlace = StopPlace.initWithLocationTreeNode(treeNode);
     location.topographicPlace = TopographicPlace.initWithLocationTreeNode(treeNode);
 
