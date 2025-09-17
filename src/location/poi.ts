@@ -10,18 +10,20 @@ const mapPoiSubCategoryIcons = <Record<RestrictionPoiOSMTag, string[]>>{
 }
 
 export class PointOfInterest {
-  public code: string
-  public name: string
-  public category: RestrictionPoiOSMTag
-  public subCategory: string | null
-  public categoryTags: string[]
+  public code: string;
+  public name: string;
+  public category: RestrictionPoiOSMTag;
+  public subCategory: string | null;
+  public categoryTags: string[];
+  public mapAdditionalInformation: Record<string, string>;
 
-  constructor(code: string, name: string, category: RestrictionPoiOSMTag, subCategory: string | null, categoryTags: string[]) {
-    this.code = code
-    this.name = name
-    this.category = category
-    this.subCategory = subCategory
-    this.categoryTags = categoryTags
+  constructor(code: string, name: string, category: RestrictionPoiOSMTag, subCategory: string | null, categoryTags: string[], mapAdditionalInformation: Record<string, string>) {
+    this.code = code;
+    this.name = name;
+    this.category = category;
+    this.subCategory = subCategory;
+    this.categoryTags = categoryTags;
+    this.mapAdditionalInformation = mapAdditionalInformation;
   }
 
   public static initWithLocationTreeNode(locationTreeNode: TreeNode, xmlConfig: XML_Config): PointOfInterest | null {
@@ -74,7 +76,23 @@ export class PointOfInterest {
       category = 'none';
     }
 
-    const poi = new PointOfInterest(code, name, category, subCategory, categoryTags);
+    // POIAdditionalInformation is OJP v2 only
+    const mapAdditionalInformation: Record<string, string> = {};
+    if (isOJPv2) {
+      const poiAdditonalInformationWrapperNode = treeNode.findChildNamed('POIAdditionalInformation');
+      if (poiAdditonalInformationWrapperNode) {
+        const additonalInfoNodes = poiAdditonalInformationWrapperNode.findChildrenNamed('POIAdditionalInformation');
+        additonalInfoNodes.forEach(additonalInfoNode => {
+          const keyText = additonalInfoNode.findTextFromChildNamed('Key');
+          const valueText = additonalInfoNode.findTextFromChildNamed('Value');
+          if ((keyText !== null) && (valueText !== null)) {
+            mapAdditionalInformation[keyText] = valueText;
+          }
+        });
+      }
+    }
+    
+    const poi = new PointOfInterest(code, name, category, subCategory, categoryTags, mapAdditionalInformation);
     return poi;
   }
 
