@@ -202,6 +202,14 @@ export class TripContinuousLeg extends TripLeg {
       return 'walk';
     }
 
+    if (legModeS === 'bicycle.own') {
+      return 'cycle';
+    }
+
+    if (legModeS === 'scooter.own') {
+      return 'escooter_rental';
+    }
+
     return null
   }
 
