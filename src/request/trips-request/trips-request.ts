@@ -81,9 +81,9 @@ export class TripRequest extends OJPBaseRequest {
     this.response = null;
   }
 
-  private static Empty(xmlConfig: XML_Config, requestorRef: string): TripRequest {
+  private static Empty(xmlConfig: XML_Config, requestorRef: string, stageConfig: ApiConfig = EMPTY_API_CONFIG): TripRequest {
     const emptyTripLocationPoint = TripLocationPoint.Empty();
-    const request = new TripRequest(EMPTY_API_CONFIG, 'en', xmlConfig, requestorRef, emptyTripLocationPoint, emptyTripLocationPoint, new Date(), 'Dep');
+    const request = new TripRequest(stageConfig, 'en', xmlConfig, requestorRef, emptyTripLocationPoint, emptyTripLocationPoint, new Date(), 'Dep');
 
     return request;
   }
@@ -95,8 +95,8 @@ export class TripRequest extends OJPBaseRequest {
     return request;
   }
 
-  public static initWithRequestMock(mockText: string, xmlConfig: XML_Config, requestorRef: string) {
-    const request = TripRequest.Empty(xmlConfig, requestorRef);
+  public static initWithRequestMock(stageConfig: ApiConfig, mockText: string, xmlConfig: XML_Config, requestorRef: string) {
+    const request = TripRequest.Empty(xmlConfig, requestorRef, stageConfig);
     request.mockRequestXML = mockText;
     request.requestInfo.requestXML = mockText;
     
@@ -198,6 +198,29 @@ export class TripRequest extends OJPBaseRequest {
     const isMonomodal = modeType === "monomodal";
 
     const transportMode = this.transportMode;
+    // https://vdvde.github.io/OJP/develop/documentation-tables/ojp.html#type_ojp__PersonalModesEnumeration
+    const personalMode = (() => {
+      if (transportMode === 'bicycle_rental') {
+        return 'bicycle';
+      }
+
+      if (transportMode === 'escooter_rental') {
+        return 'scooter';
+      }
+
+      if (transportMode === 'car_sharing') {
+        return 'car';
+      }
+
+      return null;
+    })();
+
+    const sharingModes: IndividualTransportMode[] = [
+      "bicycle_rental",
+      "car_sharing",
+      "escooter_rental",
+    ];
+    const isSharingMode = sharingModes.indexOf(transportMode) !== -1;    
 
     const nameNodeName = isOJPv2 ? 'Name' : 'LocationName';
 
@@ -245,22 +268,41 @@ export class TripRequest extends OJPBaseRequest {
       }
 
       if (!isMonomodal) {
-        // https://opentransportdata.swiss/en/cookbook/ojptriprequest/#Parameters_for_Configuration_of_the_TripRequest
-        // non-monomodal cycle transport modes is rendered in Origin/Destination
-        const isCycle = transportMode === 'cycle';
-        if (isCycle) {
-          (() => {
-            if (modeType === 'mode_at_start' && !isFrom) {
-              return;
-            }
+        if (isOJPv2) {
+          if (personalMode !== null) {
+            (() => {
+              if (modeType === 'mode_at_start' && !isFrom) {
+                return;
+              }
 
-            if (modeType === 'mode_at_end' && isFrom) {
-              return;
-            }
+              if (modeType === 'mode_at_end' && isFrom) {
+                return;
+              }
 
-            const itNode = endPointNode.ele(ojpPrefix + 'IndividualTransportOptions');
-            this.addAdditionalRestrictions(itNode, tripLocation);
-          })();
+              const transportOptionNode = endPointNode.ele(ojpPrefix + 'IndividualTransportOption');
+              const personalModeNode = transportOptionNode.ele(ojpPrefix + 'ItModeAndModeOfOperation');
+              personalModeNode.ele(ojpPrefix + 'PersonalMode', personalMode);
+              personalModeNode.ele(ojpPrefix + 'AlternativeModeOfOperation', 'sharing');
+            })();
+          }
+        } else {
+          // https://opentransportdata.swiss/en/cookbook/ojptriprequest/#Parameters_for_Configuration_of_the_TripRequest
+          // non-monomodal cycle transport modes is rendered in Origin/Destination
+          const isCycle = transportMode === 'cycle';
+          if (isCycle) {
+            (() => {
+              if (modeType === 'mode_at_start' && !isFrom) {
+                return;
+              }
+
+              if (modeType === 'mode_at_end' && isFrom) {
+                return;
+              }
+
+              const itNode = endPointNode.ele(ojpPrefix + 'IndividualTransportOptions');
+              this.addAdditionalRestrictions(itNode, tripLocation);
+            })();
+          }
         }
       }
     });
@@ -298,9 +340,39 @@ export class TripRequest extends OJPBaseRequest {
       });
     }
 
-    if (isOJPv2) {
-      if (this.walkSpeedDeviation !== null) {
-        paramsNode.ele(ojpPrefix + 'WalkSpeed', this.walkSpeedDeviation);
+    // https://opentransportdata.swiss/en/cookbook/ojptriprequest/#Parameters_for_Configuration_of_the_TripRequest
+    // - monomodal
+    if (isMonomodal) {
+      if (isSharingMode) {
+        if (isOJPv2) {
+          const itModeToCoverNode = paramsNode.ele(ojpPrefix + 'ItModeToCover');
+
+          if (personalMode !== null) {
+            itModeToCoverNode.ele('PersonalMode', personalMode);
+            itModeToCoverNode.ele('AlternativeModeOfOperation', 'sharing');
+          }
+        } else {
+          // OJP1
+          // - sharing transport modes 
+          // => Params/Extension/ItModesToCover=transportMode
+          const paramsExtensionNode = paramsNode.ele(ojpPrefix + 'Extension');
+          paramsExtensionNode.ele(ojpPrefix + 'ItModesToCover', transportMode);
+        }
+      }
+
+      if (isSharingMode && isOJPv2) {
+        // NumberOfResults = 0 for sharing in OJP v2.0
+        paramsNode.ele(ojpPrefix + 'NumberOfResults', 0);
+      } else {
+        if (this.numberOfResults !== null) {
+          paramsNode.ele(ojpPrefix + 'NumberOfResults', this.numberOfResults);
+        }
+        if (this.numberOfResultsBefore !== null) {
+          paramsNode.ele(ojpPrefix + 'NumberOfResultsBefore', this.numberOfResultsBefore);
+        }
+        if (this.numberOfResultsAfter !== null) {
+          paramsNode.ele(ojpPrefix + 'NumberOfResultsAfter', this.numberOfResultsAfter);
+        }
       }
     }
 
@@ -308,16 +380,6 @@ export class TripRequest extends OJPBaseRequest {
       paramsNode.ele(ojpPrefix + 'IncludeAllRestrictedLines', 'true');
     } else {
       paramsNode.ele(ojpPrefix + 'PrivateModeFilter').ele(ojpPrefix + 'Exclude', 'false');
-    }
-
-    if (this.numberOfResults !== null) {
-      paramsNode.ele(ojpPrefix + 'NumberOfResults', this.numberOfResults);
-    }
-    if (this.numberOfResultsBefore !== null) {
-      paramsNode.ele(ojpPrefix + 'NumberOfResultsBefore', this.numberOfResultsBefore);
-    }
-    if (this.numberOfResultsAfter !== null) {
-      paramsNode.ele(ojpPrefix + 'NumberOfResultsAfter', this.numberOfResultsAfter);
     }
 
     paramsNode.ele(ojpPrefix + "IncludeTrackSections", true);
@@ -329,12 +391,11 @@ export class TripRequest extends OJPBaseRequest {
       paramsNode.ele(ojpPrefix + "IncludeIntermediateStops", true);
     }
 
-    const sharingModes: IndividualTransportMode[] = [
-      "bicycle_rental",
-      "car_sharing",
-      "escooter_rental",
-    ];
-    const isSharingMode = sharingModes.indexOf(transportMode) !== -1;
+    if (isOJPv2) {
+      if (this.walkSpeedDeviation !== null) {
+        paramsNode.ele(ojpPrefix + 'WalkSpeed', this.walkSpeedDeviation);
+      }
+    }
 
     if (isMonomodal) {
       const standardModes: IndividualTransportMode[] = [
@@ -362,22 +423,14 @@ export class TripRequest extends OJPBaseRequest {
           modeAndModeEl.ele(siriPrefix + 'RailSubmode', 'vehicleTunnelTransportRailService');
         }  
       }
-
-      // https://opentransportdata.swiss/en/cookbook/ojptriprequest/#Parameters_for_Configuration_of_the_TripRequest
-      // - monomodal 
-      // - sharing transport modes 
-      // => Params/Extension/ItModesToCover=transportMode
-      if (isSharingMode) {
-        const paramsExtensionNode = paramsNode.ele(ojpPrefix + "Extension");
-        paramsExtensionNode.ele(ojpPrefix + "ItModesToCover", transportMode);
-      }
     } else {
       // https://opentransportdata.swiss/en/cookbook/ojptriprequest/#Parameters_for_Configuration_of_the_TripRequest
       // - non-monomodal 
       // - sharing transport modes 
       // => Params/Extension/Origin/Mode=transportMode
 
-      if (isSharingMode) {
+      const isOJPv1 = !isOJPv2;
+      if (isSharingMode && isOJPv1) {
         const paramsExtensionNode = paramsNode.ele(ojpPrefix + "Extension");
 
         tripEndpoints.forEach((tripEndpoint) => {

@@ -38,22 +38,10 @@ export class TripLeg {
   }
 
   public patchLocations(mapContextLocations: Record<string, Location>) {
-    [this.fromLocation, this.toLocation].forEach(location => {
+    const locations = [this.fromLocation, this.toLocation];
+    locations.forEach(location => {
       this.patchLocation(location, mapContextLocations);
-
-      if (location.geoPosition) {
-        return;
-      }
-
-      if (this.legTrack?.hasGeoData) {
-        const isFrom = location === this.fromLocation;
-        if (isFrom) {
-          this.fromLocation.geoPosition = this.legTrack.fromGeoPosition();
-        } else {
-          this.toLocation.geoPosition = this.legTrack.toGeoPosition();
-        }
-      }
-    })
+    });
   }
 
   public patchSituations(mapContextSituations: Record<string, PtSituationElement>) {

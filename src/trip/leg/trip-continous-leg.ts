@@ -126,8 +126,8 @@ export class TripContinuousLeg extends TripLeg {
     }
 
     const firstBookingAgency = treeNode.findTextFromChildNamed('Service/BookingArrangements/BookingArrangement/BookingAgencyName/Text');
-    const legMode = this.computeLegTransportModeFromString(legModeS, firstBookingAgency);
 
+    const legMode = this.computeLegTransportModeFromString(legModeS, firstBookingAgency);
     if (legMode === null) {
       console.error('ERROR computeLegTransportModeFromString');
       console.log('=> CANT handle mode --' + legModeS + '--');
@@ -202,6 +202,14 @@ export class TripContinuousLeg extends TripLeg {
       return 'walk';
     }
 
+    if (legModeS === 'bicycle.own') {
+      return 'cycle';
+    }
+
+    if (legModeS === 'scooter.own') {
+      return 'escooter_rental';
+    }
+
     return null
   }
 
@@ -226,15 +234,6 @@ export class TripContinuousLeg extends TripLeg {
 
   public isTaxi(): boolean {
     return this.legTransportMode === 'taxi' || this.legTransportMode === 'others-drive-car';
-  }
-
-  public formatDistance(): string {
-    if (this.legDistance > 1000) {
-      const distanceKmS = (this.legDistance / 1000).toFixed(1) + ' km'
-      return distanceKmS
-    }
-
-    return this.legDistance + ' m'
   }
 
   public addToXMLNode(parentNode: XMLElement, xmlConfig: XML_Config) {

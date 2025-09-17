@@ -197,22 +197,45 @@ export class LocationInformationRequest extends OJPBaseRequest {
     const restrictionsNode = requestNode.ele(ojpPrefix + "Restrictions");
 
     this.restrictionTypes.forEach(restrictionType => {
-      restrictionsNode.ele(ojpPrefix + "Type", restrictionType);
-
       const isPOI = restrictionType === 'poi';
-      if (isPOI && this.poiRestriction) {
-        const poiCategoryNode = restrictionsNode.ele(ojpPrefix + "PointOfInterestFilter").ele(ojpPrefix + "PointOfInterestCategory");
+      if (isPOI) {
+        if (this.poiRestriction) {
+          if (isOJPv2) {
+            const modesNode = restrictionsNode.ele(ojpPrefix + 'Modes');
+            this.poiRestriction.tags.forEach((poiOsmTag) => {
+              const personalMode: string = (() => {
+                if (poiOsmTag === 'car_sharing') {
+                  return 'car';
+                }
+                if (poiOsmTag === 'bicycle_rental') {
+                  return 'bicycle';
+                }
+                if (poiOsmTag === 'escooter_rental') {
+                  return 'scooter';
+                }
 
-        const isSharedMobility = this.poiRestriction.poiType === 'shared_mobility';
-        const poiOsmTagKey = isSharedMobility ? 'amenity' : 'POI';
-        this.poiRestriction.tags.forEach((poiOsmTag) => {
-          const osmTagNode = poiCategoryNode.ele(ojpPrefix + "OsmTag");
-          osmTagNode.ele(ojpPrefix + "Tag", poiOsmTagKey);
-          osmTagNode.ele(ojpPrefix + "Value", poiOsmTag);
-        });
+                return 'n/a';
+              })();
+              modesNode.ele(ojpPrefix + 'PersonalMode', personalMode);
+            });
+          } else {
+            restrictionsNode.ele(ojpPrefix + "Type", restrictionType);
+            const poiCategoryNode = restrictionsNode.ele(ojpPrefix + "PointOfInterestFilter").ele(ojpPrefix + "PointOfInterestCategory");
+
+            const isSharedMobility = this.poiRestriction.poiType === 'shared_mobility';
+            const poiOsmTagKey = isSharedMobility ? 'amenity' : 'POI';
+            this.poiRestriction.tags.forEach((poiOsmTag) => {
+              const osmTagNode = poiCategoryNode.ele(ojpPrefix + "OsmTag");
+              osmTagNode.ele(ojpPrefix + "Tag", poiOsmTagKey);
+              osmTagNode.ele(ojpPrefix + "Value", poiOsmTag);
+            });
+          }
+        }
+      } else {
+        restrictionsNode.ele(ojpPrefix + "Type", restrictionType);
       }
     });
-
+    
     const numberOfResults = this.numberOfResults ?? 10;
     restrictionsNode.ele(ojpPrefix + "NumberOfResults", numberOfResults);
 

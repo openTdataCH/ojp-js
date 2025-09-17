@@ -50,7 +50,7 @@ export class Location {
     const locationNamePath = xmlConfig.ojpVersion === '2.0' ? 'Name/Text' : 'LocationName/Text';
     location.locationName = treeNode.findTextFromChildNamed(locationNamePath);
     
-    location.poi = PointOfInterest.initWithLocationTreeNode(treeNode);
+    location.poi = PointOfInterest.initWithLocationTreeNode(treeNode, xmlConfig);
     location.stopPlace = StopPlace.initWithLocationTreeNode(treeNode);
     location.topographicPlace = TopographicPlace.initWithLocationTreeNode(treeNode);
 
@@ -115,6 +115,7 @@ export class Location {
       });
     }
 
+    // OJP 1.0
     // <ojp:Extension>
     //     <ojp:LocationExtensionStructure>
     //         <ojp:num_vehicles_available>1</ojp:num_vehicles_available>
