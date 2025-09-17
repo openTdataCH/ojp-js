@@ -81,9 +81,9 @@ export class TripRequest extends OJPBaseRequest {
     this.response = null;
   }
 
-  private static Empty(xmlConfig: XML_Config, requestorRef: string): TripRequest {
+  private static Empty(xmlConfig: XML_Config, requestorRef: string, stageConfig: ApiConfig = EMPTY_API_CONFIG): TripRequest {
     const emptyTripLocationPoint = TripLocationPoint.Empty();
-    const request = new TripRequest(EMPTY_API_CONFIG, 'en', xmlConfig, requestorRef, emptyTripLocationPoint, emptyTripLocationPoint, new Date(), 'Dep');
+    const request = new TripRequest(stageConfig, 'en', xmlConfig, requestorRef, emptyTripLocationPoint, emptyTripLocationPoint, new Date(), 'Dep');
 
     return request;
   }
@@ -95,8 +95,8 @@ export class TripRequest extends OJPBaseRequest {
     return request;
   }
 
-  public static initWithRequestMock(mockText: string, xmlConfig: XML_Config, requestorRef: string) {
-    const request = TripRequest.Empty(xmlConfig, requestorRef);
+  public static initWithRequestMock(stageConfig: ApiConfig, mockText: string, xmlConfig: XML_Config, requestorRef: string) {
+    const request = TripRequest.Empty(xmlConfig, requestorRef, stageConfig);
     request.mockRequestXML = mockText;
     request.requestInfo.requestXML = mockText;
     

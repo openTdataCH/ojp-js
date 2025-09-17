@@ -4,6 +4,6 @@ export interface ApiConfig {
 }
 
 export const EMPTY_API_CONFIG: ApiConfig = {
-  url: 'n/a',
+  url: 'na-URL',
   authToken: null
 };
