@@ -29,9 +29,13 @@ export class PointOfInterest {
     if (treeNode === null) {
       return null;
     }
+
+    const isOJPv2 = xmlConfig.ojpVersion === '2.0';
     
-    const code = treeNode.findTextFromChildNamed('PointOfInterestCode');
-    const name = treeNode.findTextFromChildNamed('PointOfInterestName/Text');
+    const codeTagName = isOJPv2 ? 'PublicCode' : 'PointOfInterestCode';
+    const nameTagName = isOJPv2 ? 'Name/Text' : 'PointOfInterestName/Text';
+    const code = treeNode.findTextFromChildNamed(codeTagName);
+    const name = treeNode.findTextFromChildNamed(nameTagName);
 
     if (!(code && name)) {
       return null;
