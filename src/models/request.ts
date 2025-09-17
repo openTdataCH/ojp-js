@@ -138,6 +138,21 @@ export class TripRequest extends BaseRequest implements OJP_Types.TripRequestSch
     this.origin.depArrTime = newDatetime.toISOString();
   }
 
+  public setPublicTransportRequest(motFilter: OJP_Types.VehicleModesOfTransportEnum[] | null = null) {
+    if (!this.params) {
+      return;
+    }
+
+    this.params.modeAndModeOfOperationFilter = undefined;
+    if ((motFilter !== null) && (motFilter.length > 0)) {
+      this.params.modeAndModeOfOperationFilter = [
+        {
+          exclude: false,
+          ptMode: motFilter
+        }
+      ];
+    }
+  }
 
   public disableLinkProkection() {
     if (!this.params) {
