@@ -245,22 +245,25 @@ export class TripRequest extends OJPBaseRequest {
       }
 
       if (!isMonomodal) {
-        // https://opentransportdata.swiss/en/cookbook/ojptriprequest/#Parameters_for_Configuration_of_the_TripRequest
-        // non-monomodal cycle transport modes is rendered in Origin/Destination
-        const isCycle = transportMode === 'cycle';
-        if (isCycle) {
-          (() => {
-            if (modeType === 'mode_at_start' && !isFrom) {
-              return;
-            }
+        if (isOJPv2) {
+        } else {
+          // https://opentransportdata.swiss/en/cookbook/ojptriprequest/#Parameters_for_Configuration_of_the_TripRequest
+          // non-monomodal cycle transport modes is rendered in Origin/Destination
+          const isCycle = transportMode === 'cycle';
+          if (isCycle) {
+            (() => {
+              if (modeType === 'mode_at_start' && !isFrom) {
+                return;
+              }
 
-            if (modeType === 'mode_at_end' && isFrom) {
-              return;
-            }
+              if (modeType === 'mode_at_end' && isFrom) {
+                return;
+              }
 
-            const itNode = endPointNode.ele(ojpPrefix + 'IndividualTransportOptions');
-            this.addAdditionalRestrictions(itNode, tripLocation);
-          })();
+              const itNode = endPointNode.ele(ojpPrefix + 'IndividualTransportOptions');
+              this.addAdditionalRestrictions(itNode, tripLocation);
+            })();
+          }
         }
       }
     });
@@ -298,9 +301,31 @@ export class TripRequest extends OJPBaseRequest {
       });
     }
 
-    if (isOJPv2) {
-      if (this.walkSpeedDeviation !== null) {
-        paramsNode.ele(ojpPrefix + 'WalkSpeed', this.walkSpeedDeviation);
+    // https://opentransportdata.swiss/en/cookbook/ojptriprequest/#Parameters_for_Configuration_of_the_TripRequest
+    // - monomodal
+    if (isMonomodal) {
+      if (isSharingMode) {
+        if (isOJPv2) {
+        } else {
+          // OJP1
+          // - sharing transport modes 
+          // => Params/Extension/ItModesToCover=transportMode
+          const paramsExtensionNode = paramsNode.ele(ojpPrefix + 'Extension');
+          paramsExtensionNode.ele(ojpPrefix + 'ItModesToCover', transportMode);
+        }
+      }
+
+      if (isSharingMode && isOJPv2) {
+      } else {
+        if (this.numberOfResults !== null) {
+          paramsNode.ele(ojpPrefix + 'NumberOfResults', this.numberOfResults);
+        }
+        if (this.numberOfResultsBefore !== null) {
+          paramsNode.ele(ojpPrefix + 'NumberOfResultsBefore', this.numberOfResultsBefore);
+        }
+        if (this.numberOfResultsAfter !== null) {
+          paramsNode.ele(ojpPrefix + 'NumberOfResultsAfter', this.numberOfResultsAfter);
+        }
       }
     }
 
@@ -308,16 +333,6 @@ export class TripRequest extends OJPBaseRequest {
       paramsNode.ele(ojpPrefix + 'IncludeAllRestrictedLines', 'true');
     } else {
       paramsNode.ele(ojpPrefix + 'PrivateModeFilter').ele(ojpPrefix + 'Exclude', 'false');
-    }
-
-    if (this.numberOfResults !== null) {
-      paramsNode.ele(ojpPrefix + 'NumberOfResults', this.numberOfResults);
-    }
-    if (this.numberOfResultsBefore !== null) {
-      paramsNode.ele(ojpPrefix + 'NumberOfResultsBefore', this.numberOfResultsBefore);
-    }
-    if (this.numberOfResultsAfter !== null) {
-      paramsNode.ele(ojpPrefix + 'NumberOfResultsAfter', this.numberOfResultsAfter);
     }
 
     paramsNode.ele(ojpPrefix + "IncludeTrackSections", true);
@@ -362,22 +377,14 @@ export class TripRequest extends OJPBaseRequest {
           modeAndModeEl.ele(siriPrefix + 'RailSubmode', 'vehicleTunnelTransportRailService');
         }  
       }
-
-      // https://opentransportdata.swiss/en/cookbook/ojptriprequest/#Parameters_for_Configuration_of_the_TripRequest
-      // - monomodal 
-      // - sharing transport modes 
-      // => Params/Extension/ItModesToCover=transportMode
-      if (isSharingMode) {
-        const paramsExtensionNode = paramsNode.ele(ojpPrefix + "Extension");
-        paramsExtensionNode.ele(ojpPrefix + "ItModesToCover", transportMode);
-      }
     } else {
       // https://opentransportdata.swiss/en/cookbook/ojptriprequest/#Parameters_for_Configuration_of_the_TripRequest
       // - non-monomodal 
       // - sharing transport modes 
       // => Params/Extension/Origin/Mode=transportMode
 
-      if (isSharingMode) {
+      const isOJPv1 = !isOJPv2;
+      if (isSharingMode && isOJPv1) {
         const paramsExtensionNode = paramsNode.ele(ojpPrefix + "Extension");
 
         tripEndpoints.forEach((tripEndpoint) => {
