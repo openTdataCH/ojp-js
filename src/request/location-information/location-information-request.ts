@@ -201,6 +201,23 @@ export class LocationInformationRequest extends OJPBaseRequest {
       if (isPOI) {
         if (this.poiRestriction) {
           if (isOJPv2) {
+            const modesNode = restrictionsNode.ele(ojpPrefix + 'Modes');
+            this.poiRestriction.tags.forEach((poiOsmTag) => {
+              const personalMode: string = (() => {
+                if (poiOsmTag === 'car_sharing') {
+                  return 'car';
+                }
+                if (poiOsmTag === 'bicycle_rental') {
+                  return 'bicycle';
+                }
+                if (poiOsmTag === 'escooter_rental') {
+                  return 'scooter';
+                }
+
+                return 'n/a';
+              })();
+              modesNode.ele(ojpPrefix + 'PersonalMode', personalMode);
+            });
           } else {
             restrictionsNode.ele(ojpPrefix + "Type", restrictionType);
             const poiCategoryNode = restrictionsNode.ele(ojpPrefix + "PointOfInterestFilter").ele(ojpPrefix + "PointOfInterestCategory");
