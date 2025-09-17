@@ -198,6 +198,29 @@ export class TripRequest extends OJPBaseRequest {
     const isMonomodal = modeType === "monomodal";
 
     const transportMode = this.transportMode;
+    // https://vdvde.github.io/OJP/develop/documentation-tables/ojp.html#type_ojp__PersonalModesEnumeration
+    const personalMode = (() => {
+      if (transportMode === 'bicycle_rental') {
+        return 'bicycle';
+      }
+
+      if (transportMode === 'escooter_rental') {
+        return 'scooter';
+      }
+
+      if (transportMode === 'car_sharing') {
+        return 'car';
+      }
+
+      return null;
+    })();
+
+    const sharingModes: IndividualTransportMode[] = [
+      "bicycle_rental",
+      "car_sharing",
+      "escooter_rental",
+    ];
+    const isSharingMode = sharingModes.indexOf(transportMode) !== -1;    
 
     const nameNodeName = isOJPv2 ? 'Name' : 'LocationName';
 
