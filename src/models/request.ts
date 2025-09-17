@@ -13,8 +13,6 @@ class BaseRequest {
   public mockRequestXML: string | null;
   public mockResponseXML: string | null;
 
-  public enableExtensions: boolean;
-
   protected constructor() {
     this.requestInfo = {
       requestDateTime: null,
@@ -26,7 +24,6 @@ class BaseRequest {
 
     this.mockRequestXML = null;
     this.mockResponseXML = null;
-    this.enableExtensions = true;
   }
 }
 
