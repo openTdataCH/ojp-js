@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 0.18.9 - 17.09.2025
+- Sharing OJP2.0 - [Sharing for DemoApp OJP2.0 #285](https://github.com/openTdataCH/ojp-demo-app-src/issues/285) - [PR #196](https://github.com/openTdataCH/ojp-js/pull/196)
+  - adds sharing LIR/TR requests options
+  - conditional code for OJP1/OJP2
+  - cleanup not-anymore needed members
+
 ## 0.18.8 - 24.06.2025
 - adds conditional code for handling guidance nodes - [PR #186](https://github.com/openTdataCH/ojp-js/pull/186)
 - adds `WalkSpeed` to TR request params - [PR #187](https://github.com/openTdataCH/ojp-js/pull/187)
