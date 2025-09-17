@@ -44,21 +44,28 @@ export class PointOfInterest {
     const categoryTags: string[] = [];
     let category: RestrictionPoiOSMTag | null = null;
     let subCategory: string | null = null;
-
+    
     const categoryTreeNodes = treeNode.findChildrenNamed('PointOfInterestCategory');
     categoryTreeNodes.forEach(categoryTreeNode => {
-      const tagValue = categoryTreeNode.findTextFromChildNamed('OsmTag/Value');
-      if (tagValue) {
-        categoryTags.push(tagValue);
-      }
+      if (isOJPv2) {
+        const categoryText = categoryTreeNode.findTextFromChildNamed('PointOfInterestClassification');
+        if (categoryText !== null) {
+          category = categoryText as RestrictionPoiOSMTag;
+        }
+      } else {
+        const tagValue = categoryTreeNode.findTextFromChildNamed('OsmTag/Value');
+        if (tagValue) {
+          categoryTags.push(tagValue);
+        }
 
-      const tagKey = categoryTreeNode.findTextFromChildNamed('OsmTag/Tag');
-      if (tagKey === 'POI_0' || tagKey === 'amenity') {
-        category = tagValue as RestrictionPoiOSMTag;
-      }
+        const tagKey = categoryTreeNode.findTextFromChildNamed('OsmTag/Tag');
+        if (tagKey === 'POI_0' || tagKey === 'amenity') {
+          category = tagValue as RestrictionPoiOSMTag;
+        }
 
-      if (tagKey === 'POI_1') {
-        subCategory = tagValue;
+        if (tagKey === 'POI_1') {
+          subCategory = tagValue;
+        }
       }
     });
 
