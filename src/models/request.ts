@@ -13,8 +13,6 @@ class BaseRequest {
   public mockRequestXML: string | null;
   public mockResponseXML: string | null;
 
-  public enableExtensions: boolean;
-
   protected constructor() {
     this.requestInfo = {
       requestDateTime: null,
@@ -26,7 +24,6 @@ class BaseRequest {
 
     this.mockRequestXML = null;
     this.mockResponseXML = null;
-    this.enableExtensions = true;
   }
 }
 
@@ -139,6 +136,53 @@ export class TripRequest extends BaseRequest implements OJP_Types.TripRequestSch
   public setDepartureDatetime(newDatetime: Date = new Date()) {
     delete(this.destination.depArrTime);
     this.origin.depArrTime = newDatetime.toISOString();
+  }
+
+  public setPublicTransportRequest(motFilter: OJP_Types.VehicleModesOfTransportEnum[] | null = null) {
+    if (!this.params) {
+      return;
+    }
+
+    this.params.modeAndModeOfOperationFilter = undefined;
+    if ((motFilter !== null) && (motFilter.length > 0)) {
+      this.params.modeAndModeOfOperationFilter = [
+        {
+          exclude: false,
+          ptMode: motFilter
+        }
+      ];
+    }
+  }
+
+  public disableLinkProkection() {
+    if (!this.params) {
+      return;
+    }
+
+    this.params.includeLegProjection = false;
+  }
+
+  public enableLinkProkection() {
+    if (!this.params) {
+      return;
+    }
+
+    this.params.includeLegProjection = true;
+  }
+
+  public setCarRequest() {
+    if (!this.params) {
+      return;
+    }
+
+    this.params.numberOfResults = 0;
+
+    this.params.modeAndModeOfOperationFilter = [
+      {
+        railSubmode: 'vehicleTunnelTransportRailService',
+        waterSubmode: 'localCarFerry',
+      }
+    ];
   }
 
   public buildRequestXML(language: Language, requestorRef: string, xmlConfig: XML_Config = DefaultXML_Config): string {
