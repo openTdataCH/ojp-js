@@ -7,27 +7,21 @@ import { LinkProjection } from "../link-projection";
 
 export class LegTrack {
   public trackSections: TrackSection[]
-  public hasGeoData: boolean
   public duration: Duration | null
 
   constructor(trackSections: TrackSection[]) {
     this.trackSections = trackSections;
     let durationMinutes = 0
 
-    this.hasGeoData = false
     trackSections.forEach(trackSection => {
-      if (trackSection.linkProjection) {
-        this.hasGeoData = true
-      }
-
       if (trackSection.duration) {
-        durationMinutes += trackSection.duration.totalMinutes
+        durationMinutes += trackSection.duration.totalMinutes;
       }
-    })
+    });
 
-    this.duration = null
+    this.duration = null;
     if (durationMinutes > 0) {
-      this.duration = Duration.initFromTotalMinutes(durationMinutes)
+      this.duration = Duration.initFromTotalMinutes(durationMinutes);
     }
   }
 
