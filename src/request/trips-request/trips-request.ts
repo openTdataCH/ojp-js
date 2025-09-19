@@ -360,10 +360,7 @@ export class TripRequest extends OJPBaseRequest {
         }
       }
 
-      if (isSharingMode && isOJPv2) {
-        // NumberOfResults = 0 for sharing in OJP v2.0
-        paramsNode.ele(ojpPrefix + 'NumberOfResults', 0);
-      } else {
+      if (transportMode === 'public_transport') {
         if (this.numberOfResults !== null) {
           paramsNode.ele(ojpPrefix + 'NumberOfResults', this.numberOfResults);
         }
