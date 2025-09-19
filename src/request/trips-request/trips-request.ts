@@ -220,7 +220,8 @@ export class TripRequest extends OJPBaseRequest {
       "car_sharing",
       "escooter_rental",
     ];
-    const isSharingMode = sharingModes.indexOf(transportMode) !== -1;    
+    const isSharingMode = sharingModes.indexOf(transportMode) !== -1;
+    const isWalking = transportMode === 'walk' || transportMode === 'foot';
 
     const nameNodeName = isOJPv2 ? 'Name' : 'LocationName';
 
