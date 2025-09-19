@@ -14,7 +14,7 @@ export const DEBUG_LEVEL: DEBUG_LEVEL_Type = (() => {
     return 'DEBUG';
 })();
 
-export const SDK_VERSION = '0.18.9';
+export const SDK_VERSION = '0.18.10';
 export type OJP_VERSION_Type = '1.0' | '2.0';
 
 export const IS_NODE_CLI = typeof process !== 'undefined' && process.versions && process.versions.node;
