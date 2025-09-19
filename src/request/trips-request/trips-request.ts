@@ -371,6 +371,13 @@ export class TripRequest extends OJPBaseRequest {
           paramsNode.ele(ojpPrefix + 'NumberOfResultsAfter', this.numberOfResultsAfter);
         }
       }
+
+      if (isOJPv2) {
+        if (isSharingMode || isWalking) {
+          // NumberOfResults = 0 for sharing / walking in OJP v2.0
+          paramsNode.ele(ojpPrefix + 'NumberOfResults', 0);
+        }
+      }
     }
 
     if (isOJPv2) {
