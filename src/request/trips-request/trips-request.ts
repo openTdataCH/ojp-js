@@ -268,7 +268,16 @@ export class TripRequest extends OJPBaseRequest {
         }
       }
 
-      if (!isMonomodal) {
+      if (isMonomodal) {
+        if (isOJPv2 && isWalking && isFrom) {
+          const transportOptionNode = endPointNode.ele(ojpPrefix + 'IndividualTransportOption');
+          
+          const personalModeNode = transportOptionNode.ele(ojpPrefix + 'ItModeAndModeOfOperation');
+          personalModeNode.ele(ojpPrefix + 'PersonalMode', 'foot');
+
+          transportOptionNode.ele(ojpPrefix + 'MaxDuration', 'PT60M');
+        }
+      } else {
         if (isOJPv2) {
           if (personalMode !== null) {
             (() => {
