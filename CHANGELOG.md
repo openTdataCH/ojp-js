@@ -1,7 +1,7 @@
 # CHANGELOG
 
 ## 0.18.10 - 19.09.2025
-- Walking OJP2.0 - [Fix OJP2.0 monomodal walking #288](https://github.com/openTdataCH/ojp-demo-app-src/issues/288)
+- Walking OJP2.0 - [Fix OJP2.0 monomodal walking #288](https://github.com/openTdataCH/ojp-demo-app-src/issues/288) - [PR #198](https://github.com/openTdataCH/ojp-js/pull/198)
   - adds `IndividualTransportOption` to TR request
 
 ## 0.18.9 - 17.09.2025
