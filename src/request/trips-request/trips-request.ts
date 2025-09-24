@@ -275,7 +275,10 @@ export class TripRequest extends OJPBaseRequest {
           const personalModeNode = transportOptionNode.ele(ojpPrefix + 'ItModeAndModeOfOperation');
           personalModeNode.ele(ojpPrefix + 'PersonalMode', 'foot');
 
-          transportOptionNode.ele(ojpPrefix + 'MaxDuration', 'PT60M');
+          if (tripLocation.maxDuration === null) {
+            tripLocation.maxDuration = 60;
+          }
+          this.addAdditionalRestrictions(transportOptionNode, tripLocation);
         }
       } else {
         if (isOJPv2) {
