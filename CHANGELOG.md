@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 0.18.11 - 25.09.2025
+- Enhance Walking, add more params - [[PR #199](https://github.com/openTdataCH/ojp-js/pull/199)
+  - adds Min/Max/Duration/Distance if present
+  - for monomodal walking use MaxDistance=60M(inutes)
+
 ## 0.18.10 - 19.09.2025
 - Walking OJP2.0 - [Fix OJP2.0 monomodal walking #288](https://github.com/openTdataCH/ojp-demo-app-src/issues/288) - [PR #198](https://github.com/openTdataCH/ojp-js/pull/198)
   - adds `IndividualTransportOption` to TR request
