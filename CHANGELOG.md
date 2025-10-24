@@ -1,7 +1,7 @@
 # CHANGELOG
 
 ## 0.18.13 - 24.10.2025
-- Enables Min/Max/Duration/Distance for all modes
+- updates Min/Max/Duration/Distance also for `Destination`
 
 ## 0.18.12 - 24.10.2025
 - Enables Min/Max/Duration/Distance for all modes - [PR #202](https://github.com/openTdataCH/ojp-js/pull/202)
