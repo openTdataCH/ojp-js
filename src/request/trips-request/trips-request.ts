@@ -269,7 +269,7 @@ export class TripRequest extends OJPBaseRequest {
       }
 
       if (isMonomodal) {
-        if (isOJPv2 && isFrom) {
+        if (isOJPv2) {
           if (isWalking) {
             if (tripLocation.maxDuration === null) {
               tripLocation.maxDuration = 60;

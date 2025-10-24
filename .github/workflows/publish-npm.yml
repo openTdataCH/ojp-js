@@ -3,7 +3,7 @@ name: Publish ojp-sdk-legacy on npm
 on:
   push:
     tags:
-      - '*.*.*'
+      - '0.18.*'
   # allow manual trigger
   workflow_dispatch:
 
