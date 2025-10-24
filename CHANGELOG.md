@@ -1,7 +1,10 @@
 # CHANGELOG
 
+## 0.18.12 - 24.10.2025
+- Enables Min/Max/Duration/Distance for all modes - [PR #202](https://github.com/openTdataCH/ojp-js/pull/202)
+
 ## 0.18.11 - 25.09.2025
-- Enhance Walking, add more params - [[PR #199](https://github.com/openTdataCH/ojp-js/pull/199)
+- Enhance Walking, add more params - [PR #199](https://github.com/openTdataCH/ojp-js/pull/199)
   - adds Min/Max/Duration/Distance if present
   - for monomodal walking use MaxDistance=60M(inutes)
 

@@ -269,16 +269,14 @@ export class TripRequest extends OJPBaseRequest {
       }
 
       if (isMonomodal) {
-        if (isOJPv2 && isWalking && isFrom) {
-          const transportOptionNode = endPointNode.ele(ojpPrefix + 'IndividualTransportOption');
-          
-          const personalModeNode = transportOptionNode.ele(ojpPrefix + 'ItModeAndModeOfOperation');
-          personalModeNode.ele(ojpPrefix + 'PersonalMode', 'foot');
-
-          if (tripLocation.maxDuration === null) {
-            tripLocation.maxDuration = 60;
+        if (isOJPv2 && isFrom) {
+          if (isWalking) {
+            if (tripLocation.maxDuration === null) {
+              tripLocation.maxDuration = 60;
+            }
           }
-          this.addAdditionalRestrictions(transportOptionNode, tripLocation);
+          
+          this.addAdditionalRestrictions(endPointNode, tripLocation);
         }
       } else {
         if (isOJPv2) {
@@ -312,8 +310,7 @@ export class TripRequest extends OJPBaseRequest {
                 return;
               }
 
-              const itNode = endPointNode.ele(ojpPrefix + 'IndividualTransportOptions');
-              this.addAdditionalRestrictions(itNode, tripLocation);
+              this.addAdditionalRestrictions(endPointNode, tripLocation);
             })();
           }
         }
@@ -473,37 +470,34 @@ export class TripRequest extends OJPBaseRequest {
     }
   }
   
-  private addAdditionalRestrictions(nodeEl: xmlbuilder.XMLElement, tripLocation: TripLocationPoint) {
+  private addAdditionalRestrictions(endPointNode: xmlbuilder.XMLElement, tripLocation: TripLocationPoint) {
     const siriPrefix = this.xmlConfig.defaultNS === 'siri' ? '' : 'siri:';
     const ojpPrefix = this.xmlConfig.defaultNS === 'ojp' ? '' : 'ojp:';
     const isOJPv2 = this.xmlConfig.ojpVersion === '2.0';
 
-    const hasAdditionalRestrictions = (tripLocation.minDuration !== null) || (tripLocation.maxDuration !== null) || (tripLocation.minDistance !== null) || (tripLocation.maxDistance !== null);
-    if (!hasAdditionalRestrictions) {
-      return;
-    }
+    const transportOptionNode = endPointNode.ele(ojpPrefix + 'IndividualTransportOption');
 
     if (isOJPv2) {
       if (tripLocation.customTransportMode) {
-        nodeEl.ele(ojpPrefix + 'ItModeAndModeOfOperation').ele(ojpPrefix + 'PersonalMode', tripLocation.customTransportMode);
+        transportOptionNode.ele(ojpPrefix + 'ItModeAndModeOfOperation').ele(ojpPrefix + 'PersonalMode', tripLocation.customTransportMode);
       }
     } else {
       if (tripLocation.customTransportMode) {
-        nodeEl.ele(ojpPrefix + 'Mode', tripLocation.customTransportMode);
+        transportOptionNode.ele(ojpPrefix + 'Mode', tripLocation.customTransportMode);
       }
     }
     
     if (tripLocation.minDuration !== null) {
-      nodeEl.ele(ojpPrefix + 'MinDuration', 'PT' + tripLocation.minDuration + 'M');
+      transportOptionNode.ele(ojpPrefix + 'MinDuration', 'PT' + tripLocation.minDuration + 'M');
     }
     if (tripLocation.maxDuration !== null) {
-      nodeEl.ele(ojpPrefix + 'MaxDuration', 'PT' + tripLocation.maxDuration + 'M');
+      transportOptionNode.ele(ojpPrefix + 'MaxDuration', 'PT' + tripLocation.maxDuration + 'M');
     }
     if (tripLocation.minDistance !== null) {
-      nodeEl.ele(ojpPrefix + 'MinDistance', tripLocation.minDistance);
+      transportOptionNode.ele(ojpPrefix + 'MinDistance', tripLocation.minDistance);
     }
     if (tripLocation.maxDistance !== null) {
-      nodeEl.ele(ojpPrefix + 'MaxDistance', tripLocation.maxDistance);
+      transportOptionNode.ele(ojpPrefix + 'MaxDistance', tripLocation.maxDistance);
     }
   }
 
