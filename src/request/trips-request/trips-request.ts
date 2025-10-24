@@ -475,15 +475,25 @@ export class TripRequest extends OJPBaseRequest {
     const ojpPrefix = this.xmlConfig.defaultNS === 'ojp' ? '' : 'ojp:';
     const isOJPv2 = this.xmlConfig.ojpVersion === '2.0';
 
+    const customTransportMode = tripLocation.customTransportMode ?? null;
+
+    const hasIndividualTransportOption = (customTransportMode !== null)
+      || (tripLocation.minDuration !== null) || (tripLocation.maxDuration !== null)
+      || (tripLocation.minDistance !== null) || (tripLocation.maxDistance !== null);
+
+    if (!hasIndividualTransportOption) {
+      return;
+    }
+
     const transportOptionNode = endPointNode.ele(ojpPrefix + 'IndividualTransportOption');
 
     if (isOJPv2) {
-      if (tripLocation.customTransportMode) {
-        transportOptionNode.ele(ojpPrefix + 'ItModeAndModeOfOperation').ele(ojpPrefix + 'PersonalMode', tripLocation.customTransportMode);
+      if (customTransportMode) {
+        transportOptionNode.ele(ojpPrefix + 'ItModeAndModeOfOperation').ele(ojpPrefix + 'PersonalMode', customTransportMode);
       }
     } else {
-      if (tripLocation.customTransportMode) {
-        transportOptionNode.ele(ojpPrefix + 'Mode', tripLocation.customTransportMode);
+      if (customTransportMode) {
+        transportOptionNode.ele(ojpPrefix + 'Mode', customTransportMode);
       }
     }
     
