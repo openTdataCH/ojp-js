@@ -1,7 +1,7 @@
 # CHANGELOG
 
 ## 0.18.14 - 24.10.2025
-- dont add IndividualTransportOption if no custom mode or additional properties are set
+- dont add IndividualTransportOption if no custom mode or additional properties are set - [PR #204](https://github.com/openTdataCH/ojp-js/pull/204)
 
 ## 0.18.13 - 24.10.2025
 - updates Min/Max/Duration/Distance also for `Destination` - [PR #203](https://github.com/openTdataCH/ojp-js/pull/203)
