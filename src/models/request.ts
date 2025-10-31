@@ -82,9 +82,11 @@ export class TripRequest extends BaseRequest implements OJP_Types.TripRequestSch
     const origin: OJP_Types.PlaceContextSchema = {
       placeRef: PlaceRef.initWithPlaceRefsOrCoords('8503000', 'Zürich'),
       depArrTime: date.toISOString(),
+      individualTransportOption: [],
     };
     const destination: OJP_Types.PlaceContextSchema = {
       placeRef: PlaceRef.initWithPlaceRefsOrCoords('8507000', 'Bern'),
+      individualTransportOption: [],
     };
     const params = TripRequest.DefaultRequestParams();
 
@@ -107,9 +109,11 @@ export class TripRequest extends BaseRequest implements OJP_Types.TripRequestSch
   public static initWithPlaceRefsOrCoords(originPlaceRefS: string, destinationPlaceRefS: string): TripRequest {
     const origin: OJP_Types.PlaceContextSchema = {
       placeRef: PlaceRef.initWithPlaceRefsOrCoords(originPlaceRefS),
+      individualTransportOption: [],
     };
     const destination: OJP_Types.PlaceContextSchema = {
       placeRef: PlaceRef.initWithPlaceRefsOrCoords(destinationPlaceRefS),
+      individualTransportOption: [],
     };
 
     const params = TripRequest.DefaultRequestParams();
