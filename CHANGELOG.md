@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.20.30 - 31.10.2025
+- TR with individualTransportOption
+  - adds `setMaxDurationWalkingTime`method for TR requests with longer walking (at origin / destination)
+
 ## 0.20.29 - 16.10.2025
 - use latest `ojp-shared-types` - [PR #201](https://github.com/openTdataCH/ojp-js/pull/201)
 
