@@ -7,6 +7,8 @@ import { buildRootXML } from "../helpers/xml/builder";
 import { DefaultXML_Config } from "../constants";
 import { DateHelpers } from '../helpers';
 
+type EndpointType = 'origin' | 'destination' | 'both';
+
 class BaseRequest {
   public requestInfo: RequestInfo;
 
@@ -187,6 +189,29 @@ export class TripRequest extends BaseRequest implements OJP_Types.TripRequestSch
         waterSubmode: 'localCarFerry',
       }
     ];
+  }
+
+  public setMaxDurationWalkingTime(maxDurationMinutes: number | undefined = undefined, endpointType: EndpointType = 'both') {
+    if (!maxDurationMinutes) {
+      maxDurationMinutes = 30;
+    }
+    const maxDuration = 'PT' + maxDurationMinutes + 'M';
+
+    const individualTransportOption: OJP_Types.IndividualTransportOptionSchema = {
+      maxDuration: maxDuration,
+      itModeAndModeOfOperation: {
+        personalMode: 'foot',
+        personalModeOfOperation: ['own'],
+      }
+    };
+
+    if (endpointType === 'origin' || endpointType === 'both') {
+      this.origin.individualTransportOption = [individualTransportOption];
+    }
+
+    if (endpointType === 'destination' || endpointType === 'both') {
+      this.destination.individualTransportOption = [individualTransportOption];
+    }
   }
 
   public buildRequestXML(language: Language, requestorRef: string, xmlConfig: XML_Config = DefaultXML_Config): string {
