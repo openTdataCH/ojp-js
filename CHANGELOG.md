@@ -1,7 +1,7 @@
 # CHANGELOG
 
 ## 0.20.30 - 31.10.2025
-- TR with individualTransportOption
+- TR with IndividualTransportOption - [PR #205](https://github.com/openTdataCH/ojp-js/pull/205)
   - adds `setMaxDurationWalkingTime`method for TR requests with longer walking (at origin / destination)
   - adds Github workflow for npm publish automation
 
