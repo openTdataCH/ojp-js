@@ -70,7 +70,10 @@ export class OJPv1_Helpers {
           legEnd: {
             name: leg.continuousLeg.legEnd.name,
           },
-          service: {},
+          service: {
+            personalMode: 'foot',
+            personalModeOfOperation: 'own',
+          },
           duration: leg.continuousLeg.duration,
         };
       }
