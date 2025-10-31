@@ -136,6 +136,7 @@ export class PlaygroundComponent implements OnInit {
     await this.runTR_Coords();
     await this.runTR_WalkSpeed();
     await this.runTR_ModeFilter();
+    await this.runTR_ItModeFilter();
   }
 
   private async runTR_StopsPlaceRef() {
@@ -219,6 +220,25 @@ export class PlaygroundComponent implements OnInit {
     console.log('D) TR with modeFilter');
     console.log(request.requestInfo.requestXML);
     console.log(response.value);
+  }
+
+  private async runTR_ItModeFilter() {
+    // E) TR with hiking bern - gantrisch
+    const place1 = OJP.Place.initWithCoords(7.43913, 46.94883);
+    const place2 = OJP.Place.initWithCoords(7.418625, 46.698708);
+
+    const request = OJP.TripRequest.initWithPlaces(place1, place2);
+    request.setMaxDurationWalkingTime(300);
+
+    const response = await this.ojpSDK.fetchTripRequestResponse(request);
+    if (!response.ok) {
+      console.error('fetchTripRequestResponse ERROR');
+      console.log(response.error);
+      return;
+    }
+    console.log('E) TR with IndividualTransportOption - longer walk');
+    console.log(request.requestInfo.requestXML);
+    console.log(response.value.tripResult);
   }
 
   private async runSER() {
