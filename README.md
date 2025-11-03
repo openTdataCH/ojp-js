@@ -43,7 +43,7 @@ See [Reference](./docs/reference.md) and [examples](./examples/) for usage.
 - include the `ojp-sdk-legacy` package in the `./package.json` dependencies of your project 
 ```
   "dependencies": {
-    "ojp-sdk-legacy": "0.18.14"
+    "ojp-sdk-legacy": "0.18.15"
   }
 ```
 
