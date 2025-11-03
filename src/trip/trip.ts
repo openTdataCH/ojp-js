@@ -100,7 +100,7 @@ export class Trip {
       endDatetime: tripEndTime,
 
       isCancelled: null,
-      isInfeasable: null,
+      isInfeasible: null,
       isUnplanned: null,
     };
 
@@ -108,9 +108,9 @@ export class Trip {
     if (cancelledNode) {
       tripStats.isCancelled = cancelledNode.text === 'true';
     }
-    const infeasableNode = treeNode.findChildNamed('Infeasible');
-    if (infeasableNode) {
-      tripStats.isInfeasable = infeasableNode.text === 'true';
+    const infeasibleNode = treeNode.findChildNamed('Infeasible');
+    if (infeasibleNode) {
+      tripStats.isInfeasible = infeasibleNode.text === 'true';
     }
     const unplannedNode = treeNode.findChildNamed('Unplanned');
     if (unplannedNode) {
