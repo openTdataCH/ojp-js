@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 0.18.15 - 3.11.2025
+- fix OJP1.0 TR sharing
+
 ## 0.18.14 - 24.10.2025
 - dont add IndividualTransportOption if no custom mode or additional properties are set - [PR #204](https://github.com/openTdataCH/ojp-js/pull/204)
 
