@@ -2,6 +2,7 @@
 
 ## 0.18.15 - 3.11.2025
 - fix OJP1.0 TR sharing - [OJP 1.0 - fix multimodal sharing #300](https://github.com/openTdataCH/ojp-demo-app-src/issues/300) - [PR #208](https://github.com/openTdataCH/ojp-js/pull/208)
+- fix Infeasible typo - [Typo in trip status "Infeasable" #292](https://github.com/openTdataCH/ojp-demo-app-src/issues/292) - [PR #209](https://github.com/openTdataCH/ojp-js/pull/209)
 
 ## 0.18.14 - 24.10.2025
 - dont add IndividualTransportOption if no custom mode or additional properties are set - [PR #204](https://github.com/openTdataCH/ojp-js/pull/204)
@@ -163,7 +164,7 @@
   - BREAKING CHANGE - SIRI-SX situations model changed
   - BREAKING CHANGE  - `StationBoardModel` is removed from the SDK, should be implemented in the integrator
   - for TR send `UseRealtimeData`=`explanatory` to capture real-time info
-  - adds support for trips with `Cancelled`, `Infeasible` Trip status
+  - adds support for trips with `Cancelled`, `Infeasable` Trip status
   - adds support for `NotServicedStop` property for TimedLeg points
 
 ## 0.9.36 - 26.08.2024
