@@ -275,8 +275,9 @@ export class TripRequest extends OJPBaseRequest {
               tripLocation.maxDuration = 60;
             }
           }
-          
-          this.addAdditionalRestrictions(endPointNode, tripLocation);
+
+          const transportOptionNode = endPointNode.ele(ojpPrefix + 'IndividualTransportOption');
+          this.addAdditionalRestrictions(transportOptionNode, tripLocation);
         }
       } else {
         if (isOJPv2) {
@@ -470,44 +471,40 @@ export class TripRequest extends OJPBaseRequest {
     }
   }
   
-  private addAdditionalRestrictions(endPointNode: xmlbuilder.XMLElement, tripLocation: TripLocationPoint) {
+  private addAdditionalRestrictions(wrapperNode: xmlbuilder.XMLElement, tripLocation: TripLocationPoint) {
     const siriPrefix = this.xmlConfig.defaultNS === 'siri' ? '' : 'siri:';
     const ojpPrefix = this.xmlConfig.defaultNS === 'ojp' ? '' : 'ojp:';
     const isOJPv2 = this.xmlConfig.ojpVersion === '2.0';
 
-    const customTransportMode = tripLocation.customTransportMode ?? null;
-
-    const hasIndividualTransportOption = (customTransportMode !== null)
-      || (tripLocation.minDuration !== null) || (tripLocation.maxDuration !== null)
+    const hasIndividualTransportOptions = (tripLocation.minDuration !== null) || (tripLocation.maxDuration !== null)
       || (tripLocation.minDistance !== null) || (tripLocation.maxDistance !== null);
-
-    if (!hasIndividualTransportOption) {
+    
+    let customTransportMode = tripLocation.customTransportMode ?? null;
+    if (hasIndividualTransportOptions && (customTransportMode === null)) {
+      customTransportMode = isOJPv2 ? 'foot' : 'walk';
+    }
+    
+    if (!customTransportMode) {
       return;
     }
 
-    const transportOptionNode = endPointNode.ele(ojpPrefix + 'IndividualTransportOption');
-
     if (isOJPv2) {
-      if (customTransportMode) {
-        transportOptionNode.ele(ojpPrefix + 'ItModeAndModeOfOperation').ele(ojpPrefix + 'PersonalMode', customTransportMode);
-      }
+      wrapperNode.ele(ojpPrefix + 'PersonalMode', customTransportMode);
     } else {
-      if (customTransportMode) {
-        transportOptionNode.ele(ojpPrefix + 'Mode', customTransportMode);
-      }
+      wrapperNode.ele(ojpPrefix + 'Mode', customTransportMode);
     }
     
     if (tripLocation.minDuration !== null) {
-      transportOptionNode.ele(ojpPrefix + 'MinDuration', 'PT' + tripLocation.minDuration + 'M');
+      wrapperNode.ele(ojpPrefix + 'MinDuration', 'PT' + tripLocation.minDuration + 'M');
     }
     if (tripLocation.maxDuration !== null) {
-      transportOptionNode.ele(ojpPrefix + 'MaxDuration', 'PT' + tripLocation.maxDuration + 'M');
+      wrapperNode.ele(ojpPrefix + 'MaxDuration', 'PT' + tripLocation.maxDuration + 'M');
     }
     if (tripLocation.minDistance !== null) {
-      transportOptionNode.ele(ojpPrefix + 'MinDistance', tripLocation.minDistance);
+      wrapperNode.ele(ojpPrefix + 'MinDistance', tripLocation.minDistance);
     }
     if (tripLocation.maxDistance !== null) {
-      transportOptionNode.ele(ojpPrefix + 'MaxDistance', tripLocation.maxDistance);
+      wrapperNode.ele(ojpPrefix + 'MaxDistance', tripLocation.maxDistance);
     }
   }
 
