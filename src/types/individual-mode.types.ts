@@ -1,4 +1,4 @@
-// walk is in v1, walk/foot is in v2
+// walk is in v1, foot is in v2
 type DefaultIndividualTransportMode = 'public_transport' | 'walk' | 'foot' | 'cycle' | 'car'
 type SharedIndividualTransportMode = 'escooter_rental' | 'car_sharing' | 'self-drive-car' | 'bicycle_rental'
 
