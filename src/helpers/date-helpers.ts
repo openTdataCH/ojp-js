@@ -20,8 +20,9 @@ export class DateHelpers {
 
   // 21:38
   public static formatTimeHHMM(d: Date = new Date()): string {
-    const dateFormatted = DateHelpers.formatDate(d)
-    return dateFormatted.substring(11,16);
+    const dateFormatted = DateHelpers.formatDate(d);
+
+    return dateFormatted.substring(11, 16);
   }
 
   public static computeDelayMinutes(timetableTimeS: Date | string, estimatedTimeS: Date | string | null): number | null {
