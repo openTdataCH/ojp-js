@@ -3,22 +3,13 @@ import { FileHelpers } from './helpers/file-helpers';
 import * as OJP_Types from 'ojp-shared-types';
 import * as OJP from '../src'
 import { OJP_Helpers } from './helpers/ojp-test.helpers';
-import { XML_Config } from '../src/types/_all';
+import { XML_BuilderConfigOJPv1 } from '../src/constants';
 
 describe('OJP Test TripRequest Response', () => {
   let response1: OJP_Types.FareDeliverySchema;
   let response2: OJP_Types.FareDeliverySchema;
 
   beforeAll(async () => {
-    const XML_BuilderConfigOJPv1: XML_Config = {
-      ojpVersion: '1.0',
-      defaultNS: 'siri',
-      mapNS: {
-          'ojp': 'http://www.vdv.de/ojp',
-          'siri': 'http://www.siri.org.uk/siri',
-      },
-    };
-
     const ojp = OJP_Helpers.DefaultSDK('de', XML_BuilderConfigOJPv1);
     
     const mockXML_1 = FileHelpers.loadMockXML('fare-response.xml');
