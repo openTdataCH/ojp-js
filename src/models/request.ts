@@ -154,7 +154,8 @@ export class TripRequest extends BaseRequest implements OJP_Types.TripRequestSch
       this.params.modeAndModeOfOperationFilter = [
         {
           exclude: false,
-          ptMode: motFilter
+          ptMode: motFilter,
+          personalMode: [],
         }
       ];
     }
@@ -185,6 +186,8 @@ export class TripRequest extends BaseRequest implements OJP_Types.TripRequestSch
 
     this.params.modeAndModeOfOperationFilter = [
       {
+        ptMode: [],
+        personalMode: [],
         railSubmode: 'vehicleTunnelTransportRailService',
         waterSubmode: 'localCarFerry',
       }
