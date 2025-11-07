@@ -280,19 +280,39 @@ export class LocationInformationRequest extends BaseRequest implements OJP_Types
     return request;
   }
 
-  public static initWithLocationName(name: string): LocationInformationRequest {
+  public static initWithLocationName(name: string, placeTypes: OJP_Types.PlaceTypeEnum[] = [], numberOfResults: number = 10): LocationInformationRequest {
     const request = LocationInformationRequest.Default();
 
     request.initialInput = {
       name: name,
     };
 
+    if (request.restrictions) {
+      if (placeTypes.length > 0) {
+        request.restrictions.type = placeTypes;
+      }
+
+      if (numberOfResults !== null) {
+        request.restrictions.numberOfResults = numberOfResults;
+      }
+    }
+
     return request;
   }
 
-  public static initWithPlaceRef(placeRefOrCoords: string): LocationInformationRequest {
+  public static initWithPlaceRef(placeRefOrCoords: string, numberOfResults: number = 10): LocationInformationRequest {
     const request = LocationInformationRequest.Default();
+    
     request.placeRef = PlaceRef.initWithPlaceRefsOrCoords(placeRefOrCoords);
+
+    if (request.restrictions) {
+      request.restrictions.type = ['stop'];
+
+      if (numberOfResults !== null) {
+        request.restrictions.numberOfResults = numberOfResults;
+      }
+    }
+
     return request;
   }
 
