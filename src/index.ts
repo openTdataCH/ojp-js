@@ -20,7 +20,19 @@ export  {
   XmlSerializer,
 } from './models/xml-serializer';
 
-export { SDK_VERSION } from './constants';
+export { 
+  SDK_VERSION, 
+  DefaultXML_Config, XML_BuilderConfigOJPv1, XML_ParserConfigOJPv1,
+} from './constants';
+
 export { DateHelpers } from './helpers/index';
 export { HTTPConfig, Language, RequestInfo } from "./types/_all";
 export { SDK } from "./sdk";
+export {
+  FareRequestResponse,
+  LocationInformationRequestResponse,
+  StopEventRequestResponse,
+  TripInfoRequestResponse,
+  TripRefineRequestResponse,
+  TripRequestResponse,
+} from "./types/response";
