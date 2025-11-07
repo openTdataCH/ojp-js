@@ -316,7 +316,7 @@ export class LocationInformationRequest extends BaseRequest implements OJP_Types
     return request;
   }
 
-  public static initWithBBOX(bboxData: string | number[], placeType: OJP_Types.PlaceTypeEnum[], numberOfResults: number = 10): LocationInformationRequest {
+  public static initWithBBOX(bboxData: string | number[], placeTypes: OJP_Types.PlaceTypeEnum[] = [], numberOfResults: number = 10): LocationInformationRequest {
     const bboxDataParts: number[] = (() => {
       if (Array.isArray(bboxData)) {
         return bboxData;
@@ -354,7 +354,7 @@ export class LocationInformationRequest extends BaseRequest implements OJP_Types
     };
 
     request.restrictions = {
-      type: placeType,
+      type: placeTypes,
       numberOfResults: numberOfResults,
     };
 
