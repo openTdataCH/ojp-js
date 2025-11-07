@@ -7,12 +7,10 @@ import { PlaceResult, StopEventResult, Trip } from "./models/ojp";
 import { XML_Config, HTTPConfig, Language } from "./types/_all";
 import { FareRequest, LocationInformationRequest, StopEventRequest, TripInfoRequest, TripRefineRequest, TripRequest } from "./models/request";
 import { DefaultXML_Config } from "./constants";
-
-type ResponseOk<T> = { ok: true; value: T };
-type ResponseError<E> = { ok: false; error: E };
-type OJP_Response<T, E> = ResponseOk<T> | ResponseError<E>;
+import { FareRequestResponse, LocationInformationRequestResponse, StopEventRequestResponse, TripInfoRequestResponse, TripRefineRequestResponse, TripRequestResponse } from "./types/response";
 
 type OJP_RequestType = TripRequest | LocationInformationRequest | StopEventRequest | TripRefineRequest | FareRequest | TripInfoRequest;
+
 export class SDK {
   private requestorRef: string;
   private httpConfig: HTTPConfig;
@@ -88,7 +86,7 @@ export class SDK {
     return responseXML;
   }
 
-  public async fetchTripRequestResponse(request: TripRequest): Promise<OJP_Response<OJP_Types.TripDeliverySchema, Error>> {
+  public async fetchTripRequestResponse(request: TripRequest): Promise<TripRequestResponse> {
     const responseXML = await this.computeResponse(request);
 
     try {
@@ -107,7 +105,7 @@ export class SDK {
     }
   }
 
-  public async fetchLocationInformationRequestResponse(request: LocationInformationRequest): Promise<OJP_Response<OJP_Types.LocationInformationDeliverySchema, Error>> {
+  public async fetchLocationInformationRequestResponse(request: LocationInformationRequest): Promise<LocationInformationRequestResponse> {
     const responseXML = await this.computeResponse(request);
 
     try {
@@ -126,7 +124,7 @@ export class SDK {
     }
   }
 
-  public async fetchStopEventRequestResponse(request: StopEventRequest): Promise<OJP_Response<OJP_Types.StopEventDeliverySchema, Error>> {
+  public async fetchStopEventRequestResponse(request: StopEventRequest): Promise<StopEventRequestResponse> {
     const responseXML = await this.computeResponse(request);
 
     try {
@@ -145,7 +143,7 @@ export class SDK {
     }
   }
 
-  public async fetchTripRefineRequestResponse(request: TripRefineRequest): Promise<OJP_Response<OJP_Types.TRR_DeliverySchema, Error>> {
+  public async fetchTripRefineRequestResponse(request: TripRefineRequest): Promise<TripRefineRequestResponse> {
     const responseXML = await this.computeResponse(request);
 
     try {
@@ -164,7 +162,7 @@ export class SDK {
     }
   }
 
-  public async fetchTripInfoRequestResponse(request: TripInfoRequest): Promise<OJP_Response<OJP_Types.TripInfoDeliverySchema | OJP_Types.OJPv1_TripInfoDeliverySchema, Error>> {
+  public async fetchTripInfoRequestResponse(request: TripInfoRequest): Promise<TripInfoRequestResponse> {
     const responseXML = await this.computeResponse(request);
 
     try {
@@ -183,7 +181,7 @@ export class SDK {
     }
   }
 
-  public async fetchFareRequestResponse(request: FareRequest): Promise<OJP_Response<OJP_Types.FareDeliverySchema, Error>> {
+  public async fetchFareRequestResponse(request: FareRequest): Promise<FareRequestResponse> {
     const responseXML = await this.computeResponse(request);
 
     try {
