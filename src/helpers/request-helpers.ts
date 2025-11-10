@@ -14,7 +14,7 @@ export class RequestHelpers {
     return requestTimestamp;
   }
 
-  public static async computeResponse(request: OJP_RequestType, sdk: SDK<'1.0'> | SDK<'2.0'>, xmlConfig: XML_Config = DefaultXML_Config): Promise<string> {
+  public static async computeResponse(request: OJP_RequestType, sdk: SDK<'1.0'> | SDK<'2.0'>, xmlConfig: XML_Config): Promise<string> {
     const requestXML = (() => {
       if (request.mockRequestXML) {
         // console.log('TR: using mock request XML');
