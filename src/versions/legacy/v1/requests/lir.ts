@@ -1,6 +1,6 @@
 import * as OJP_Types from 'ojp-shared-types';
 
-import { SDK } from '../../../../sdk-new';
+import { SDK } from '../../../../sdk';
 import { buildRootXML } from '../../../../helpers/xml/builder';
 import { parseXML } from '../../../../helpers/xml/parser';
 
