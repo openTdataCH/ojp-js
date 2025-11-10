@@ -11,5 +11,8 @@ export type OJPv1_LocationInformationRequestResponse = OJP_Response<OJP_Types.OJ
 
 export type StopEventRequestResponse = OJP_Response<OJP_Types.StopEventDeliverySchema, Error>;
 export type TripRefineRequestResponse = OJP_Response<OJP_Types.TRR_DeliverySchema, Error>;
-export type TripInfoRequestResponse = OJP_Response<OJP_Types.TripInfoDeliverySchema | OJP_Types.OJPv1_TripInfoDeliverySchema, Error>;
+
+export type TripInfoRequestResponse = OJP_Response<OJP_Types.TripInfoDeliverySchema, Error>;
+export type OJPv1_TripInfoRequestResponse = OJP_Response<OJP_Types.OJPv1_TripInfoDeliverySchema, Error>;
+
 export type FareRequestResponse = OJP_Response<OJP_Types.FareDeliverySchema, Error>;
