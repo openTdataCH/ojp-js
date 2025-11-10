@@ -8,17 +8,19 @@ import { OJPv1_LocationInformationRequest } from './versions/legacy/v1/requests/
 import { OJPv1_TripInfoRequest } from "./versions/legacy/v1/requests/tir";
 import { OJPv1_TripRequest } from "./versions/legacy/v1/requests/tr";
 
-type RequestKey = 'LocationInformationRequest' | 'TripInfoRequest' | 'TripRequest';
+type RequestKey = 'LocationInformationRequest' | 'StopEventRequest' | 'TripInfoRequest' | 'TripRequest';
 
 // Registry of classes per version
 const builders = {
   '1.0': { 
     LocationInformationRequest: OJPv1_LocationInformationRequest,
+    StopEventRequest: OJPv1_StopEventRequest,
     TripInfoRequest: OJPv1_TripInfoRequest,
     TripRequest: OJPv1_TripRequest,
   },
   '2.0': { 
     LocationInformationRequest: LocationInformationRequest,
+    StopEventRequest: StopEventRequest,
     TripInfoRequest: TripInfoRequest,
     TripRequest: TripRequest,
   },
