@@ -14,7 +14,7 @@ import { XML_BuilderConfigOJPv1 } from '../../../../constants';
 import { OJPv1_LocationInformationRequestResponse } from '../../../../types/response';
 import { SharedLocationInformationRequest } from '../../../current/requests/lir.shared';
 
-export class OJPv1_LocationInformationRequest extends SharedLocationInformationRequest {
+export class OJPv1_LocationInformationRequest extends SharedLocationInformationRequest<{ version: '1.0', fetchResponse: OJPv1_LocationInformationRequestResponse }> {
   public payload: OJP_Types.OJPv1_LocationInformationRequestSchema;
 
   private constructor(initialInput: OJP_Types.OJPv1_InitialInputSchema | undefined, placeRef: PlaceRef | undefined, restrictions: OJP_Types.LIR_RequestParamsSchema | undefined) {
@@ -84,6 +84,10 @@ export class OJPv1_LocationInformationRequest extends SharedLocationInformationR
     return request;
   }
 
+  protected patchPayload() {
+
+  }
+
   public buildRequestXML(language: Language, requestorRef: string, xmlConfig: XML_Config): string {
     this.payload.requestTimestamp = RequestHelpers.computeRequestTimestamp();
 
@@ -105,7 +109,7 @@ export class OJPv1_LocationInformationRequest extends SharedLocationInformationR
     return xmlS;
   }
 
-  public async fetchResponse(sdk: SDK<'1.0'>): Promise<OJPv1_LocationInformationRequestResponse> {
+  public async _fetchResponse(sdk: SDK<'1.0'>): Promise<OJPv1_LocationInformationRequestResponse> {
     const responseXML = await RequestHelpers.computeResponse(this, sdk, XML_BuilderConfigOJPv1);
 
     try {

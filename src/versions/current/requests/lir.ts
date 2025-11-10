@@ -13,7 +13,7 @@ import { LocationInformationRequestResponse } from '../../../types/response';
 import { SharedLocationInformationRequest } from './lir.shared';
 import { DefaultXML_Config } from '../../../constants';
 
-export class LocationInformationRequest extends SharedLocationInformationRequest {
+export class LocationInformationRequest extends SharedLocationInformationRequest<{ version: '2.0', fetchResponse: LocationInformationRequestResponse }> {
   public payload: OJP_Types.LocationInformationRequestSchema;
 
   private constructor(initialInput: OJP_Types.InitialInputSchema | undefined, placeRef: PlaceRef | undefined, restrictions: OJP_Types.LIR_RequestParamsSchema | undefined) {
@@ -83,6 +83,10 @@ export class LocationInformationRequest extends SharedLocationInformationRequest
     return request;
   }
 
+  protected patchPayload() {
+
+  }
+
   public buildRequestXML(language: Language, requestorRef: string, xmlConfig: XML_Config): string {
     this.payload.requestTimestamp = RequestHelpers.computeRequestTimestamp();
 
@@ -104,7 +108,7 @@ export class LocationInformationRequest extends SharedLocationInformationRequest
     return xmlS;
   }
 
-  public async fetchResponse(sdk: SDK<'2.0'>): Promise<LocationInformationRequestResponse> {
+  public async _fetchResponse(sdk: SDK<'2.0'>): Promise<LocationInformationRequestResponse> {
     const responseXML = await RequestHelpers.computeResponse(this, sdk, DefaultXML_Config);
 
     try {

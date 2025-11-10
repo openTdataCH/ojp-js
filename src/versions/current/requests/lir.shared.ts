@@ -1,8 +1,8 @@
 import * as OJP_Types from 'ojp-shared-types';
 
-import { BaseRequest } from "./base";
+import { BaseRequest, ResultSpec } from "./base";
 
-export abstract class SharedLocationInformationRequest extends BaseRequest {
+export abstract class SharedLocationInformationRequest<S extends ResultSpec> extends BaseRequest<S> {
   protected static DefaultRestrictionParams(): OJP_Types.LIR_RequestParamsSchema {
     const restrictionParams: OJP_Types.LIR_RequestParamsSchema = {
       type: [],
