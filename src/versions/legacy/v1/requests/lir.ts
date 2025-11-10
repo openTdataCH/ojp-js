@@ -28,7 +28,7 @@ export class OJPv1_LocationInformationRequest extends SharedLocationInformationR
     };
   }
 
-  private static Default(): OJPv1_LocationInformationRequest {
+  private static Default() {
     const initialInput: OJP_Types.OJPv1_InitialInputSchema = {
       locationName: undefined,
       geoRestriction: undefined,
@@ -40,19 +40,19 @@ export class OJPv1_LocationInformationRequest extends SharedLocationInformationR
     return request;
   }
 
-  public static initWithRequestMock(mockText: string): OJPv1_LocationInformationRequest {
+  public static initWithRequestMock(mockText: string) {
     const request = OJPv1_LocationInformationRequest.Default();
     request.mockRequestXML = mockText;
     return request;
   }
 
-  public static initWithResponseMock(mockText: string): OJPv1_LocationInformationRequest {
+  public static initWithResponseMock(mockText: string) {
     const request = OJPv1_LocationInformationRequest.Default();
     request.mockResponseXML = mockText;
     return request;
   }
 
-  public static initWithLocationName(name: string, placeTypes: OJP_Types.PlaceTypeEnum[] = [], numberOfResults: number = 10): OJPv1_LocationInformationRequest {
+  public static initWithLocationName(name: string, placeTypes: OJP_Types.PlaceTypeEnum[] = [], numberOfResults: number = 10) {
     const request = OJPv1_LocationInformationRequest.Default();
 
     request.payload.initialInput = {
@@ -66,7 +66,7 @@ export class OJPv1_LocationInformationRequest extends SharedLocationInformationR
     return request;
   }
 
-  public static initWithPlaceRef(placeRefOrCoords: string, numberOfResults: number = 10): OJPv1_LocationInformationRequest {
+  public static initWithPlaceRef(placeRefOrCoords: string, numberOfResults: number = 10) {
     const request = OJPv1_LocationInformationRequest.Default();
     
     request.payload.placeRef = PlaceRef.initWithPlaceRefsOrCoords(placeRefOrCoords);
@@ -78,7 +78,7 @@ export class OJPv1_LocationInformationRequest extends SharedLocationInformationR
     return request;
   }
 
-  public static initWithBBOX(bboxData: string | number[], placeTypes: OJP_Types.PlaceTypeEnum[] = [], numberOfResults: number = 10): OJPv1_LocationInformationRequest {
+  public static initWithBBOX(bboxData: string | number[], placeTypes: OJP_Types.PlaceTypeEnum[] = [], numberOfResults: number = 10) {
     const request = OJPv1_LocationInformationRequest.Default();
 
     const geoRestriction = this.computeGeoRestriction(bboxData);
