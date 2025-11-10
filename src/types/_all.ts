@@ -5,8 +5,10 @@ export interface HTTPConfig {
 
 export type Language = 'de' | 'fr' | 'it' | 'en';
 
+export type OJP_VERSION = '1.0' | '2.0';
+
 export interface XML_Config {
-  ojpVersion: '1.0' | '2.0',
+  ojpVersion: OJP_VERSION,
   defaultNS: 'ojp' | 'siri' | null,
   mapNS: Record<string, string>
 }
