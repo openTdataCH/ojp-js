@@ -1,17 +1,21 @@
 import { HTTPConfig, Language, OJP_VERSION } from './types/_all';
 
 import { LocationInformationRequest } from './versions/current/requests/lir';
+import { TripInfoRequest } from "./versions/current/requests/tir";
 import { OJPv1_LocationInformationRequest } from './versions/legacy/v1/requests/lir';
+import { OJPv1_TripInfoRequest } from "./versions/legacy/v1/requests/tir";
 
-type RequestKey = 'LocationInformationRequest';
+type RequestKey = 'LocationInformationRequest' | 'TripInfoRequest';
 
 // Registry of classes per version
 const builders = {
   '1.0': { 
-    LocationInformationRequest: OJPv1_LocationInformationRequest, 
+    LocationInformationRequest: OJPv1_LocationInformationRequest,
+    TripInfoRequest: OJPv1_TripInfoRequest,
   },
   '2.0': { 
     LocationInformationRequest: LocationInformationRequest,
+    TripInfoRequest: TripInfoRequest,
   },
 } as const;
 
