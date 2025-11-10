@@ -1,4 +1,4 @@
-export * from './sdk';
+export { SDK } from './sdk';
 
 export { 
   SDK_VERSION, 
