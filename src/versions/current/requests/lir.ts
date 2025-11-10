@@ -39,18 +39,6 @@ export class LocationInformationRequest extends SharedLocationInformationRequest
     return request;
   }
 
-  public static initWithRequestMock(mockText: string) {
-    const request = LocationInformationRequest.Default();
-    request.mockRequestXML = mockText;
-    return request;
-  }
-
-  public static initWithResponseMock(mockText: string) {
-    const request = LocationInformationRequest.Default();
-    request.mockResponseXML = mockText;
-    return request;
-  }
-
   public static initWithLocationName(name: string, placeTypes: OJP_Types.PlaceTypeEnum[] = [], numberOfResults: number = 10) {
     const request = LocationInformationRequest.Default();
 

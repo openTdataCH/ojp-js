@@ -20,4 +20,18 @@ export class BaseRequest {
     this.mockRequestXML = null;
     this.mockResponseXML = null;
   }
+
+  public static initWithRequestMock<T>(this: { Default(): T }, mockText: string): T {
+    const instance = this.Default();
+    (instance as BaseRequest).mockRequestXML = mockText;
+    
+    return instance;
+  }
+
+  public static initWithResponseMock<T>(this: { Default(): T }, mockText: string): T {
+    const instance = this.Default();
+    (instance as BaseRequest).mockResponseXML = mockText;
+    
+    return instance;
+  }
 }
