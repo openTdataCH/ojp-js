@@ -42,13 +42,8 @@ export class TripInfoRequest extends SharedTripInfoRequest<{ version: '2.0', fet
     return request;
   }
 
-  protected patchPayload() {
-
-  }
-
   public buildRequestXML(language: Language, requestorRef: string, xmlConfig: XML_Config): string {
     this.payload.requestTimestamp = RequestHelpers.computeRequestTimestamp();
-    this.patchPayload();
 
     const requestOJP: OJP_Types.TIR_RequestOJP = {
       OJPRequest: {

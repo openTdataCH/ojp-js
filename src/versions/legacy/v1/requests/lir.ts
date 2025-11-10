@@ -84,10 +84,6 @@ export class OJPv1_LocationInformationRequest extends SharedLocationInformationR
     return request;
   }
 
-  protected patchPayload() {
-
-  }
-
   public buildRequestXML(language: Language, requestorRef: string, xmlConfig: XML_Config): string {
     this.payload.requestTimestamp = RequestHelpers.computeRequestTimestamp();
 

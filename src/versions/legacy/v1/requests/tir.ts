@@ -14,8 +14,6 @@ import { SharedTripInfoRequest } from '../../../current/requests/tir.shared';
 import { XML_BuilderConfigOJPv1 } from '../../../../constants';
 
 export class OJPv1_TripInfoRequest extends SharedTripInfoRequest<{ version: '1.0', fetchResponse: OJPv1_TripInfoRequestResponse }> {
-  // This should be OJPv1 of TIR_RequestSchema
-  // - however because the types are very similar we adapt the request in patchPayload()
   public payload: OJP_Types.TIR_RequestSchema;
 
   protected constructor(journeyRef: string, operatingDayRef: string, params?: OJP_Types.TIR_RequestParamsSchema) {
@@ -27,6 +25,13 @@ export class OJPv1_TripInfoRequest extends SharedTripInfoRequest<{ version: '1.0
       operatingDayRef: operatingDayRef,
       params: params,
     };
+
+    // OJP 2.0 TIR request XML can be used also for OJP 1.0
+    //    except for following params which need to be removed / unset
+    if (this.payload.params) {
+      // IncludeSituationsContext is only in 2.0, in 1.0 will return in 400 error on server
+      this.payload.params.includeSituationsContext = undefined;
+    }
   }
 
   // Used by Base.initWithRequestMock / initWithResponseMock
@@ -44,16 +49,8 @@ export class OJPv1_TripInfoRequest extends SharedTripInfoRequest<{ version: '1.0
     return request;
   }
 
-  protected patchPayload(): void {
-    if (this.payload.params) {
-      // IncludeSituationsContext is only in 2.0, in 1.0 will return in 400 error on server
-      this.payload.params.includeSituationsContext = undefined;
-    }
-  }
-
   public buildRequestXML(language: Language, requestorRef: string, xmlConfig: XML_Config): string {
     this.payload.requestTimestamp = RequestHelpers.computeRequestTimestamp();
-    this.patchPayload();
 
     const requestOJP: OJP_Types.TIR_RequestOJP = {
       OJPRequest: {

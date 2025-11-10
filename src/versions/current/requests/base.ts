@@ -44,7 +44,5 @@ export abstract class BaseRequest<S extends ResultSpec> {
     return response;
   }
 
-  protected abstract patchPayload(): void;
-
   public abstract buildRequestXML(language: Language, requestorRef: string, xmlConfig: XML_Config): string;
 }
