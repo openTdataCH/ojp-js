@@ -6,3 +6,7 @@ export {
 } from './constants';
 
 export { HTTPConfig, Language, RequestInfo } from "./types/_all";
+
+export  {
+  XmlSerializer,
+} from './models/xml-serializer';
