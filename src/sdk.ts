@@ -2,6 +2,7 @@ import { HTTPConfig, Language, OJP_VERSION } from './types/_all';
 
 import { LocationInformationRequest } from './versions/current/requests/lir';
 import { TripInfoRequest } from "./versions/current/requests/tir";
+
 import { OJPv1_LocationInformationRequest } from './versions/legacy/v1/requests/lir';
 import { OJPv1_TripInfoRequest } from "./versions/legacy/v1/requests/tir";
 
