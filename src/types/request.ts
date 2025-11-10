@@ -6,7 +6,11 @@ import { OJPv1_TripInfoRequest } from "../versions/legacy/v1/requests/tir";
 
 import { TripRequest } from "../versions/current/requests/tr";
 import { OJPv1_TripRequest } from "../versions/legacy/v1/requests/tr";
+import { StopEventRequest } from "../versions/current/requests/ser";
+import { OJPv1_StopEventRequest } from "../versions/legacy/v1/requests/ser";
+
 export type OJP_RequestType = 
     LocationInformationRequest | OJPv1_LocationInformationRequest |
+    StopEventRequest | OJPv1_StopEventRequest |
     TripInfoRequest | OJPv1_TripInfoRequest |
     TripRequest | OJPv1_TripRequest;
