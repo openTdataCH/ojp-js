@@ -11,6 +11,7 @@ import { RequestHelpers } from '../../../helpers/request-helpers';
 
 import { LocationInformationRequestResponse } from '../../../types/response';
 import { SharedLocationInformationRequest } from './lir.shared';
+import { DefaultXML_Config } from '../../../constants';
 
 export class LocationInformationRequest extends SharedLocationInformationRequest {
   public payload: OJP_Types.LocationInformationRequestSchema;
@@ -116,7 +117,7 @@ export class LocationInformationRequest extends SharedLocationInformationRequest
   }
 
   public async fetchResponse(sdk: SDK<'2.0'>): Promise<LocationInformationRequestResponse> {
-    const responseXML = await RequestHelpers.computeResponse(this, sdk);
+    const responseXML = await RequestHelpers.computeResponse(this, sdk, DefaultXML_Config);
 
     try {
       const parsedObj = parseXML<{ OJP: OJP_Types.LocationInformationRequestResponseOJP }>(responseXML, 'OJP');
