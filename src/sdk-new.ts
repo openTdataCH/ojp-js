@@ -1,35 +1,37 @@
-import { LocationInformationRequest } from './versions/v2/requests/lir';
+import { HTTPConfig, Language, OJP_VERSION } from './types/_all';
+
+import { LocationInformationRequest } from './versions/current/requests/lir';
 import { OJPv1_LocationInformationRequest } from './versions/legacy/v1/requests/lir';
 
-type Version = 'v1' | 'v2';
+type RequestKey = 'LocationInformationRequest';
 
-type LocationInformationRequestClass<V extends Version> =
-  V extends 'v2' ? typeof LocationInformationRequest : typeof OJPv1_LocationInformationRequest;
-
-const registry = {
-  v1: {
-    LocationInformationRequest: OJPv1_LocationInformationRequest,
+// Registry of classes per version
+const builders = {
+  '1.0': { 
+    LocationInformationRequest: OJPv1_LocationInformationRequest, 
   },
-  v2: {
+  '2.0': { 
     LocationInformationRequest: LocationInformationRequest,
   },
 } as const;
-type Registry = typeof registry;
-type RequestKeys = keyof Registry['v1'];
-type ClassFor<V extends Version, K extends RequestKeys> = Registry[V][K];
 
-export class SDK<V extends Version = 'v2'> {
-  private readonly version: V;
+type Builders = typeof builders;
+type ClassFor<V extends OJP_VERSION, K extends RequestKey> = Builders[V][K];
 
-  constructor(version?: V) {
-    this.version = (version ?? 'v2') as V;
+export class SDK<V extends OJP_VERSION = '2.0'> {
+  public readonly version: OJP_VERSION;
+  public requestorRef: string;
+  public httpConfig: HTTPConfig;
+  public language: Language;
+
+  constructor(requestorRef: string, httpConfig: HTTPConfig, language: Language = 'en', version: OJP_VERSION = '2.0') {
+    this.requestorRef = requestorRef;
+    this.httpConfig = httpConfig;
+    this.language = language;
+    this.version = version;
   }
 
-  public get LocationInformationRequest(): LocationInformationRequestClass<V> {
-    return (this.version === 'v2' ? LocationInformationRequest : OJPv1_LocationInformationRequest) as LocationInformationRequestClass<V>;
-  }
-
-  get requests(): { [K in RequestKeys]: ClassFor<V, K> } {
-    return registry[this.version] as { [K in RequestKeys]: ClassFor<V, K> };
+  get requests(): { [K in RequestKey]: ClassFor<V, K> } {
+    return builders[this.version] as { [K in RequestKey]: ClassFor<V, K> };
   }
 }
