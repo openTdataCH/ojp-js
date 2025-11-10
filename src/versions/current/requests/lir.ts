@@ -94,25 +94,6 @@ export class LocationInformationRequest extends SharedLocationInformationRequest
     return request;
   }
 
-  public async fetchResponse(sdk: SDK<'2.0'>): Promise<LocationInformationRequestResponse> {
-    const responseXML = await RequestHelpers.computeResponse(this, sdk);
-
-    try {
-      const parsedObj = parseXML<{ OJP: OJP_Types.LocationInformationRequestResponseOJP }>(responseXML, 'OJP');
-      const response = parsedObj.OJP.OJPResponse.serviceDelivery.OJPLocationInformationDelivery;
-
-      return {
-        ok: true,
-        value: response,
-      };
-    } catch (error) {
-      return {
-        ok: false,
-        error: error instanceof Error ? error : new Error('Unknown error'),
-      };
-    }
-  }
-
   public buildRequestXML(language: Language, requestorRef: string, xmlConfig: XML_Config): string {
     this.payload.requestTimestamp = RequestHelpers.computeRequestTimestamp();
 
@@ -132,5 +113,24 @@ export class LocationInformationRequest extends SharedLocationInformationRequest
     const xmlS = buildRootXML(requestOJP, xmlConfig);
 
     return xmlS;
+  }
+
+  public async fetchResponse(sdk: SDK<'2.0'>): Promise<LocationInformationRequestResponse> {
+    const responseXML = await RequestHelpers.computeResponse(this, sdk);
+
+    try {
+      const parsedObj = parseXML<{ OJP: OJP_Types.LocationInformationRequestResponseOJP }>(responseXML, 'OJP');
+      const response = parsedObj.OJP.OJPResponse.serviceDelivery.OJPLocationInformationDelivery;
+
+      return {
+        ok: true,
+        value: response,
+      };
+    } catch (error) {
+      return {
+        ok: false,
+        error: error instanceof Error ? error : new Error('Unknown error'),
+      };
+    }
   }
 }
