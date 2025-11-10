@@ -14,6 +14,19 @@ import { SharedTripInfoRequest } from './tir.shared';
 import { DefaultXML_Config } from '../../../constants';
 
 export class TripInfoRequest extends SharedTripInfoRequest<{ version: '2.0', fetchResponse: TripInfoRequestResponse }> {
+  public payload: OJP_Types.TIR_RequestSchema;
+
+  protected constructor(journeyRef: string, operatingDayRef: string, params?: OJP_Types.TIR_RequestParamsSchema) {
+    super();
+
+    this.payload = {
+      requestTimestamp: RequestHelpers.computeRequestTimestamp(),
+      journeyRef: journeyRef,
+      operatingDayRef: operatingDayRef,
+      params: params,
+    };
+  }
+
   // Used by Base.initWithRequestMock / initWithResponseMock
   private static Default() {
     const request = new TripInfoRequest('n/a', 'n/a', SharedTripInfoRequest.DefaultRequestParams());

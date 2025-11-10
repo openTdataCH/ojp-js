@@ -14,6 +14,21 @@ import { SharedTripInfoRequest } from '../../../current/requests/tir.shared';
 import { XML_BuilderConfigOJPv1 } from '../../../../constants';
 
 export class OJPv1_TripInfoRequest extends SharedTripInfoRequest<{ version: '1.0', fetchResponse: OJPv1_TripInfoRequestResponse }> {
+  // This should be OJPv1 of TIR_RequestSchema
+  // - however because the types are very similar we adapt the request in patchPayload()
+  public payload: OJP_Types.TIR_RequestSchema;
+
+  protected constructor(journeyRef: string, operatingDayRef: string, params?: OJP_Types.TIR_RequestParamsSchema) {
+    super();
+
+    this.payload = {
+      requestTimestamp: RequestHelpers.computeRequestTimestamp(),
+      journeyRef: journeyRef,
+      operatingDayRef: operatingDayRef,
+      params: params,
+    };
+  }
+
   // Used by Base.initWithRequestMock / initWithResponseMock
   private static Default() {
     const request = new OJPv1_TripInfoRequest('n/a', 'n/a', SharedTripInfoRequest.DefaultRequestParams());
