@@ -28,7 +28,7 @@ export class OJPv1_LocationInformationRequest extends SharedLocationInformationR
     };
   }
 
-  private static Default() {
+  public static Default() {
     const initialInput: OJP_Types.OJPv1_InitialInputSchema = {
       locationName: undefined,
       geoRestriction: undefined,

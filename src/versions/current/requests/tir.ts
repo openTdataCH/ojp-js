@@ -28,7 +28,7 @@ export class TripInfoRequest extends SharedTripInfoRequest<{ version: '2.0', fet
   }
 
   // Used by Base.initWithRequestMock / initWithResponseMock
-  private static Default() {
+  public static Default() {
     const request = new TripInfoRequest('n/a', 'n/a', SharedTripInfoRequest.DefaultRequestParams());
     return request;
   }

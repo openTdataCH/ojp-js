@@ -35,7 +35,7 @@ export class OJPv1_TripInfoRequest extends SharedTripInfoRequest<{ version: '1.0
   }
 
   // Used by Base.initWithRequestMock / initWithResponseMock
-  private static Default() {
+  public static Default() {
     const request = new OJPv1_TripInfoRequest('n/a', 'n/a', SharedTripInfoRequest.DefaultRequestParams());
     return request;
   }

@@ -27,7 +27,7 @@ export class StopEventRequest extends SharedStopEventRequest <{ version: '2.0', 
   }
 
   // Used by Base.initWithRequestMock / initWithResponseMock
-  private static Default() {
+  public static Default() {
     const date = new Date();
     const location: OJP_Types.SER_RequestLocationSchema = {
       placeRef: {

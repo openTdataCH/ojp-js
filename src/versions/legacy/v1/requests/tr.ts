@@ -32,7 +32,7 @@ export class OJPv1_TripRequest extends SharedTripRequest<{ version: '1.0', fetch
   }
 
   // Used by Base.initWithRequestMock / initWithResponseMock
-  private static Default() {
+  public static Default() {
     const date = new Date();
     const origin: OJP_Types.PlaceContextSchema = {
       placeRef: PlaceRef.initWithPlaceRefsOrCoords('8503000', 'Zürich'),

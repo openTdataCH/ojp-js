@@ -39,7 +39,7 @@ export class TripRefineRequest extends BaseRequest<{ version: '2.0', fetchRespon
   }
 
   // Used by Base.initWithRequestMock / initWithResponseMock
-  private static Default() {
+  public static Default() {
     const fakeTripResult = <OJP_Types.TripResultSchema>{};
     // update fake
     const params = TripRefineRequest.DefaultRequestParams();
