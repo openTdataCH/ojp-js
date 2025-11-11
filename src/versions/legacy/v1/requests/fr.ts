@@ -1,20 +1,20 @@
 import * as OJP_Types from 'ojp-shared-types';
 
-import { SDK } from '../../../sdk';
+import { SDK } from '../../../../sdk';
 
-import { buildRootXML } from '../../../helpers/xml/builder';
-import { parseXML } from '../../../helpers/xml/parser';
-import { RequestHelpers } from '../../../helpers/request-helpers';
-import { OJPv1_Helpers } from '../../../helpers/ojp-v1';
+import { buildRootXML } from '../../../../helpers/xml/builder';
+import { parseXML } from '../../../../helpers/xml/parser';
+import { RequestHelpers } from '../../../../helpers/request-helpers';
+import { OJPv1_Helpers } from '../../../../helpers/ojp-v1';
 
-import { Language, XML_Config } from '../../../types/_all';
+import { Language, XML_Config } from '../../../../types/_all';
 
-import { FareRequestResponse } from '../../../types/response';
-import { DefaultXML_Config } from '../../../constants';
+import { FareRequestResponse } from '../../../../types/response';
+import { DefaultXML_Config, XML_BuilderConfigOJPv1 } from '../../../../constants';
 
-import { BaseRequest } from './base';
+import { BaseRequest } from '../../../current/requests/base';
 
-export class FareRequest extends BaseRequest<{ version: '2.0', fetchResponse: FareRequestResponse }> {
+export class OJPv1_FareRequest extends BaseRequest<{ version: '1.0', fetchResponse: FareRequestResponse }> {
   public payload: OJP_Types.FareRequestSchema[];
 
   private constructor(items: OJP_Types.FareRequestSchema[]) {
@@ -49,8 +49,8 @@ export class FareRequest extends BaseRequest<{ version: '2.0', fetchResponse: Fa
   }
 
   // Used by Base.initWithRequestMock / initWithResponseMock
-  private static Default(): FareRequest {
-    const request = new FareRequest([]);
+  public static Default(): OJPv1_FareRequest {
+    const request = new OJPv1_FareRequest([]);
     return request;
   }
 
@@ -69,13 +69,13 @@ export class FareRequest extends BaseRequest<{ version: '2.0', fetchResponse: Fa
         tripFareRequest: {
           trip: trip,
         },
-        params: FareRequest.DefaultRequestParams(),
+        params: OJPv1_FareRequest.DefaultRequestParams(),
       };
 
       fareRequests.push(fareRequest);
     });
 
-    const request = new FareRequest(fareRequests);
+    const request = new OJPv1_FareRequest(fareRequests);
     return request;
   }
 
@@ -86,7 +86,7 @@ export class FareRequest extends BaseRequest<{ version: '2.0', fetchResponse: Fa
       newTrips.push(tripV1);
     });
 
-    const request = FareRequest.initWithOJPv1Trips(newTrips);
+    const request = OJPv1_FareRequest.initWithOJPv1Trips(newTrips);
     return request;
   }
 
@@ -138,13 +138,20 @@ export class FareRequest extends BaseRequest<{ version: '2.0', fetchResponse: Fa
     return xmlS;
   }
 
-  protected override async _fetchResponse(sdk: SDK<'2.0'>): Promise<FareRequestResponse> {
-    const responseXML = await RequestHelpers.computeResponse(this, sdk, DefaultXML_Config);
+  protected override async _fetchResponse(sdk: SDK<'1.0'>): Promise<FareRequestResponse> {
+    const xmlConfig: XML_Config = sdk.version === '2.0' ? DefaultXML_Config : XML_BuilderConfigOJPv1;
+    
+    const responseXML = await RequestHelpers.computeResponse(this, sdk, xmlConfig);
 
     try {
       const parsedObj = parseXML<{ OJP: OJP_Types.FareResponseOJP }>(responseXML, 'OJP');
       const response = parsedObj.OJP.OJPResponse.serviceDelivery.OJPFareDelivery;
 
+      if (response === undefined) {
+        console.log(responseXML);
+        throw new Error('Parse error');
+      }
+      
       return {
         ok: true,
         value: response,
