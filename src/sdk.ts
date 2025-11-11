@@ -1,5 +1,6 @@
 import { HTTPConfig, Language, OJP_VERSION } from './types/_all';
 
+import { FareRequest } from "./versions/current/requests/fr";
 import { LocationInformationRequest } from './versions/current/requests/lir';
 import { StopEventRequest } from "./versions/current/requests/ser";
 import { TripInfoRequest } from "./versions/current/requests/tir";
@@ -11,17 +12,18 @@ import { OJPv1_StopEventRequest } from "./versions/legacy/v1/requests/ser";
 import { OJPv1_TripInfoRequest } from "./versions/legacy/v1/requests/tir";
 import { OJPv1_TripRequest } from "./versions/legacy/v1/requests/tr";
 
-type RequestKey = 'LocationInformationRequest' | 'StopEventRequest' | 'TripInfoRequest' | 'TripRefineRequest' | 'TripRequest';
 class EmptyRequest {
   public static init() {
     throw new Error('this request is not available for the selected OJP version');
   }
 }
 
+type RequestKey = 'FareRequest' | 'LocationInformationRequest' | 'StopEventRequest' | 'TripInfoRequest' | 'TripRefineRequest' | 'TripRequest';
 
 // Registry of classes per version
 const builders = {
-  '1.0': { 
+  '1.0': {
+    FareRequest: EmptyRequest,
     LocationInformationRequest: OJPv1_LocationInformationRequest,
     StopEventRequest: OJPv1_StopEventRequest,
     TripInfoRequest: OJPv1_TripInfoRequest,
@@ -29,6 +31,7 @@ const builders = {
     TripRequest: OJPv1_TripRequest,
   },
   '2.0': { 
+    FareRequest: FareRequest,
     LocationInformationRequest: LocationInformationRequest,
     StopEventRequest: StopEventRequest,
     TripInfoRequest: TripInfoRequest,
