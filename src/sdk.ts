@@ -23,7 +23,7 @@ type RequestKey = 'FareRequest' | 'LocationInformationRequest' | 'StopEventReque
 // Registry of classes per version
 const builders = {
   '1.0': {
-    FareRequest: EmptyRequest,
+    FareRequest: OJPv1_FareRequest,
     LocationInformationRequest: OJPv1_LocationInformationRequest,
     StopEventRequest: OJPv1_StopEventRequest,
     TripInfoRequest: OJPv1_TripInfoRequest,
@@ -31,7 +31,7 @@ const builders = {
     TripRequest: OJPv1_TripRequest,
   },
   '2.0': { 
-    FareRequest: FareRequest,
+    FareRequest: EmptyRequest,
     LocationInformationRequest: LocationInformationRequest,
     StopEventRequest: StopEventRequest,
     TripInfoRequest: TripInfoRequest,
