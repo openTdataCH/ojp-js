@@ -1,12 +1,12 @@
 import { HTTPConfig, Language, OJP_VERSION } from './types/_all';
 
-import { FareRequest } from "./versions/current/requests/fr";
 import { LocationInformationRequest } from './versions/current/requests/lir';
 import { StopEventRequest } from "./versions/current/requests/ser";
 import { TripInfoRequest } from "./versions/current/requests/tir";
 import { TripRefineRequest } from "./versions/current/requests/trr";
 import { TripRequest } from "./versions/current/requests/tr";
 
+import { OJPv1_FareRequest } from "./versions/legacy/v1/requests/fr";
 import { OJPv1_LocationInformationRequest } from './versions/legacy/v1/requests/lir';
 import { OJPv1_StopEventRequest } from "./versions/legacy/v1/requests/ser";
 import { OJPv1_TripInfoRequest } from "./versions/legacy/v1/requests/tir";
