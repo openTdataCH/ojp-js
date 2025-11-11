@@ -21,3 +21,12 @@ export { DateHelpers } from './helpers/date-helpers';
 export  {
   XmlSerializer,
 } from './models/xml-serializer';
+
+export { GeoPosition } from './models/geoposition';
+
+export {
+  Place,
+  PlaceResult,
+  StopEventResult,
+  Trip,
+} from "./models/ojp";
