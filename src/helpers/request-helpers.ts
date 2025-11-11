@@ -2,7 +2,6 @@ import axios, { AxiosHeaders, AxiosRequestConfig } from "axios";
 
 import { SDK } from "../sdk";
 
-import { DefaultXML_Config } from "../constants";
 import { HTTPConfig, XML_Config } from "../types/_all";
 import { OJP_RequestType } from "../types/request";
 
