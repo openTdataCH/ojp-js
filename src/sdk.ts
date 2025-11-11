@@ -49,11 +49,20 @@ export class SDK<V extends OJP_VERSION = '2.0'> {
   public httpConfig: HTTPConfig;
   public language: Language;
 
-  constructor(requestorRef: string, httpConfig: HTTPConfig, language: Language = 'en', version: OJP_VERSION = '2.0') {
+  private constructor(requestorRef: string, httpConfig: HTTPConfig, language: Language = 'en', version: OJP_VERSION) {
     this.requestorRef = requestorRef;
     this.httpConfig = httpConfig;
     this.language = language;
     this.version = version;
+  }
+
+  public static create(requestorRef: string, httpConfig: HTTPConfig, language: Language = 'en'): SDK<'2.0'> {
+    const sdk = new SDK<'2.0'>(requestorRef, httpConfig, language, '2.0');
+    return sdk;
+  }
+  public static v1(requestorRef: string, httpConfig: HTTPConfig, language: Language = 'en'): SDK<'1.0'> {
+    const sdk = new SDK<'1.0'>(requestorRef, httpConfig, language, '1.0');
+    return sdk;
   }
 
   get requests(): { [K in RequestKey]: ClassFor<V, K> } {
