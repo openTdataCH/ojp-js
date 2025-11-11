@@ -12,9 +12,9 @@ import { TripRefineRequestResponse } from '../../../types/response';
 import { Trip } from '../../../models/ojp';
 import { DefaultXML_Config } from '../../../constants';
 
-import { SharedTripRefineRequest } from './trr.shared';
+import { BaseRequest } from './base';
 
-export class TripRefineRequest extends SharedTripRefineRequest<{ version: '2.0', fetchResponse: TripRefineRequestResponse }> {
+export class TripRefineRequest extends BaseRequest<{ version: '2.0', fetchResponse: TripRefineRequestResponse }> {
   public payload: OJP_Types.TRR_RequestSchema;
 
   private constructor(tripResult: OJP_Types.TripResultSchema, refineParams?: OJP_Types.TRR_RequestParamsSchema) {
@@ -27,11 +27,22 @@ export class TripRefineRequest extends SharedTripRefineRequest<{ version: '2.0',
     };
   }
 
+  private static DefaultRequestParams(): OJP_Types.TRR_RequestParamsSchema {
+    const params: OJP_Types.TRR_RequestParamsSchema = {
+      numberOfResults: undefined,
+      useRealtimeData: 'explanatory',
+      includeAllRestrictedLines: true,
+      includeIntermediateStops: true,
+    };
+
+    return params;
+  }
+
   // Used by Base.initWithRequestMock / initWithResponseMock
   private static Default() {
     const fakeTripResult = <OJP_Types.TripResultSchema>{};
     // update fake
-    const params = SharedTripRefineRequest.DefaultRequestParams();
+    const params = TripRefineRequest.DefaultRequestParams();
     const request = new TripRefineRequest(fakeTripResult, params);
 
     return request;
@@ -43,7 +54,7 @@ export class TripRefineRequest extends SharedTripRefineRequest<{ version: '2.0',
       trip: trip,
     };
 
-    const params = SharedTripRefineRequest.DefaultRequestParams();
+    const params = TripRefineRequest.DefaultRequestParams();
     const request = new TripRefineRequest(tripResult, params);
     
     return request;
