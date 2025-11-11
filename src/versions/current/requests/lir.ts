@@ -37,7 +37,6 @@ export class LocationInformationRequest extends SharedLocationInformationRequest
 
   public static initWithLocationName(name: string, placeTypes: OJP_Types.PlaceTypeEnum[] = [], numberOfResults: number = 10) {
     const request = LocationInformationRequest.Default();
-
     request.payload.initialInput = {
       name: name,
     };
