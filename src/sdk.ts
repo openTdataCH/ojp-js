@@ -27,7 +27,7 @@ const builders = {
     LocationInformationRequest: LocationInformationRequest,
     StopEventRequest: StopEventRequest,
     TripInfoRequest: TripInfoRequest,
-    TripRefineRequest: FakeOJPv1_TripRefineRequest,
+    TripRefineRequest: TripRefineRequest,
     TripRequest: TripRequest,
   },
 } as const;
