@@ -78,7 +78,7 @@ export class OJPv1_LocationInformationRequest extends SharedLocationInformationR
     }
     
     if (request.payload.restrictions) {
-      request.updateRestrictions(request.payload.restrictions, ['stop'], numberOfResults);
+      request.updateRestrictions(request.payload.restrictions, placeTypes, numberOfResults);
     }
 
     return request;
