@@ -104,8 +104,8 @@ export class LocationInformationRequest extends SharedLocationInformationRequest
     return xmlS;
   }
 
-  public async _fetchResponse(sdk: SDK<'2.0'>): Promise<LocationInformationRequestResponse> {
     const responseXML = await RequestHelpers.computeResponse(this, sdk, DefaultXML_Config);
+  protected async _fetchResponse(sdk: SDK<'2.0'>): Promise<LocationInformationRequestResponse> {
 
     try {
       const parsedObj = parseXML<{ OJP: OJP_Types.LocationInformationRequestResponseOJP }>(responseXML, 'OJP');
