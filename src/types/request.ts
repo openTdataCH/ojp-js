@@ -8,7 +8,6 @@ import { StopEventRequest } from "../versions/current/requests/ser";
 import { OJPv1_StopEventRequest } from "../versions/legacy/v1/requests/ser";
 
 import { TripRefineRequest } from "../versions/current/requests/trr";
-import { FakeOJPv1_TripRefineRequest } from "../versions/legacy/v1/requests/trr";
 
 import { TripRequest } from "../versions/current/requests/tr";
 import { OJPv1_TripRequest } from "../versions/legacy/v1/requests/tr";
@@ -17,5 +16,5 @@ export type OJP_RequestType =
     LocationInformationRequest | OJPv1_LocationInformationRequest |
     StopEventRequest | OJPv1_StopEventRequest |
     TripInfoRequest | OJPv1_TripInfoRequest |
-    TripRefineRequest | FakeOJPv1_TripRefineRequest |
+    TripRefineRequest |
     TripRequest | OJPv1_TripRequest;
