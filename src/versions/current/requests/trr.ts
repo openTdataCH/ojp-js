@@ -10,7 +10,7 @@ import { Language, XML_Config } from '../../../types/_all';
 
 import { TripRefineRequestResponse } from '../../../types/response';
 import { Trip } from '../../../models/ojp';
-import { DefaultXML_Config } from '../../../constants';
+import { DefaultXML_Config, XML_BuilderConfigOJPv1 } from '../../../constants';
 
 import { BaseRequest } from './base';
 
@@ -82,7 +82,9 @@ export class TripRefineRequest extends BaseRequest<{ version: '2.0', fetchRespon
   }
 
   protected override async _fetchResponse(sdk: SDK<'2.0'>): Promise<TripRefineRequestResponse> {
-    const responseXML = await RequestHelpers.computeResponse(this, sdk, DefaultXML_Config);
+    const xmlConfig: XML_Config = sdk.version === '2.0' ? DefaultXML_Config : XML_BuilderConfigOJPv1;
+
+    const responseXML = await RequestHelpers.computeResponse(this, sdk, xmlConfig);
 
     try {
       const parsedObj = parseXML<{ OJP: OJP_Types.TRR_ResponseOJP }>(responseXML, 'OJP');

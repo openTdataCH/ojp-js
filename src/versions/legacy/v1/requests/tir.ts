@@ -11,7 +11,7 @@ import { Language, XML_Config } from '../../../../types/_all';
 
 import { OJPv1_TripInfoRequestResponse } from "../../../../types/response";
 import { SharedTripInfoRequest } from '../../../current/requests/tir.shared';
-import { XML_BuilderConfigOJPv1 } from '../../../../constants';
+import { DefaultXML_Config, XML_BuilderConfigOJPv1 } from '../../../../constants';
 
 export class OJPv1_TripInfoRequest extends SharedTripInfoRequest<{ version: '1.0', fetchResponse: OJPv1_TripInfoRequestResponse }> {
   public payload: OJP_Types.TIR_RequestSchema;
@@ -71,7 +71,9 @@ export class OJPv1_TripInfoRequest extends SharedTripInfoRequest<{ version: '1.0
   }
 
   protected override async _fetchResponse(sdk: SDK<'1.0'>): Promise<OJPv1_TripInfoRequestResponse> {
-    const responseXML = await RequestHelpers.computeResponse(this, sdk, XML_BuilderConfigOJPv1);
+    const xmlConfig: XML_Config = sdk.version === '2.0' ? DefaultXML_Config : XML_BuilderConfigOJPv1;
+    
+    const responseXML = await RequestHelpers.computeResponse(this, sdk, xmlConfig);
 
     try {
       const parsedObj = parseXML<{ OJP: OJP_Types.OJPv1_TripInfoResponseOJP }>(responseXML, 'OJP');

@@ -9,7 +9,7 @@ import { Language, XML_Config } from '../../../../types/_all';
 
 import { RequestHelpers } from '../../../../helpers/request-helpers';
 
-import { XML_BuilderConfigOJPv1 } from '../../../../constants';
+import { DefaultXML_Config, XML_BuilderConfigOJPv1 } from '../../../../constants';
 
 import { OJPv1_LocationInformationRequestResponse } from '../../../../types/response';
 import { SharedLocationInformationRequest } from '../../../current/requests/lir.shared';
@@ -105,8 +105,10 @@ export class OJPv1_LocationInformationRequest extends SharedLocationInformationR
     return xmlS;
   }
 
-  public async _fetchResponse(sdk: SDK<'1.0'>): Promise<OJPv1_LocationInformationRequestResponse> {
-    const responseXML = await RequestHelpers.computeResponse(this, sdk, XML_BuilderConfigOJPv1);
+  protected async _fetchResponse(sdk: SDK<'1.0'>): Promise<OJPv1_LocationInformationRequestResponse> {
+    const xmlConfig: XML_Config = sdk.version === '2.0' ? DefaultXML_Config : XML_BuilderConfigOJPv1;
+    
+    const responseXML = await RequestHelpers.computeResponse(this, sdk, xmlConfig);
 
     try {
       const parsedObj = parseXML<{ OJP: OJP_Types.OJPv1_LocationInformationRequestResponseOJP }>(responseXML, 'OJP');

@@ -9,7 +9,7 @@ import { RequestHelpers } from '../../../helpers/request-helpers';
 import { Language, XML_Config } from '../../../types/_all';
 
 import { StopEventRequestResponse } from '../../../types/response';
-import { DefaultXML_Config } from '../../../constants';
+import { DefaultXML_Config, XML_BuilderConfigOJPv1 } from '../../../constants';
 
 import { SharedStopEventRequest } from './ser.shared';
 
@@ -85,7 +85,9 @@ export class StopEventRequest extends SharedStopEventRequest <{ version: '2.0', 
   }
 
   protected override async _fetchResponse(sdk: SDK<'2.0'>): Promise<StopEventRequestResponse> {
-    const responseXML = await RequestHelpers.computeResponse(this, sdk, DefaultXML_Config);
+    const xmlConfig: XML_Config = sdk.version === '2.0' ? DefaultXML_Config : XML_BuilderConfigOJPv1;
+
+    const responseXML = await RequestHelpers.computeResponse(this, sdk, xmlConfig);
 
     try {
       const parsedObj = parseXML<{ OJP: OJP_Types.StopEventRequestResponseOJP }>(responseXML, 'OJP');

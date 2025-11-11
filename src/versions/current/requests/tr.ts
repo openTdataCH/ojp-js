@@ -10,7 +10,7 @@ import { Language, XML_Config } from '../../../types/_all';
 
 import { TripRequestResponse } from '../../../types/response';
 import { Place, PlaceRef } from '../../../models/ojp';
-import { DefaultXML_Config } from '../../../constants';
+import { DefaultXML_Config, XML_BuilderConfigOJPv1 } from '../../../constants';
 
 import { SharedTripRequest } from './tr.shared';
 
@@ -186,7 +186,9 @@ export class TripRequest extends SharedTripRequest<{ version: '2.0', fetchRespon
   }
 
   protected override async _fetchResponse(sdk: SDK<'2.0'>): Promise<TripRequestResponse> {
-    const responseXML = await RequestHelpers.computeResponse(this, sdk, DefaultXML_Config);
+    const xmlConfig: XML_Config = sdk.version === '2.0' ? DefaultXML_Config : XML_BuilderConfigOJPv1;
+
+    const responseXML = await RequestHelpers.computeResponse(this, sdk, xmlConfig);
 
     try {
       const parsedObj = parseXML<{ OJP: OJP_Types.TripRequestResponseOJP }>(responseXML, 'OJP');
