@@ -1,7 +1,6 @@
 import { FileHelpers } from './helpers/file-helpers';
 
 import * as OJP_Types from 'ojp-shared-types';
-import * as OJP from '../src'
 import { OJP_Helpers } from './helpers/ojp-test.helpers';
 
 describe('OJP Test TripRequest Response', () => {
@@ -10,9 +9,9 @@ describe('OJP Test TripRequest Response', () => {
   beforeAll(async () => {
     const ojp = OJP_Helpers.DefaultSDK();
     const mockXML = FileHelpers.loadMockXML('ser-response-situations.xml');
-    const mockRequest = OJP.StopEventRequest.initWithResponseMock(mockXML);
+    const mockRequest = ojp.requests.StopEventRequest.initWithResponseMock(mockXML);
     
-    const ojpResponse = await ojp.fetchStopEventRequestResponse(mockRequest);
+    const ojpResponse = await mockRequest.fetchResponse(ojp);
     if (ojpResponse.ok) {
       response = ojpResponse.value;
     }

@@ -10,8 +10,8 @@ describe('OJP Test TripRequest Response', () => {
   beforeAll(async () => {
     const ojp = OJP_Helpers.DefaultSDK();
     const mockXML = FileHelpers.loadMockXML('tr-response-zh-be.xml');
-    const mockRequest = OJP.TripRequest.initWithResponseMock(mockXML);
-    const response = await ojp.fetchTripRequestResponse(mockRequest);
+    const mockRequest = ojp.requests.TripRequest.initWithResponseMock(mockXML);
+    const response = await mockRequest.fetchResponse(ojp);
     if (response.ok) {
       trips = response.value.tripResult.map(el => el.trip);
     } else {
