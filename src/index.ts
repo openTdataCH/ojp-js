@@ -7,6 +7,15 @@ export {
 
 export { HTTPConfig, Language, RequestInfo } from "./types/_all";
 
+export {
+  FareRequestResponse,
+  LocationInformationRequestResponse,
+  StopEventRequestResponse,
+  TripInfoRequestResponse,
+  TripRefineRequestResponse,
+  TripRequestResponse,
+} from "./types/response";
+
 export { DateHelpers } from './helpers/date-helpers';
 
 export  {
