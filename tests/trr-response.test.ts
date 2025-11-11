@@ -1,7 +1,6 @@
 import { FileHelpers } from './helpers/file-helpers';
 
 import * as OJP_Types from 'ojp-shared-types';
-import * as OJP from '../src'
 import { OJP_Helpers } from './helpers/ojp-test.helpers';
 
 describe('OJP Test TripRefineRequest Response', () => {
