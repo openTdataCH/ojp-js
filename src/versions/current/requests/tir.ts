@@ -4,7 +4,7 @@ import { SDK } from '../../../sdk';
 
 import { buildRootXML } from '../../../helpers/xml/builder';
 import { parseXML } from '../../../helpers/xml/parser';
-import { DateHelpers } from '../../../helpers';
+import { DateHelpers } from '../../../helpers/date-helpers';
 import { RequestHelpers } from '../../../helpers/request-helpers';
 
 import { Language, XML_Config } from '../../../types/_all';
