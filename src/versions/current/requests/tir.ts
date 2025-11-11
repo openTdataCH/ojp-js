@@ -72,6 +72,11 @@ export class TripInfoRequest extends SharedTripInfoRequest<{ version: '2.0', fet
       const parsedObj = parseXML<{ OJP: OJP_Types.TripInfoResponseOJP }>(responseXML, 'OJP');
       const response = parsedObj.OJP.OJPResponse.serviceDelivery.OJPTripInfoDelivery;
 
+      if (response === undefined) {
+        console.log(responseXML);
+        throw new Error('Parse error');
+      }
+
       return {
         ok: true,
         value: response,

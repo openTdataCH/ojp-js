@@ -93,6 +93,11 @@ export class OJPv1_StopEventRequest extends SharedStopEventRequest <{ version: '
       const parsedObj = parseXML<{ OJP: OJP_Types.StopEventRequestResponseOJP }>(responseXML, 'OJP');
       const response = parsedObj.OJP.OJPResponse.serviceDelivery.OJPStopEventDelivery;
 
+      if (response === undefined) {
+        console.log(responseXML);
+        throw new Error('Parse error');
+      }
+
       return {
         ok: true,
         value: response,

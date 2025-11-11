@@ -90,6 +90,11 @@ export class TripRefineRequest extends BaseRequest<{ version: '2.0', fetchRespon
       const parsedObj = parseXML<{ OJP: OJP_Types.TRR_ResponseOJP }>(responseXML, 'OJP');
       const response = parsedObj.OJP.OJPResponse.serviceDelivery.OJPTripRefineDelivery;
 
+      if (response === undefined) {
+        console.log(responseXML);
+        throw new Error('Parse error');
+      }
+
       return {
         ok: true,
         value: response,
