@@ -7,6 +7,8 @@ export {
 
 export { HTTPConfig, Language, RequestInfo } from "./types/_all";
 
+export { DateHelpers } from './helpers/date-helpers';
+
 export  {
   XmlSerializer,
 } from './models/xml-serializer';
