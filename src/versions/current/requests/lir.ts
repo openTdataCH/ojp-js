@@ -27,14 +27,10 @@ export class LocationInformationRequest extends SharedLocationInformationRequest
     };
   }
 
-    const initialInput: OJP_Types.InitialInputSchema = {
-      name: undefined,
-      geoRestriction: undefined,
-    };
   public static Default() {
     const restrictions = SharedLocationInformationRequest.DefaultRestrictionParams();
 
-    const request = new LocationInformationRequest(initialInput, undefined, restrictions);
+    const request = new LocationInformationRequest(undefined, undefined, restrictions);
 
     return request;
   }
