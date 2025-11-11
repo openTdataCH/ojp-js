@@ -6,9 +6,6 @@ describe('OJP Test GeoPosition', () => {
 
   beforeAll(async () => {
     ojp = OJP_Helpers.DefaultSDK();
-    // const mockXML = FileHelpers.loadMockXML('tr-response-zh-be.xml');
-    // const mockRequest = OJP.TripRequest.initWithResponseMock(mockXML);
-    // trips = await ojp.fetchTrips(mockRequest);
   });
 
   test('Constructor with literal coords a-la GoogleMaps lat/lng', () => {
