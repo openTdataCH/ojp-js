@@ -107,6 +107,7 @@ export class PlaygroundComponent implements OnInit {
       request.restrictions.modes = {
         exclude: false,
         ptMode: ['water'],
+        personalMode: [],
       };
     }
 
@@ -208,6 +209,7 @@ export class PlaygroundComponent implements OnInit {
         {
           exclude: false,
           ptMode: ['water'],
+          personalMode: [],
         }
       ];
     }
