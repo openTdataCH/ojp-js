@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 0.18.16 - 12.11.2025
+- TR `railSubmode` filter
+
 ## 0.18.15 - 3.11.2025
 - fix OJP1.0 TR sharing - [OJP 1.0 - fix multimodal sharing #300](https://github.com/openTdataCH/ojp-demo-app-src/issues/300) - [PR #208](https://github.com/openTdataCH/ojp-js/pull/208)
 - fix Infeasible typo - [Typo in trip status "Infeasable" #292](https://github.com/openTdataCH/ojp-demo-app-src/issues/292) - [PR #209](https://github.com/openTdataCH/ojp-js/pull/209)
