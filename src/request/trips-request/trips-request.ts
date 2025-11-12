@@ -352,9 +352,18 @@ export class TripRequest extends OJPBaseRequest {
     if ((this.transportMode === 'public_transport') && hasPublicTransportModesFilter) {
       const modeContainerNode = paramsNode.ele(ojpPrefix + 'ModeAndModeOfOperationFilter');
       modeContainerNode.ele(ojpPrefix + 'Exclude', 'false');
-      this.publicTransportModes.forEach(publicTransportMode => {
-        modeContainerNode.ele(ojpPrefix + 'PtMode', publicTransportMode);
-      });
+
+      const hasRailSubmodesFilter = this.railSubmodes.length > 0;
+      if (hasRailSubmodesFilter) {
+        // RailSubmode doesnt work with PtMode=rail, they are mutually exclusive
+        this.railSubmodes.forEach(railSubmode => {
+          modeContainerNode.ele(siriPrefix + 'RailSubmode', railSubmode);
+        }); 
+      } else {
+        this.publicTransportModes.forEach(publicTransportMode => {
+          modeContainerNode.ele(ojpPrefix + 'PtMode', publicTransportMode);
+        });
+      }
     }
 
     // https://opentransportdata.swiss/en/cookbook/ojptriprequest/#Parameters_for_Configuration_of_the_TripRequest
