@@ -1,7 +1,7 @@
 # CHANGELOG
 
 ## 0.18.16 - 12.11.2025
-- TR `railSubmode` filter
+- Adds TR `RailSubmode` filter - [PR #211](https://github.com/openTdataCH/ojp-js/pull/211)
 
 ## 0.18.15 - 3.11.2025
 - fix OJP1.0 TR sharing - [OJP 1.0 - fix multimodal sharing #300](https://github.com/openTdataCH/ojp-demo-app-src/issues/300) - [PR #208](https://github.com/openTdataCH/ojp-js/pull/208)
