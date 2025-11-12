@@ -348,7 +348,8 @@ export class TripRequest extends OJPBaseRequest {
 
     const paramsNode = tripRequestNode.ele(ojpPrefix + "Params");
     
-    if (this.transportMode === 'public_transport' && (this.publicTransportModes.length > 0)) {
+    const hasPublicTransportModesFilter = this.publicTransportModes.length > 0;
+    if ((this.transportMode === 'public_transport') && hasPublicTransportModesFilter) {
       const modeContainerNode = paramsNode.ele(ojpPrefix + 'ModeAndModeOfOperationFilter');
       modeContainerNode.ele(ojpPrefix + 'Exclude', 'false');
       this.publicTransportModes.forEach(publicTransportMode => {
