@@ -27,6 +27,7 @@ export class TripRequest extends OJPBaseRequest {
   public numberOfResultsBefore: number | null;
   
   public publicTransportModes: ModeOfTransportType[];
+  public railSubmodes: string[];
   
   public modeType: TripModeType;
   public transportMode: IndividualTransportMode;
@@ -54,6 +55,7 @@ export class TripRequest extends OJPBaseRequest {
     numberOfResultsBefore: number | null = null,
     numberOfResultsAfter: number | null = null,
     publicTransportModes: ModeOfTransportType[] = [],
+    railSubmodes: string[] = [],
   ) {
     super(stageConfig, language, xmlConfig, requestorRef);
 
@@ -67,6 +69,7 @@ export class TripRequest extends OJPBaseRequest {
     this.numberOfResultsAfter = numberOfResultsAfter;
 
     this.publicTransportModes = publicTransportModes;
+    this.railSubmodes = railSubmodes;
 
     this.modeType = "monomodal";
     this.transportMode = "public_transport";
@@ -140,6 +143,7 @@ export class TripRequest extends OJPBaseRequest {
     numberOfResultsBefore: number | null = null,
     numberOfResultsAfter: number | null = null,
     publicTransportModes: ModeOfTransportType[] = [],
+    railSubmodes: string[] = [],
   ) {
     if ((fromTripLocation === null) || (toTripLocation === null)) {
       return null;
@@ -172,6 +176,7 @@ export class TripRequest extends OJPBaseRequest {
       numberOfResultsAfter,
 
       publicTransportModes,
+      railSubmodes,
     );
     request.includeLegProjection = includeLegProjection;
     request.modeType = modeType;
@@ -343,12 +348,22 @@ export class TripRequest extends OJPBaseRequest {
 
     const paramsNode = tripRequestNode.ele(ojpPrefix + "Params");
     
-    if (this.transportMode === 'public_transport' && (this.publicTransportModes.length > 0)) {
+    const hasPublicTransportModesFilter = this.publicTransportModes.length > 0;
+    if ((this.transportMode === 'public_transport') && hasPublicTransportModesFilter) {
       const modeContainerNode = paramsNode.ele(ojpPrefix + 'ModeAndModeOfOperationFilter');
       modeContainerNode.ele(ojpPrefix + 'Exclude', 'false');
-      this.publicTransportModes.forEach(publicTransportMode => {
-        modeContainerNode.ele(ojpPrefix + 'PtMode', publicTransportMode);
-      });
+
+      const hasRailSubmodesFilter = this.railSubmodes.length > 0;
+      if (hasRailSubmodesFilter) {
+        // RailSubmode doesnt work with PtMode=rail, they are mutually exclusive
+        this.railSubmodes.forEach(railSubmode => {
+          modeContainerNode.ele(siriPrefix + 'RailSubmode', railSubmode);
+        }); 
+      } else {
+        this.publicTransportModes.forEach(publicTransportMode => {
+          modeContainerNode.ele(ojpPrefix + 'PtMode', publicTransportMode);
+        });
+      }
     }
 
     // https://opentransportdata.swiss/en/cookbook/ojptriprequest/#Parameters_for_Configuration_of_the_TripRequest
