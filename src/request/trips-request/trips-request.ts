@@ -27,6 +27,7 @@ export class TripRequest extends OJPBaseRequest {
   public numberOfResultsBefore: number | null;
   
   public publicTransportModes: ModeOfTransportType[];
+  public railSubmodes: string[];
   
   public modeType: TripModeType;
   public transportMode: IndividualTransportMode;
@@ -54,6 +55,7 @@ export class TripRequest extends OJPBaseRequest {
     numberOfResultsBefore: number | null = null,
     numberOfResultsAfter: number | null = null,
     publicTransportModes: ModeOfTransportType[] = [],
+    railSubmodes: string[] = [],
   ) {
     super(stageConfig, language, xmlConfig, requestorRef);
 
@@ -67,6 +69,7 @@ export class TripRequest extends OJPBaseRequest {
     this.numberOfResultsAfter = numberOfResultsAfter;
 
     this.publicTransportModes = publicTransportModes;
+    this.railSubmodes = railSubmodes;
 
     this.modeType = "monomodal";
     this.transportMode = "public_transport";
@@ -140,6 +143,7 @@ export class TripRequest extends OJPBaseRequest {
     numberOfResultsBefore: number | null = null,
     numberOfResultsAfter: number | null = null,
     publicTransportModes: ModeOfTransportType[] = [],
+    railSubmodes: string[] = [],
   ) {
     if ((fromTripLocation === null) || (toTripLocation === null)) {
       return null;
@@ -172,6 +176,7 @@ export class TripRequest extends OJPBaseRequest {
       numberOfResultsAfter,
 
       publicTransportModes,
+      railSubmodes,
     );
     request.includeLegProjection = includeLegProjection;
     request.modeType = modeType;
