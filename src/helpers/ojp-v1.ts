@@ -34,7 +34,7 @@ export class OJPv1_Helpers {
           productCategory: legV2.timedLeg.service.productCategory,
           publishedLineName: legV2.timedLeg.service.publishedServiceName,
           trainNumber: legV2.timedLeg.service.trainNumber,
-          attribute: legV2.timedLeg.service.attribute,
+          attribute: [],
           operatorRef: legV2.timedLeg.service.operatorRef,
           destinationStopPointRef: legV2.timedLeg.service.destinationStopPointRef,
           destinationText: legV2.timedLeg.service.destinationText,
@@ -42,6 +42,15 @@ export class OJPv1_Helpers {
           cancelled: legV2.timedLeg.service.cancelled,
           deviation: legV2.timedLeg.service.deviation,
         };
+
+        legV2.timedLeg.service.attribute.forEach(attributeV2 => {
+          const attributeV1: OJP_Types.OJPv1_GeneralAttributeSchema = {
+            text: attributeV2.userText,
+            code: attributeV2.code,
+            importance: attributeV2.importance,
+          };
+          timedLegServiceV1.attribute.push(attributeV1);
+        });
         
         const timedLegV1: OJP_Types.OJPv1_TimedLegSchema = {
           legBoard: legV2.timedLeg.legBoard,
