@@ -18,3 +18,11 @@ export interface RequestInfo {
   responseXML: string | null;
   parseDateTime: Date | null;
 }
+
+// https://vdvde.github.io/OJP/develop/documentation-tables/siri.html#type_siri__RailSubmodesOfTransportEnumeration
+//    international     - ICE, TGV, EC, RJX, NJ, EN
+//    highSpeedRail     - IC
+//    interregionalRail - IR, IRN, IRE
+//    railShuttle       - ATZ
+//    local             - S, SN, RB, RE, PE
+export type RailSubmodeType = 'international' | 'highSpeedRail' | 'interregionalRail' | 'railShuttle' | 'local';
