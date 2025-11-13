@@ -131,7 +131,7 @@ export class OJPv1_Helpers {
             directionRef: leg.timedLeg.service.directionRef,
             mode: leg.timedLeg.service.mode,
             publishedLineName: leg.timedLeg.service.publishedLineName,
-            attribute: [],
+            attribute: leg.timedLeg.service.attribute,
             operatorRef: leg.timedLeg.service.operatorRef,
           },
         };
