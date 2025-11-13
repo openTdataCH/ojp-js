@@ -138,6 +138,7 @@ export class PlaygroundComponent implements OnInit {
     await this.runTR_WalkSpeed();
     await this.runTR_ModeFilter();
     await this.runTR_ItModeFilter();
+    await this.runTR_RailSubmodeFilter();
   }
 
   private async runTR_StopsPlaceRef() {
@@ -241,6 +242,25 @@ export class PlaygroundComponent implements OnInit {
     console.log('E) TR with IndividualTransportOption - longer walk');
     console.log(request.requestInfo.requestXML);
     console.log(response.value.tripResult);
+  }
+
+  private async runTR_RailSubmodeFilter() {
+    // F) TR with IR between ZH-BE
+    const fromStopRef = '8507000';  // Bern
+    const toStopRef = '8503000';    // Zürich
+
+    const request = OJP.TripRequest.initWithPlaceRefsOrCoords(fromStopRef, toStopRef);
+    request.setRailSubmodes('local');
+
+    const response = await this.ojpINT_SDK.fetchTripRequestResponse(request);
+    if (!response.ok) {
+      console.error('fetchTripRequestResponse ERROR');
+      console.log(response.error);
+      return;
+    }
+    console.log('F) TR with RailSubmode - S-Bahn-only');
+    console.log(request.requestInfo.requestXML);
+    console.log(response.value.tripResult[0].trip.leg[0].timedLeg?.service);
   }
 
   private async runSER() {
