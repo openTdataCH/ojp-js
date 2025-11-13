@@ -271,7 +271,12 @@ export class JourneyService {
       const attrData = this.serviceAttributes[key];
 
       const attributeNode = serviceNode.ele(ojpPrefix + 'Attribute');
-      attributeNode.ele(ojpPrefix + 'UserText').ele(ojpPrefix + 'Text', attrData.text);
+      if (isOJPv2) {
+        attributeNode.ele(ojpPrefix + 'UserText').ele(ojpPrefix + 'Text', attrData.text);
+      } else {
+        attributeNode.ele(ojpPrefix + 'Text').ele(ojpPrefix + 'Text', attrData.text);
+      }
+      
       attributeNode.ele(ojpPrefix + 'Code', attrData.code);
 
       if (attrData.importance !== null) {
