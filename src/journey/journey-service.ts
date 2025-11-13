@@ -161,10 +161,14 @@ export class JourneyService {
         return;
       }
 
+      const importanceS = attributeTreeNode.findTextFromChildNamed('Importance');
+      const importance = importanceS === null ? null : Number(importanceS);
+
       const serviceAttribute: ServiceAttribute = {
         code: code,
         text: text,
         extra: {},
+        importance: importance,
       };
       
       attributeTreeNode.children.forEach(childTreeNode => {
