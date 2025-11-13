@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 0.18.17 - 13.11.2025
+- Improve Service.Attribute - [PR #214](https://github.com/openTdataCH/ojp-js/pull/214)
+  - parse/use `Importance` in Service Attributre nodes
+  - fix serialisation of Attribute Text nodes in OJP v1
+
 ## 0.18.16 - 12.11.2025
 - Adds TR `RailSubmode` filter - [PR #211](https://github.com/openTdataCH/ojp-js/pull/211)
 
