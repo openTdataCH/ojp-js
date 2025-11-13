@@ -1,6 +1,6 @@
 import * as OJP_Types from 'ojp-shared-types';
 
-import { Language, RequestInfo, XML_Config } from "../types/_all";
+import { Language, RailSubmodeType, RequestInfo, XML_Config } from "../types/_all";
 import { Place, PlaceRef, Trip } from './ojp';
 import { OJPv1_Helpers } from '../helpers/ojp-v1';
 import { buildRootXML } from "../helpers/xml/builder";
@@ -216,6 +216,31 @@ export class TripRequest extends BaseRequest implements OJP_Types.TripRequestSch
     if (endpointType === 'destination' || endpointType === 'both') {
       this.destination.individualTransportOption = [individualTransportOption];
     }
+  }
+
+  // https://vdvde.github.io/OJP/develop/documentation-tables/siri.html#type_siri__RailSubmodesOfTransportEnumeration
+  public setRailSubmodes(railSubmodes: RailSubmodeType | RailSubmodeType[]) {
+    if (!Array.isArray(railSubmodes)) {
+      railSubmodes = [railSubmodes];
+    }
+
+    if (!this.params) {
+      return;
+    }
+
+    this.params.modeAndModeOfOperationFilter = [];
+    const modeFilters: OJP_Types.ModeFilterSchema[] = [];
+    railSubmodes.forEach(railSubmode => {
+      const modeFilter: OJP_Types.ModeFilterSchema = {
+        exclude: false,
+        ptMode: [],
+        personalMode: [],
+        railSubmode: railSubmode,
+      };
+      modeFilters.push(modeFilter);
+    });
+
+    this.params.modeAndModeOfOperationFilter = modeFilters;
   }
 
   public buildRequestXML(language: Language, requestorRef: string, xmlConfig: XML_Config = DefaultXML_Config): string {
