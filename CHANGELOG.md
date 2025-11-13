@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.20.32 - 13.11.2025
+- Fix OJPv1 GeneralAttribute - [PR #213](https://github.com/openTdataCH/ojp-js/pull/213)
+  - use new OJP_Types `GeneralAttributeSchema`
+
 ## 0.20.31 - 13.11.2025
 - Params Updates - [PR #212](https://github.com/openTdataCH/ojp-js/pull/212)
   - TR - adds filter helper for `RailSubmode`
