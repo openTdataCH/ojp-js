@@ -39,7 +39,6 @@ Code / Demo App Implementation
 - include [ojp-sdk-next](https://www.npmjs.com/package/ojp-sdk-next), [ojp-shared-types](https://www.npmjs.com/package/ojp-shared-types) packages in the `./package.json` dependencies of the project 
 ```
   "dependencies": {
-    "ojp-shared-types": "0.0.22",
     "ojp-shared-types": "0.0.23",
     "ojp-sdk-next": "0.20.31",
   }
@@ -94,7 +93,7 @@ async myMethod() {
   }
 
   // do something with the value
-  comnst placeResults = response.value.placeResult ?? [];
+  const placeResults = response.value.placeResult ?? [];
   placeResults.forEach(placeResult => {
 
   });
