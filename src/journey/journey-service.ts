@@ -8,9 +8,10 @@ import { TreeNode } from '../xml/tree-node';
 import { XML_Config } from '../types/_all';
 
 interface ServiceAttribute {
-  code: string
-  text: string
-  extra: Record<string, string>
+  code: string;
+  text: string;
+  extra: Record<string, string>;
+  importance: number | null;
 }
 
 interface ProductCategory {
@@ -160,10 +161,14 @@ export class JourneyService {
         return;
       }
 
+      const importanceS = attributeTreeNode.findTextFromChildNamed('Importance');
+      const importance = importanceS === null ? null : Number(importanceS);
+
       const serviceAttribute: ServiceAttribute = {
         code: code,
         text: text,
         extra: {},
+        importance: importance,
       };
       
       attributeTreeNode.children.forEach(childTreeNode => {
@@ -266,8 +271,17 @@ export class JourneyService {
       const attrData = this.serviceAttributes[key];
 
       const attributeNode = serviceNode.ele(ojpPrefix + 'Attribute');
-      attributeNode.ele(ojpPrefix + 'UserText').ele(ojpPrefix + 'Text', attrData.text);
+      if (isOJPv2) {
+        attributeNode.ele(ojpPrefix + 'UserText').ele(ojpPrefix + 'Text', attrData.text);
+      } else {
+        attributeNode.ele(ojpPrefix + 'Text').ele(ojpPrefix + 'Text', attrData.text);
+      }
+      
       attributeNode.ele(ojpPrefix + 'Code', attrData.code);
+
+      if (attrData.importance !== null) {
+        attributeNode.ele(ojpPrefix + 'Importance', attrData.importance);
+      }
     }
 
     const operatorRef = (() => {
