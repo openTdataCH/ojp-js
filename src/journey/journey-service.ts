@@ -273,6 +273,10 @@ export class JourneyService {
       const attributeNode = serviceNode.ele(ojpPrefix + 'Attribute');
       attributeNode.ele(ojpPrefix + 'UserText').ele(ojpPrefix + 'Text', attrData.text);
       attributeNode.ele(ojpPrefix + 'Code', attrData.code);
+
+      if (attrData.importance !== null) {
+        attributeNode.ele(ojpPrefix + 'Importance', attrData.importance);
+      }
     }
 
     const operatorRef = (() => {
