@@ -11,6 +11,7 @@ interface ServiceAttribute {
   code: string;
   text: string;
   extra: Record<string, string>;
+  importance: number | null;
 }
 
 interface ProductCategory {
