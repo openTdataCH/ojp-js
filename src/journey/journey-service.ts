@@ -8,9 +8,9 @@ import { TreeNode } from '../xml/tree-node';
 import { XML_Config } from '../types/_all';
 
 interface ServiceAttribute {
-  code: string
-  text: string
-  extra: Record<string, string>
+  code: string;
+  text: string;
+  extra: Record<string, string>;
 }
 
 interface ProductCategory {
