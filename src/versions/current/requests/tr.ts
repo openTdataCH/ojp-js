@@ -6,7 +6,7 @@ import { buildRootXML } from '../../../helpers/xml/builder';
 import { parseXML } from '../../../helpers/xml/parser';
 import { RequestHelpers } from '../../../helpers/request-helpers';
 
-import { Language, XML_Config } from '../../../types/_all';
+import { Language, RailSubmodeType, XML_Config } from '../../../types/_all';
 
 import { TripRequestResponse } from '../../../types/response';
 import { Place, PlaceRef } from '../../../models/ojp';
@@ -162,6 +162,31 @@ export class TripRequest extends SharedTripRequest<{ version: '2.0', fetchRespon
     if (endpointType === 'destination' || endpointType === 'both') {
       this.payload.destination.individualTransportOption = [individualTransportOption];
     }
+  }
+
+  // https://vdvde.github.io/OJP/develop/documentation-tables/siri.html#type_siri__RailSubmodesOfTransportEnumeration
+  public setRailSubmodes(railSubmodes: RailSubmodeType | RailSubmodeType[]) {
+    if (!Array.isArray(railSubmodes)) {
+      railSubmodes = [railSubmodes];
+    }
+
+    if (!this.payload.params) {
+      return;
+    }
+
+    this.payload.params.modeAndModeOfOperationFilter = [];
+    const modeFilters: OJP_Types.ModeFilterSchema[] = [];
+    railSubmodes.forEach(railSubmode => {
+      const modeFilter: OJP_Types.ModeFilterSchema = {
+        exclude: false,
+        ptMode: [],
+        personalMode: [],
+        railSubmode: railSubmode,
+      };
+      modeFilters.push(modeFilter);
+    });
+
+    this.payload.params.modeAndModeOfOperationFilter = modeFilters;
   }
 
   public buildRequestXML(language: Language, requestorRef: string, xmlConfig: XML_Config): string {
