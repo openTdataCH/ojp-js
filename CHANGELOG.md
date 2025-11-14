@@ -1,5 +1,16 @@
 # CHANGELOG
 
+## 0.20.32 - 13.11.2025
+- Fix OJPv1 GeneralAttribute - [PR #213](https://github.com/openTdataCH/ojp-js/pull/213)
+  - use new OJP_Types `GeneralAttributeSchema`
+
+## 0.20.31 - 13.11.2025
+- Params Updates - [PR #212](https://github.com/openTdataCH/ojp-js/pull/212)
+  - TR - adds filter helper for `RailSubmode`
+  - Place - adds support for OJP v1 init, adds `initWithOJPv1XMLSchema` static initializer
+  - use latest `ojp-shared-types`
+    - TR restriction mode filter requires now `ptMode`, `personalMode`  arrays
+
 ## 0.20.30 - 31.10.2025
 - TR with IndividualTransportOption - [PR #205](https://github.com/openTdataCH/ojp-js/pull/205)
   - adds `setMaxDurationWalkingTime`method for TR requests with longer walking (at origin / destination)
