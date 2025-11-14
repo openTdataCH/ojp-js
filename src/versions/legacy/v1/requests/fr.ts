@@ -17,7 +17,7 @@ import { BaseRequest } from '../../../current/requests/base';
 export class OJPv1_FareRequest extends BaseRequest<{ version: '1.0', fetchResponse: FareRequestResponse }> {
   public payload: OJP_Types.FareRequestSchema[];
 
-  private constructor(items: OJP_Types.FareRequestSchema[]) {
+  protected constructor(items: OJP_Types.FareRequestSchema[]) {
     super();
 
     this.payload = items;

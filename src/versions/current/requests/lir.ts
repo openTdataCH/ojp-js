@@ -16,7 +16,7 @@ import { DefaultXML_Config, XML_BuilderConfigOJPv1 } from '../../../constants';
 export class LocationInformationRequest extends SharedLocationInformationRequest<{ version: '2.0', fetchResponse: LocationInformationRequestResponse }> {
   public payload: OJP_Types.LocationInformationRequestSchema;
 
-  private constructor(initialInput: OJP_Types.InitialInputSchema | undefined, placeRef: PlaceRef | undefined, restrictions: OJP_Types.LIR_RequestParamsSchema | undefined) {
+  protected constructor(initialInput: OJP_Types.InitialInputSchema | undefined, placeRef: PlaceRef | undefined, restrictions: OJP_Types.LIR_RequestParamsSchema | undefined) {
     super();
 
     this.payload = {

@@ -17,7 +17,7 @@ import { BaseRequest } from './base';
 export class TripRefineRequest extends BaseRequest<{ version: '2.0', fetchResponse: TripRefineRequestResponse }> {
   public payload: OJP_Types.TRR_RequestSchema;
 
-  private constructor(tripResult: OJP_Types.TripResultSchema, refineParams?: OJP_Types.TRR_RequestParamsSchema) {
+  protected constructor(tripResult: OJP_Types.TripResultSchema, refineParams?: OJP_Types.TRR_RequestParamsSchema) {
     super();
 
     this.payload = {

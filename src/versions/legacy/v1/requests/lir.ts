@@ -17,7 +17,7 @@ import { SharedLocationInformationRequest } from '../../../current/requests/lir.
 export class OJPv1_LocationInformationRequest extends SharedLocationInformationRequest<{ version: '1.0', fetchResponse: OJPv1_LocationInformationRequestResponse }> {
   public payload: OJP_Types.OJPv1_LocationInformationRequestSchema;
 
-  private constructor(initialInput: OJP_Types.OJPv1_InitialInputSchema | undefined, placeRef: PlaceRef | undefined, restrictions: OJP_Types.LIR_RequestParamsSchema | undefined) {
+  protected constructor(initialInput: OJP_Types.OJPv1_InitialInputSchema | undefined, placeRef: PlaceRef | undefined, restrictions: OJP_Types.LIR_RequestParamsSchema | undefined) {
     super();
     
     this.payload = {
