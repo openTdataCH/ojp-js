@@ -49,6 +49,12 @@ export class OJPv1_TripInfoRequest extends SharedTripInfoRequest<{ version: '1.0
     return request;
   }
 
+  public enableTrackProjection() {
+    if (this.payload.params) {
+      this.payload.params.includeTrackProjection = true;
+    }
+  }
+
   public buildRequestXML(language: Language, requestorRef: string, xmlConfig: XML_Config): string {
     this.payload.requestTimestamp = RequestHelpers.computeRequestTimestamp();
 
