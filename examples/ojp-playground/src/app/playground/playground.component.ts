@@ -10,11 +10,16 @@ import * as OJP from 'ojp-sdk';
 export class PlaygroundComponent implements OnInit {
   public sdkOJPv1: OJP.SDK<'1.0'>;
   public sdkOJPv2: OJP.SDK;
+  public sdkOJPv2INT: OJP.SDK;
 
   constructor() {
     const requestorRef = 'PlaygroundApp.v1';
     const sdkHTTP_Config: OJP.HTTPConfig = {
       url: 'https://api.opentransportdata.swiss/ojp20',
+      authToken: null,
+    };
+    const sdkHTTP_INT_Config: OJP.HTTPConfig = {
+      url: 'https://odpch-api.clients.liip.ch/ojp20-beta',
       authToken: null,
     };
     const legacySDK_HTTP_Config: OJP.HTTPConfig = {
@@ -25,6 +30,7 @@ export class PlaygroundComponent implements OnInit {
 
     this.sdkOJPv1 = OJP.SDK.v1(requestorRef, legacySDK_HTTP_Config, 'en');
     this.sdkOJPv2 = OJP.SDK.create(requestorRef, sdkHTTP_Config, 'en');
+    this.sdkOJPv2INT = OJP.SDK.create(requestorRef, sdkHTTP_INT_Config, 'en');
   }
 
   async ngOnInit(): Promise<void> {
