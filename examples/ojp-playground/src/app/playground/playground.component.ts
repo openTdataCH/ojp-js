@@ -252,10 +252,10 @@ export class PlaygroundComponent implements OnInit {
     const fromStopRef = '8507000';  // Bern
     const toStopRef = '8503000';    // Zürich
 
-    const request = OJP.TripRequest.initWithPlaceRefsOrCoords(fromStopRef, toStopRef);
+    const request = this.sdkOJPv2INT.requests.TripRequest.initWithPlaceRefsOrCoords(fromStopRef, toStopRef);
     request.setRailSubmodes('local');
 
-    const response = await this.ojpINT_SDK.fetchTripRequestResponse(request);
+    const response = await request.fetchResponse(this.sdkOJPv2INT);
     if (!response.ok) {
       console.error('fetchTripRequestResponse ERROR');
       console.log(response.error);
