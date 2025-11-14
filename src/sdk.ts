@@ -18,8 +18,6 @@ class EmptyRequest {
   }
 }
 
-type RequestKey = 'FareRequest' | 'LocationInformationRequest' | 'StopEventRequest' | 'TripInfoRequest' | 'TripRefineRequest' | 'TripRequest';
-
 // Registry of classes per version
 const builders = {
   '1.0': {
@@ -41,6 +39,7 @@ const builders = {
 } as const;
 
 type Builders = typeof builders;
+type RequestKey = keyof Builders['2.0'];
 type ClassFor<V extends OJP_VERSION, K extends RequestKey> = Builders[V][K];
 
 export class SDK<V extends OJP_VERSION = '2.0'> {
