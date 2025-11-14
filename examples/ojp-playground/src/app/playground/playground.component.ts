@@ -9,7 +9,7 @@ import * as OJP from 'ojp-sdk';
 })
 export class PlaygroundComponent implements OnInit {
   public sdkOJPv1: OJP.SDK<'1.0'>;
-  public sdkOJPv2: OJP.SDK<'2.0'>;
+  public sdkOJPv2: OJP.SDK;
 
   constructor() {
     const requestorRef = 'PlaygroundApp.v1';
