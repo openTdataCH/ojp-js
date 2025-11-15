@@ -1,14 +1,11 @@
 export * from './constants';
 
-export * from './helpers/date-helpers';
 export * from './helpers/xml-helpers';
 
 export * from './journey/journey-service';
 export * from './journey/public-transport-mode';
 
 export * from './location/location';
-export * from './location/geoposition-bbox';
-export * from './location/geoposition';
 
 export * from './shared/duration';
 
