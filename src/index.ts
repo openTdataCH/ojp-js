@@ -10,8 +10,10 @@ export { HTTPConfig, Language, RequestInfo, OJP_VERSION, AnySDK } from "./types/
 export {
   FareRequestResponse,
   LocationInformationRequestResponse,
+  OJPv1_LocationInformationRequestResponse,
   StopEventRequestResponse,
   TripInfoRequestResponse,
+  OJPv1_TripInfoRequestResponse,
   TripRefineRequestResponse,
   TripRequestResponse,
 } from "./types/response";
