@@ -321,4 +321,10 @@ export class Location {
     this.stopPlace = anotherLocation.stopPlace;
     this.geoPosition = anotherLocation.geoPosition;
   }
+
+  // helper created to allow GeoPosition set from outside SDK
+  // it is done temporarely until migration to ojp-sdk-next
+  public updateLegacyGeoPosition(longitude: number, latitude: number) {
+    this.geoPosition = new GeoPosition(longitude, latitude);
+  }
 }
