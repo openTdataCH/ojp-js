@@ -14,7 +14,7 @@ interface NearbyLocation {
 }
 
 // TODO - long term: subclass from Location?
-export type LocationType = 'stop' | 'address' | 'poi' | 'topographicPlace'
+type LocationType = 'stop' | 'address' | 'poi' | 'topographicPlace'
 
 const literalCoordsRegexp = /^([0-9\.]+?),([0-9\.]+?)$/;
 
