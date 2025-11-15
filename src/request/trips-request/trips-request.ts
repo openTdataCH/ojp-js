@@ -12,7 +12,7 @@ import { TripModeType } from '../../types/trip-mode-type';
 import { IndividualTransportMode } from '../../types/individual-mode.types';
 import { ModeOfTransportType } from '../../types/mode-of-transport.type';
 import { JourneyPointType } from '../../types/journey-points';
-import { UseRealtimeDataEnumeration, XML_Config } from "../../types/_all";
+import { XML_Config } from "../../types/_all";
 
 export type TripRequestBoardingType = 'Dep' | 'Arr'
 
@@ -38,7 +38,7 @@ export class TripRequest extends OJPBaseRequest {
   public response: TripRequest_Response | null;
 
   public enableExtensions: boolean;
-  public useRealTimeDataType: UseRealtimeDataEnumeration;
+  public useRealTimeDataType: string;
 
   public walkSpeedDeviation: number | null;
 

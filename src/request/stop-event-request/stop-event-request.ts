@@ -7,7 +7,7 @@ import { StopEventRequest_Response } from '../types/stop-event-request.type';
 import { StopEventRequestParser } from './stop-event-request-parser';
 import { Language } from '../../types/language-type';
 import { GeoPosition } from '../../location/geoposition';
-import { UseRealtimeDataEnumeration, XML_Config } from '../../types/_all';
+import { XML_Config } from '../../types/_all';
 
 export class StopEventRequest extends OJPBaseRequest {
     public stopPlaceRef: string | null;
@@ -23,7 +23,7 @@ export class StopEventRequest extends OJPBaseRequest {
     public includeRealtimeData: boolean;
     
     public enableExtensions: boolean;
-    public useRealTimeDataType: UseRealtimeDataEnumeration;
+    public useRealTimeDataType: string;
 
     constructor(stageConfig: ApiConfig, language: Language, xmlConfig: XML_Config, requestorRef: string, stopPlaceRef: string | null, geoPosition: GeoPosition | null, stopEventType: StopEventType, stopEventDate: Date) {
         super(stageConfig, language, xmlConfig, requestorRef);
