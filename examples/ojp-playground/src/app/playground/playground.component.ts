@@ -53,6 +53,7 @@ export class PlaygroundComponent implements OnInit {
     await this.runLR_LookupByBBOX();
     await this.runLR_LookupByStopRef();
     await this.runLR_LookupByNameFilterPtMode();
+    await this.runLR_InitWithMock();
   }
 
   private async runLR_LookupByName() {
@@ -147,6 +148,26 @@ export class PlaygroundComponent implements OnInit {
       const score = placeResult.probability ?? 'n/a';
       console.log((idx + 1) + '.' + name + ' - ' + score);
     });
+  }
+
+  private async runLR_InitWithMock() {
+    const request = this.sdkOJPv2.requests.LocationInformationRequest.initWithRequestMock('<Foo/>');
+
+    try {
+      const response = await request.fetchResponse(this.sdkOJPv2);
+      console.log(response);
+    } catch (e) {
+      console.error('Error occurred:', e);
+    }
+
+    const request2 = this.sdkOJPv2.requests.TripInfoRequest.initWithRequestMock('<Foo/>');
+
+    try {
+      const response = await request2.fetchResponse(this.sdkOJPv2);
+      console.log(response);
+    } catch (e) {
+      console.error('Error occurred:', e);
+    }
   }
 
   private async runTR() {
