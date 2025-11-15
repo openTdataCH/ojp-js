@@ -1,5 +1,5 @@
-export { UseRealtimeDataEnumeration, FareClassType, OccupancyLevel, MapFareClassOccupancy } from './_all';
 export * from './lir-restrictions.type';
+export { FareClassType, OccupancyLevel, MapFareClassOccupancy } from './_all';
 export * from './mode-of-transport.type';
 export * from './individual-mode.types';
 export * from './journey-points';
