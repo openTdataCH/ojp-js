@@ -5,7 +5,7 @@ export {
   DefaultXML_Config, XML_BuilderConfigOJPv1, XML_ParserConfigOJPv1,
 } from './constants';
 
-export { HTTPConfig, Language, RequestInfo } from "./types/_all";
+export { HTTPConfig, Language, RequestInfo, OJP_VERSION, AnySDK } from "./types/_all";
 
 export {
   FareRequestResponse,
