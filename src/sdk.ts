@@ -48,7 +48,7 @@ export class SDK<V extends OJP_VERSION = '2.0'> {
   public httpConfig: HTTPConfig;
   public language: Language;
 
-  private constructor(requestorRef: string, httpConfig: HTTPConfig, language: Language = 'en', version: OJP_VERSION) {
+  private constructor(requestorRef: string, httpConfig: HTTPConfig, language: Language = 'en', version: OJP_VERSION = '2.0') {
     this.requestorRef = requestorRef;
     this.httpConfig = httpConfig;
     this.language = language;
