@@ -176,15 +176,15 @@ export class Location {
       return null
     }
 
-    let longitude = parseFloat(inputMatches[1])
-    let latitude = parseFloat(inputMatches[2])
+    let longitude = parseFloat(inputMatches[1]);
+    let latitude = parseFloat(inputMatches[2]);
     // In CH always long < lat
     if (longitude > latitude) {
-      longitude = parseFloat(inputMatches[2])
-      latitude = parseFloat(inputMatches[1])
+      longitude = parseFloat(inputMatches[2]);
+      latitude = parseFloat(inputMatches[1]);
     }
     
-    const location = Location.initWithLngLat(longitude, latitude)
+    const location = Location.initWithLngLat(longitude, latitude);
 
     // Match the content inside the ()
     const locationNameMatches = inputS.trim().match(/\(([^\)]*)\)?/);
