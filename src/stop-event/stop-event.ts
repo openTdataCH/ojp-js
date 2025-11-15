@@ -9,8 +9,6 @@ import { Location } from '../location/location';
 import { PtSituationElement } from '../situation/situation-element';
 import { XML_Config } from '../types/_all';
 
-export type StationBoardType = 'Departures' | 'Arrivals'
-
 export class StopEvent {
     public journeyService: JourneyService;
     public stopPoint: StopPoint;
