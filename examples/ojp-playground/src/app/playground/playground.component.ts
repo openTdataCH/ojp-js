@@ -49,6 +49,7 @@ export class PlaygroundComponent implements OnInit {
     console.log('======================');
 
     await this.runLR_LookupByName();
+    await this.runLR_LookupByNameOJPv1();
     await this.runLR_LookupByBBOX();
     await this.runLR_LookupByStopRef();
     await this.runLR_LookupByNameFilterPtMode();
@@ -67,6 +68,21 @@ export class PlaygroundComponent implements OnInit {
       return;
     }
     console.log(response.value.placeResult);
+  }
+
+  private async runLR_LookupByNameOJPv1() {
+    // 1) LIR lookup by name
+    const searchTerm = 'Bern';
+    const request = this.sdkOJPv1.requests.LocationInformationRequest.initWithLocationName(searchTerm);
+
+    console.log('1) LIR lookup by name - OJPv1');
+    const response = await request.fetchResponse(this.sdkOJPv1);
+    if (!response.ok) {
+      console.error('fetchLocationInformationRequestResponse ERROR');
+      console.log(response.error);
+      return;
+    }
+    console.log(response.value.location);
   }
 
   private async runLR_LookupByBBOX() {
