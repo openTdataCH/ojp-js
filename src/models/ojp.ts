@@ -119,10 +119,11 @@ export class Place implements OJP_Types.PlaceSchema {
   public name: OJP_Types.InternationalTextSchema;
   public geoPosition: GeoPosition;
   public mode: OJP_Types.ModeStructureSchema[];
+  public attribute: OJP_Types.GeneralAttributeSchema[];
 
   public placeType: OJP_Types.PlaceTypeEnum | null;
 
-  private constructor(stopPoint: OJP_Types.StopPointSchema | undefined, stopPlace: OJP_Types.StopPlaceSchema | undefined, topographicPlace: OJP_Types.TopographicPlaceSchema | undefined, pointOfInterest: OJP_Types.PointOfInterestSchema | undefined, address: OJP_Types.AddressSchema | undefined, name: OJP_Types.InternationalTextSchema, geoPosition: GeoPosition, mode: OJP_Types.ModeStructureSchema[]) {
+  private constructor(stopPoint: OJP_Types.StopPointSchema | undefined, stopPlace: OJP_Types.StopPlaceSchema | undefined, topographicPlace: OJP_Types.TopographicPlaceSchema | undefined, pointOfInterest: OJP_Types.PointOfInterestSchema | undefined, address: OJP_Types.AddressSchema | undefined, name: OJP_Types.InternationalTextSchema, geoPosition: GeoPosition, mode: OJP_Types.ModeStructureSchema[], attribute: OJP_Types.GeneralAttributeSchema[]) {
     this.stopPoint = stopPoint;
     this.stopPlace = stopPlace;
     this.topographicPlace = topographicPlace;
@@ -131,6 +132,7 @@ export class Place implements OJP_Types.PlaceSchema {
     this.name = name;
     this.geoPosition = geoPosition;
     this.mode = mode;
+    this.attribute = attribute;
 
     this.placeType = geoPosition.isValid() ? 'location' : null;
     if (stopPoint || stopPlace) {
@@ -149,7 +151,7 @@ export class Place implements OJP_Types.PlaceSchema {
 
   public static initWithXMLSchema(placeSchema: OJP_Types.PlaceSchema): Place {
     const geoPosition = new GeoPosition(placeSchema.geoPosition);
-    const place = new Place(placeSchema.stopPoint, placeSchema.stopPlace, placeSchema.topographicPlace, placeSchema.pointOfInterest, placeSchema.address, placeSchema.name, geoPosition, placeSchema.mode);
+    const place = new Place(placeSchema.stopPoint, placeSchema.stopPlace, placeSchema.topographicPlace, placeSchema.pointOfInterest, placeSchema.address, placeSchema.name, geoPosition, placeSchema.mode, placeSchema.attribute);
     return place;
   }
 
@@ -160,7 +162,7 @@ export class Place implements OJP_Types.PlaceSchema {
       text: geoPosition.latitude + ',' + geoPosition.longitude
     };
     
-    const place = new Place(undefined, undefined, undefined, undefined, undefined, name, geoPosition, []);
+    const place = new Place(undefined, undefined, undefined, undefined, undefined, name, geoPosition, [], []);
 
     return place;
   }
@@ -170,7 +172,7 @@ export class Place implements OJP_Types.PlaceSchema {
       text: 'n/a Empty'
     };
     const geoPosition = new GeoPosition('0,0');
-    const place = new Place(undefined, undefined, undefined, undefined, undefined, name, geoPosition, []);
+    const place = new Place(undefined, undefined, undefined, undefined, undefined, name, geoPosition, [], []);
 
     return place;
   }
