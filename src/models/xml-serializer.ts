@@ -19,6 +19,11 @@ export class XmlSerializer {
       return tagName;
     }
 
+    // Leave unchanged all UPPERCASE only tags 
+    if (tagName.toUpperCase() === tagName) {
+      return tagName;
+    }
+
     // Convert to camelCase, strip -_
     let newTagName = tagName.replace(/[-_](.)/g, (_, char) => char.toUpperCase()) 
     // Ensure first letter is lowercase
