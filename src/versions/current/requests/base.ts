@@ -36,8 +36,8 @@ export abstract class BaseRequest<S extends ResultSpec> {
     return instance as ReturnType<T_This['Default']>;
   }
 
-  protected abstract _fetchResponse(sdk: SDK<S['version']>): Promise<S['fetchResponse']>;
-  public async fetchResponse(sdk: SDK<S['version']>): Promise<S['fetchResponse']> {
+  protected abstract _fetchResponse(sdk: AnySDK): Promise<S['fetchResponse']>;
+  public async fetchResponse(sdk: AnySDK): Promise<S['fetchResponse']> {
     const response = await this._fetchResponse(sdk);
     return response;
   }
