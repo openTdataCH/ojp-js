@@ -1,6 +1,7 @@
 import * as OJP_Types from 'ojp-shared-types';
 
 import { XMLParser } from "fast-xml-parser";
+import { XmlSerializer } from '../../models/xml-serializer';
 
 const MapParentArrayTags: Record<string, string[]> = {};
 for (const key in OJP_Types.OpenAPI_Dependencies.MapArrayTags) {
@@ -21,18 +22,7 @@ for (const key in OJP_Types.OpenAPI_Dependencies.MapArrayTags) {
 }
 
 const transformTagNameHandler = (tagName: string) => {
-  if (tagName.startsWith('OJP')) {
-    return tagName;
-  }
-
-  // Convert to camelCase, strip -_
-  let newTagName = tagName.replace(/[-_](.)/g, (_, char) => char.toUpperCase()) 
-  // Ensure first letter is lowercase
-  newTagName = newTagName.replace(/^([A-Z])/, (match) => match.toLowerCase());
-
-  // console.log('transformToCamelCase:   ' + tagName);
-
-  return newTagName;
+  return XmlSerializer.transfortTagHandler(tagName);
 };
 
 const isArrayHandler = (tagName: string, jPath: string) => {

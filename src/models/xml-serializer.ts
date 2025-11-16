@@ -13,4 +13,19 @@ export class XmlSerializer {
     const xml = buildXML(obj, wrapperNodeName, this.xmlConfig);
     return xml;
   }
+
+  public static transfortTagHandler(tagName: string) {
+    if (tagName.startsWith('OJP')) {
+      return tagName;
+    }
+
+    // Convert to camelCase, strip -_
+    let newTagName = tagName.replace(/[-_](.)/g, (_, char) => char.toUpperCase()) 
+    // Ensure first letter is lowercase
+    newTagName = newTagName.replace(/^([A-Z])/, (match) => match.toLowerCase());
+
+    // console.log('transformToCamelCase:   ' + tagName + '->' + newTagName);
+
+    return newTagName;
+  }
 }
