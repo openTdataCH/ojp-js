@@ -151,12 +151,6 @@ export class Place implements OJP_Types.PlaceSchema {
     const geoPosition = new GeoPosition(placeSchema.geoPosition);
     const place = new Place(placeSchema.stopPoint, placeSchema.stopPlace, placeSchema.topographicPlace, placeSchema.pointOfInterest, placeSchema.address, placeSchema.name, geoPosition, placeSchema.mode);
     return place;
-  } 
-
-  public static initWithOJPv1XMLSchema(placeV1Schema: OJP_Types.OJPv1_LocationSchema): Place {
-    const geoPosition = new GeoPosition(placeV1Schema.geoPosition);
-    const place = new Place(placeV1Schema.stopPoint, placeV1Schema.stopPlace, placeV1Schema.topographicPlace, placeV1Schema.pointOfInterest, placeV1Schema.address, placeV1Schema.locationName, geoPosition, placeV1Schema.mode);
-    return place;
   }
 
   public static initWithCoords(geoPositionArg: GeoPositionLike | number, optionalLatitude: number | null = null): Place {
