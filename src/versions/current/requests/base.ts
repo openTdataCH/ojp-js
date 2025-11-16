@@ -1,5 +1,4 @@
-import { SDK } from "../../../sdk";
-import { Language, OJP_VERSION, RequestInfo, XML_Config } from "../../../types/_all";
+import { AnySDK, Language, OJP_VERSION, RequestInfo, XML_Config } from "../../../types/_all";
 
 export type ResultSpec = { fetchResponse: unknown };
 
