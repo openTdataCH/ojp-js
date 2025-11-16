@@ -22,7 +22,7 @@ for (const key in OJP_Types.OpenAPI_Dependencies.MapArrayTags) {
 }
 
 const transformTagNameHandler = (tagName: string) => {
-  return XmlSerializer.transfortTagHandler(tagName);
+  return XmlSerializer.transformTagName(tagName);
 };
 
 const isArrayHandler = (tagName: string, jPath: string) => {

@@ -14,7 +14,7 @@ export class XmlSerializer {
     return xml;
   }
 
-  public static transfortTagHandler(tagName: string) {
+  public static transformTagName(tagName: string) {
     if (tagName.startsWith('OJP')) {
       return tagName;
     }
