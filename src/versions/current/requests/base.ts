@@ -24,18 +24,16 @@ export abstract class BaseRequest<S extends ResultSpec> {
     this.mockResponseXML = null;
   }
 
-  public static initWithRequestMock<T, S extends ResultSpec>(this: { Default(): T }, mockText: string): T {
+  public static initWithRequestMock<T_This extends { Default(): any }>(this: T_This, mockText: string): ReturnType<T_This['Default']> {
     const instance = this.Default();
-    (instance as BaseRequest<S>).mockRequestXML = mockText;
-    
-    return instance;
+    (instance as BaseRequest<any>).mockRequestXML = mockText;
+    return instance as ReturnType<T_This['Default']>;
   }
 
-  public static initWithResponseMock<T, S extends ResultSpec>(this: { Default(): T }, mockText: string): T {
+  public static initWithResponseMock<T_This extends { Default(): any }>(this: T_This, mockText: string): ReturnType<T_This['Default']> {
     const instance = this.Default();
-    (instance as BaseRequest<S>).mockResponseXML = mockText;
-    
-    return instance;
+    (instance as BaseRequest<any>).mockResponseXML = mockText;
+    return instance as ReturnType<T_This['Default']>;
   }
 
   protected abstract _fetchResponse(sdk: SDK<S['version']>): Promise<S['fetchResponse']>;
