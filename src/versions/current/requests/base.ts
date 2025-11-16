@@ -1,7 +1,7 @@
 import { SDK } from "../../../sdk";
 import { Language, OJP_VERSION, RequestInfo, XML_Config } from "../../../types/_all";
 
-export type ResultSpec = { version: OJP_VERSION, fetchResponse: unknown };
+export type ResultSpec = { fetchResponse: unknown };
 
 export abstract class BaseRequest<S extends ResultSpec> {
   public requestInfo: RequestInfo;
