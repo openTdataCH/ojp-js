@@ -14,7 +14,7 @@ import { DefaultXML_Config, XML_BuilderConfigOJPv1 } from '../../../../constants
 import { SharedStopEventRequest } from '../../../current/requests/ser.shared';
 
 // TODO - StopEventRequestResponse is wrong, should be OJPv1_StopEventRequestResponse
-export class OJPv1_StopEventRequest extends SharedStopEventRequest <{ version: '1.0', fetchResponse: StopEventRequestResponse }> {
+export class OJPv1_StopEventRequest extends SharedStopEventRequest <{ fetchResponse: StopEventRequestResponse }> {
   // TODO - adapt schema if needed
   public payload: OJP_Types.StopEventRequestSchema;
 

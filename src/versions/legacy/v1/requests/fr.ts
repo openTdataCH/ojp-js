@@ -14,7 +14,7 @@ import { DefaultXML_Config, XML_BuilderConfigOJPv1 } from '../../../../constants
 
 import { BaseRequest } from '../../../current/requests/base';
 
-export class OJPv1_FareRequest extends BaseRequest<{ version: '1.0', fetchResponse: FareRequestResponse }> {
+export class OJPv1_FareRequest extends BaseRequest<{ fetchResponse: FareRequestResponse }> {
   public payload: OJP_Types.FareRequestSchema[];
 
   protected constructor(items: OJP_Types.FareRequestSchema[]) {

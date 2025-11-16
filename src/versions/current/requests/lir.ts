@@ -13,7 +13,7 @@ import { LocationInformationRequestResponse } from '../../../types/response';
 import { SharedLocationInformationRequest } from './lir.shared';
 import { DefaultXML_Config, XML_BuilderConfigOJPv1 } from '../../../constants';
 
-export class LocationInformationRequest extends SharedLocationInformationRequest<{ version: '2.0', fetchResponse: LocationInformationRequestResponse }> {
+export class LocationInformationRequest extends SharedLocationInformationRequest<{ fetchResponse: LocationInformationRequestResponse }> {
   public payload: OJP_Types.LocationInformationRequestSchema;
 
   protected constructor(initialInput: OJP_Types.InitialInputSchema | undefined, placeRef: PlaceRef | undefined, restrictions: OJP_Types.LIR_RequestParamsSchema | undefined) {

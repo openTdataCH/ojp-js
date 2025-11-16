@@ -13,7 +13,7 @@ import { OJPv1_TripInfoRequestResponse } from "../../../../types/response";
 import { SharedTripInfoRequest } from '../../../current/requests/tir.shared';
 import { DefaultXML_Config, XML_BuilderConfigOJPv1 } from '../../../../constants';
 
-export class OJPv1_TripInfoRequest extends SharedTripInfoRequest<{ version: '1.0', fetchResponse: OJPv1_TripInfoRequestResponse }> {
+export class OJPv1_TripInfoRequest extends SharedTripInfoRequest<{ fetchResponse: OJPv1_TripInfoRequestResponse }> {
   public payload: OJP_Types.TIR_RequestSchema;
 
   protected constructor(journeyRef: string, operatingDayRef: string, params?: OJP_Types.TIR_RequestParamsSchema) {

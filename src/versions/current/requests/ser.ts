@@ -13,7 +13,7 @@ import { DefaultXML_Config, XML_BuilderConfigOJPv1 } from '../../../constants';
 
 import { SharedStopEventRequest } from './ser.shared';
 
-export class StopEventRequest extends SharedStopEventRequest <{ version: '2.0', fetchResponse: StopEventRequestResponse }> {
+export class StopEventRequest extends SharedStopEventRequest <{ fetchResponse: StopEventRequestResponse }> {
   public payload: OJP_Types.StopEventRequestSchema;
 
   protected constructor(location: OJP_Types.SER_RequestLocationSchema, params: OJP_Types.SER_RequestParamsSchema | undefined = undefined) {

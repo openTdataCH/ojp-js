@@ -15,7 +15,7 @@ import { PlaceRef } from '../../../../models/ojp';
 import { SharedTripRequest } from '../../../current/requests/tr.shared';
 
 // TODO - TripRequestResponse is wrong, should be OJPv1_TripRequestResponse
-export class OJPv1_TripRequest extends SharedTripRequest<{ version: '1.0', fetchResponse: TripRequestResponse }> {
+export class OJPv1_TripRequest extends SharedTripRequest<{ fetchResponse: TripRequestResponse }> {
   // TODO - adapt schema if needed
   public payload: OJP_Types.TripRequestSchema;
 

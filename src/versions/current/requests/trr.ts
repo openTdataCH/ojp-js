@@ -14,7 +14,7 @@ import { DefaultXML_Config, XML_BuilderConfigOJPv1 } from '../../../constants';
 
 import { BaseRequest } from './base';
 
-export class TripRefineRequest extends BaseRequest<{ version: '2.0', fetchResponse: TripRefineRequestResponse }> {
+export class TripRefineRequest extends BaseRequest<{ fetchResponse: TripRefineRequestResponse }> {
   public payload: OJP_Types.TRR_RequestSchema;
 
   protected constructor(tripResult: OJP_Types.TripResultSchema, refineParams?: OJP_Types.TRR_RequestParamsSchema) {

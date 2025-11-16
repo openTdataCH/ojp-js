@@ -16,7 +16,7 @@ import { SharedTripRequest } from './tr.shared';
 
 type EndpointType = 'origin' | 'destination' | 'both';
 
-export class TripRequest extends SharedTripRequest<{ version: '2.0', fetchResponse: TripRequestResponse }> {
+export class TripRequest extends SharedTripRequest<{ fetchResponse: TripRequestResponse }> {
   public payload: OJP_Types.TripRequestSchema;
 
   protected constructor(
