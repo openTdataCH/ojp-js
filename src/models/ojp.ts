@@ -42,6 +42,17 @@ export class PlaceRef implements OJP_Types.PlaceRefSchema {
       return placeRef;
     }
   }
+
+  public asOJPv1Schema() {
+    const legacyPlaceRef: OJP_Types.OJPv1_PlaceRefSchema = {
+      stopPointRef: this.stopPointRef,
+      stopPlaceRef: this.stopPlaceRef,
+      geoPosition: this.geoPosition,
+      locationName: this.name,
+    }
+
+    return legacyPlaceRef;
+  }
 }
 
 export class Trip implements OJP_Types.TripSchema {
