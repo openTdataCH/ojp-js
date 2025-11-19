@@ -53,15 +53,11 @@ export class OJPv1_LocationInformationRequest extends SharedLocationInformationR
     const request = OJPv1_LocationInformationRequest.Default();
     
     const placeRef = PlaceRef.initWithPlaceRefsOrCoords(placeRefOrCoords);
-    // following doesnt work, or at least TS compiler doesnt complain that locationName != name (as present in PlaceRef obj)
-    // request.payload.placeRef = placeRef;
-    // -> therefore set each property separately
-    request.payload.placeRef = {
-      stopPointRef: placeRef.stopPointRef,
-      stopPlaceRef: placeRef.stopPlaceRef,
-      geoPosition: placeRef.geoPosition,
-      locationName: placeRef.name,
-    };
+    // following shouldnt work 
+    // at least TS compiler doesnt complain that locationName != name (as present in PlaceRef obj)
+    request.payload.placeRef = placeRef;
+    // -> therefore use an explicit export
+    request.payload.placeRef = placeRef.asOJPv1Schema();
 
     if (request.payload.restrictions) {
       request.updateRestrictions(request.payload.restrictions, ['stop'], numberOfResults);
