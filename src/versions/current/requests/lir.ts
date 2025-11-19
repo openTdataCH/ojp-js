@@ -16,21 +16,20 @@ import { DefaultXML_Config, XML_BuilderConfigOJPv1 } from '../../../constants';
 export class LocationInformationRequest extends SharedLocationInformationRequest<{ fetchResponse: LocationInformationRequestResponse }> {
   public payload: OJP_Types.LocationInformationRequestSchema;
 
-  protected constructor(initialInput: OJP_Types.InitialInputSchema | undefined, placeRef: PlaceRef | undefined, restrictions: OJP_Types.LIR_RequestParamsSchema | undefined) {
+  protected constructor(restrictions: OJP_Types.LIR_RequestParamsSchema | undefined) {
     super();
 
     this.payload = {
       requestTimestamp: RequestHelpers.computeRequestTimestamp(),
-      initialInput: initialInput,
-      placeRef: placeRef,
+      initialInput: undefined,
+      placeRef: undefined,
       restrictions: restrictions,
     };
   }
 
   public static Default() {
     const restrictions = SharedLocationInformationRequest.DefaultRestrictionParams();
-
-    const request = new LocationInformationRequest(undefined, undefined, restrictions);
+    const request = new LocationInformationRequest(restrictions);
 
     return request;
   }
