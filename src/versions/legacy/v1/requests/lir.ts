@@ -17,13 +17,13 @@ import { SharedLocationInformationRequest } from '../../../current/requests/lir.
 export class OJPv1_LocationInformationRequest extends SharedLocationInformationRequest<{ fetchResponse: OJPv1_LocationInformationRequestResponse }> {
   public payload: OJP_Types.OJPv1_LocationInformationRequestSchema;
 
-  protected constructor(initialInput: OJP_Types.OJPv1_InitialInputSchema | undefined, placeRef: PlaceRef | undefined, restrictions: OJP_Types.LIR_RequestParamsSchema | undefined) {
+  protected constructor(restrictions: OJP_Types.LIR_RequestParamsSchema) {
     super();
-    
+
     this.payload = {
       requestTimestamp: RequestHelpers.computeRequestTimestamp(),
-      initialInput: initialInput,
-      placeRef: placeRef,
+      initialInput: undefined,
+      placeRef: undefined,
       restrictions: restrictions,
     };
   }
@@ -35,7 +35,7 @@ export class OJPv1_LocationInformationRequest extends SharedLocationInformationR
     };
     const restrictions = SharedLocationInformationRequest.DefaultRestrictionParams();
 
-    const request = new OJPv1_LocationInformationRequest(initialInput, undefined, restrictions);
+    const request = new OJPv1_LocationInformationRequest(restrictions);
 
     return request;
   }
