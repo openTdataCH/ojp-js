@@ -29,12 +29,7 @@ export class OJPv1_LocationInformationRequest extends SharedLocationInformationR
   }
 
   public static Default() {
-    const initialInput: OJP_Types.OJPv1_InitialInputSchema = {
-      locationName: undefined,
-      geoRestriction: undefined,
-    };
     const restrictions = SharedLocationInformationRequest.DefaultRestrictionParams();
-
     const request = new OJPv1_LocationInformationRequest(restrictions);
 
     return request;
