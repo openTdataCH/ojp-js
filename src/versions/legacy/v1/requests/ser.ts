@@ -8,17 +8,15 @@ import { RequestHelpers } from '../../../../helpers/request-helpers';
 
 import { Language, XML_Config } from '../../../../types/_all';
 
-import { StopEventRequestResponse } from '../../../../types/response';
+import { OJPv1_StopEventRequestResponse } from '../../../../types/response';
 import { DefaultXML_Config, XML_BuilderConfigOJPv1 } from '../../../../constants';
 
 import { SharedStopEventRequest } from '../../../current/requests/ser.shared';
 
-// TODO - StopEventRequestResponse is wrong, should be OJPv1_StopEventRequestResponse
-export class OJPv1_StopEventRequest extends SharedStopEventRequest <{ fetchResponse: StopEventRequestResponse }> {
-  // TODO - adapt schema if needed
-  public payload: OJP_Types.StopEventRequestSchema;
+export class OJPv1_StopEventRequest extends SharedStopEventRequest <{ fetchResponse: OJPv1_StopEventRequestResponse }> {
+  public payload: OJP_Types.OJPv1_StopEventRequestSchema;
 
-  protected constructor(location: OJP_Types.SER_RequestLocationSchema, params: OJP_Types.SER_RequestParamsSchema | undefined = undefined) {
+  protected constructor(location: OJP_Types.OJPv1_SER_RequestLocationSchema, params: OJP_Types.SER_RequestParamsSchema | undefined = undefined) {
     super();
 
     throw new Error('No OJP types defined for SER OJP 1.0');
@@ -27,10 +25,10 @@ export class OJPv1_StopEventRequest extends SharedStopEventRequest <{ fetchRespo
   // Used by Base.initWithRequestMock / initWithResponseMock
   public static Default() {
     const date = new Date();
-    const location: OJP_Types.SER_RequestLocationSchema = {
+    const location: OJP_Types.OJPv1_SER_RequestLocationSchema = {
       placeRef: {
-        stopPointRef: '8507000',
-        name: {
+        stopPlaceRef: '8507000',
+        locationName: {
           text: 'n/a'
         }
       },
@@ -44,10 +42,10 @@ export class OJPv1_StopEventRequest extends SharedStopEventRequest <{ fetchRespo
   }
 
   public static initWithPlaceRefAndDate(placeRefS: string, date: Date = new Date()) {
-    const location: OJP_Types.SER_RequestLocationSchema = {
+    const location: OJP_Types.OJPv1_SER_RequestLocationSchema = {
       placeRef: {
-        stopPointRef: placeRefS,
-        name: {
+        stopPlaceRef: placeRefS,
+        locationName: {
           text: 'n/a'
         }
       },
@@ -64,8 +62,7 @@ export class OJPv1_StopEventRequest extends SharedStopEventRequest <{ fetchRespo
   public buildRequestXML(language: Language, requestorRef: string, xmlConfig: XML_Config): string {
     this.payload.requestTimestamp = RequestHelpers.computeRequestTimestamp();
 
-    // TODO - use the correct OJP v1.0 type
-    const requestOJP: OJP_Types.SER_RequestOJP = {
+    const requestOJP: OJP_Types.OJPv1_StopEventRequestOJP = {
       OJPRequest: {
         serviceRequest: {
           serviceRequestContext: {
@@ -83,14 +80,13 @@ export class OJPv1_StopEventRequest extends SharedStopEventRequest <{ fetchRespo
     return xmlS;
   }
 
-  // TODO - use the correct OJP1.0 type
-  protected override async _fetchResponse(sdk: SDK<'1.0'>): Promise<StopEventRequestResponse> {
+  protected override async _fetchResponse(sdk: SDK<'1.0'>): Promise<OJPv1_StopEventRequestResponse> {
     const xmlConfig: XML_Config = sdk.version === '2.0' ? DefaultXML_Config : XML_BuilderConfigOJPv1;
 
     const responseXML = await RequestHelpers.computeResponse(this, sdk, xmlConfig);
 
     try {
-      const parsedObj = parseXML<{ OJP: OJP_Types.StopEventRequestResponseOJP }>(responseXML, 'OJP');
+      const parsedObj = parseXML<{ OJP: OJP_Types.OJPv1_StopEventResponseOJP }>(responseXML, 'OJP');
       const response = parsedObj.OJP.OJPResponse.serviceDelivery.OJPStopEventDelivery;
 
       if (response === undefined) {
