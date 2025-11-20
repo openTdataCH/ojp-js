@@ -10,6 +10,7 @@ export type LocationInformationRequestResponse = OJP_Response<OJP_Types.Location
 export type OJPv1_LocationInformationRequestResponse = OJP_Response<OJP_Types.OJPv1_LocationInformationDeliverySchema, Error>;
 
 export type StopEventRequestResponse = OJP_Response<OJP_Types.StopEventDeliverySchema, Error>;
+export type OJPv1_StopEventRequestResponse = OJP_Response<OJP_Types.OJPv1_StopEventDeliverySchema, Error>;
 
 export type TripInfoRequestResponse = OJP_Response<OJP_Types.TripInfoDeliverySchema, Error>;
 export type OJPv1_TripInfoRequestResponse = OJP_Response<OJP_Types.OJPv1_TripInfoDeliverySchema, Error>;
