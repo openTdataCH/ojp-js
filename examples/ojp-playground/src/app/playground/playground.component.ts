@@ -59,7 +59,7 @@ export class PlaygroundComponent implements OnInit {
   private async runLR_LookupByName() {
     // 1) LIR lookup by name
     const searchTerm = 'Bern';
-    const request = this.sdkOJPv2.requests.LocationInformationRequest.initWithLocationName(searchTerm);
+    const request = OJP.LocationInformationRequest.initWithLocationName(searchTerm);
 
     console.log('1) LIR lookup by name');
     const response = await request.fetchResponse(this.sdkOJPv2);
@@ -93,7 +93,7 @@ export class PlaygroundComponent implements OnInit {
     let bbox: string | number[] = '7.433259,46.937798,7.475252,46.954805';
     bbox = [7.433259, 46.937798, 7.475252, 46.954805];
     
-    const request = this.sdkOJPv2.requests.LocationInformationRequest.initWithBBOX(bbox, ['stop']);
+    const request = OJP.LocationInformationRequest.initWithBBOX(bbox, ['stop']);
 
     console.log('2) LIR lookup by BBOX');
     const response = await request.fetchResponse(this.sdkOJPv2);
@@ -108,7 +108,7 @@ export class PlaygroundComponent implements OnInit {
   private async runLR_LookupByStopRef() {
     // 3) LIR lookup by stop reference
     const stopRef = '8507000';
-    const request = this.sdkOJPv2.requests.LocationInformationRequest.initWithPlaceRef(stopRef);
+    const request = OJP.LocationInformationRequest.initWithPlaceRef(stopRef);
 
     console.log('3) LIR lookup by StopRef');
     const response = await request.fetchResponse(this.sdkOJPv2);
@@ -122,7 +122,7 @@ export class PlaygroundComponent implements OnInit {
   private async runLR_LookupByNameFilterPtMode() {
     // 4) LIR lookup by name with filter by ptMode type
     const searchTerm = 'Th';
-    const request = this.sdkOJPv2.requests.LocationInformationRequest.initWithLocationName(searchTerm);
+    const request = OJP.LocationInformationRequest.initWithLocationName(searchTerm);
     if (request.payload.restrictions) {
       request.payload.restrictions.type = ['stop'];
       request.payload.restrictions.includePtModes = true;
@@ -151,7 +151,7 @@ export class PlaygroundComponent implements OnInit {
   }
 
   private async runLR_InitWithMock() {
-    const request = this.sdkOJPv2.requests.LocationInformationRequest.initWithRequestMock('<Foo/>');
+    const request = OJP.LocationInformationRequest.initWithRequestMock('<Foo/>');
 
     try {
       const response = await request.fetchResponse(this.sdkOJPv2);
@@ -160,7 +160,7 @@ export class PlaygroundComponent implements OnInit {
       console.error('Error occurred:', e);
     }
 
-    const request2 = this.sdkOJPv2.requests.TripInfoRequest.initWithRequestMock('<Foo/>');
+    const request2 = OJP.TripInfoRequest.initWithRequestMock('<Foo/>');
 
     try {
       const response = await request2.fetchResponse(this.sdkOJPv2);
@@ -188,7 +188,7 @@ export class PlaygroundComponent implements OnInit {
     const fromStopRef = '8507000';  // Bern
     const toStopRef = '8503000';    // Zürich
 
-    const request = this.sdkOJPv2.requests.TripRequest.initWithPlaceRefsOrCoords(fromStopRef, toStopRef);
+    const request = OJP.TripRequest.initWithPlaceRefsOrCoords(fromStopRef, toStopRef);
     const response = await request.fetchResponse(this.sdkOJPv2);
     if (!response.ok) {
       console.error('fetchTripRequestResponse ERROR');
@@ -212,7 +212,7 @@ export class PlaygroundComponent implements OnInit {
     const fromCoordsRef = '46.957522,7.431170';
     const toCoordsRef = '46.931849,7.485132';
 
-    const request = this.sdkOJPv2.requests.TripRequest.initWithPlaceRefsOrCoords(fromCoordsRef, toCoordsRef);
+    const request = OJP.TripRequest.initWithPlaceRefsOrCoords(fromCoordsRef, toCoordsRef);
     request.enableLinkProkection();
 
     const response = await request.fetchResponse(this.sdkOJPv2);
@@ -227,7 +227,7 @@ export class PlaygroundComponent implements OnInit {
 
   private async runTR_WalkSpeed() {
     // C) TR with walkSpeed
-    const request = this.sdkOJPv2.requests.TripRequest.initWithPlaceRefsOrCoords('8507099', '8511418');
+    const request = OJP.TripRequest.initWithPlaceRefsOrCoords('8507099', '8511418');
     if (request.payload.params) {
       request.payload.params.walkSpeed = 400;
     }
@@ -244,7 +244,7 @@ export class PlaygroundComponent implements OnInit {
 
   private async runTR_ModeFilter() {
     // D) TR with modeFilter - Thun(See) - Spiez(See)
-    const request = this.sdkOJPv2.requests.TripRequest.initWithPlaceRefsOrCoords('8507150', '8507154');
+    const request = OJP.TripRequest.initWithPlaceRefsOrCoords('8507150', '8507154');
     if (request.payload.params) {
       request.payload.params.modeAndModeOfOperationFilter = [
         {
@@ -270,7 +270,7 @@ export class PlaygroundComponent implements OnInit {
     const place1 = OJP.Place.initWithCoords(7.43913, 46.94883);
     const place2 = OJP.Place.initWithCoords(7.418625, 46.698708);
 
-    const request = this.sdkOJPv2.requests.TripRequest.initWithPlaces(place1, place2);
+    const request = OJP.TripRequest.initWithPlaces(place1, place2);
     request.setMaxDurationWalkingTime(300);
 
     const response = await request.fetchResponse(this.sdkOJPv2);
@@ -313,7 +313,7 @@ export class PlaygroundComponent implements OnInit {
 
   private async runSER_LookupByStopRef() {
     const stopRef = '8507000'; // Bern
-    const request = this.sdkOJPv2.requests.StopEventRequest.initWithPlaceRefAndDate(stopRef, new Date());
+    const request = OJP.StopEventRequest.initWithPlaceRefAndDate(stopRef, new Date());
     
     const response1 = await request.fetchResponse(this.sdkOJPv2);
     if (!response1.ok) {
