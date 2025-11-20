@@ -23,6 +23,7 @@ export {
   LocationInformationRequestResponse,
   OJPv1_LocationInformationRequestResponse,
   StopEventRequestResponse,
+  OJPv1_StopEventRequestResponse,
   TripInfoRequestResponse,
   OJPv1_TripInfoRequestResponse,
   TripRefineRequestResponse,
