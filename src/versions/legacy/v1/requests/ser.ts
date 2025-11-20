@@ -19,7 +19,11 @@ export class OJPv1_StopEventRequest extends SharedStopEventRequest <{ fetchRespo
   protected constructor(location: OJP_Types.OJPv1_SER_RequestLocationSchema, params: OJP_Types.SER_RequestParamsSchema | undefined = undefined) {
     super();
 
-    throw new Error('No OJP types defined for SER OJP 1.0');
+    this.payload = {
+      requestTimestamp: RequestHelpers.computeRequestTimestamp(),
+      location: location,
+      params: params,
+    }
   }
 
   // Used by Base.initWithRequestMock / initWithResponseMock
