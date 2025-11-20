@@ -35,7 +35,8 @@ export class OJPv1_StopEventRequest extends SharedStopEventRequest <{ fetchRespo
       depArrTime: date.toISOString(),
     };
 
-    const requestParams = SharedStopEventRequest.DefaultRequestParams();
+    const requestParams = SharedStopEventRequest.DefaultRequestParams('1.0');
+    
     const request = new OJPv1_StopEventRequest(location, requestParams);
     
     return request;
@@ -52,7 +53,7 @@ export class OJPv1_StopEventRequest extends SharedStopEventRequest <{ fetchRespo
       depArrTime: date.toISOString(),
     };
 
-    const params = SharedStopEventRequest.DefaultRequestParams();
+    const params = SharedStopEventRequest.DefaultRequestParams('1.0');
 
     const request = new OJPv1_StopEventRequest(location, params);
 
