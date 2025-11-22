@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 0.20.33 - 23.11.2025
+- use latest `ojp-shared-types` - [PR #215](https://github.com/openTdataCH/ojp-js/pull/215)
+
 ## 0.20.32 - 13.11.2025
 - Fix OJPv1 GeneralAttribute - [PR #213](https://github.com/openTdataCH/ojp-js/pull/213)
   - use new OJP_Types `GeneralAttributeSchema`
