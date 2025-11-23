@@ -27,7 +27,6 @@ export class PlaygroundComponent implements OnInit {
       authToken: null,
     };
 
-
     this.sdkOJPv1 = OJP.SDK.v1(requestorRef, legacySDK_HTTP_Config, 'en');
     this.sdkOJPv2 = OJP.SDK.create(requestorRef, sdkHTTP_Config, 'en');
     this.sdkOJPv2INT = OJP.SDK.create(requestorRef, sdkHTTP_INT_Config, 'en');
