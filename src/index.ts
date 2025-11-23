@@ -11,8 +11,6 @@ export * from './shared/duration';
 
 export * from './situation/situation-element';
 
-export * from './stop-event/stop-event';
-
 export * from './request/index';
 
 export * from './trip/index';
