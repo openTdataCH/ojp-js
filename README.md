@@ -15,9 +15,9 @@ Code / Demo App Implementation
 
 | Code Place | LIR | SER | TR | TIR | FR | TRR | Comments |
 | - | - | - | - | - | - | - | - |
-| `ojp-sdk-legacy` (legacy SDK) | :white_check_mark: | :white_check_mark: | :white_check_mark: | - | - | - | TRR is only available for OJP v2.0 |
+| `ojp-sdk-legacy` (legacy SDK) | - | - | :white_check_mark: | - | - | - | TRR is only available for OJP v2.0 |
 | `ojp-sdk-next` (new SDK) | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |  |
-| DemoApp Beta | `legacy` | `legacy` | `legacy` | `ojp-sdk-next` | `ojp-sdk-next` | `ojp-sdk-next` | `legacy` is the old SDK (OJP v1 and v2, see above) |
+| DemoApp | `ojp-sdk-next` | `ojp-sdk-next` | `legacy` | `ojp-sdk-next` | `ojp-sdk-next` | `ojp-sdk-next` | `legacy` is the old SDK (OJP v1 and v2, see above) |
 
 - LIR - LocationInformationRequest
 - SER - StopEventRequest
@@ -43,7 +43,7 @@ See [Reference](./docs/reference.md) and [examples](./examples/) for usage.
 - include the `ojp-sdk-legacy` package in the `./package.json` dependencies of your project 
 ```
   "dependencies": {
-    "ojp-sdk-legacy": "0.18.17"
+    "ojp-sdk-legacy": "0.18.18"
   }
 ```
 

@@ -12,7 +12,7 @@ import { TripModeType } from '../../types/trip-mode-type';
 import { IndividualTransportMode } from '../../types/individual-mode.types';
 import { ModeOfTransportType } from '../../types/mode-of-transport.type';
 import { JourneyPointType } from '../../types/journey-points';
-import { UseRealtimeDataEnumeration, XML_Config } from "../../types/_all";
+import { XML_Config } from "../../types/_all";
 
 export type TripRequestBoardingType = 'Dep' | 'Arr'
 
@@ -38,7 +38,7 @@ export class TripRequest extends OJPBaseRequest {
   public response: TripRequest_Response | null;
 
   public enableExtensions: boolean;
-  public useRealTimeDataType: UseRealtimeDataEnumeration;
+  public useRealTimeDataType: string;
 
   public walkSpeedDeviation: number | null;
 
@@ -103,26 +103,6 @@ export class TripRequest extends OJPBaseRequest {
     request.mockRequestXML = mockText;
     request.requestInfo.requestXML = mockText;
     
-    return request;
-  }
-
-  public static initWithStopRefs(stageConfig: ApiConfig, language: Language, xmlConfig: XML_Config, requestorRef: string, fromStopRef: string, toStopRef: string, departureDate: Date = new Date(), tripRequestBoardingType: TripRequestBoardingType = 'Dep') {
-    const fromLocation = Location.initWithStopPlaceRef(fromStopRef);
-    const toLocation = Location.initWithStopPlaceRef(toStopRef);
-    const fromTripLocationPoint = new TripLocationPoint(fromLocation);
-    const toTripLocationPoint = new TripLocationPoint(toLocation);
-
-    const request = new TripRequest(stageConfig, language, xmlConfig, requestorRef, fromTripLocationPoint, toTripLocationPoint, departureDate, tripRequestBoardingType);
-    
-    return request;
-  }
-
-  public static initWithLocationsAndDate(stageConfig: ApiConfig, language: Language, xmlConfig: XML_Config, requestorRef: string, fromLocation: Location, toLocation: Location, departureDate: Date, tripRequestBoardingType: TripRequestBoardingType = 'Dep') {
-    const fromTripLocationPoint = new TripLocationPoint(fromLocation);
-    const toTripLocationPoint = new TripLocationPoint(toLocation);
-    
-    const request = new TripRequest(stageConfig, language, xmlConfig, requestorRef, fromTripLocationPoint, toTripLocationPoint, departureDate, tripRequestBoardingType);
-
     return request;
   }
 

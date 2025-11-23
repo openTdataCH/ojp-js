@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.18.18 - 23.11.2025
+- Migrate APIs - [PR #216](https://github.com/openTdataCH/ojp-js/pull/216)
+  - remove LIR, SER requests, OJP Demo App is using now `ojp-sdk-next` for these
+
 ## 0.18.17 - 13.11.2025
 - Improve Service.Attribute - [PR #214](https://github.com/openTdataCH/ojp-js/pull/214)
   - parse/use `Importance` in Service Attributre nodes

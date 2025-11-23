@@ -14,7 +14,7 @@ interface NearbyLocation {
 }
 
 // TODO - long term: subclass from Location?
-export type LocationType = 'stop' | 'address' | 'poi' | 'topographicPlace'
+type LocationType = 'stop' | 'address' | 'poi' | 'topographicPlace'
 
 const literalCoordsRegexp = /^([0-9\.]+?),([0-9\.]+?)$/;
 
@@ -176,15 +176,15 @@ export class Location {
       return null
     }
 
-    let longitude = parseFloat(inputMatches[1])
-    let latitude = parseFloat(inputMatches[2])
+    let longitude = parseFloat(inputMatches[1]);
+    let latitude = parseFloat(inputMatches[2]);
     // In CH always long < lat
     if (longitude > latitude) {
-      longitude = parseFloat(inputMatches[2])
-      latitude = parseFloat(inputMatches[1])
+      longitude = parseFloat(inputMatches[2]);
+      latitude = parseFloat(inputMatches[1]);
     }
     
-    const location = Location.initWithLngLat(longitude, latitude)
+    const location = Location.initWithLngLat(longitude, latitude);
 
     // Match the content inside the ()
     const locationNameMatches = inputS.trim().match(/\(([^\)]*)\)?/);
@@ -320,5 +320,11 @@ export class Location {
     this.locationName = anotherLocation.locationName;
     this.stopPlace = anotherLocation.stopPlace;
     this.geoPosition = anotherLocation.geoPosition;
+  }
+
+  // helper created to allow GeoPosition set from outside SDK
+  // it is done temporarely until migration to ojp-sdk-next
+  public updateLegacyGeoPosition(longitude: number, latitude: number) {
+    this.geoPosition = new GeoPosition(longitude, latitude);
   }
 }

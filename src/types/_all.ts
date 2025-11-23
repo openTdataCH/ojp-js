@@ -1,5 +1,3 @@
-export type UseRealtimeDataEnumeration = 'full' | 'explanatory' | 'none';
-
 export type FareClassType = 'firstClass' | 'secondClass';
 export type OccupancyLevel = 'unknown' | 'manySeatsAvailable' | 'fewSeatsAvailable' | 'standingRoomOnly';
 export type MapFareClassOccupancy = Record<FareClassType, OccupancyLevel | null>;

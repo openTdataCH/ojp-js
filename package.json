@@ -1,6 +1,6 @@
 {
   "name": "ojp-sdk-legacy",
-  "version": "0.18.17",
+  "version": "0.18.18",
   "description": "OJP (Open Journey Planner) Javascript SDK (legacy version)",
   "main": "lib/index.js",
   "type": "module",
