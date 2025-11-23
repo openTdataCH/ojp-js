@@ -106,26 +106,6 @@ export class TripRequest extends OJPBaseRequest {
     return request;
   }
 
-  public static initWithStopRefs(stageConfig: ApiConfig, language: Language, xmlConfig: XML_Config, requestorRef: string, fromStopRef: string, toStopRef: string, departureDate: Date = new Date(), tripRequestBoardingType: TripRequestBoardingType = 'Dep') {
-    const fromLocation = Location.initWithStopPlaceRef(fromStopRef);
-    const toLocation = Location.initWithStopPlaceRef(toStopRef);
-    const fromTripLocationPoint = new TripLocationPoint(fromLocation);
-    const toTripLocationPoint = new TripLocationPoint(toLocation);
-
-    const request = new TripRequest(stageConfig, language, xmlConfig, requestorRef, fromTripLocationPoint, toTripLocationPoint, departureDate, tripRequestBoardingType);
-    
-    return request;
-  }
-
-  public static initWithLocationsAndDate(stageConfig: ApiConfig, language: Language, xmlConfig: XML_Config, requestorRef: string, fromLocation: Location, toLocation: Location, departureDate: Date, tripRequestBoardingType: TripRequestBoardingType = 'Dep') {
-    const fromTripLocationPoint = new TripLocationPoint(fromLocation);
-    const toTripLocationPoint = new TripLocationPoint(toLocation);
-    
-    const request = new TripRequest(stageConfig, language, xmlConfig, requestorRef, fromTripLocationPoint, toTripLocationPoint, departureDate, tripRequestBoardingType);
-
-    return request;
-  }
-
   public static initWithTripLocationsAndDate(
     stageConfig: ApiConfig, 
     language: Language,
