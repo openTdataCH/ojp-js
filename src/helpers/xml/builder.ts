@@ -105,7 +105,7 @@ export function buildXML(obj: Record<string, any>, wrapperNodeName: string = 'OJ
 
   const xmlParts: string[] = [];
 
-  // By convetion
+  // By convention
   const isRootNode = wrapperNodeName === 'OJP';
   if (isRootNode) {
     const xmlAttrs: string[] = [];
