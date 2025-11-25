@@ -147,8 +147,6 @@ const transformTagNameHandler = (tagName: string) => {
 };
 
 const isArrayHandler = (tagName: string, jPath: string) => {
-  // console.log('handleArrayNodes:       ' + tagName +  ' -- ' + jPath);
-
   const jPathParts = jPath.split('.');
   if (jPathParts.length >= 2) {
     const pathPart = jPathParts.slice(-2).join('.');
