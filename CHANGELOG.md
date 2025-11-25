@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 0.21.1 - 25.11.2025
+- refactor SDK - [PR #210](https://github.com/openTdataCH/ojp-js/pull/210)
+
 ## 0.20.33 - 23.11.2025
 - use latest `ojp-shared-types` - [PR #215](https://github.com/openTdataCH/ojp-js/pull/215)
 
