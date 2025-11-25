@@ -31,8 +31,10 @@
   "license": "MIT",
   "dependencies": {
     "axios": "1.8.3",
-    "fast-xml-parser": "5.0.8",
-    "ojp-shared-types": "github:openTdataCH/ojp-shared-types#feature/updates-api"
+    "fast-xml-parser": "5.0.8"
+  },
+  "peerDependencies": {
+    "ojp-shared-types": "0.1.1"
   },
   "devDependencies": {
     "@types/geojson": "7946.0.16",
