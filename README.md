@@ -62,29 +62,32 @@ const httpConfig: OJP.HTTPConfig = {
 // define a requestorRef that describes the client
 const requestorRef = 'MyExampleTransportApp.v1';
 
-// define the SDK i18n language
+// create the SDK
 const language = 'de'; // de, fr, it, en
-const ojpSDK = new OJP.SDK(requestorRef, httpConfig, language);
+const ojpSDK = OJP.SDK.create(requestorRef, httpConfig, language);
 
 // build LIR by Name
 const searchTerm = 'Bern';
-const request1 = OJP.LocationInformationRequest.initWithLocationName(searchTerm);
+const request1 = ojpSDK.requests.LocationInformationRequest.initWithLocationName('Bern');
 
 // build LIR by StopRef
 const stopRef = '8507000'; // Bern
-const request2 = OJP.LocationInformationRequest.initWithPlaceRef(stopRef);
+const request2 = ojpSDK.requests.LocationInformationRequest.initWithPlaceRef(stopRef);
 
 // build LIR by BBOX
 // these are equivalent
 let bbox: string | number[] = '7.433259,46.937798,7.475252,46.954805';
 bbox = [7.433259, 46.937798, 7.475252, 46.954805];
 
-const request3 =  OJP.LocationInformationRequest.initWithBBOX(bbox, ['stop']);
+const request3 =  ojpSDK.requests.LocationInformationRequest.initWithBBOX(bbox, ['stop']);
+
+// change XML payload if needed
+request1.payload.initialInput ...
 
 // fetch the results
 async myMethod() {
   // ...
-  const response = await this.ojpSDK.fetchLocationInformationRequestResponse(request1);
+  const response = await request1.fetchResponse(ojpSDK);
 
   if (!response.ok) {
     // handle error
@@ -95,7 +98,7 @@ async myMethod() {
   // do something with the value
   const placeResults = response.value.placeResult ?? [];
   placeResults.forEach(placeResult => {
-
+    console.log(placeResult.place.name);
   });
 }
 ```
