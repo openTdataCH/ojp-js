@@ -1,6 +1,6 @@
 import { FileHelpers } from './helpers/file-helpers';
 
-import * as OJP from '../src'
+import * as OJP from '../src';
 import { OJP_Helpers } from './helpers/ojp-test.helpers';
 
 describe('OJP Test TripRequest Response', () => {
@@ -9,9 +9,9 @@ describe('OJP Test TripRequest Response', () => {
   beforeAll(async () => {
     const ojp = OJP_Helpers.DefaultSDK();
     const mockXML = FileHelpers.loadMockXML('lir-response-be.xml');
-    const mockRequest = OJP.LocationInformationRequest.initWithResponseMock(mockXML);
+    const mockRequest = ojp.requests.LocationInformationRequest.initWithResponseMock(mockXML);
 
-    const response = await ojp.fetchLocationInformationRequestResponse(mockRequest);
+    const response = await mockRequest.fetchResponse(ojp);
     if (response.ok) {
       placeResults = response.value.placeResult.map(el => OJP.PlaceResult.initWithXMLSchema(el));
     } else {

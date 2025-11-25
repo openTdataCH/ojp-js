@@ -1,36 +1,25 @@
 import { FileHelpers } from './helpers/file-helpers';
 
 import * as OJP_Types from 'ojp-shared-types';
-import * as OJP from '../src'
 import { OJP_Helpers } from './helpers/ojp-test.helpers';
-import { XML_Config } from '../src/types/_all';
 
 describe('OJP Test TripRequest Response', () => {
   let response1: OJP_Types.FareDeliverySchema;
   let response2: OJP_Types.FareDeliverySchema;
 
   beforeAll(async () => {
-    const XML_BuilderConfigOJPv1: XML_Config = {
-      ojpVersion: '1.0',
-      defaultNS: 'siri',
-      mapNS: {
-          'ojp': 'http://www.vdv.de/ojp',
-          'siri': 'http://www.siri.org.uk/siri',
-      },
-    };
-
-    const ojp = OJP_Helpers.DefaultSDK('de', XML_BuilderConfigOJPv1);
+    const ojp = OJP_Helpers.LegacySDK();
     
     const mockXML_1 = FileHelpers.loadMockXML('fare-response.xml');
-    const mockRequest1 = OJP.FareRequest.initWithResponseMock(mockXML_1);
-    const ojpResponse1 = await ojp.fetchFareRequestResponse(mockRequest1);
+    const mockRequest1 = ojp.requests.FareRequest.initWithResponseMock(mockXML_1);
+    const ojpResponse1 = await mockRequest1.fetchResponse(ojp);
     if (ojpResponse1.ok) {
       response1 = ojpResponse1.value;
     }
 
     const mockXML_2 = FileHelpers.loadMockXML('fare-response-single-result.xml');
-    const mockRequest2 = OJP.FareRequest.initWithResponseMock(mockXML_2);
-    const ojpResponse2 = await ojp.fetchFareRequestResponse(mockRequest2);
+    const mockRequest2 = ojp.requests.FareRequest.initWithResponseMock(mockXML_2);
+    const ojpResponse2 = await mockRequest2.fetchResponse(ojp);
     if (ojpResponse2.ok) {
       response2 = ojpResponse2.value;
     }

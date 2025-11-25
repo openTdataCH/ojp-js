@@ -31,7 +31,7 @@ type RenderModel = {
   styleUrls: ['./departures.component.scss']
 })
 export class DeparturesComponent implements OnInit {
-  private ojpSDK: OJP.SDK;
+  private ojpSDK: OJP.SDK<'2.0'>;
 
   public renderModel: RenderModel
   private queryParams: URLSearchParams
@@ -51,7 +51,7 @@ export class DeparturesComponent implements OnInit {
 
 
     const requestorRef = 'PlaygroundApp.v1';
-    this.ojpSDK = new OJP.SDK(requestorRef, httpConfig, 'de');
+    this.ojpSDK = OJP.SDK.create(requestorRef, httpConfig, 'de');
   }
 
   async ngOnInit(): Promise<void> {
@@ -105,8 +105,8 @@ export class DeparturesComponent implements OnInit {
     }
     const stopRef = this.queryParams.get('stop_id') ?? mapStopRefs.BERN_BAHNHOF;
 
-    const request = OJP.LocationInformationRequest.initWithPlaceRef(stopRef);
-    const response = await this.ojpSDK.fetchLocationInformationRequestResponse(request);
+    const request = this.ojpSDK.requests.LocationInformationRequest.initWithPlaceRef(stopRef);
+    const response = await request.fetchResponse(this.ojpSDK);
 
     if (!response.ok) {
       return [];
@@ -121,9 +121,9 @@ export class DeparturesComponent implements OnInit {
   }
 
   private async fetchLatestDepartures(placeRef: string) {
-    const request = OJP.StopEventRequest.initWithPlaceRefAndDate(placeRef, new Date());
+    const request = this.ojpSDK.requests.StopEventRequest.initWithPlaceRefAndDate(placeRef, new Date());
 
-    const response = await this.ojpSDK.fetchStopEventRequestResponse(request);
+    const response = await request.fetchResponse(this.ojpSDK);
     if (!response.ok) {
       return;
     }

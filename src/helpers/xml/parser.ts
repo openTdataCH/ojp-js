@@ -1,6 +1,7 @@
 import * as OJP_Types from 'ojp-shared-types';
 
 import { XMLParser } from "fast-xml-parser";
+import { XmlSerializer } from '../../models/xml-serializer';
 
 const MapParentArrayTags: Record<string, string[]> = {};
 for (const key in OJP_Types.OpenAPI_Dependencies.MapArrayTags) {
@@ -20,24 +21,132 @@ for (const key in OJP_Types.OpenAPI_Dependencies.MapArrayTags) {
   MapParentArrayTags[parentTagName].push(childTagName);
 }
 
-const transformTagNameHandler = (tagName: string) => {
-  if (tagName.startsWith('OJP')) {
-    return tagName;
+export function transformJsonInPlace(root: unknown): void {
+  const hashTextKey = '#text';
+
+  function isHashKeyObject(v: unknown): v is Record<string, unknown> {
+    if ((typeof v) !== 'object') {
+      return false;
+    }
+    if (Array.isArray(v)) {
+      return false;
+    }
+
+    const hasKey = hashTextKey in (v as any);
+
+    return hasKey;
   }
 
-  // Convert to camelCase, strip -_
-  let newTagName = tagName.replace(/[-_](.)/g, (_, char) => char.toUpperCase()) 
-  // Ensure first letter is lowercase
-  newTagName = newTagName.replace(/^([A-Z])/, (match) => match.toLowerCase());
+  function normalizeValue(value: unknown, path: string[]): unknown {
+    if (path.length < 2) {
+      return value;
+    }
 
-  // console.log('transformToCamelCase:   ' + tagName);
+    const pathSuffix = path.slice(-2).join('.');
 
-  return newTagName;
+    if ((pathSuffix in OJP_Types.OpenAPI_Dependencies.MapStringValues) && (typeof(value) !== 'string')) {
+      return String(value);
+    }
+
+    return value;
+  }
+
+  function visit(node: unknown, path: string[]): void {
+    const currentNodeKey = path.at(-1);
+
+    if (Array.isArray(node)) {
+      for (let i = 0; i < node.length; i++) {
+        visit(node[i], path);
+      }
+      return;
+    }
+
+    // Objects
+    if (node && typeof node === 'object') {
+      const rec = node as Record<string, unknown>;
+      const keys = Object.keys(rec);
+
+      for (const key of keys) {
+        let value = rec[key];
+        const valuePath = [...path, key];
+
+        // Case 1: check for #text property values
+        if (isHashKeyObject(value)) {
+          const inner = value as Record<string, unknown>;
+
+          // hashTextKey -> main value for prop1
+          rec[key] = inner[hashTextKey];
+
+          // other props -> 'prop1.other', etc.
+          for (const innerKey of Object.keys(inner)) {
+            if (innerKey === hashTextKey) {
+              continue;
+            }
+            const flatKey = `${key}.${innerKey}`;
+            rec[flatKey] = inner[innerKey];
+          }
+
+          // Do NOT recurse into old inner object; we've flattened it
+          continue;
+        }
+
+        // Case 2: if arrays, check for #text property values in the children
+        if (Array.isArray(value) && value.length > 0 && value.every(isHashKeyObject)) {
+          const arr = value as Array<Record<string, unknown>>;
+          const basePath = valuePath; // path to prop1
+
+          // prop1 -> array of normalized hashTextKey values
+          rec[key] = arr.map(o => normalizeValue(o[hashTextKey], basePath));
+
+          // collect extra keys
+          const extraKeys = new Set<string>();
+          for (const o of arr) {
+            for (const k of Object.keys(o)) {
+              if (k !== hashTextKey) {
+                extraKeys.add(k);
+              }
+            }
+          }
+
+          // prop1.other -> array of normalized 'other' values
+          for (const extraKey of extraKeys) {
+            const flatKey = `${key}.${extraKey}`;
+            // no need to normalize attributes to strings
+            rec[flatKey] = arr.map(o => o[extraKey]);
+          }
+
+          continue;
+        }
+
+        // Normal property: normalize then recurse
+        value = normalizeValue(value, valuePath);
+        rec[key] = value;
+        visit(value, valuePath);
+      }
+
+      // Enforce arrays, create empty nodes if needed
+      if (currentNodeKey !== undefined) {
+        const expectedPropAsArray = MapParentArrayTags[currentNodeKey] ?? [];
+        expectedPropAsArray.forEach(prop => {
+          if (!(prop in rec)) {
+            rec[prop] = [];
+          }
+          // NOTE for later: do not try to enforce an array of an existing property
+          //      this was handled in the parsing via isArrayHandler.
+          //      MapParentArrayTags has low granularity
+        });
+      }
+    }
+  }
+
+  visit(root, []);
+}
+
+const transformTagNameHandler = (tagName: string) => {
+  return XmlSerializer.transformTagName(tagName);
 };
 
 const isArrayHandler = (tagName: string, jPath: string) => {
-  // console.log('handleArrayNodes:       ' + tagName +  ' -- ' + jPath);
-
   const jPathParts = jPath.split('.');
   if (jPathParts.length >= 2) {
     const pathPart = jPathParts.slice(-2).join('.');
@@ -49,27 +158,6 @@ const isArrayHandler = (tagName: string, jPath: string) => {
   return false;
 };
 
-function traverseJSON(obj: any, path: string[], callback: (key: string, value: any, path: string[]) => void) {
-  if ((typeof obj !== 'object') || (obj === null)) {
-    return;
-  }
-
-  if (Array.isArray(obj)) {
-    for (const item of obj) {
-      traverseJSON(item, path, callback);
-    }
-  } else {
-    for (const key in obj) {
-      const newPath = path.slice();
-      newPath.push(key);
-
-      callback(key, obj[key], newPath);
-
-      traverseJSON(obj[key], newPath, callback);
-    }
-  }
-}
-
 export function parseXML<T>(xml: string, parentPath: string = ''): T {
   const parser = new XMLParser({
     ignoreAttributes: false,
@@ -80,57 +168,7 @@ export function parseXML<T>(xml: string, parentPath: string = ''): T {
   });
 
   const response = parser.parse(xml) as T;
+  transformJsonInPlace(response);
 
-  traverseJSON(response, [parentPath], (key: string, value: any, path: string[]) => {
-    // console.log('traverseJSON_> ' + path.join('.') + ' k: ' + key + ' v: ' + value);
-    
-    if (typeof value === 'object') {    
-      // enforce empty arrays if the array items are not present
-      if (path.length >= 2) {
-        if (key in MapParentArrayTags) {
-          const enforceChildTags = MapParentArrayTags[key];
-          if (Array.isArray(value)) {
-            value.forEach(childValue => {
-              enforceChildTags.forEach(childTagName => {
-                childValue[childTagName] ??= [];
-              });
-            });
-          } else {
-            enforceChildTags.forEach(childTagName => {
-              value[childTagName] ??= [];
-            });
-          }
-        }
-      }
-
-      for (const key1 in value) {
-        if (typeof value[key1] === 'object') {
-          // check for #text keys that are added for text nodes that have attributes
-          if (Object.keys(value[key1]).includes('#text')) {
-            const otherKeys = Object.keys(value[key1]).filter(el => el !== '#text');
-
-            // keep attributes
-            otherKeys.forEach(otherKey => {
-              const newKey = key1 + otherKey;
-              value[newKey] = value[key1][otherKey];
-            });
-            
-            // replace the object with literal value of #text
-            value[key1] = value[key1]['#text'];
-          }
-        }
-
-        // for .text properties we need the before step (#text parsing) to be executed first
-        const lastItem = (path.at(-1) ?? '');
-        const stringKey = lastItem + '.' + key1;
-        if (stringKey in OJP_Types.OpenAPI_Dependencies.MapStringValues) {
-          // fast-xml-parser attempts to converts everything
-          //    conform to schema id needed, i.e. String values
-          value[key1] = String(value[key1]);
-        }
-      }
-    }
-  });
-  
   return response;
 }

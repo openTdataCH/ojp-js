@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import * as OJP from 'ojp-sdk'
+import * as OJP from 'ojp-sdk';
 
 @Component({
   selector: 'playground',
@@ -8,22 +8,28 @@ import * as OJP from 'ojp-sdk'
   styleUrls: ['./playground.component.scss']
 })
 export class PlaygroundComponent implements OnInit {
-  private ojpSDK: OJP.SDK;
-  private ojpINT_SDK: OJP.SDK;
+  public sdkOJPv1: OJP.SDK<'1.0'>;
+  public sdkOJPv2: OJP.SDK;
+  public sdkOJPv2INT: OJP.SDK;
 
   constructor() {
-    let httpConfig: OJP.HTTPConfig = {
+    const requestorRef = 'PlaygroundApp.v1';
+    const sdkHTTP_Config: OJP.HTTPConfig = {
       url: 'https://api.opentransportdata.swiss/ojp20',
       authToken: null,
     };
-    let httpConfigINT: OJP.HTTPConfig = {
+    const sdkHTTP_INT_Config: OJP.HTTPConfig = {
       url: 'https://odpch-api.clients.liip.ch/ojp20-beta',
       authToken: null,
     };
+    const legacySDK_HTTP_Config: OJP.HTTPConfig = {
+      url: 'https://api.opentransportdata.swiss/ojp2020',
+      authToken: null,
+    };
 
-    const requestorRef = 'PlaygroundApp.v1';
-    this.ojpSDK = new OJP.SDK(requestorRef, httpConfig, 'de');
-    this.ojpINT_SDK = new OJP.SDK(requestorRef, httpConfigINT, 'de');
+    this.sdkOJPv1 = OJP.SDK.v1(requestorRef, legacySDK_HTTP_Config, 'en');
+    this.sdkOJPv2 = OJP.SDK.create(requestorRef, sdkHTTP_Config, 'en');
+    this.sdkOJPv2INT = OJP.SDK.create(requestorRef, sdkHTTP_INT_Config, 'en');
   }
 
   async ngOnInit(): Promise<void> {
@@ -42,9 +48,11 @@ export class PlaygroundComponent implements OnInit {
     console.log('======================');
 
     await this.runLR_LookupByName();
+    await this.runLR_LookupByNameOJPv1();
     await this.runLR_LookupByBBOX();
     await this.runLR_LookupByStopRef();
     await this.runLR_LookupByNameFilterPtMode();
+    await this.runLR_InitWithMock();
   }
 
   private async runLR_LookupByName() {
@@ -53,13 +61,28 @@ export class PlaygroundComponent implements OnInit {
     const request = OJP.LocationInformationRequest.initWithLocationName(searchTerm);
 
     console.log('1) LIR lookup by name');
-    const response = await this.ojpSDK.fetchLocationInformationRequestResponse(request);
+    const response = await request.fetchResponse(this.sdkOJPv2);
     if (!response.ok) {
       console.error('fetchLocationInformationRequestResponse ERROR');
       console.log(response.error);
       return;
     }
     console.log(response.value.placeResult);
+  }
+
+  private async runLR_LookupByNameOJPv1() {
+    // 1) LIR lookup by name
+    const searchTerm = 'Bern';
+    const request = this.sdkOJPv1.requests.LocationInformationRequest.initWithLocationName(searchTerm);
+
+    console.log('1) LIR lookup by name - OJPv1');
+    const response = await request.fetchResponse(this.sdkOJPv1);
+    if (!response.ok) {
+      console.error('fetchLocationInformationRequestResponse ERROR');
+      console.log(response.error);
+      return;
+    }
+    console.log(response.value.location);
   }
 
   private async runLR_LookupByBBOX() {
@@ -72,7 +95,7 @@ export class PlaygroundComponent implements OnInit {
     const request = OJP.LocationInformationRequest.initWithBBOX(bbox, ['stop']);
 
     console.log('2) LIR lookup by BBOX');
-    const response = await this.ojpSDK.fetchLocationInformationRequestResponse(request);
+    const response = await request.fetchResponse(this.sdkOJPv2);
     if (!response.ok) {
       console.error('fetchLocationInformationRequestResponse ERROR');
       console.log(response.error);
@@ -87,23 +110,22 @@ export class PlaygroundComponent implements OnInit {
     const request = OJP.LocationInformationRequest.initWithPlaceRef(stopRef);
 
     console.log('3) LIR lookup by StopRef');
-    const response = await this.ojpSDK.fetchLocationInformationRequestResponse(request);
+    const response = await request.fetchResponse(this.sdkOJPv2);
     if (!response.ok) {
       console.error('fetchLocationInformationRequestResponse ERROR');
       console.log(response.error);
       return;
     }
-    console.log(response.value.placeResult);
   }
 
   private async runLR_LookupByNameFilterPtMode() {
     // 4) LIR lookup by name with filter by ptMode type
     const searchTerm = 'Th';
     const request = OJP.LocationInformationRequest.initWithLocationName(searchTerm);
-    if (request.restrictions) {
-      request.restrictions.type = ['stop'];
-      request.restrictions.includePtModes = true;
-      request.restrictions.modes = {
+    if (request.payload.restrictions) {
+      request.payload.restrictions.type = ['stop'];
+      request.payload.restrictions.includePtModes = true;
+      request.payload.restrictions.modes = {
         exclude: false,
         ptMode: ['water'],
         personalMode: [],
@@ -111,7 +133,7 @@ export class PlaygroundComponent implements OnInit {
     }
 
     console.log('4) LIR lookup by name with filter by ptMode type');
-    const response = await this.ojpINT_SDK.fetchLocationInformationRequestResponse(request);
+    const response = await request.fetchResponse(this.sdkOJPv2);
     if (!response.ok) {
       console.error('fetchLocationInformationRequestResponse ERROR');
       console.log(response.error);
@@ -125,6 +147,26 @@ export class PlaygroundComponent implements OnInit {
       const score = placeResult.probability ?? 'n/a';
       console.log((idx + 1) + '.' + name + ' - ' + score);
     });
+  }
+
+  private async runLR_InitWithMock() {
+    const request = OJP.LocationInformationRequest.initWithRequestMock('<Foo/>');
+
+    try {
+      const response = await request.fetchResponse(this.sdkOJPv2);
+      console.log(response);
+    } catch (e) {
+      console.error('Error occurred:', e);
+    }
+
+    const request2 = OJP.TripInfoRequest.initWithRequestMock('<Foo/>');
+
+    try {
+      const response = await request2.fetchResponse(this.sdkOJPv2);
+      console.log(response);
+    } catch (e) {
+      console.error('Error occurred:', e);
+    }
   }
 
   private async runTR() {
@@ -146,7 +188,7 @@ export class PlaygroundComponent implements OnInit {
     const toStopRef = '8503000';    // Zürich
 
     const request = OJP.TripRequest.initWithPlaceRefsOrCoords(fromStopRef, toStopRef);
-    const response = await this.ojpSDK.fetchTripRequestResponse(request);
+    const response = await request.fetchResponse(this.sdkOJPv2);
     if (!response.ok) {
       console.error('fetchTripRequestResponse ERROR');
       console.log(response.error);
@@ -170,11 +212,9 @@ export class PlaygroundComponent implements OnInit {
     const toCoordsRef = '46.931849,7.485132';
 
     const request = OJP.TripRequest.initWithPlaceRefsOrCoords(fromCoordsRef, toCoordsRef);
-    if (request.params) {
-      request.params.includeLegProjection = true;
-    }
+    request.enableLinkProkection();
 
-    const response = await this.ojpSDK.fetchTripRequestResponse(request);
+    const response = await request.fetchResponse(this.sdkOJPv2);
     if (!response.ok) {
       console.error('fetchTripRequestResponse ERROR');
       console.log(response.error);
@@ -187,10 +227,10 @@ export class PlaygroundComponent implements OnInit {
   private async runTR_WalkSpeed() {
     // C) TR with walkSpeed
     const request = OJP.TripRequest.initWithPlaceRefsOrCoords('8507099', '8511418');
-    if (request.params) {
-      request.params.walkSpeed = 400;
+    if (request.payload.params) {
+      request.payload.params.walkSpeed = 400;
     }
-    const response = await this.ojpSDK.fetchTripRequestResponse(request);
+    const response = await request.fetchResponse(this.sdkOJPv2);
     if (!response.ok) {
       console.error('fetchTripRequestResponse ERROR');
       console.log(response.error);
@@ -204,8 +244,8 @@ export class PlaygroundComponent implements OnInit {
   private async runTR_ModeFilter() {
     // D) TR with modeFilter - Thun(See) - Spiez(See)
     const request = OJP.TripRequest.initWithPlaceRefsOrCoords('8507150', '8507154');
-    if (request.params) {
-      request.params.modeAndModeOfOperationFilter = [
+    if (request.payload.params) {
+      request.payload.params.modeAndModeOfOperationFilter = [
         {
           exclude: false,
           ptMode: ['water'],
@@ -213,7 +253,7 @@ export class PlaygroundComponent implements OnInit {
         }
       ];
     }
-    const response = await this.ojpSDK.fetchTripRequestResponse(request);
+    const response = await request.fetchResponse(this.sdkOJPv2);
     if (!response.ok) {
       console.error('fetchTripRequestResponse ERROR');
       console.log(response.error);
@@ -232,7 +272,7 @@ export class PlaygroundComponent implements OnInit {
     const request = OJP.TripRequest.initWithPlaces(place1, place2);
     request.setMaxDurationWalkingTime(300);
 
-    const response = await this.ojpSDK.fetchTripRequestResponse(request);
+    const response = await request.fetchResponse(this.sdkOJPv2);
     if (!response.ok) {
       console.error('fetchTripRequestResponse ERROR');
       console.log(response.error);
@@ -248,10 +288,10 @@ export class PlaygroundComponent implements OnInit {
     const fromStopRef = '8507000';  // Bern
     const toStopRef = '8503000';    // Zürich
 
-    const request = OJP.TripRequest.initWithPlaceRefsOrCoords(fromStopRef, toStopRef);
+    const request = this.sdkOJPv2INT.requests.TripRequest.initWithPlaceRefsOrCoords(fromStopRef, toStopRef);
     request.setRailSubmodes('local');
 
-    const response = await this.ojpINT_SDK.fetchTripRequestResponse(request);
+    const response = await request.fetchResponse(this.sdkOJPv2INT);
     if (!response.ok) {
       console.error('fetchTripRequestResponse ERROR');
       console.log(response.error);
@@ -272,9 +312,9 @@ export class PlaygroundComponent implements OnInit {
 
   private async runSER_LookupByStopRef() {
     const stopRef = '8507000'; // Bern
-    const request1 = OJP.StopEventRequest.initWithPlaceRefAndDate(stopRef, new Date());
+    const request = OJP.StopEventRequest.initWithPlaceRefAndDate(stopRef, new Date());
     
-    const response1 = await this.ojpSDK.fetchStopEventRequestResponse(request1);
+    const response1 = await request.fetchResponse(this.sdkOJPv2);
     if (!response1.ok) {
       console.error('fetchStopEventRequestResponse ERROR');
       console.log(response1.error);

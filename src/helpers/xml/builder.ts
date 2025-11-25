@@ -78,21 +78,6 @@ export function buildXML(obj: Record<string, any>, wrapperNodeName: string = 'OJ
     // capitalize first letter
     let newKey = key.charAt(0).toUpperCase() + key.slice(1);
 
-    const keysToKeep = OJP_Types.OpenAPI_Dependencies.MapModelKeepPropertiesXML[key] ?? null;
-    if (keysToKeep !== null) {
-      if (typeof value === 'object') {
-        const objKeys = Object.keys(value);
-        objKeys.forEach(objKey => {
-          if (keysToKeep.includes(objKey)) {
-            return;
-          }
-
-          // remove keys that are not in XSD
-          delete(value[objKey]);
-        });
-      }
-    }
-    
     // ensure namespaces
     const parentKey = path.at(-1) ?? null;
     if (parentKey !== null) {
@@ -120,7 +105,7 @@ export function buildXML(obj: Record<string, any>, wrapperNodeName: string = 'OJ
 
   const xmlParts: string[] = [];
 
-  // By convetion
+  // By convention
   const isRootNode = wrapperNodeName === 'OJP';
   if (isRootNode) {
     const xmlAttrs: string[] = [];

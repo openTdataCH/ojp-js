@@ -2,8 +2,8 @@
 import { XMLParser } from 'fast-xml-parser';
 
 import * as OJP from '../src'
-
 import { OJP_Helpers } from './helpers/ojp-test.helpers';
+
 import { DefaultXML_Config } from '../src/constants';
 
 describe('OJP Test Request', () => {
@@ -16,7 +16,7 @@ describe('OJP Test Request', () => {
   });
 
   test('Test LIR Name', () => {
-    const request = OJP.LocationInformationRequest.initWithLocationName('Bern');
+    const request = ojp.requests.LocationInformationRequest.initWithLocationName('Bern');
     const requestorRef = 'test.requestorRef';
     const requestXML = request.buildRequestXML('de', requestorRef, DefaultXML_Config);
 
@@ -35,7 +35,7 @@ describe('OJP Test Request', () => {
   });
 
   test('Test LIR PlaceRef', () => {
-    const request = OJP.LocationInformationRequest.initWithPlaceRef('8507000');
+    const request = ojp.requests.LocationInformationRequest.initWithPlaceRef('8507000');
     const requestorRef = 'test.requestorRef';
     const requestXML = request.buildRequestXML('de', requestorRef, DefaultXML_Config);
 
@@ -52,7 +52,7 @@ describe('OJP Test Request', () => {
 
   test('Test LIR BBOX', () => {
     const bbox1 = '7.433259,46.937798,7.475252,46.954805';
-    const request = OJP.LocationInformationRequest.initWithBBOX(bbox1, ['stop'], 536);
+    const request = ojp.requests.LocationInformationRequest.initWithBBOX(bbox1, ['stop'], 536);
 
     const requestorRef = 'test.requestorRef';
     const requestXML = request.buildRequestXML('de', requestorRef, DefaultXML_Config);
@@ -72,7 +72,7 @@ describe('OJP Test Request', () => {
 
     // This is equivalent with bbox1
     const bbox2 = [7.433259, 46.937798, 7.475252, 46.954805];
-    const request2 = OJP.LocationInformationRequest.initWithBBOX(bbox2, ['stop'], 536);
+    const request2 = ojp.requests.LocationInformationRequest.initWithBBOX(bbox2, ['stop'], 536);
     const request2_XML = request2.buildRequestXML('de', requestorRef, DefaultXML_Config);
     const request2_JSON = parser.parse(request2_XML);
 

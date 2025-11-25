@@ -1,7 +1,6 @@
 import { FileHelpers } from './helpers/file-helpers';
 
 import * as OJP_Types from 'ojp-shared-types';
-import * as OJP from '../src'
 import { OJP_Helpers } from './helpers/ojp-test.helpers';
 
 describe('OJP Test TripRefineRequest Response', () => {
@@ -10,9 +9,9 @@ describe('OJP Test TripRefineRequest Response', () => {
   beforeAll(async () => {
     const ojp = OJP_Helpers.DefaultSDK();
     const mockXML = FileHelpers.loadMockXML('trr-response-zh-be.xml');
-    const mockRequest = OJP.TripRefineRequest.initWithResponseMock(mockXML);
+    const mockRequest = ojp.requests.TripRefineRequest.initWithResponseMock(mockXML);
     
-    const ojpResponse = await ojp.fetchTripRefineRequestResponse(mockRequest);
+    const ojpResponse = await mockRequest.fetchResponse(ojp);
     if (ojpResponse.ok) {
       response = ojpResponse.value;
     }
