@@ -1,7 +1,11 @@
 # CHANGELOG
 
+## 0.18.20 - 22.01.2026
+- Updates API - [PR #220](https://github.com/openTdataCH/ojp-js/pull/220)
+  - Adds TR `OptimisationMethod` param
+
 ## 0.18.19 - 03.12.2025
-- Fix OJPv1 TR PtMode filter
+- Fix OJPv1 TR PtMode filter - [PR #218](https://github.com/openTdataCH/ojp-js/pull/218)
 
 ## 0.18.18 - 23.11.2025
 - Migrate APIs - [PR #216](https://github.com/openTdataCH/ojp-js/pull/216)

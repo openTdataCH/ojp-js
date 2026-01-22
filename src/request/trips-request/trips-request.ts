@@ -39,6 +39,7 @@ export class TripRequest extends OJPBaseRequest {
 
   public enableExtensions: boolean;
   public useRealTimeDataType: string;
+  public optimisationMethod: string | null;
 
   public walkSpeedDeviation: number | null;
 
@@ -79,6 +80,7 @@ export class TripRequest extends OJPBaseRequest {
 
     this.enableExtensions = true;
     this.useRealTimeDataType = 'explanatory';
+    this.optimisationMethod = null;
     this.walkSpeedDeviation = null;
 
     this.response = null;
@@ -464,6 +466,9 @@ export class TripRequest extends OJPBaseRequest {
 
     if (isOJPv2) {
       paramsNode.ele(ojpPrefix + "UseRealtimeData", this.useRealTimeDataType);
+      if (this.optimisationMethod) {
+        paramsNode.ele(ojpPrefix + "OptimisationMethod", this.optimisationMethod);
+      }
     }
   }
   
