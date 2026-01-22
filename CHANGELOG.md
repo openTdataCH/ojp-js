@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 0.21.2 - 22.01.2025
+- updates API - [PR #219](https://github.com/openTdataCH/ojp-js/pull/219)
+  - updates TRR refine params
+  - use latest `ojp-shared-types`
+
 ## 0.21.1 - 25.11.2025
 - refactor SDK - [PR #210](https://github.com/openTdataCH/ojp-js/pull/210)
   - package

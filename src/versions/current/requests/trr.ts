@@ -32,6 +32,8 @@ export class TripRefineRequest extends BaseRequest<{ fetchResponse: TripRefineRe
       numberOfResults: undefined,
       useRealtimeData: 'explanatory',
       includeAllRestrictedLines: true,
+      includeLegProjection: false,
+      includeTurnDescription: true,
       includeIntermediateStops: true,
     };
 
