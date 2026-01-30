@@ -8,16 +8,14 @@ import { RequestHelpers } from "../../../../helpers/request-helpers";
 
 import { Language, XML_Config } from '../../../../types/_all';
 
-import { TripRequestResponse } from "../../../../types/response";
+import { OJPv1_TripRequestResponse } from "../../../../types/response";
 import { DefaultXML_Config, XML_BuilderConfigOJPv1 } from '../../../../constants';
 import { PlaceRef } from '../../../../models/ojp';
 
 import { EndpointType, SharedTripRequest } from '../../../current/requests/tr.shared';
 
-// TODO - TripRequestResponse is wrong, should be OJPv1_TripRequestResponse
-export class OJPv1_TripRequest extends SharedTripRequest<{ fetchResponse: TripRequestResponse }> {
-  // TODO - adapt schema if needed
-  public payload: OJP_Types.TripRequestSchema;
+export class OJPv1_TripRequest extends SharedTripRequest<{ fetchResponse: OJPv1_TripRequestResponse }> {
+  public payload: OJP_Types.OJPv1_TripRequestSchema;
 
   protected constructor(
     origin: OJP_Types.PlaceContextSchema, 
@@ -79,8 +77,7 @@ export class OJPv1_TripRequest extends SharedTripRequest<{ fetchResponse: TripRe
   public buildRequestXML(language: Language, requestorRef: string, xmlConfig: XML_Config): string {
     this.payload.requestTimestamp = RequestHelpers.computeRequestTimestamp();
 
-    // TODO - should be OJPv1_TripRequestOJP
-    const requestOJP: OJP_Types.TripRequestOJP = {
+    const requestOJP: OJP_Types.OJPv1_TripRequestOJP = {
       OJPRequest: {
         serviceRequest: {
           serviceRequestContext: {
@@ -98,8 +95,7 @@ export class OJPv1_TripRequest extends SharedTripRequest<{ fetchResponse: TripRe
     return xmlS;
   }
 
-  // TODO - should be OJPv1_TripRequestResponse,  OJPv1_TripRequestResponseOJP
-  protected override async _fetchResponse(sdk: SDK<'1.0'>): Promise<TripRequestResponse> {
+  protected override async _fetchResponse(sdk: SDK<'1.0'>): Promise<OJPv1_TripRequestResponse> {
     const xmlConfig: XML_Config = sdk.version === '2.0' ? DefaultXML_Config : XML_BuilderConfigOJPv1;
 
     const responseXML = await RequestHelpers.computeResponse(this, sdk, xmlConfig);
