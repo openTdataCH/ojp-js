@@ -10,7 +10,7 @@ import { Language, XML_Config } from '../../../../types/_all';
 
 import { OJPv1_TripRequestResponse } from "../../../../types/response";
 import { DefaultXML_Config, XML_BuilderConfigOJPv1 } from '../../../../constants';
-import { PlaceRef } from '../../../../models/ojp';
+import { Place, PlaceRef } from '../../../../models/ojp';
 
 import { EndpointType, SharedTripRequest } from '../../../current/requests/tr.shared';
 
@@ -18,33 +18,69 @@ export class OJPv1_TripRequest extends SharedTripRequest<{ fetchResponse: OJPv1_
   public payload: OJP_Types.OJPv1_TripRequestSchema;
 
   protected constructor(
-    origin: OJP_Types.PlaceContextSchema, 
-    destination: OJP_Types.PlaceContextSchema, 
-    via: OJP_Types.ViaPointSchema[] = [],
+    origin: OJP_Types.OJPv1_PlaceContextSchema, 
+    destination: OJP_Types.OJPv1_PlaceContextSchema, 
+    via: OJP_Types.OJPv1_ViaPointSchema[] = [],
     
-    params: OJP_Types.TripParamsSchema | null = null, 
+    params: OJP_Types.OJPv1_TripParamsSchema | null = null, 
   ) {
     super();
 
-    throw new Error('No OJP types defined for TR OJP 1.0');
+    this.payload = {
+      requestTimestamp: RequestHelpers.computeRequestTimestamp(),
+      origin: origin,
+      destination: destination,
+      via: via,
+      params: params ??= {},
+    };
+  }
+
+  private static DefaultRequestParams(): OJP_Types.OJPv1_TripParamsSchema {
+    const requestParams: OJP_Types.OJPv1_TripParamsSchema = {
+      ptModeFilter: [],
+      
+      numberOfResults: 5,
+      numberOfResultsBefore: undefined,
+      numberOfResultsAfter: undefined,
+
+      includeAllRestrictedLines: true,
+      includeTrackSections: true,
+      includeLegProjection: false,
+      includeIntermediateStops: true,
+    };
+
+    return requestParams;
   }
 
   // Used by Base.initWithRequestMock / initWithResponseMock
   public static Default() {
     const date = new Date();
-    const origin: OJP_Types.PlaceContextSchema = {
-      placeRef: PlaceRef.initWithPlaceRefsOrCoords('8503000', 'Zürich'),
+    const origin: OJP_Types.OJPv1_PlaceContextSchema = {
+      placeRef: PlaceRef.initWithPlaceRefsOrCoords('8503000', 'Zürich').asOJPv1Schema(),
       depArrTime: date.toISOString(),
-      individualTransportOption: [],
     };
-    const destination: OJP_Types.PlaceContextSchema = {
-      placeRef: PlaceRef.initWithPlaceRefsOrCoords('8507000', 'Bern'),
-      individualTransportOption: [],
+    const destination: OJP_Types.OJPv1_PlaceContextSchema = {
+      placeRef: PlaceRef.initWithPlaceRefsOrCoords('8507000', 'Bern').asOJPv1Schema(),
+    };
+    const params = OJPv1_TripRequest.DefaultRequestParams();
+
+    const request = new OJPv1_TripRequest(origin, destination, [], params);
+    return request;
+  }
+  public static initWithPlaceRefsOrCoords(originPlaceRefS: string, destinationPlaceRefS: string) {
+    const origin: OJP_Types.OJPv1_PlaceContextSchema = {
+      placeRef: PlaceRef.initWithPlaceRefsOrCoords(originPlaceRefS).asOJPv1Schema(),
+    };
+    const destination: OJP_Types.OJPv1_PlaceContextSchema = {
+      placeRef: PlaceRef.initWithPlaceRefsOrCoords(destinationPlaceRefS).asOJPv1Schema(),
     };
 
     const params = OJPv1_TripRequest.DefaultRequestParams();
 
     const request = new OJPv1_TripRequest(origin, destination, [], params);
+    request.setDepartureDatetime();
+
+    return request;
     return request;
   }
 
