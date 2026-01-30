@@ -29,9 +29,8 @@ export class TripRefineRequest extends BaseRequest<{ fetchResponse: TripRefineRe
 
   private static DefaultRequestParams(): OJP_Types.TRR_RequestParamsSchema {
     const params: OJP_Types.TRR_RequestParamsSchema = {
-      numberOfResults: undefined,
-      useRealtimeData: 'explanatory',
-      includeAllRestrictedLines: true,
+      includeLegProjection: true,
+      includeTurnDescription: true,
       includeIntermediateStops: true,
     };
 
