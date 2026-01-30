@@ -91,4 +91,13 @@ export class GeoPosition implements OJP_Types.GeoPositionSchema {
     const coords: [number, number] = [this.longitude, this.latitude];
     return coords;
   }
+
+  public asGeoPositionSchema(): OJP_Types.GeoPositionSchema {
+    const schema: OJP_Types.GeoPositionSchema = {
+      longitude: this.longitude,
+      latitude: this.latitude,
+    };
+
+    return schema;
+  }
 }
