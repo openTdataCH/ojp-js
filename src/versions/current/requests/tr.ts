@@ -6,7 +6,7 @@ import { buildRootXML } from '../../../helpers/xml/builder';
 import { parseXML } from '../../../helpers/xml/parser';
 import { RequestHelpers } from '../../../helpers/request-helpers';
 
-import { Language, RailSubmodeType, XML_Config } from '../../../types/_all';
+import { Language, XML_Config } from '../../../types/_all';
 
 import { TripRequestResponse } from '../../../types/response';
 import { Place, PlaceRef } from '../../../models/ojp';
@@ -165,7 +165,7 @@ export class TripRequest extends SharedTripRequest<{ fetchResponse: TripRequestR
   }
 
   // https://vdvde.github.io/OJP/develop/documentation-tables/siri.html#type_siri__RailSubmodesOfTransportEnumeration
-  public setRailSubmodes(railSubmodes: RailSubmodeType | RailSubmodeType[]) {
+  public setRailSubmodes(railSubmodes: OJP_Types.RailSubmodeEnum | OJP_Types.RailSubmodeEnum[]) {
     if (!Array.isArray(railSubmodes)) {
       railSubmodes = [railSubmodes];
     }
