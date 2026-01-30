@@ -18,3 +18,4 @@ export type OJPv1_TripInfoRequestResponse = OJP_Response<OJP_Types.OJPv1_TripInf
 export type TripRefineRequestResponse = OJP_Response<OJP_Types.TRR_DeliverySchema, Error>;
 
 export type TripRequestResponse = OJP_Response<OJP_Types.TripDeliverySchema, Error>;
+export type OJPv1_TripRequestResponse = OJP_Response<OJP_Types.OJPv1_TripDeliverySchema, Error>;

@@ -29,10 +29,7 @@ export class TripRefineRequest extends BaseRequest<{ fetchResponse: TripRefineRe
 
   private static DefaultRequestParams(): OJP_Types.TRR_RequestParamsSchema {
     const params: OJP_Types.TRR_RequestParamsSchema = {
-      numberOfResults: undefined,
-      useRealtimeData: 'explanatory',
-      includeAllRestrictedLines: true,
-      includeLegProjection: false,
+      includeLegProjection: true,
       includeTurnDescription: true,
       includeIntermediateStops: true,
     };
@@ -89,7 +86,7 @@ export class TripRefineRequest extends BaseRequest<{ fetchResponse: TripRefineRe
     const responseXML = await RequestHelpers.computeResponse(this, sdk, xmlConfig);
 
     try {
-      const parsedObj = parseXML<{ OJP: OJP_Types.TRR_ResponseOJP }>(responseXML, 'OJP');
+      const parsedObj = parseXML<{ OJP: OJP_Types.TRR_ResponseOJP }>(responseXML, sdk.version);
       const response = parsedObj.OJP.OJPResponse.serviceDelivery.OJPTripRefineDelivery;
 
       if (response === undefined) {

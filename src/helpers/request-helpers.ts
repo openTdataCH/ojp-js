@@ -58,10 +58,6 @@ export class RequestHelpers {
       headers: headers,
     };
 
-    if (httpConfig.url.startsWith('http://localhost')) {
-      requestConfig.method = 'GET';
-    }
-
     if (requestConfig.method === 'POST') {
       requestConfig.data = requestXML;
     }

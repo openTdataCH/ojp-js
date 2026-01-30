@@ -107,7 +107,7 @@ export class OJPv1_LocationInformationRequest extends SharedLocationInformationR
     const responseXML = await RequestHelpers.computeResponse(this, sdk, xmlConfig);
 
     try {
-      const parsedObj = parseXML<{ OJP: OJP_Types.OJPv1_LocationInformationRequestResponseOJP }>(responseXML, 'OJP');
+      const parsedObj = parseXML<{ OJP: OJP_Types.OJPv1_LocationInformationRequestResponseOJP }>(responseXML, sdk.version);
       const response = parsedObj.OJP.OJPResponse.serviceDelivery.OJPLocationInformationDelivery;
 
       if (response === undefined) {

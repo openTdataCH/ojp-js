@@ -5,7 +5,6 @@ import { SDK } from '../../../../sdk';
 import { buildRootXML } from '../../../../helpers/xml/builder';
 import { parseXML } from '../../../../helpers/xml/parser';
 import { RequestHelpers } from '../../../../helpers/request-helpers';
-import { OJPv1_Helpers } from '../../../../helpers/ojp-v1';
 
 import { Language, XML_Config } from '../../../../types/_all';
 
@@ -54,9 +53,79 @@ export class OJPv1_FareRequest extends BaseRequest<{ fetchResponse: FareRequestR
     return request;
   }
 
-  private static initWithOJPv1Trips(trips: OJP_Types.OJPv1_TripSchema[]) {
+  private static cleanTripForFareRequest(trip: OJP_Types.OJPv1_TripSchema) {
+    trip.tripLeg.forEach(leg => {
+      if (leg.continuousLeg) {
+        leg.continuousLeg = {
+          legStart: {
+            locationName: leg.continuousLeg.legStart.locationName,
+          },
+          legEnd: {
+            locationName: leg.continuousLeg.legEnd.locationName,
+          },
+          service: {
+            personalMode: 'foot',
+            personalModeOfOperation: 'own',
+          },
+          duration: leg.continuousLeg.duration,
+        };
+      }
+
+      if (leg.transferLeg) {
+        leg.transferLeg = {
+          transferType: leg.transferLeg.transferType,
+          legStart: {
+            locationName: leg.transferLeg.legStart.locationName,
+          },
+          legEnd: {
+            locationName: leg.transferLeg.legEnd.locationName,
+          },
+          duration: leg.transferLeg.duration,
+        };
+      }
+
+      if (leg.timedLeg) {
+        const newLegIntermediates = leg.timedLeg.legIntermediates.map(el => {
+          const newLeg = {
+            stopPointRef: el.stopPointRef,
+            stopPointName: el.stopPointName,
+            serviceArrival: el.serviceArrival,
+            serviceDeparture: el.serviceDeparture,
+          };
+          
+          return newLeg;
+        });
+
+        leg.timedLeg = {
+          legBoard: {
+            stopPointRef: leg.timedLeg.legBoard.stopPointRef,
+            stopPointName: leg.timedLeg.legBoard.stopPointName,
+            serviceDeparture: leg.timedLeg.legBoard.serviceDeparture,
+          },
+          legIntermediates: newLegIntermediates,
+          legAlight: {
+            stopPointRef: leg.timedLeg.legAlight.stopPointRef,
+            stopPointName: leg.timedLeg.legAlight.stopPointName,
+            serviceArrival: leg.timedLeg.legAlight.serviceArrival,
+          },
+          service: {
+            operatingDayRef: leg.timedLeg.service.operatingDayRef,
+            journeyRef: leg.timedLeg.service.journeyRef,
+            lineRef: leg.timedLeg.service.lineRef,
+            directionRef: leg.timedLeg.service.directionRef,
+            mode: leg.timedLeg.service.mode,
+            publishedLineName: leg.timedLeg.service.publishedLineName,
+            attribute: leg.timedLeg.service.attribute,
+            operatorRef: leg.timedLeg.service.operatorRef,
+          },
+        };
+      }
+    });
+  }
+
+  public static initWithOJPv1Trips(trips: OJP_Types.OJPv1_TripSchema[]) {
     trips.map(tripV1 => {
-      OJPv1_Helpers.cleanTripForFareRequest(tripV1);
+      OJPv1_FareRequest.cleanTripForFareRequest(tripV1);
     });
 
     const now = new Date();
@@ -76,17 +145,6 @@ export class OJPv1_FareRequest extends BaseRequest<{ fetchResponse: FareRequestR
     });
 
     const request = new OJPv1_FareRequest(fareRequests);
-    return request;
-  }
-
-  public static initWithOJPv2Trips(trips: OJP_Types.TripSchema[]) {
-    const newTrips: OJP_Types.OJPv1_TripSchema[] = [];
-    trips.forEach(trip => {
-      const tripV1 = OJPv1_Helpers.convertOJPv2Trip_to_v1Trip(trip);
-      newTrips.push(tripV1);
-    });
-
-    const request = OJPv1_FareRequest.initWithOJPv1Trips(newTrips);
     return request;
   }
 
@@ -144,7 +202,7 @@ export class OJPv1_FareRequest extends BaseRequest<{ fetchResponse: FareRequestR
     const responseXML = await RequestHelpers.computeResponse(this, sdk, xmlConfig);
 
     try {
-      const parsedObj = parseXML<{ OJP: OJP_Types.FareResponseOJP }>(responseXML, 'OJP');
+      const parsedObj = parseXML<{ OJP: OJP_Types.FareResponseOJP }>(responseXML, sdk.version);
       const response = parsedObj.OJP.OJPResponse.serviceDelivery.OJPFareDelivery;
 
       if (response === undefined) {

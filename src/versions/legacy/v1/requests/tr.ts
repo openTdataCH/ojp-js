@@ -8,54 +8,187 @@ import { RequestHelpers } from "../../../../helpers/request-helpers";
 
 import { Language, XML_Config } from '../../../../types/_all';
 
-import { TripRequestResponse } from "../../../../types/response";
+import { OJPv1_TripRequestResponse } from "../../../../types/response";
 import { DefaultXML_Config, XML_BuilderConfigOJPv1 } from '../../../../constants';
-import { PlaceRef } from '../../../../models/ojp';
+import { Place, PlaceRef } from '../../../../models/ojp';
 
-import { SharedTripRequest } from '../../../current/requests/tr.shared';
+import { EndpointType, SharedTripRequest } from '../../../current/requests/tr.shared';
 
-// TODO - TripRequestResponse is wrong, should be OJPv1_TripRequestResponse
-export class OJPv1_TripRequest extends SharedTripRequest<{ fetchResponse: TripRequestResponse }> {
-  // TODO - adapt schema if needed
-  public payload: OJP_Types.TripRequestSchema;
+export class OJPv1_TripRequest extends SharedTripRequest<{ fetchResponse: OJPv1_TripRequestResponse }> {
+  public payload: OJP_Types.OJPv1_TripRequestSchema;
 
   protected constructor(
-    origin: OJP_Types.PlaceContextSchema, 
-    destination: OJP_Types.PlaceContextSchema, 
-    via: OJP_Types.ViaPointSchema[] = [],
+    origin: OJP_Types.OJPv1_PlaceContextSchema, 
+    destination: OJP_Types.OJPv1_PlaceContextSchema, 
+    via: OJP_Types.OJPv1_ViaPointSchema[] = [],
     
-    params: OJP_Types.TripParamsSchema | null = null, 
+    params: OJP_Types.OJPv1_TripParamsSchema | null = null, 
   ) {
     super();
 
-    throw new Error('No OJP types defined for TR OJP 1.0');
+    this.payload = {
+      requestTimestamp: RequestHelpers.computeRequestTimestamp(),
+      origin: origin,
+      destination: destination,
+      via: via,
+      params: params ??= {},
+    };
+  }
+
+  private static DefaultRequestParams(): OJP_Types.OJPv1_TripParamsSchema {
+    const requestParams: OJP_Types.OJPv1_TripParamsSchema = {
+      ptModeFilter: [],
+      
+      numberOfResults: 5,
+      numberOfResultsBefore: undefined,
+      numberOfResultsAfter: undefined,
+
+      includeAllRestrictedLines: true,
+      includeTrackSections: true,
+      includeLegProjection: false,
+      includeIntermediateStops: true,
+    };
+
+    return requestParams;
   }
 
   // Used by Base.initWithRequestMock / initWithResponseMock
   public static Default() {
     const date = new Date();
-    const origin: OJP_Types.PlaceContextSchema = {
-      placeRef: PlaceRef.initWithPlaceRefsOrCoords('8503000', 'Zürich'),
+    const origin: OJP_Types.OJPv1_PlaceContextSchema = {
+      placeRef: PlaceRef.initWithPlaceRefsOrCoords('8503000', 'Zürich').asOJPv1Schema(),
       depArrTime: date.toISOString(),
-      individualTransportOption: [],
     };
-    const destination: OJP_Types.PlaceContextSchema = {
-      placeRef: PlaceRef.initWithPlaceRefsOrCoords('8507000', 'Bern'),
-      individualTransportOption: [],
+    const destination: OJP_Types.OJPv1_PlaceContextSchema = {
+      placeRef: PlaceRef.initWithPlaceRefsOrCoords('8507000', 'Bern').asOJPv1Schema(),
     };
-    const params = SharedTripRequest.DefaultRequestParams();
+    const params = OJPv1_TripRequest.DefaultRequestParams();
 
     const request = new OJPv1_TripRequest(origin, destination, [], params);
     return request;
   }
+  public static initWithPlaceRefsOrCoords(originPlaceRefS: string, destinationPlaceRefS: string) {
+    const origin: OJP_Types.OJPv1_PlaceContextSchema = {
+      placeRef: PlaceRef.initWithPlaceRefsOrCoords(originPlaceRefS).asOJPv1Schema(),
+    };
+    const destination: OJP_Types.OJPv1_PlaceContextSchema = {
+      placeRef: PlaceRef.initWithPlaceRefsOrCoords(destinationPlaceRefS).asOJPv1Schema(),
+    };
 
-  // TODO - add the rest of the initializers
+    const params = OJPv1_TripRequest.DefaultRequestParams();
+
+    const request = new OJPv1_TripRequest(origin, destination, [], params);
+    request.setDepartureDatetime();
+
+    return request;
+  }
+
+  public static initWithPlaces(origin: Place, destination: Place) {
+    const originPlaceRefS = origin.asStopPlaceRefOrCoords();
+    const destinationPlaceRefS = destination.asStopPlaceRefOrCoords();
+
+    const request = OJPv1_TripRequest.initWithPlaceRefsOrCoords(originPlaceRefS, destinationPlaceRefS);
+    return request;
+  }
+
+  public setArrivalDatetime(newDatetime: Date = new Date()) {
+    delete(this.payload.origin.depArrTime);
+    this.payload.destination.depArrTime = newDatetime.toISOString();
+  }
+
+  public setDepartureDatetime(newDatetime: Date = new Date()) {
+    delete(this.payload.destination.depArrTime);
+    this.payload.origin.depArrTime = newDatetime.toISOString();
+  }
+
+  public disableLinkProkection() {
+    if (!this.payload.params) {
+      return;
+    }
+
+    this.payload.params.includeLegProjection = false;
+  }
+
+  public enableLinkProkection() {
+    if (!this.payload.params) {
+      return;
+    }
+
+    this.payload.params.includeLegProjection = true;
+  }
+
+  public setPublicTransportRequest(motFilter: OJP_Types.VehicleModesOfTransportEnum[] | null): void {
+    if (!this.payload.params) { return; }
+
+    this.payload.params.ptModeFilter = undefined;
+    if ((motFilter !== null) && (motFilter.length > 0)) {
+      this.payload.params.ptModeFilter = [
+        {
+          exclude: false,
+          ptMode: motFilter,
+          personalMode: [],
+        }
+      ];
+    }
+  }
+
+  public setCarRequest(): void {
+    // this is only in OJPv2
+  }
+
+  public setRailSubmodes(railSubmodes: OJP_Types.RailSubmodeEnum | OJP_Types.RailSubmodeEnum[]): void {
+    // this is only in OJPv2
+  }
+
+  public setMaxDurationWalkingTime(maxDurationMinutes: number | undefined, endpointType: EndpointType): void {
+    // this is only in OJPv2
+  }
+
+  public setNumberOfResults(resultsNo: number | null): void {
+    if (!this.payload.params) { return; }
+    this.payload.params.numberOfResults = resultsNo ?? undefined;
+  }
+  public setNumberOfResultsAfter(resultsNo: number): void {
+    if (!this.payload.params) { return; }
+    this.payload.params.numberOfResultsAfter = resultsNo;
+  }
+  public setNumberOfResultsBefore(resultsNo: number): void {
+    if (!this.payload.params) { return; }
+    this.payload.params.numberOfResultsBefore = resultsNo;
+  }
+
+  public setOriginDurationDistanceRestrictions(minDuration: number | null, maxDuration: number | null, minDistance: number | null, maxDistance: number | null): void {
+    // this is only in OJPv2
+  }
+
+  public setDestinationDurationDistanceRestrictions(minDuration: number | null, maxDuration: number | null, minDistance: number | null, maxDistance: number | null): void {
+    // this is only in OJPv2
+  }
+
+  public setWalkSpeedDeviation(walkSpeedPercent: number): void {
+    // this is only in OJPv2
+  }
+
+  public setViaPlace(place: Place, dwellTime: number | null): void {
+    const placeRefS = place.asStopPlaceRefOrCoords();
+    const placeRef = PlaceRef.initWithPlaceRefsOrCoords(placeRefS).asOJPv1Schema();
+
+    const viaPointSchema: OJP_Types.OJPv1_ViaPointSchema = {
+      viaPoint: placeRef,
+    };
+
+    if (dwellTime !== null) {
+      const dwellTimeS = 'PT' + dwellTime.toString() + 'M';
+      viaPointSchema.dwellTime = dwellTimeS;
+    }
+
+    this.payload.via = [viaPointSchema];
+  }
 
   public buildRequestXML(language: Language, requestorRef: string, xmlConfig: XML_Config): string {
     this.payload.requestTimestamp = RequestHelpers.computeRequestTimestamp();
 
-    // TODO - should be OJPv1_TripRequestOJP
-    const requestOJP: OJP_Types.TripRequestOJP = {
+    const requestOJP: OJP_Types.OJPv1_TripRequestOJP = {
       OJPRequest: {
         serviceRequest: {
           serviceRequestContext: {
@@ -73,14 +206,13 @@ export class OJPv1_TripRequest extends SharedTripRequest<{ fetchResponse: TripRe
     return xmlS;
   }
 
-  // TODO - should be OJPv1_TripRequestResponse,  OJPv1_TripRequestResponseOJP
-  protected override async _fetchResponse(sdk: SDK<'1.0'>): Promise<TripRequestResponse> {
+  protected override async _fetchResponse(sdk: SDK<'1.0'>): Promise<OJPv1_TripRequestResponse> {
     const xmlConfig: XML_Config = sdk.version === '2.0' ? DefaultXML_Config : XML_BuilderConfigOJPv1;
 
     const responseXML = await RequestHelpers.computeResponse(this, sdk, xmlConfig);
 
     try {
-      const parsedObj = parseXML<{ OJP: OJP_Types.TripRequestResponseOJP }>(responseXML, 'OJP');
+      const parsedObj = parseXML<{ OJP: OJP_Types.OJPv1_TripRequestResponseOJP }>(responseXML, sdk.version);
       const response = parsedObj.OJP.OJPResponse.serviceDelivery.OJPTripDelivery;
 
       if (response === undefined) {

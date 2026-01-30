@@ -96,7 +96,7 @@ export class Trip implements OJP_Types.TripSchema {
 
   public static initWithTripXML(rawXML: string): Trip {
     const parentTagName = 'TripResult';
-    const parsedTrip = parseXML<{ trip: OJP_Types.TripSchema }>(rawXML, parentTagName);
+    const parsedTrip = parseXML<{ trip: OJP_Types.TripSchema }>(rawXML, '2.0');
     const trip = new Trip(
       parsedTrip.trip.id,
       parsedTrip.trip.duration,
@@ -244,7 +244,7 @@ export class PlaceResult implements OJP_Types.PlaceResultSchema {
 
   public static initWithXML(nodeXML: string): PlaceResult {
     const parentTagName = 'PlaceResult';
-    const parsedObj = parseXML<{ placeResult: OJP_Types.PlaceResultSchema }>(nodeXML, parentTagName);
+    const parsedObj = parseXML<{ placeResult: OJP_Types.PlaceResultSchema }>(nodeXML, '2.0');
     
     const placeSchema = parsedObj.placeResult.place;
     const place = Place.initWithXMLSchema(placeSchema);
@@ -266,7 +266,7 @@ export class StopEventResult implements OJP_Types.StopEventResultSchema {
 
   public static initWithXML(nodeXML: string): StopEventResult {
     const parentTagName = 'StopEventResult';
-    const parsedObj = parseXML<{ stopEventResult: OJP_Types.StopEventResultSchema }>(nodeXML, parentTagName);
+    const parsedObj = parseXML<{ stopEventResult: OJP_Types.StopEventResultSchema }>(nodeXML, '2.0');
     const result = new StopEventResult(parsedObj.stopEventResult.id, parsedObj.stopEventResult.stopEvent);
 
     return result;

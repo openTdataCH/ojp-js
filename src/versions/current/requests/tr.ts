@@ -6,15 +6,13 @@ import { buildRootXML } from '../../../helpers/xml/builder';
 import { parseXML } from '../../../helpers/xml/parser';
 import { RequestHelpers } from '../../../helpers/request-helpers';
 
-import { Language, RailSubmodeType, XML_Config } from '../../../types/_all';
+import { Language, XML_Config } from '../../../types/_all';
 
 import { TripRequestResponse } from '../../../types/response';
 import { Place, PlaceRef } from '../../../models/ojp';
 import { DefaultXML_Config, XML_BuilderConfigOJPv1 } from '../../../constants';
 
-import { SharedTripRequest } from './tr.shared';
-
-type EndpointType = 'origin' | 'destination' | 'both';
+import { EndpointType, SharedTripRequest } from './tr.shared';
 
 export class TripRequest extends SharedTripRequest<{ fetchResponse: TripRequestResponse }> {
   public payload: OJP_Types.TripRequestSchema;
@@ -37,6 +35,25 @@ export class TripRequest extends SharedTripRequest<{ fetchResponse: TripRequestR
     };
   }
 
+  private static DefaultRequestParams(): OJP_Types.TripParamsSchema {
+    const requestParams: OJP_Types.TripParamsSchema = {
+      modeAndModeOfOperationFilter: [],
+      
+      numberOfResults: 5,
+      numberOfResultsBefore: undefined,
+      numberOfResultsAfter: undefined,
+
+      useRealtimeData: 'explanatory',
+
+      includeAllRestrictedLines: true,
+      includeTrackSections: true,
+      includeLegProjection: false,
+      includeIntermediateStops: true,
+    };
+
+    return requestParams;
+  }
+
   // Used by Base.initWithRequestMock / initWithResponseMock
   public static Default() {
     const date = new Date();
@@ -49,7 +66,7 @@ export class TripRequest extends SharedTripRequest<{ fetchResponse: TripRequestR
       placeRef: PlaceRef.initWithPlaceRefsOrCoords('8507000', 'Bern'),
       individualTransportOption: [],
     };
-    const params = SharedTripRequest.DefaultRequestParams();
+    const params = TripRequest.DefaultRequestParams();
 
     const request = new TripRequest(origin, destination, [], params);
     return request;
@@ -92,9 +109,7 @@ export class TripRequest extends SharedTripRequest<{ fetchResponse: TripRequestR
   }
 
   public setPublicTransportRequest(motFilter: OJP_Types.VehicleModesOfTransportEnum[] | null = null) {
-    if (!this.payload.params) {
-      return;
-    }
+    if (!this.payload.params) { return; }
 
     this.payload.params.modeAndModeOfOperationFilter = undefined;
     if ((motFilter !== null) && (motFilter.length > 0)) {
@@ -125,9 +140,7 @@ export class TripRequest extends SharedTripRequest<{ fetchResponse: TripRequestR
   }
 
   public setCarRequest() {
-    if (!this.payload.params) {
-      return;
-    }
+    if (!this.payload.params) { return; }
 
     this.payload.params.numberOfResults = 0;
 
@@ -165,7 +178,7 @@ export class TripRequest extends SharedTripRequest<{ fetchResponse: TripRequestR
   }
 
   // https://vdvde.github.io/OJP/develop/documentation-tables/siri.html#type_siri__RailSubmodesOfTransportEnumeration
-  public setRailSubmodes(railSubmodes: RailSubmodeType | RailSubmodeType[]) {
+  public setRailSubmodes(railSubmodes: OJP_Types.RailSubmodeEnum | OJP_Types.RailSubmodeEnum[]) {
     if (!Array.isArray(railSubmodes)) {
       railSubmodes = [railSubmodes];
     }
@@ -187,6 +200,78 @@ export class TripRequest extends SharedTripRequest<{ fetchResponse: TripRequestR
     });
 
     this.payload.params.modeAndModeOfOperationFilter = modeFilters;
+  }
+  
+  public setNumberOfResults(resultsNo: number | null): void {
+    if (!this.payload.params) { return; }
+    this.payload.params.numberOfResults = resultsNo ?? undefined;
+  }
+  public setNumberOfResultsAfter(resultsNo: number): void {
+    if (!this.payload.params) { return; }
+    this.payload.params.numberOfResultsAfter = resultsNo;
+  }
+  public setNumberOfResultsBefore(resultsNo: number): void {
+    if (!this.payload.params) { return; }
+    this.payload.params.numberOfResultsBefore = resultsNo;
+  }
+
+  private setEndpointDurationDistanceRestrictions(placeContext: OJP_Types.PlaceContextSchema, minDuration: number | null, maxDuration: number | null, minDistance: number | null, maxDistance: number | null): void {
+    if ((minDuration === null) && (maxDuration === null) && (minDistance === null) && (maxDistance === null)) {
+      return;
+    }
+
+    const transportOption: OJP_Types.IndividualTransportOptionSchema = {
+      itModeAndModeOfOperation: {
+        personalMode: 'foot',
+        personalModeOfOperation: ['own'],
+      },
+    };
+
+    if (minDuration !== null) {
+      transportOption.minDuration = 'PT' + minDuration + 'M';
+    }
+    if (maxDuration !== null) {
+      transportOption.maxDuration = 'PT' + maxDuration + 'M';
+    }
+    if (minDistance !== null) {
+      transportOption.minDistance = minDistance;
+    }
+    if (maxDistance !== null) {
+      transportOption.maxDistance = maxDistance;
+    }
+
+    placeContext.individualTransportOption = [transportOption];
+  }
+
+  public setOriginDurationDistanceRestrictions(minDuration: number | null, maxDuration: number | null, minDistance: number | null, maxDistance: number | null): void {
+    const placeContext = this.payload.origin;
+    this.setEndpointDurationDistanceRestrictions(placeContext, minDuration, maxDuration, minDistance, maxDistance);
+  }
+
+  public setDestinationDurationDistanceRestrictions(minDuration: number | null, maxDuration: number | null, minDistance: number | null, maxDistance: number | null): void {
+    const placeContext = this.payload.destination;
+    this.setEndpointDurationDistanceRestrictions(placeContext, minDuration, maxDuration, minDistance, maxDistance);
+  }
+
+  public setWalkSpeedDeviation(walkSpeedPercent: number): void {
+    if (!this.payload.params) { return; }
+    this.payload.params.walkSpeed = walkSpeedPercent;
+  }
+
+  public setViaPlace(place: Place, dwellTime: number | null): void {
+    const placeRefS = place.asStopPlaceRefOrCoords();
+    const placeRef = PlaceRef.initWithPlaceRefsOrCoords(placeRefS);
+
+    const viaPointSchema: OJP_Types.ViaPointSchema = {
+      viaPoint: placeRef,
+    };
+
+    if (dwellTime !== null) {
+      const dwellTimeS = 'PT' + dwellTime.toString() + 'M';
+      viaPointSchema.dwellTime = dwellTimeS;
+    }
+
+    this.payload.via = [viaPointSchema];
   }
 
   public buildRequestXML(language: Language, requestorRef: string, xmlConfig: XML_Config): string {
@@ -216,7 +301,7 @@ export class TripRequest extends SharedTripRequest<{ fetchResponse: TripRequestR
     const responseXML = await RequestHelpers.computeResponse(this, sdk, xmlConfig);
 
     try {
-      const parsedObj = parseXML<{ OJP: OJP_Types.TripRequestResponseOJP }>(responseXML, 'OJP');
+      const parsedObj = parseXML<{ OJP: OJP_Types.TripRequestResponseOJP }>(responseXML, sdk.version);
       const response = parsedObj.OJP.OJPResponse.serviceDelivery.OJPTripDelivery;
 
       if (response === undefined) {
