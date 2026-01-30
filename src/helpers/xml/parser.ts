@@ -3,25 +3,37 @@ import * as OJP_Types from 'ojp-shared-types';
 import { XMLParser } from "fast-xml-parser";
 import { XmlSerializer } from '../../models/xml-serializer';
 
-const MapParentArrayTags: Record<string, string[]> = {};
-for (const key in OJP_Types.OpenAPI_Dependencies.MapArrayTags) {
-  const keyParts = key.split('.');
-  if (keyParts.length !== 2) {
-    console.error('invalid OpenAPI_Dependencies.MapArrayTags key: ' + key);
-    continue;
-  }
+const mapArrayTags: Record<string, boolean> = Object.assign({}, OJP_Types.OpenAPI_Dependencies.MapArrayTags);
 
-  const parentTagName = keyParts[0];
-  const childTagName = keyParts[1];
-
-  if (!(parentTagName in MapParentArrayTags)) {
-    MapParentArrayTags[parentTagName] = [];
-  }
-
-  MapParentArrayTags[parentTagName].push(childTagName);
+const mapLegacyArrayTags: Record<string, boolean> = Object.assign({}, OJP_Types.OpenAPI_Dependencies.MapArrayTags);
+for (const key in OJP_Types.OpenAPI_Dependencies.MapLegacyArrayTags) {
+  mapLegacyArrayTags[key] = OJP_Types.OpenAPI_Dependencies.MapLegacyArrayTags[key];
 }
 
-export function transformJsonInPlace(root: unknown): void {
+function computeMapParentArrayTags(mapArrayTags: Record<string, boolean>): Record<string, string[]> {
+  const mapParentArrayTags: Record<string, string[]> = {};
+  for (const key in mapArrayTags) {
+    const keyParts = key.split('.');
+    if (keyParts.length !== 2) {
+      console.error('invalid OpenAPI_Dependencies.MapArrayTags key: ' + key);
+      continue;
+    }
+
+    const parentTagName = keyParts[0];
+    const childTagName = keyParts[1];
+
+    if (!(parentTagName in mapParentArrayTags)) {
+      mapParentArrayTags[parentTagName] = [];
+    }
+
+    mapParentArrayTags[parentTagName].push(childTagName);
+  }
+
+  return mapParentArrayTags;
+}
+
+const MapParentArrayTags = computeMapParentArrayTags(mapArrayTags);
+const MapLegacyParentArrayTags = computeMapParentArrayTags(mapLegacyArrayTags);
   const hashTextKey = '#text';
 
   function isHashKeyObject(v: unknown): v is Record<string, unknown> {
