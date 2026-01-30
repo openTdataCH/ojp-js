@@ -28,6 +28,7 @@ export {
   OJPv1_TripInfoRequestResponse,
   TripRefineRequestResponse,
   TripRequestResponse,
+  OJPv1_TripRequestResponse,
 } from "./types/response";
 
 export { DateHelpers } from './helpers/date-helpers';
