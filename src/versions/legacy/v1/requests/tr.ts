@@ -50,7 +50,31 @@ export class OJPv1_TripRequest extends SharedTripRequest<{ fetchResponse: TripRe
     return request;
   }
 
-  // TODO - add the rest of the initializers
+  public setArrivalDatetime(newDatetime: Date = new Date()) {
+    delete(this.payload.origin.depArrTime);
+    this.payload.destination.depArrTime = newDatetime.toISOString();
+  }
+
+  public setDepartureDatetime(newDatetime: Date = new Date()) {
+    delete(this.payload.destination.depArrTime);
+    this.payload.origin.depArrTime = newDatetime.toISOString();
+  }
+
+  public disableLinkProkection() {
+    if (!this.payload.params) {
+      return;
+    }
+
+    this.payload.params.includeLegProjection = false;
+  }
+
+  public enableLinkProkection() {
+    if (!this.payload.params) {
+      return;
+    }
+
+    this.payload.params.includeLegProjection = true;
+  }
 
   public buildRequestXML(language: Language, requestorRef: string, xmlConfig: XML_Config): string {
     this.payload.requestTimestamp = RequestHelpers.computeRequestTimestamp();
