@@ -81,6 +81,13 @@ export class OJPv1_TripRequest extends SharedTripRequest<{ fetchResponse: OJPv1_
     request.setDepartureDatetime();
 
     return request;
+  }
+
+  public static initWithPlaces(origin: Place, destination: Place) {
+    const originPlaceRefS = origin.asStopPlaceRefOrCoords();
+    const destinationPlaceRefS = destination.asStopPlaceRefOrCoords();
+
+    const request = OJPv1_TripRequest.initWithPlaceRefsOrCoords(originPlaceRefS, destinationPlaceRefS);
     return request;
   }
 
