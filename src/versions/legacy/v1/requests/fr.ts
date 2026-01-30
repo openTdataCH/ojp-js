@@ -54,9 +54,79 @@ export class OJPv1_FareRequest extends BaseRequest<{ fetchResponse: FareRequestR
     return request;
   }
 
-  private static initWithOJPv1Trips(trips: OJP_Types.OJPv1_TripSchema[]) {
+  private static cleanTripForFareRequest(trip: OJP_Types.OJPv1_TripSchema) {
+    trip.tripLeg.forEach(leg => {
+      if (leg.continuousLeg) {
+        leg.continuousLeg = {
+          legStart: {
+            locationName: leg.continuousLeg.legStart.locationName,
+          },
+          legEnd: {
+            locationName: leg.continuousLeg.legEnd.locationName,
+          },
+          service: {
+            personalMode: 'foot',
+            personalModeOfOperation: 'own',
+          },
+          duration: leg.continuousLeg.duration,
+        };
+      }
+
+      if (leg.transferLeg) {
+        leg.transferLeg = {
+          transferType: leg.transferLeg.transferType,
+          legStart: {
+            locationName: leg.transferLeg.legStart.locationName,
+          },
+          legEnd: {
+            locationName: leg.transferLeg.legEnd.locationName,
+          },
+          duration: leg.transferLeg.duration,
+        };
+      }
+
+      if (leg.timedLeg) {
+        const newLegIntermediates = leg.timedLeg.legIntermediates.map(el => {
+          const newLeg = {
+            stopPointRef: el.stopPointRef,
+            stopPointName: el.stopPointName,
+            serviceArrival: el.serviceArrival,
+            serviceDeparture: el.serviceDeparture,
+          };
+          
+          return newLeg;
+        });
+
+        leg.timedLeg = {
+          legBoard: {
+            stopPointRef: leg.timedLeg.legBoard.stopPointRef,
+            stopPointName: leg.timedLeg.legBoard.stopPointName,
+            serviceDeparture: leg.timedLeg.legBoard.serviceDeparture,
+          },
+          legIntermediates: newLegIntermediates,
+          legAlight: {
+            stopPointRef: leg.timedLeg.legAlight.stopPointRef,
+            stopPointName: leg.timedLeg.legAlight.stopPointName,
+            serviceArrival: leg.timedLeg.legAlight.serviceArrival,
+          },
+          service: {
+            operatingDayRef: leg.timedLeg.service.operatingDayRef,
+            journeyRef: leg.timedLeg.service.journeyRef,
+            lineRef: leg.timedLeg.service.lineRef,
+            directionRef: leg.timedLeg.service.directionRef,
+            mode: leg.timedLeg.service.mode,
+            publishedLineName: leg.timedLeg.service.publishedLineName,
+            attribute: leg.timedLeg.service.attribute,
+            operatorRef: leg.timedLeg.service.operatorRef,
+          },
+        };
+      }
+    });
+  }
+
+  public static initWithOJPv1Trips(trips: OJP_Types.OJPv1_TripSchema[]) {
     trips.map(tripV1 => {
-      OJPv1_Helpers.cleanTripForFareRequest(tripV1);
+      OJPv1_FareRequest.cleanTripForFareRequest(tripV1);
     });
 
     const now = new Date();
