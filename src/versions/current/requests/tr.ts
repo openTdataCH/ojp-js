@@ -49,7 +49,7 @@ export class TripRequest extends SharedTripRequest<{ fetchResponse: TripRequestR
       placeRef: PlaceRef.initWithPlaceRefsOrCoords('8507000', 'Bern'),
       individualTransportOption: [],
     };
-    const params = SharedTripRequest.DefaultRequestParams();
+    const params = TripRequest.DefaultRequestParams();
 
     const request = new TripRequest(origin, destination, [], params);
     return request;

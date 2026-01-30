@@ -43,7 +43,8 @@ export class OJPv1_TripRequest extends SharedTripRequest<{ fetchResponse: TripRe
       placeRef: PlaceRef.initWithPlaceRefsOrCoords('8507000', 'Bern'),
       individualTransportOption: [],
     };
-    const params = SharedTripRequest.DefaultRequestParams();
+
+    const params = OJPv1_TripRequest.DefaultRequestParams();
 
     const request = new OJPv1_TripRequest(origin, destination, [], params);
     return request;
