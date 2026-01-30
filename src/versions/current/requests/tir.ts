@@ -75,7 +75,7 @@ export class TripInfoRequest extends SharedTripInfoRequest<{ fetchResponse: Trip
     const responseXML = await RequestHelpers.computeResponse(this, sdk, xmlConfig);
 
     try {
-      const parsedObj = parseXML<{ OJP: OJP_Types.TripInfoResponseOJP }>(responseXML, 'OJP');
+      const parsedObj = parseXML<{ OJP: OJP_Types.TripInfoResponseOJP }>(responseXML, sdk.version);
       const response = parsedObj.OJP.OJPResponse.serviceDelivery.OJPTripInfoDelivery;
 
       if (response === undefined) {

@@ -80,7 +80,7 @@ export class OJPv1_TripRequest extends SharedTripRequest<{ fetchResponse: TripRe
     const responseXML = await RequestHelpers.computeResponse(this, sdk, xmlConfig);
 
     try {
-      const parsedObj = parseXML<{ OJP: OJP_Types.TripRequestResponseOJP }>(responseXML, 'OJP');
+      const parsedObj = parseXML<{ OJP: OJP_Types.OJPv1_TripRequestResponseOJP }>(responseXML, sdk.version);
       const response = parsedObj.OJP.OJPResponse.serviceDelivery.OJPTripDelivery;
 
       if (response === undefined) {

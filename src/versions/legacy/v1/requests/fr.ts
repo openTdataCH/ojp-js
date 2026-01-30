@@ -144,7 +144,7 @@ export class OJPv1_FareRequest extends BaseRequest<{ fetchResponse: FareRequestR
     const responseXML = await RequestHelpers.computeResponse(this, sdk, xmlConfig);
 
     try {
-      const parsedObj = parseXML<{ OJP: OJP_Types.FareResponseOJP }>(responseXML, 'OJP');
+      const parsedObj = parseXML<{ OJP: OJP_Types.FareResponseOJP }>(responseXML, sdk.version);
       const response = parsedObj.OJP.OJPResponse.serviceDelivery.OJPFareDelivery;
 
       if (response === undefined) {

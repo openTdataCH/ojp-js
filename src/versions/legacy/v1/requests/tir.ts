@@ -82,7 +82,7 @@ export class OJPv1_TripInfoRequest extends SharedTripInfoRequest<{ fetchResponse
     const responseXML = await RequestHelpers.computeResponse(this, sdk, xmlConfig);
 
     try {
-      const parsedObj = parseXML<{ OJP: OJP_Types.OJPv1_TripInfoResponseOJP }>(responseXML, 'OJP');
+      const parsedObj = parseXML<{ OJP: OJP_Types.OJPv1_TripInfoResponseOJP }>(responseXML, sdk.version);
       const response = parsedObj.OJP.OJPResponse.serviceDelivery.OJPTripInfoDelivery;
 
       if (response === undefined) {

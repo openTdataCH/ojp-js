@@ -91,7 +91,7 @@ export class OJPv1_StopEventRequest extends SharedStopEventRequest <{ fetchRespo
     const responseXML = await RequestHelpers.computeResponse(this, sdk, xmlConfig);
 
     try {
-      const parsedObj = parseXML<{ OJP: OJP_Types.OJPv1_StopEventResponseOJP }>(responseXML, 'OJP');
+      const parsedObj = parseXML<{ OJP: OJP_Types.OJPv1_StopEventResponseOJP }>(responseXML, sdk.version);
       const response = parsedObj.OJP.OJPResponse.serviceDelivery.OJPStopEventDelivery;
 
       if (response === undefined) {
