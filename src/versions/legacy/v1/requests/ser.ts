@@ -16,7 +16,7 @@ import { SharedStopEventRequest } from '../../../current/requests/ser.shared';
 export class OJPv1_StopEventRequest extends SharedStopEventRequest <{ fetchResponse: OJPv1_StopEventRequestResponse }> {
   public payload: OJP_Types.OJPv1_StopEventRequestSchema;
 
-  protected constructor(location: OJP_Types.OJPv1_SER_RequestLocationSchema, params: OJP_Types.SER_RequestParamsSchema | undefined = undefined) {
+  protected constructor(location: OJP_Types.OJPv1_PlaceContextSchema, params: OJP_Types.SER_RequestParamsSchema | undefined = undefined) {
     super();
 
     this.payload = {
@@ -29,7 +29,7 @@ export class OJPv1_StopEventRequest extends SharedStopEventRequest <{ fetchRespo
   // Used by Base.initWithRequestMock / initWithResponseMock
   public static Default() {
     const date = new Date();
-    const location: OJP_Types.OJPv1_SER_RequestLocationSchema = {
+    const location: OJP_Types.OJPv1_PlaceContextSchema = {
       placeRef: {
         stopPlaceRef: '8507000',
         locationName: {
@@ -47,7 +47,7 @@ export class OJPv1_StopEventRequest extends SharedStopEventRequest <{ fetchRespo
   }
 
   public static initWithPlaceRefAndDate(placeRefS: string, date: Date = new Date()) {
-    const location: OJP_Types.OJPv1_SER_RequestLocationSchema = {
+    const location: OJP_Types.OJPv1_PlaceContextSchema = {
       placeRef: {
         stopPlaceRef: placeRefS,
         locationName: {
