@@ -12,7 +12,7 @@ import { TripRequestResponse } from "../../../../types/response";
 import { DefaultXML_Config, XML_BuilderConfigOJPv1 } from '../../../../constants';
 import { PlaceRef } from '../../../../models/ojp';
 
-import { SharedTripRequest } from '../../../current/requests/tr.shared';
+import { EndpointType, SharedTripRequest } from '../../../current/requests/tr.shared';
 
 // TODO - TripRequestResponse is wrong, should be OJPv1_TripRequestResponse
 export class OJPv1_TripRequest extends SharedTripRequest<{ fetchResponse: TripRequestResponse }> {

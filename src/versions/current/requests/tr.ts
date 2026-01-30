@@ -12,9 +12,7 @@ import { TripRequestResponse } from '../../../types/response';
 import { Place, PlaceRef } from '../../../models/ojp';
 import { DefaultXML_Config, XML_BuilderConfigOJPv1 } from '../../../constants';
 
-import { SharedTripRequest } from './tr.shared';
-
-type EndpointType = 'origin' | 'destination' | 'both';
+import { EndpointType, SharedTripRequest } from './tr.shared';
 
 export class TripRequest extends SharedTripRequest<{ fetchResponse: TripRequestResponse }> {
   public payload: OJP_Types.TripRequestSchema;
