@@ -2,6 +2,7 @@ import * as OJP_Types from 'ojp-shared-types';
 
 import { XMLParser } from "fast-xml-parser";
 import { XmlSerializer } from '../../models/xml-serializer';
+import { OJP_VERSION } from '../../types/_all';
 
 const mapArrayTags: Record<string, boolean> = Object.assign({}, OJP_Types.OpenAPI_Dependencies.MapArrayTags);
 
@@ -34,7 +35,12 @@ function computeMapParentArrayTags(mapArrayTags: Record<string, boolean>): Recor
 
 const MapParentArrayTags = computeMapParentArrayTags(mapArrayTags);
 const MapLegacyParentArrayTags = computeMapParentArrayTags(mapLegacyArrayTags);
+
+export function transformJsonInPlace(root: unknown, ojpVersion: OJP_VERSION): void {
   const hashTextKey = '#text';
+
+  const isOJP_v2 = ojpVersion === '2.0';
+  const mapParentArrayTags = isOJP_v2 ? MapParentArrayTags : MapLegacyParentArrayTags;
 
   function isHashKeyObject(v: unknown): v is Record<string, unknown> {
     if ((typeof v) !== 'object') {
@@ -138,7 +144,7 @@ const MapLegacyParentArrayTags = computeMapParentArrayTags(mapLegacyArrayTags);
 
       // Enforce arrays, create empty nodes if needed
       if (currentNodeKey !== undefined) {
-        const expectedPropAsArray = MapParentArrayTags[currentNodeKey] ?? [];
+        const expectedPropAsArray = mapParentArrayTags[currentNodeKey] ?? [];
         expectedPropAsArray.forEach(prop => {
           if (!(prop in rec)) {
             rec[prop] = [];
@@ -158,11 +164,14 @@ const transformTagNameHandler = (tagName: string) => {
   return XmlSerializer.transformTagName(tagName);
 };
 
-const isArrayHandler = (tagName: string, jPath: string) => {
+const isArrayHandler = (tagName: string, jPath: string, ojpVersion: OJP_VERSION) => {
+  const isOJP_v2 = ojpVersion === '2.0';
+  const targetMapArrayTags = isOJP_v2 ? mapArrayTags : mapLegacyArrayTags;
+
   const jPathParts = jPath.split('.');
   if (jPathParts.length >= 2) {
     const pathPart = jPathParts.slice(-2).join('.');
-    if (pathPart in OJP_Types.OpenAPI_Dependencies.MapArrayTags) {
+    if (pathPart in targetMapArrayTags) {
       return true;
     }
   }
@@ -170,17 +179,19 @@ const isArrayHandler = (tagName: string, jPath: string) => {
   return false;
 };
 
-export function parseXML<T>(xml: string, parentPath: string = ''): T {
+export function parseXML<T>(xml: string, ojpVersion: OJP_VERSION): T {
   const parser = new XMLParser({
     ignoreAttributes: false,
     removeNSPrefix: true,
     transformTagName: transformTagNameHandler,
-    isArray: isArrayHandler,
+    isArray: (tagName: string, jPath: string) => {
+      return isArrayHandler(tagName, jPath, ojpVersion);
+    },
     // parseTagValue: false,
   });
 
   const response = parser.parse(xml) as T;
-  transformJsonInPlace(response);
+  transformJsonInPlace(response, ojpVersion);
 
   return response;
 }
