@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 0.21.3 - 30.01.2025
+- TR requests - [PR #221](https://github.com/openTdataCH/ojp-js/pull/221)
+  - adds support for TR OJPv1, v2
+  - enforce schema arrays per OJP version
+  - adds more TR params tweaking: `setMaxDurationWalkingTime`, `setNumberOfResults`, `setOrigin/Destination DurationDistanceRestrictions`, `setViaPlace`
+
 ## 0.21.2 - 22.01.2025
 - updates API - [PR #219](https://github.com/openTdataCH/ojp-js/pull/219)
   - updates TRR refine params
