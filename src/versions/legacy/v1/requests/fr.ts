@@ -5,7 +5,6 @@ import { SDK } from '../../../../sdk';
 import { buildRootXML } from '../../../../helpers/xml/builder';
 import { parseXML } from '../../../../helpers/xml/parser';
 import { RequestHelpers } from '../../../../helpers/request-helpers';
-import { OJPv1_Helpers } from '../../../../helpers/ojp-v1';
 
 import { Language, XML_Config } from '../../../../types/_all';
 
@@ -146,17 +145,6 @@ export class OJPv1_FareRequest extends BaseRequest<{ fetchResponse: FareRequestR
     });
 
     const request = new OJPv1_FareRequest(fareRequests);
-    return request;
-  }
-
-  public static initWithOJPv2Trips(trips: OJP_Types.TripSchema[]) {
-    const newTrips: OJP_Types.OJPv1_TripSchema[] = [];
-    trips.forEach(trip => {
-      const tripV1 = OJPv1_Helpers.convertOJPv2Trip_to_v1Trip(trip);
-      newTrips.push(tripV1);
-    });
-
-    const request = OJPv1_FareRequest.initWithOJPv1Trips(newTrips);
     return request;
   }
 
