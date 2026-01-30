@@ -17,7 +17,7 @@ Code / Demo App Implementation
 | - | - | - | - | - | - | - | - |
 | `ojp-sdk-legacy` (legacy SDK) | - | - | - | - | - | - | TRR is only available for OJP v2.0 |
 | `ojp-sdk-next` (new SDK) | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |  |
-| DemoApp | `ojp-sdk-next` | `ojp-sdk-next` | `ojp-sdk-next` | `ojp-sdk-next` | `ojp-sdk-next` | `ojp-sdk-next` | `legacy` is the old SDK (OJP v1 and v2, see above) |
+| DemoApp | `ojp-sdk-next` | `ojp-sdk-next` | `ojp-sdk-next` | `ojp-sdk-next` | `ojp-sdk-next` | `ojp-sdk-next` | using only `ojp-sdk-next` |
 
 - LIR - LocationInformationRequest
 - SER - StopEventRequest
