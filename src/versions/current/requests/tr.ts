@@ -109,9 +109,7 @@ export class TripRequest extends SharedTripRequest<{ fetchResponse: TripRequestR
   }
 
   public setPublicTransportRequest(motFilter: OJP_Types.VehicleModesOfTransportEnum[] | null = null) {
-    if (!this.payload.params) {
-      return;
-    }
+    if (!this.payload.params) { return; }
 
     this.payload.params.modeAndModeOfOperationFilter = undefined;
     if ((motFilter !== null) && (motFilter.length > 0)) {
@@ -142,9 +140,7 @@ export class TripRequest extends SharedTripRequest<{ fetchResponse: TripRequestR
   }
 
   public setCarRequest() {
-    if (!this.payload.params) {
-      return;
-    }
+    if (!this.payload.params) { return; }
 
     this.payload.params.numberOfResults = 0;
 
