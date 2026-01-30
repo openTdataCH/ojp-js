@@ -201,6 +201,78 @@ export class TripRequest extends SharedTripRequest<{ fetchResponse: TripRequestR
 
     this.payload.params.modeAndModeOfOperationFilter = modeFilters;
   }
+  
+  public setNumberOfResults(resultsNo: number | null): void {
+    if (!this.payload.params) { return; }
+    this.payload.params.numberOfResults = resultsNo ?? undefined;
+  }
+  public setNumberOfResultsAfter(resultsNo: number): void {
+    if (!this.payload.params) { return; }
+    this.payload.params.numberOfResultsAfter = resultsNo;
+  }
+  public setNumberOfResultsBefore(resultsNo: number): void {
+    if (!this.payload.params) { return; }
+    this.payload.params.numberOfResultsBefore = resultsNo;
+  }
+
+  private setEndpointDurationDistanceRestrictions(placeContext: OJP_Types.PlaceContextSchema, minDuration: number | null, maxDuration: number | null, minDistance: number | null, maxDistance: number | null): void {
+    if ((minDuration === null) && (maxDuration === null) && (minDistance === null) && (maxDistance === null)) {
+      return;
+    }
+
+    const transportOption: OJP_Types.IndividualTransportOptionSchema = {
+      itModeAndModeOfOperation: {
+        personalMode: 'foot',
+        personalModeOfOperation: ['own'],
+      },
+    };
+
+    if (minDuration !== null) {
+      transportOption.minDuration = 'PT' + minDuration + 'M';
+    }
+    if (maxDuration !== null) {
+      transportOption.maxDuration = 'PT' + maxDuration + 'M';
+    }
+    if (minDistance !== null) {
+      transportOption.minDistance = minDistance;
+    }
+    if (maxDistance !== null) {
+      transportOption.maxDistance = maxDistance;
+    }
+
+    placeContext.individualTransportOption = [transportOption];
+  }
+
+  public setOriginDurationDistanceRestrictions(minDuration: number | null, maxDuration: number | null, minDistance: number | null, maxDistance: number | null): void {
+    const placeContext = this.payload.origin;
+    this.setEndpointDurationDistanceRestrictions(placeContext, minDuration, maxDuration, minDistance, maxDistance);
+  }
+
+  public setDestinationDurationDistanceRestrictions(minDuration: number | null, maxDuration: number | null, minDistance: number | null, maxDistance: number | null): void {
+    const placeContext = this.payload.destination;
+    this.setEndpointDurationDistanceRestrictions(placeContext, minDuration, maxDuration, minDistance, maxDistance);
+  }
+
+  public setWalkSpeedDeviation(walkSpeedPercent: number): void {
+    if (!this.payload.params) { return; }
+    this.payload.params.walkSpeed = walkSpeedPercent;
+  }
+
+  public setViaPlace(place: Place, dwellTime: number | null): void {
+    const placeRefS = place.asStopPlaceRefOrCoords();
+    const placeRef = PlaceRef.initWithPlaceRefsOrCoords(placeRefS);
+
+    const viaPointSchema: OJP_Types.ViaPointSchema = {
+      viaPoint: placeRef,
+    };
+
+    if (dwellTime !== null) {
+      const dwellTimeS = 'PT' + dwellTime.toString() + 'M';
+      viaPointSchema.dwellTime = dwellTimeS;
+    }
+
+    this.payload.via = [viaPointSchema];
+  }
 
   public buildRequestXML(language: Language, requestorRef: string, xmlConfig: XML_Config): string {
     this.payload.requestTimestamp = RequestHelpers.computeRequestTimestamp();

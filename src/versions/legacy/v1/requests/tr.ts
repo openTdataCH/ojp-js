@@ -117,6 +117,74 @@ export class OJPv1_TripRequest extends SharedTripRequest<{ fetchResponse: OJPv1_
     this.payload.params.includeLegProjection = true;
   }
 
+  public setPublicTransportRequest(motFilter: OJP_Types.VehicleModesOfTransportEnum[] | null): void {
+    if (!this.payload.params) { return; }
+
+    this.payload.params.ptModeFilter = undefined;
+    if ((motFilter !== null) && (motFilter.length > 0)) {
+      this.payload.params.ptModeFilter = [
+        {
+          exclude: false,
+          ptMode: motFilter,
+          personalMode: [],
+        }
+      ];
+    }
+  }
+
+  public setCarRequest(): void {
+    // this is only in OJPv2
+  }
+
+  public setRailSubmodes(railSubmodes: OJP_Types.RailSubmodeEnum | OJP_Types.RailSubmodeEnum[]): void {
+    // this is only in OJPv2
+  }
+
+  public setMaxDurationWalkingTime(maxDurationMinutes: number | undefined, endpointType: EndpointType): void {
+    // this is only in OJPv2
+  }
+
+  public setNumberOfResults(resultsNo: number | null): void {
+    if (!this.payload.params) { return; }
+    this.payload.params.numberOfResults = resultsNo ?? undefined;
+  }
+  public setNumberOfResultsAfter(resultsNo: number): void {
+    if (!this.payload.params) { return; }
+    this.payload.params.numberOfResultsAfter = resultsNo;
+  }
+  public setNumberOfResultsBefore(resultsNo: number): void {
+    if (!this.payload.params) { return; }
+    this.payload.params.numberOfResultsBefore = resultsNo;
+  }
+
+  public setOriginDurationDistanceRestrictions(minDuration: number | null, maxDuration: number | null, minDistance: number | null, maxDistance: number | null): void {
+    // this is only in OJPv2
+  }
+
+  public setDestinationDurationDistanceRestrictions(minDuration: number | null, maxDuration: number | null, minDistance: number | null, maxDistance: number | null): void {
+    // this is only in OJPv2
+  }
+
+  public setWalkSpeedDeviation(walkSpeedPercent: number): void {
+    // this is only in OJPv2
+  }
+
+  public setViaPlace(place: Place, dwellTime: number | null): void {
+    const placeRefS = place.asStopPlaceRefOrCoords();
+    const placeRef = PlaceRef.initWithPlaceRefsOrCoords(placeRefS).asOJPv1Schema();
+
+    const viaPointSchema: OJP_Types.OJPv1_ViaPointSchema = {
+      viaPoint: placeRef,
+    };
+
+    if (dwellTime !== null) {
+      const dwellTimeS = 'PT' + dwellTime.toString() + 'M';
+      viaPointSchema.dwellTime = dwellTimeS;
+    }
+
+    this.payload.via = [viaPointSchema];
+  }
+
   public buildRequestXML(language: Language, requestorRef: string, xmlConfig: XML_Config): string {
     this.payload.requestTimestamp = RequestHelpers.computeRequestTimestamp();
 
