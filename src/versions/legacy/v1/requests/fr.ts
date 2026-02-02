@@ -172,28 +172,7 @@ export class OJPv1_FareRequest extends BaseRequest<{ fetchResponse: FareRequestR
       },
     };
 
-    const xmlS = buildRootXML(requestOJP, xmlConfig, (objTransformed => {
-      const siriPrefix = xmlConfig.defaultNS !== 'siri' ? 'siri:' : '';
-      const ojpPrefix = xmlConfig.defaultNS !== 'ojp' ? 'ojp:' : '';
-
-      // Hack to patch the Service.OperatorRef
-      //  in XSD schema OperatorRef is under siri: namespace
-      //      https://vdvde.github.io/OJP/develop/documentation-tables/ojp.html#type_ojp__DatedJourneyStructure
-      //  however ojp-nova needs it under ojp: namespace
-      const fareRequests = objTransformed[siriPrefix + 'OJPRequest'][siriPrefix + 'ServiceRequest'][ojpPrefix + 'OJPFareRequest'] as any[];
-      fareRequests.forEach(fareRequest => {
-        const trip = fareRequest[ojpPrefix + 'TripFareRequest'][ojpPrefix + 'Trip'];
-        (trip[ojpPrefix + 'TripLeg'] as any[]).forEach(leg => {
-          if (ojpPrefix + 'TimedLeg' in leg) {
-            const service = leg[ojpPrefix + 'TimedLeg'][ojpPrefix + 'Service'];
-            if (siriPrefix + 'OperatorRef' in service) {
-              service[ojpPrefix + 'OperatorRef'] = service[siriPrefix + 'OperatorRef'];
-              delete service[siriPrefix + 'OperatorRef'];  
-            }
-          }
-        });
-      });
-    }));
+    const xmlS = buildRootXML(requestOJP, xmlConfig);
 
     return xmlS;
   }
