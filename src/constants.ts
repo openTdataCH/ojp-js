@@ -1,6 +1,6 @@
 import { XML_Config } from "./types/_all";
 
-export const SDK_VERSION = '0.21.3';
+export const SDK_VERSION = '0.21.4';
 
 const mapNS = {
   'ojp': 'http://www.vdv.de/ojp',
