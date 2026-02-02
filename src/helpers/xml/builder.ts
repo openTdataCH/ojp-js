@@ -73,6 +73,15 @@ export function buildRootXML(obj: Record<string, any>, xmlConfig: XML_Config = D
 
 export function buildXML(obj: Record<string, any>, wrapperNodeName: string = 'OJP', xmlConfig: XML_Config = DefaultXML_Config, callbackTransformedObj: ((obj: Record<string, any>) => void) | null = null): string {
   const objCopy = JSON.parse(JSON.stringify(obj));
+  const mapNsTags = JSON.parse(JSON.stringify(OJP_Types.OpenAPI_Dependencies.MapNS_Tags)) as Record<string, string>;
+
+  const isOJPv1 = xmlConfig.ojpVersion === '1.0';
+  if (isOJPv1) {
+    const keysToOverride = Object.keys(OJP_Types.OpenAPI_Dependencies.MapLegacyOverrideNS_Tags);
+    keysToOverride.forEach(key => {
+      mapNsTags[key] = OJP_Types.OpenAPI_Dependencies.MapLegacyOverrideNS_Tags[key];
+    });
+  }
 
   const objTransformed = transformKeys(objCopy, [wrapperNodeName], (key: string, value: any, path: string[]) => {
     // capitalize first letter
@@ -83,7 +92,7 @@ export function buildXML(obj: Record<string, any>, wrapperNodeName: string = 'OJ
     if (parentKey !== null) {
       const tagNS_Key = parentKey.replace(/^.*:/, '') + '.' + newKey;
       const tagNS = (() => {
-        const tagNSConfig = OJP_Types.OpenAPI_Dependencies.MapNS_Tags[tagNS_Key] ?? 'ojp';
+        const tagNSConfig = mapNsTags[tagNS_Key] ?? 'ojp';
         if (xmlConfig.defaultNS === tagNSConfig) {
           return '';
         }
