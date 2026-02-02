@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.21.4 - 02.02.2026
+- Fix TR OJPv1 - [PR #223](https://github.com/openTdataCH/ojp-js/pull/223)
+  - removes the hack that was also prepending "ojp:" to the OperatorRef values
+
 ## 0.21.3 - 30.01.2026
 - TR requests - [PR #221](https://github.com/openTdataCH/ojp-js/pull/221)
   - adds support for TR OJPv1, v2
