@@ -1,4 +1,4 @@
-name: Publish ojp-sdk-next on npm
+name: Publish ojp-sdk on npm
 
 on:
   push:
