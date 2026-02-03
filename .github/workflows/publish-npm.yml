@@ -3,7 +3,7 @@ name: Publish ojp-sdk on npm
 on:
   push:
     tags:
-      - '0.21.*'
+      - '0.22.*'
   # allow manual trigger
   workflow_dispatch:
 
