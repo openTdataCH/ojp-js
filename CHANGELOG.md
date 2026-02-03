@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 0.22.1 - 03.02.2026
+- Promote ojp-sdk-next as main - [PR #225](https://github.com/openTdataCH/ojp-js/pull/225)
+  - change package name back to `ojp-sdk`
+  - cleans up README
+
 ## 0.21.5 - 03.02.2026
 - Fix OperatorRef - [PR #224](https://github.com/openTdataCH/ojp-js/pull/224)
   - removes ns change hacks, OpenAPI specs are used now
