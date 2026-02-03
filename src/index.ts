@@ -1,23 +1,47 @@
-export * from './constants';
+export { SDK } from './sdk';
 
-export * from './helpers/date-helpers';
-export * from './helpers/xml-helpers';
+export { 
+  SDK_VERSION, 
+  DefaultXML_Config, XML_BuilderConfigOJPv1, XML_ParserConfigOJPv1,
+} from './constants';
 
-export * from './journey/journey-service';
-export * from './journey/public-transport-mode';
+export { HTTPConfig, Language, RequestInfo, OJP_VERSION, AnySDK } from "./types/_all";
 
-export * from './location/location';
-export * from './location/geoposition-bbox';
-export * from './location/geoposition';
+export { OJPv1_FareRequest } from './versions/legacy/v1/requests/fr';
+export { OJPv1_LocationInformationRequest } from './versions/legacy/v1/requests/lir';
+export { OJPv1_StopEventRequest } from './versions/legacy/v1/requests/ser';
+export { OJPv1_TripInfoRequest } from './versions/legacy/v1/requests/tir';
+export { OJPv1_TripRequest } from './versions/legacy/v1/requests/tr';
+export { LocationInformationRequest } from './versions/current/requests/lir';
+export { StopEventRequest } from './versions/current/requests/ser';
+export { TripInfoRequest } from './versions/current/requests/tir';
+export { TripRequest } from './versions/current/requests/tr';
+export { TripRefineRequest } from './versions/current/requests/trr';
 
-export * from './shared/duration';
+export {
+  FareRequestResponse,
+  LocationInformationRequestResponse,
+  OJPv1_LocationInformationRequestResponse,
+  StopEventRequestResponse,
+  OJPv1_StopEventRequestResponse,
+  TripInfoRequestResponse,
+  OJPv1_TripInfoRequestResponse,
+  TripRefineRequestResponse,
+  TripRequestResponse,
+  OJPv1_TripRequestResponse,
+} from "./types/response";
 
-export * from './situation/situation-element';
+export { DateHelpers } from './helpers/date-helpers';
 
-export * from './stop-event/stop-event';
+export  {
+  XmlSerializer,
+} from './models/xml-serializer';
 
-export * from './request/index';
+export { GeoPosition } from './models/geoposition';
 
-export * from './trip/index';
-
-export * from './types/index';
+export {
+  Place,
+  PlaceResult,
+  StopEventResult,
+  Trip,
+} from "./models/ojp";

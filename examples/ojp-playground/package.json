@@ -21,7 +21,9 @@
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.13.0",
-    "ojp-sdk": "0.9.32"
+    
+    "ojp-shared-types": "0.1.5",
+    "ojp-sdk": "../.."
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^16.2.4",

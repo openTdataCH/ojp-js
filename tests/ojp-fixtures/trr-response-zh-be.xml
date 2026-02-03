@@ -1,0 +1,365 @@
+<?xml version="1.0" encoding="utf-8"?>
+<OJP xmlns:siri="http://www.siri.org.uk/siri" version="2.0"
+    xmlns="http://www.vdv.de/ojp">
+    <OJPResponse>
+        <siri:ServiceDelivery>
+            <siri:ResponseTimestamp>2025-09-01T21:37:14.4052394+02:00</siri:ResponseTimestamp>
+            <siri:ProducerRef>MENTZ</siri:ProducerRef>
+            <OJPTripRefineDelivery>
+                <siri:ResponseTimestamp>2025-09-01T21:37:14.4052402+02:00</siri:ResponseTimestamp>
+                <siri:RequestMessageRef>00-7d4736c8715a936eeac687ed84d6593c-7f1aa7c24d574ce2-00</siri:RequestMessageRef>
+                <siri:DefaultLanguage>en</siri:DefaultLanguage>
+                <CalcTime>40</CalcTime>
+                <TripResponseContext>
+                    <Places>
+                        <Place>
+                            <StopPlace>
+                                <StopPlaceRef>8507000</StopPlaceRef>
+                                <StopPlaceName>
+                                    <Text xml:lang="en">Bern</Text>
+                                </StopPlaceName>
+                                <PrivateCode>
+                                    <System>EFA</System>
+                                    <Value>111055:0:2</Value>
+                                </PrivateCode>
+                                <TopographicPlaceRef>23006351:1</TopographicPlaceRef>
+                            </StopPlace>
+                            <Name>
+                                <Text xml:lang="en">Bern</Text>
+                            </Name>
+                            <GeoPosition>
+                                <siri:Longitude>7.43783</siri:Longitude>
+                                <siri:Latitude>46.94846</siri:Latitude>
+                            </GeoPosition>
+                        </Place>
+                        <Place>
+                            <StopPoint>
+                                <siri:StopPointRef>ch:1:sloid:7000:1:2</siri:StopPointRef>
+                                <StopPointName>
+                                    <Text xml:lang="en">Bern</Text>
+                                </StopPointName>
+                                <PrivateCode>
+                                    <System>EFA</System>
+                                    <Value>111055:0:2</Value>
+                                </PrivateCode>
+                                <ParentRef>8507000</ParentRef>
+                                <TopographicPlaceRef>23006351:1</TopographicPlaceRef>
+                            </StopPoint>
+                            <Name>
+                                <Text xml:lang="en">Bern</Text>
+                            </Name>
+                            <GeoPosition>
+                                <siri:Longitude>7.43783</siri:Longitude>
+                                <siri:Latitude>46.94846</siri:Latitude>
+                            </GeoPosition>
+                        </Place>
+                        <Place>
+                            <TopographicPlace>
+                                <TopographicPlaceCode>23006351:1</TopographicPlaceCode>
+                                <TopographicPlaceName>
+                                    <Text xml:lang="en">Bern</Text>
+                                </TopographicPlaceName>
+                            </TopographicPlace>
+                            <Name>
+                                <Text xml:lang="en">Bern</Text>
+                            </Name>
+                            <GeoPosition>
+                                <siri:Longitude>7.43783</siri:Longitude>
+                                <siri:Latitude>46.94846</siri:Latitude>
+                            </GeoPosition>
+                        </Place>
+                        <Place>
+                            <StopPlace>
+                                <StopPlaceRef>8500218</StopPlaceRef>
+                                <StopPlaceName>
+                                    <Text xml:lang="en">Olten</Text>
+                                </StopPlaceName>
+                                <PrivateCode>
+                                    <System>EFA</System>
+                                    <Value>106652:0:7</Value>
+                                </PrivateCode>
+                                <TopographicPlaceRef>23019581:1</TopographicPlaceRef>
+                            </StopPlace>
+                            <Name>
+                                <Text xml:lang="en">Olten</Text>
+                            </Name>
+                            <GeoPosition>
+                                <siri:Longitude>7.90781</siri:Longitude>
+                                <siri:Latitude>47.35204</siri:Latitude>
+                            </GeoPosition>
+                        </Place>
+                        <Place>
+                            <StopPoint>
+                                <siri:StopPointRef>ch:1:sloid:218:4:7</siri:StopPointRef>
+                                <StopPointName>
+                                    <Text xml:lang="en">Olten</Text>
+                                </StopPointName>
+                                <PrivateCode>
+                                    <System>EFA</System>
+                                    <Value>106652:0:7</Value>
+                                </PrivateCode>
+                                <ParentRef>8500218</ParentRef>
+                                <TopographicPlaceRef>23019581:1</TopographicPlaceRef>
+                            </StopPoint>
+                            <Name>
+                                <Text xml:lang="en">Olten</Text>
+                            </Name>
+                            <GeoPosition>
+                                <siri:Longitude>7.90781</siri:Longitude>
+                                <siri:Latitude>47.35204</siri:Latitude>
+                            </GeoPosition>
+                        </Place>
+                        <Place>
+                            <TopographicPlace>
+                                <TopographicPlaceCode>23019581:1</TopographicPlaceCode>
+                                <TopographicPlaceName>
+                                    <Text xml:lang="en">Olten</Text>
+                                </TopographicPlaceName>
+                            </TopographicPlace>
+                            <Name>
+                                <Text xml:lang="en">Olten</Text>
+                            </Name>
+                            <GeoPosition>
+                                <siri:Longitude>7.90781</siri:Longitude>
+                                <siri:Latitude>47.35204</siri:Latitude>
+                            </GeoPosition>
+                        </Place>
+                        <Place>
+                            <StopPlace>
+                                <StopPlaceRef>8503000</StopPlaceRef>
+                                <StopPlaceName>
+                                    <Text xml:lang="en">Zürich HB</Text>
+                                </StopPlaceName>
+                                <PrivateCode>
+                                    <System>EFA</System>
+                                    <Value>108276:0:33</Value>
+                                </PrivateCode>
+                                <TopographicPlaceRef>23026261:27</TopographicPlaceRef>
+                            </StopPlace>
+                            <Name>
+                                <Text xml:lang="en">Zürich HB</Text>
+                            </Name>
+                            <GeoPosition>
+                                <siri:Longitude>8.53675</siri:Longitude>
+                                <siri:Latitude>47.37852</siri:Latitude>
+                            </GeoPosition>
+                        </Place>
+                        <Place>
+                            <StopPoint>
+                                <siri:StopPointRef>ch:1:sloid:3000:501:33</siri:StopPointRef>
+                                <StopPointName>
+                                    <Text xml:lang="en">Zürich HB</Text>
+                                </StopPointName>
+                                <PrivateCode>
+                                    <System>EFA</System>
+                                    <Value>108276:0:33</Value>
+                                </PrivateCode>
+                                <ParentRef>8503000</ParentRef>
+                                <TopographicPlaceRef>23026261:27</TopographicPlaceRef>
+                            </StopPoint>
+                            <Name>
+                                <Text xml:lang="en">Zürich HB</Text>
+                            </Name>
+                            <GeoPosition>
+                                <siri:Longitude>8.53675</siri:Longitude>
+                                <siri:Latitude>47.37852</siri:Latitude>
+                            </GeoPosition>
+                        </Place>
+                        <Place>
+                            <TopographicPlace>
+                                <TopographicPlaceCode>23026261:27</TopographicPlaceCode>
+                                <TopographicPlaceName>
+                                    <Text xml:lang="en">Zürich</Text>
+                                </TopographicPlaceName>
+                            </TopographicPlace>
+                            <Name>
+                                <Text xml:lang="en">Zürich HB</Text>
+                            </Name>
+                            <GeoPosition>
+                                <siri:Longitude>8.53675</siri:Longitude>
+                                <siri:Latitude>47.37852</siri:Latitude>
+                            </GeoPosition>
+                        </Place>
+                    </Places>
+                    <Situations />
+                </TripResponseContext>
+                <TripResult>
+                    <Id>ID-F3402DBB-3494-425E-8E34-66AE803EAD97</Id>
+                    <Trip>
+                        <Id>ID-F3402DBB-3494-425E-8E34-66AE803EAD97</Id>
+                        <Duration>PT58M48S</Duration>
+                        <StartTime>2025-09-01T20:02:30Z</StartTime>
+                        <EndTime>2025-09-01T21:01:18Z</EndTime>
+                        <Transfers>0</Transfers>
+                        <Leg>
+                            <Id>1</Id>
+                            <Duration>PT58M48S</Duration>
+                            <TimedLeg>
+                                <LegBoard>
+                                    <siri:StopPointRef>ch:1:sloid:7000:1:2</siri:StopPointRef>
+                                    <StopPointName>
+                                        <Text xml:lang="en">Bern</Text>
+                                    </StopPointName>
+                                    <NameSuffix>
+                                        <Text xml:lang="en">PLATFORM_ACCESS_WITH_ASSISTANCE_WHEN_NOTIFIED</Text>
+                                    </NameSuffix>
+                                    <PlannedQuay>
+                                        <Text xml:lang="en">2</Text>
+                                    </PlannedQuay>
+                                    <EstimatedQuay>
+                                        <Text xml:lang="en">2</Text>
+                                    </EstimatedQuay>
+                                    <ServiceDeparture>
+                                        <TimetabledTime>2025-09-01T20:02:00Z</TimetabledTime>
+                                        <EstimatedTime>2025-09-01T20:02:30Z</EstimatedTime>
+                                    </ServiceDeparture>
+                                    <Order>1</Order>
+                                    <siri:ExpectedDepartureOccupancy>
+                                        <siri:FareClass>firstClass</siri:FareClass>
+                                        <siri:OccupancyLevel>manySeatsAvailable</siri:OccupancyLevel>
+                                    </siri:ExpectedDepartureOccupancy>
+                                    <siri:ExpectedDepartureOccupancy>
+                                        <siri:FareClass>secondClass </siri:FareClass>
+                                        <siri:OccupancyLevel>manySeatsAvailable</siri:OccupancyLevel>
+                                    </siri:ExpectedDepartureOccupancy>
+                                </LegBoard>
+                                <LegIntermediate>
+                                    <siri:StopPointRef>ch:1:sloid:218:4:7</siri:StopPointRef>
+                                    <StopPointName>
+                                        <Text xml:lang="en">Olten</Text>
+                                    </StopPointName>
+                                    <NameSuffix>
+                                        <Text xml:lang="en">PLATFORM_ACCESS_WITH_ASSISTANCE_WHEN_NOTIFIED</Text>
+                                    </NameSuffix>
+                                    <PlannedQuay>
+                                        <Text xml:lang="en">7</Text>
+                                    </PlannedQuay>
+                                    <EstimatedQuay>
+                                        <Text xml:lang="en">7</Text>
+                                    </EstimatedQuay>
+                                    <ServiceArrival>
+                                        <TimetabledTime>2025-09-01T20:28:00Z</TimetabledTime>
+                                        <EstimatedTime>2025-09-01T20:28:24Z</EstimatedTime>
+                                    </ServiceArrival>
+                                    <ServiceDeparture>
+                                        <TimetabledTime>2025-09-01T20:30:00Z</TimetabledTime>
+                                        <EstimatedTime>2025-09-01T20:31:18Z</EstimatedTime>
+                                    </ServiceDeparture>
+                                    <Order>2</Order>
+                                    <siri:ExpectedDepartureOccupancy>
+                                        <siri:FareClass>firstClass</siri:FareClass>
+                                        <siri:OccupancyLevel>manySeatsAvailable</siri:OccupancyLevel>
+                                    </siri:ExpectedDepartureOccupancy>
+                                    <siri:ExpectedDepartureOccupancy>
+                                        <siri:FareClass>secondClass </siri:FareClass>
+                                        <siri:OccupancyLevel>manySeatsAvailable</siri:OccupancyLevel>
+                                    </siri:ExpectedDepartureOccupancy>
+                                </LegIntermediate>
+                                <LegAlight>
+                                    <siri:StopPointRef>ch:1:sloid:3000:501:33</siri:StopPointRef>
+                                    <StopPointName>
+                                        <Text xml:lang="en">Zürich HB</Text>
+                                    </StopPointName>
+                                    <NameSuffix>
+                                        <Text xml:lang="en">PLATFORM_ACCESS_WITHOUT_ASSISTANCE</Text>
+                                    </NameSuffix>
+                                    <PlannedQuay>
+                                        <Text xml:lang="en">33</Text>
+                                    </PlannedQuay>
+                                    <EstimatedQuay>
+                                        <Text xml:lang="en">33</Text>
+                                    </EstimatedQuay>
+                                    <ServiceArrival>
+                                        <TimetabledTime>2025-09-01T21:02:00Z</TimetabledTime>
+                                        <EstimatedTime>2025-09-01T21:01:18Z</EstimatedTime>
+                                    </ServiceArrival>
+                                    <Order>4</Order>
+                                </LegAlight>
+                                <Service>
+                                    <OperatingDayRef>2025-09-01</OperatingDayRef>
+                                    <JourneyRef>ch:1:sjyid:100001:837-001</JourneyRef>
+                                    <PublicCode>IC8</PublicCode>
+                                    <siri:LineRef>ojp:91008:E</siri:LineRef>
+                                    <siri:DirectionRef>H</siri:DirectionRef>
+                                    <Mode>
+                                        <PtMode>rail</PtMode>
+                                        <siri:RailSubmode>interregionalRail</siri:RailSubmode>
+                                        <Name>
+                                            <Text xml:lang="en">Zug</Text>
+                                        </Name>
+                                        <ShortName>
+                                            <Text xml:lang="en">IC</Text>
+                                        </ShortName>
+                                    </Mode>
+                                    <ProductCategory>
+                                        <Name>
+                                            <Text xml:lang="en">InterCity</Text>
+                                        </Name>
+                                        <ShortName>
+                                            <Text xml:lang="en">IC</Text>
+                                        </ShortName>
+                                        <ProductCategoryRef>23</ProductCategoryRef>
+                                    </ProductCategory>
+                                    <PublishedServiceName>
+                                        <Text xml:lang="en">IC8</Text>
+                                    </PublishedServiceName>
+                                    <TrainNumber>837</TrainNumber>
+                                    <Attribute>
+                                        <UserText>
+                                            <Text xml:lang="en">Businesszone in 1. Klasse</Text>
+                                        </UserText>
+                                        <Code>A__BZ</Code>
+                                        <Importance>50</Importance>
+                                    </Attribute>
+                                    <Attribute>
+                                        <UserText>
+                                            <Text xml:lang="en">Familienwagen mit Spielplatz</Text>
+                                        </UserText>
+                                        <Code>A__FA</Code>
+                                        <Importance>50</Importance>
+                                    </Attribute>
+                                    <Attribute>
+                                        <UserText>
+                                            <Text xml:lang="en">Ruhezone in 1. Klasse</Text>
+                                        </UserText>
+                                        <Code>A__RZ</Code>
+                                        <Importance>50</Importance>
+                                    </Attribute>
+                                    <Attribute>
+                                        <UserText>
+                                            <Text xml:lang="en">Gratis-Internet mit der App SBB FreeSurf</Text>
+                                        </UserText>
+                                        <Code>A__FS</Code>
+                                        <Importance>50</Importance>
+                                    </Attribute>
+                                    <Attribute>
+                                        <UserText>
+                                            <Text xml:lang="en">Niederflureinstieg</Text>
+                                        </UserText>
+                                        <Code>A__NF</Code>
+                                        <Importance>50</Importance>
+                                    </Attribute>
+                                    <Attribute>
+                                        <UserText>
+                                            <Text xml:lang="en">Aussteigeseite: Links</Text>
+                                        </UserText>
+                                        <Code>ojp91008EH_InfoCall130_108276_1</Code>
+                                        <Importance>50</Importance>
+                                    </Attribute>
+                                    <OriginText>
+                                        <Text xml:lang="en">n/a</Text>
+                                    </OriginText>
+                                    <siri:OperatorRef>11</siri:OperatorRef>
+                                    <DestinationStopPointRef>8506121</DestinationStopPointRef>
+                                    <DestinationText>
+                                        <Text xml:lang="en">Romanshorn</Text>
+                                    </DestinationText>
+                                </Service>
+                            </TimedLeg>
+                        </Leg>
+                    </Trip>
+                </TripResult>
+            </OJPTripRefineDelivery>
+        </siri:ServiceDelivery>
+    </OJPResponse>
+</OJP>

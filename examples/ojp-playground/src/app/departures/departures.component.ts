@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
-import * as OJP from 'ojp-sdk'
+import * as OJP from 'ojp-sdk';
 
 type DepartureRow = {
   service: {
@@ -30,7 +30,9 @@ type RenderModel = {
   templateUrl: './departures.component.html',
   styleUrls: ['./departures.component.scss']
 })
-export class DeparturesComponent {
+export class DeparturesComponent implements OnInit {
+  private ojpSDK: OJP.SDK<'2.0'>;
+
   public renderModel: RenderModel
   private queryParams: URLSearchParams
   
@@ -42,6 +44,58 @@ export class DeparturesComponent {
     
     this.queryParams = new URLSearchParams(document.location.search);
 
+    let httpConfig: OJP.HTTPConfig = {
+      url: 'https://api.opentransportdata.swiss/ojp20',
+      authToken: null,
+    };
+
+
+    const requestorRef = 'PlaygroundApp.v1';
+    this.ojpSDK = OJP.SDK.create(requestorRef, httpConfig, 'de');
+  }
+
+  async ngOnInit(): Promise<void> {
+    const placeResults = await this.fetchLookupLocations();
+    if (placeResults.length === 0) {
+      console.error('ERROR: empty LIR response')
+      return;
+    }
+
+    const place = placeResults[0].place;
+    
+    // TODO - this should go in a helper?
+    const placeRef = (() => {
+      const stopPlaceRef = place.stopPlace?.stopPlaceRef ?? null;
+      if (stopPlaceRef !== null) {
+        return stopPlaceRef;
+      }
+
+      const stopPointRef = place.stopPoint?.stopPointRef ?? null;
+      if (stopPointRef !== null) {
+        return stopPointRef;
+      }
+
+      return null;
+    })();
+
+    if (placeRef === null) {
+      console.error('CANT compute placeRef');
+      console.log(place);
+      return;
+    }
+
+    this.renderModel.stop = {
+      id: place.stopPlace?.stopPlaceRef ?? 'n/a stopPlaceRef',
+      name: place.name.text,
+    };
+
+    setTimeout(() => {
+      this.fetchLatestDepartures(placeRef);
+    }, 1000 * 60);
+    this.fetchLatestDepartures(placeRef);
+  }
+
+  private async fetchLookupLocations(): Promise<OJP.PlaceResult[]> {
     const mapStopRefs = {
       'BERN': '8507000',
       'BERN_BAHNHOF': '8576646',
@@ -51,59 +105,56 @@ export class DeparturesComponent {
     }
     const stopRef = this.queryParams.get('stop_id') ?? mapStopRefs.BERN_BAHNHOF;
 
-    const locationRequest = OJP.LocationInformationRequest.initWithStopPlaceRef(OJP.DEFAULT_STAGE, stopRef);
-    locationRequest.fetchResponse().then(response => {
-      if (response.locations.length === 0) {
-        console.log('ERROR - fetching locations for ' + stopRef);
-        return;
-      }
-      
-      const stopPlace = response.locations[0].stopPlace;
-      if (stopPlace === null) {
-        return;
-      }
+    const request = this.ojpSDK.requests.LocationInformationRequest.initWithPlaceRef(stopRef);
+    const response = await request.fetchResponse(this.ojpSDK);
 
-      this.renderModel.stop = {
-        id: stopPlace.stopPlaceRef,
-        name: stopPlace.stopPlaceName ?? 'n/a',
-      }
-    })
-    
-    setTimeout(() => {
-      this.fetchLatestDepartures(stopRef);
-    }, 1000 * 60);
-    this.fetchLatestDepartures(stopRef);
+    if (!response.ok) {
+      return [];
+    }
+
+    const placeResults: OJP.PlaceResult[] = response.value.placeResult.map(placeResultSchema => {
+      const placeResult = OJP.PlaceResult.initWithXMLSchema(placeResultSchema);
+      return placeResult;
+    });
+
+    return placeResults;
   }
 
-  private fetchLatestDepartures(stopRef: string) {
-    const request = OJP.StopEventRequest.initWithStopPlaceRef(OJP.DEFAULT_STAGE, stopRef, 'departure', new Date());
-    console.log('FETCH departures for ' + stopRef + ' ...');
-    request.fetchResponse().then(response => {
-      this.renderModel.departures = []
-      response.stopEvents.forEach(stopEvent => {
-        const departureRow = this.computeDepartureRow(stopEvent)
-        this.renderModel.departures.push(departureRow);
-      });
+  private async fetchLatestDepartures(placeRef: string) {
+    const request = this.ojpSDK.requests.StopEventRequest.initWithPlaceRefAndDate(placeRef, new Date());
+
+    const response = await request.fetchResponse(this.ojpSDK);
+    if (!response.ok) {
+      return;
+    }
+
+    const results = response.value.stopEventResult ?? [];
+    this.renderModel.departures = [];
+    results.forEach(result => {
+      const departureRow = this.computeDepartureRow(result);
+      this.renderModel.departures.push(departureRow);
     });
   }
 
-  private computeDepartureRow(stopEvent: OJP.StopEvent): DepartureRow {
+  private computeDepartureRow(stopEventResult: OJP.StopEventResult): DepartureRow {
+    const stopEvent = stopEventResult.stopEvent;
     // console.log(stopEvent);
 
-    const journeyService = stopEvent.journeyService;
-    const serviceLineNumber = journeyService.serviceLineNumber;
+    const journeyService = stopEvent.service;
+    const serviceLineNumber = journeyService.publishedServiceName.text;
     
     const serviceLine: string = (() => {
-      if (journeyService.ptMode.isRail()) {
+      const isRail = journeyService.mode.ptMode === 'rail';
+      if (isRail) {
         return serviceLineNumber ?? 'n/a'
       } else {
         const serviceLineParts: string[] = []
-        if (journeyService.ptMode.shortName) {
-          // prepend B (for bus)
-          serviceLineParts.push(journeyService.ptMode.shortName)
-        }
+        
+        // prepend B (for bus)
+        serviceLineParts.push(journeyService.mode.shortName?.text ?? 'n/a shortName');
+        
         // then line number
-        serviceLineParts.push(serviceLineNumber ?? 'n/a')
+        serviceLineParts.push(serviceLineNumber)
 
         return serviceLineParts.join('');
       }
@@ -112,8 +163,8 @@ export class DeparturesComponent {
     const headingText: string = (() => {
       const lineParts: string[] = [];
 
-      if (journeyService.destinationStopPlace) {
-        lineParts.push(journeyService.destinationStopPlace.stopPlaceName ?? 'n/a');
+      if (journeyService.destinationText) {
+        lineParts.push(journeyService.destinationText.text);
       }
 
       return lineParts.join('');
@@ -121,26 +172,23 @@ export class DeparturesComponent {
 
     const stopData: string = (() => {
       const lineParts: string[] = [];
-      stopEvent.nextStopPoints.forEach(stopPoint => {
-        const stopPlace = stopPoint.location.stopPlace;
-        if (stopPlace === null) {
-          return;
-        }
-
-        lineParts.push(stopPlace.stopPlaceName ?? 'n/a');
+      stopEvent.onwardCall.forEach(call => {
+        const stopPointName = call.callAtStop.stopPointName?.text ?? 'n/a';
+        lineParts.push(stopPointName);
       });
 
       return ' - ' + lineParts.join(' - ');
     })();
 
-    const departureData = stopEvent.stopPoint.departureData;
+    const departureData = stopEvent.thisCall.callAtStop.serviceDeparture ?? null;
     
     const departureTimeF: string = (() => {
       if (departureData === null) {
         return 'n/a';
       }
 
-      return OJP.DateHelpers.formatTimeHHMM(departureData.timetableTime);
+      const date = new Date(departureData.timetabledTime);
+      return OJP.DateHelpers.formatTimeHHMM(date);
     })();
 
     const delayText: string = (() => {
@@ -148,7 +196,7 @@ export class DeparturesComponent {
         return '';
       }
 
-      const delayMinutes = departureData.delayMinutes;
+      const delayMinutes = OJP.DateHelpers.computeDelayMinutes(departureData.timetabledTime, departureData.estimatedTime ?? null);
       if (delayMinutes === null) {
         return '';
       }
@@ -163,21 +211,21 @@ export class DeparturesComponent {
     })();
 
 
-    const departureRow = <DepartureRow>{
+    const departureRow: DepartureRow = {
       service: {
         line: serviceLine
       },
       journey: {
-        number: journeyService.journeyNumber,
+        number: journeyService.trainNumber ?? 'n/a TrainNumber',
         headingText: headingText,
         stops: stopData,
       },
       departure: {
         timeF: departureTimeF,
         delayText: delayText,
-      }
-    }
+      },
+    };
 
-    return departureRow
+    return departureRow;
   }
 }
