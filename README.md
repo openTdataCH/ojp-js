@@ -2,30 +2,6 @@
 
 The OJP Javascript SDK is a Javascript/Typescript package used for communication with [OJP APIs](https://opentransportdata.swiss/en/cookbook/open-journey-planner-ojp/).
 
-## Current Development Status
-
-Javascript SDK branches
-
-| Branch | NPM | Demo App | Description |
-|-|-|-|-|
-| [ojp-js#ojp-sdk-legacy](https://github.com/openTdataCH/ojp-js/tree/feature/ojp-sdk-legacy) | [ojp-sdk-legacy](https://www.npmjs.com/package/ojp-sdk-legacy) | deprecated | original SDK, contains dual code for OJP `1.0`,`2.0` |
-| [ojp-js#ojp-sdk-next](https://github.com/openTdataCH/ojp-js/tree/feature/ojp-sdk-next) | [ojp-sdk-next](https://www.npmjs.com/package/ojp-sdk-next) - temporarely, long-term will be published under `ojp-sdk` | <ul><li>[PROD - OJP 2.0](https://opentdatach.github.io/ojp-demo-app/search)</li><li>[BETA - OJP 1.0](https://tools.odpch.ch/beta-ojp-demo/search)</li></ul> | new SDK code with models derived from XSD schema |
-
-Code / Demo App Implementation
-
-| Code Place | LIR | SER | TR | TIR | FR | TRR | Comments |
-| - | - | - | - | - | - | - | - |
-| `ojp-sdk-legacy` (legacy SDK) | - | - | - | - | - | - | TRR is only available for OJP v2.0 |
-| `ojp-sdk-next` (new SDK) | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |  |
-| DemoApp | `ojp-sdk-next` | `ojp-sdk-next` | `ojp-sdk-next` | `ojp-sdk-next` | `ojp-sdk-next` | `ojp-sdk-next` | using only `ojp-sdk-next` |
-
-- LIR - LocationInformationRequest
-- SER - StopEventRequest
-- TR - TripRequest
-- TIR - TripInfoRequest
-- FR - FareRequest
-- TRR - TripRefineRequest
-
 ## Resources
 
 - OJP Demo App: https://opentdatach.github.io/ojp-demo-app/ - web application using this SDK
@@ -34,17 +10,15 @@ Code / Demo App Implementation
 
 ## Usage 
 
-**Note:** 26.Mar - a different package name is used for test purpose: `ojp-sdk-next`. This package will replace the current `ojp-sdk` package.
+- get an API key from [opentransportdata.swiss](https://api-manager.opentransportdata.swiss/) API manager
 
-- include [ojp-sdk-next](https://www.npmjs.com/package/ojp-sdk-next), [ojp-shared-types](https://www.npmjs.com/package/ojp-shared-types) packages in the `./package.json` dependencies of the project 
+- include [ojp-sdk](https://www.npmjs.com/package/ojp-sdk), [ojp-shared-types](https://www.npmjs.com/package/ojp-shared-types) packages in the `./package.json` dependencies of the project 
 ```
   "dependencies": {
     "ojp-shared-types": "0.1.5",
     "ojp-sdk-next": "0.21.5",
   }
 ```
-
-- get an API key from [opentransportdata.swiss](https://api-manager.opentransportdata.swiss/) API manager
 
 - use the SDK, see also [playground.component.ts](./examples/ojp-playground/src/app/playground/playground.component.ts) in examples
 
