@@ -84,4 +84,4 @@ TBA
 
 The project is released under a [MIT license](./LICENSE).
 
-Copyright (c) 2021 - 2025 Open Data Platform Mobility Switzerland - [opentransportdata.swiss](https://opentransportdata.swiss/en/).
+Copyright (c) 2021 - 2026 Open Data Platform Mobility Switzerland - [opentransportdata.swiss](https://opentransportdata.swiss/en/).
