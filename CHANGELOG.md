@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.21.5 - 03.02.2026
+- Fix OperatorRef - [PR #224](https://github.com/openTdataCH/ojp-js/pull/224)
+  - removes ns change hacks, OpenAPI specs are used now
+
 ## 0.21.4 - 02.02.2026
 - Fix TR OJPv1 - [PR #223](https://github.com/openTdataCH/ojp-js/pull/223)
   - removes the hack that was also prepending "ojp:" to the OperatorRef values
