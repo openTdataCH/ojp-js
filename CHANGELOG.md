@@ -4,6 +4,8 @@
 - Fix OJPv1 TR params - [PR #227](https://github.com/openTdataCH/ojp-js/pull/227)
   - fix OJPv1 TR setCarRequest()
   - use OJPv1 ContinousService
+- Fix departures-cli example - [PR #228](https://github.com/openTdataCH/ojp-js/pull/228)
+  - use OJP spec, adapt the calls, use new SDK to perform request / response
 
 ## 0.22.1 - 03.02.2026
 - Promote ojp-sdk-next as main - [PR #225](https://github.com/openTdataCH/ojp-js/pull/225)
