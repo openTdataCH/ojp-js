@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 0.22.2 - 18.02.2026
+- Fix OJPv1 TR params - [PR #227](https://github.com/openTdataCH/ojp-js/pull/227)
+  - fix OJPv1 TR setCarRequest()
+  - use OJPv1 ContinousService
+
 ## 0.22.1 - 03.02.2026
 - Promote ojp-sdk-next as main - [PR #225](https://github.com/openTdataCH/ojp-js/pull/225)
   - change package name back to `ojp-sdk`
