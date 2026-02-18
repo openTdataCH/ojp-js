@@ -16,7 +16,7 @@ The OJP Javascript SDK is a Javascript/Typescript package used for communication
 ```
   "dependencies": {
     "ojp-shared-types": "0.1.6",
-    "ojp-sdk": "0.22.1",
+    "ojp-sdk": "0.22.2",
   }
 ```
 
