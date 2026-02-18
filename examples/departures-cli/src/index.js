@@ -90,7 +90,7 @@ function computeDepartureRow(stopEvent) {
   return departureRow
 }
 
-function main() {
+async function main() {
   const params = process.argv.slice(2);
   if (params.length === 0) {
     console.error('ERROR: expecting at least one parameter');
@@ -124,4 +124,4 @@ function main() {
   });
 }
 
-main()
+await main()
