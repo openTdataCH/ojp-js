@@ -1,19 +1,22 @@
 import * as OJP from 'ojp-sdk'
 import { exit } from 'process';
 
-function computeDepartureRow(stopEvent) {
-  const journeyService = stopEvent.journeyService;
-  const serviceLineNumber = journeyService.serviceLineNumber;
+function computeDepartureRow(stopEventResultSchema) {
+  const stopEvent = stopEventResultSchema.stopEvent;
+  const journeyService = stopEvent.service;
+  const serviceLineNumber = journeyService.publishedServiceName.text;
   
   const serviceLine = (() => {
-    if (journeyService.ptMode.isRail()) {
+    const isRail = journeyService.mode.ptMode === 'rail';
+
+    if (isRail) {
       return serviceLineNumber ?? 'n/a'
     } else {
       const serviceLineParts = []
       if (journeyService.ptMode.shortName) {
-        serviceLineParts.push(journeyService.ptMode.shortName)
+        serviceLineParts.push(journeyService.ptMode.shortName.text);
       }
-      serviceLineParts.push(serviceLineNumber ?? 'n/a')
+      serviceLineParts.push(serviceLineNumber ?? 'n/a');
 
       return serviceLineParts.join('');
     }
@@ -22,8 +25,8 @@ function computeDepartureRow(stopEvent) {
   const headingText = (() => {
     const lineParts = [];
 
-    if (journeyService.destinationStopPlace) {
-      lineParts.push(journeyService.destinationStopPlace.stopPlaceName);
+    if (journeyService.destinationText) {
+      lineParts.push(journeyService.destinationText.text);
     }
 
     return lineParts.join('');
@@ -31,26 +34,27 @@ function computeDepartureRow(stopEvent) {
 
   const stopData = (() => {
     const lineParts = [];
-    stopEvent.nextStopPoints.forEach(stopPoint => {
-      const stopPlace = stopPoint.location.stopPlace;
-      if (stopPlace === null) {
+    stopEvent.onwardCall.forEach(callSchema => {
+      const stopPointName = callSchema.callAtStop.stopPointName;
+      if (stopPointName === null) {
         return;
       }
 
-      lineParts.push(stopPlace.stopPlaceName);
+      lineParts.push(stopPointName.text);
     });
 
     return ' - ' + lineParts.join(' - ');
   })();
 
-  const departureData = stopEvent.stopPoint.departureData;
+  const departureData = stopEvent.thisCall.callAtStop.serviceDeparture;
   
   const departureTimeF = (() => {
     if (departureData === null) {
       return 'n/a';
     }
 
-    return OJP.DateHelpers.formatTimeHHMM(departureData.timetableTime);
+    const departureDataDate = new Date(departureData.timetabledTime);
+    return OJP.DateHelpers.formatTimeHHMM(departureDataDate);
   })();
 
   const delayText = (() => {
@@ -58,7 +62,14 @@ function computeDepartureRow(stopEvent) {
       return '';
     }
 
-    const delayMinutes = departureData.delayMinutes;
+    if (departureData.estimatedTime === undefined) {
+      return '';
+    }
+
+    const timetableDate = new Date(departureData.timetabledTime);
+    const estimatedDate = new Date(departureData.estimatedTime);
+
+    const delayMinutes = OJP.DateHelpers.computeDelayMinutes(timetableDate, estimatedDate);
     if (delayMinutes === null) {
       return '';
     }
@@ -77,7 +88,7 @@ function computeDepartureRow(stopEvent) {
       line: serviceLine
     },
     journey: {
-      number: journeyService.journeyNumber,
+      number: journeyService.trainNumber,
       headingText: headingText,
       stops: stopData,
     },
@@ -90,7 +101,7 @@ function computeDepartureRow(stopEvent) {
   return departureRow
 }
 
-function main() {
+async function main() {
   const params = process.argv.slice(2);
   if (params.length === 0) {
     console.error('ERROR: expecting at least one parameter');
@@ -106,22 +117,40 @@ function main() {
   }
   const stopRef = params[0] ?? mapStopRefs.BERN_BAHNHOF;
 
-  const request = OJP.StopEventRequest.initWithStopPlaceRef(OJP.DEFAULT_STAGE, stopRef, 'departure', new Date());
+  const sdkHTTP_Config = {
+    url: 'https://api.opentransportdata.swiss/ojp20',
+    authToken: null,
+  };
+
   console.log('FETCH departures for ' + stopRef + ' ...');
-  request.fetchResponse().then(response => {
-    console.log('--------------------------------------------------------------------------------------');
-    console.log('| Service     | Heading                                     | Departure | Delay      |');
-    console.log('--------------------------------------------------------------------------------------');
-    response.stopEvents.forEach(stopEvent => {
-      const departureRow = computeDepartureRow(stopEvent);
-      const serviceCell = (departureRow.service.line + ' ' + departureRow.journey.number).padEnd(11, ' ');
-      const headingCell = departureRow.journey.headingText.padEnd(43, ' ');
-      const timeCell = departureRow.departure.timeF.padEnd(9, ' ');
-      const delayCell = departureRow.departure.delayText.padEnd(10, ' ');
-      console.log('| ' + serviceCell + ' | ' + headingCell + ' | ' + timeCell + ' | ' + delayCell + ' |');
-    });
-    console.log('--------------------------------------------------------------------------------------');
+
+  const sdk = OJP.SDK.create('CliApp.v1', sdkHTTP_Config, 'en');
+  const request = OJP.StopEventRequest.initWithPlaceRefAndDate(stopRef, new Date());
+  const response = await request.fetchResponse(sdk);
+
+  console.log('... done FETCH');
+
+  if (!response.ok) {
+    console.log('response errror');
+    console.log(request);
+    console.log(response);
+    exit(1);
+  }
+
+  console.log('--------------------------------------------------------------------------------------');
+  console.log('| Service     | Heading                                     | Departure | Delay      |');
+  console.log('--------------------------------------------------------------------------------------');
+  
+  response.value.stopEventResult.forEach(stopEventResultSchema => {
+    const departureRow = computeDepartureRow(stopEventResultSchema);
+    const serviceCell = (departureRow.service.line + ' ' + departureRow.journey.number).padEnd(11, ' ');
+    const headingCell = departureRow.journey.headingText.padEnd(43, ' ');
+    const timeCell = departureRow.departure.timeF.padEnd(9, ' ');
+    const delayCell = departureRow.departure.delayText.padEnd(10, ' ');
+    console.log('| ' + serviceCell + ' | ' + headingCell + ' | ' + timeCell + ' | ' + delayCell + ' |');
   });
+
+  console.log('--------------------------------------------------------------------------------------');
 }
 
-main()
+await main()
