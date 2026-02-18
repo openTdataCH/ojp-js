@@ -133,7 +133,9 @@ export class OJPv1_TripRequest extends SharedTripRequest<{ fetchResponse: OJPv1_
   }
 
   public setCarRequest(): void {
-    // this is only in OJPv2
+    if (!this.payload.params) { return; }
+
+    this.payload.params.itModesToCover = ['self-drive-car'];
   }
 
   public setRailSubmodes(railSubmodes: OJP_Types.RailSubmodeEnum | OJP_Types.RailSubmodeEnum[]): void {
