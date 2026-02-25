@@ -14,7 +14,7 @@ export abstract class SharedLocationInformationRequest<S extends ResultSpec> ext
     return restrictionParams;
   }
 
-  public updateRestrictions(restrictions: OJP_Types.LIR_RequestParamsSchema, placeTypes: OJP_Types.PlaceTypeEnum[], numberOfResults: number) {
+  protected updateRestrictions(restrictions: OJP_Types.LIR_RequestParamsSchema, placeTypes: OJP_Types.PlaceTypeEnum[], numberOfResults: number) {
     if (placeTypes.length > 0) {
       restrictions.type = placeTypes;
     }
@@ -24,7 +24,7 @@ export abstract class SharedLocationInformationRequest<S extends ResultSpec> ext
     }
   }
 
-  public static computeGeoRestriction(bboxData: string | number[]): OJP_Types.GeoRestrictionsSchema | null {
+  protected static computeGeoRestriction(bboxData: string | number[]): OJP_Types.GeoRestrictionsSchema | null {
     const bboxDataParts: number[] = (() => {
       if (Array.isArray(bboxData)) {
         return bboxData;

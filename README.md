@@ -4,9 +4,11 @@ The OJP Javascript SDK is a Javascript/Typescript package used for communication
 
 ## Resources
 
-- OJP Demo App: https://opentdatach.github.io/ojp-demo-app/ - web application using this SDK
-- [CHANGELOG](./CHANGELOG.md) for latest changes
+- SDK documentation: https://opentdatach.github.io/ojp-js
+
+- latest changes: [CHANGELOG](./CHANGELOG.md)
 - npm `ojp-sdk` package: https://www.npmjs.com/package/ojp-sdk
+- OJP Demo App: https://opentdatach.github.io/ojp-demo-app/ - web application using this SDK
 
 ## Usage 
 
@@ -20,7 +22,12 @@ The OJP Javascript SDK is a Javascript/Typescript package used for communication
   }
 ```
 
-- use the SDK, see also [playground.component.ts](./examples/ojp-playground/src/app/playground/playground.component.ts) in examples
+- resources to use the SDK
+  - this repo's playground app - [playground.component.ts](./examples/ojp-playground/src/app/playground/playground.component.ts)
+  - SDK documentation: https://opentdatach.github.io/ojp-js
+  - OJP Demo App: https://opentdatach.github.io/ojp-demo-app/ - web application using this SDK
+
+### Create SDK
 
 ```
 import * as OJP from 'ojp-sdk-next';
@@ -39,29 +46,35 @@ const requestorRef = 'MyExampleTransportApp.v1';
 // create the SDK
 const language = 'de'; // de, fr, it, en
 const ojpSDK = OJP.SDK.create(requestorRef, httpConfig, language);
+```
 
-// build LIR by Name
+### Location Information Request (LIR)
+
+Find locations by name, stop reference or inside a bounding box rectangle.
+
+```
+// case1 - build LIR by Name
 const searchTerm = 'Bern';
-const request1 = ojpSDK.requests.LocationInformationRequest.initWithLocationName('Bern');
+const request = LocationInformationRequest.initWithLocationName('Bern');
 
 // build LIR by StopRef
 const stopRef = '8507000'; // Bern
-const request2 = ojpSDK.requests.LocationInformationRequest.initWithPlaceRef(stopRef);
+const request2 = LocationInformationRequest.initWithPlaceRef(stopRef);
 
 // build LIR by BBOX
 // these are equivalent
 let bbox: string | number[] = '7.433259,46.937798,7.475252,46.954805';
 bbox = [7.433259, 46.937798, 7.475252, 46.954805];
 
-const request3 =  ojpSDK.requests.LocationInformationRequest.initWithBBOX(bbox, ['stop']);
+const request3 =  ojpSDK.request.initWithBBOX(bbox, ['stop']);
 
 // change XML payload if needed
-request1.payload.initialInput ...
+request.payload.initialInput ...
 
-// fetch the results
+// Fetch the results
 async myMethod() {
   // ...
-  const response = await request1.fetchResponse(ojpSDK);
+  const response = await request.fetchResponse(ojpSDK);
 
   if (!response.ok) {
     // handle error
@@ -76,9 +89,107 @@ async myMethod() {
   });
 }
 ```
+### Trip Request (TR)
 
-TBA
-- update [docs](./docs/)
+Find trips between A-B endpoints defined by stop references and / or coordinates
+
+```
+// a) from/to StopPlaceRefs
+const fromStopRef = '8507000';  // Bern
+const toStopRef = '8503000';    // Zürich
+const request = OJP.TripRequest.initWithPlaceRefsOrCoords(fromStopRef, toStopRef);
+
+// b) from/to coord pairs (latitude, longitude)
+const fromCoordsRef = '46.957522,7.431170';
+const toCoordsRef = '46.931849,7.485132';
+const request2 = OJP.TripRequest.initWithPlaceRefsOrCoords(fromCoordsRef, toCoordsRef);
+
+// change XML payload if needed
+request.payload.params ...
+
+// or use one of modifier method
+
+// return precise route for legs, disabled by default
+request.enableLinkProkection();
+
+// set monomodal car requests
+request.setCarRequest();
+
+// Fetch the results
+async myMethod() {
+  // ...
+  const response = await request.fetchResponse(ojpSDK);
+
+  if (!response.ok) {
+    // handle error
+    console.log(response.error);
+    return;
+  }
+
+  // do something with the value
+  const tripResults = response.value.tripResult ?? [];
+  tripResults.forEach(tripResult => {
+    // handle tripResult response
+  });
+}
+```
+
+### Stop Event Request (SER)
+
+Display arrival / departure service information for stop references.
+
+```
+const stopRef = '8507000'; // Bern
+const request = OJP.StopEventRequest.initWithPlaceRefAndDate(stopRef, new Date());
+
+// change XML payload if needed
+request.payload.params ...
+
+// Fetch the results
+async myMethod() {
+  // ...
+  const response = await request.fetchResponse(ojpSDK);
+
+  if (!response.ok) {
+    // handle error
+    console.log(response.error);
+    return;
+  }
+
+  // do something with the value
+  const stopEventResults = response.value.stopEventResult ?? [];
+  stopEventResults.forEach(stopEventResult => {
+    // handle stopEventResult response
+  });
+}
+```
+
+### Trip Info Request (TIR)
+
+Display full service information (stop calls, service data)
+
+```
+const journeyRef = 'ch:1:sjyid:100001:2179-001'; // from a DatedJourneyService in a TR TimedLeg
+const request = OJP.StopEventRequest.initWithJourneyRef(journeyRef);
+
+// change XML payload if needed
+request.payload.params ...
+
+// Fetch the results
+async myMethod() {
+  // ...
+  const response = await request.fetchResponse(ojpSDK);
+
+  if (!response.ok) {
+    // handle error
+    console.log(response.error);
+    return;
+  }
+
+  // do something with the tripInfoResult
+  const tripInfoResult = response.value.tripInfoResult;
+}
+```
 
 ## License
 

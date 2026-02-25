@@ -15,7 +15,8 @@
     "test": "jest",
     "build": "rm -rf lib && tsup src/index.ts --dts --format esm,cjs --out-dir lib",
     "dev": "tsup src/index.ts --dts --format esm,cjs --out-dir lib --watch",
-    "prepare": "npm run build"
+    "prepare": "npm run build",
+    "generate:docs": "typedoc"
   },
   "repository": {
     "type": "git",
@@ -47,6 +48,8 @@
     "ts-jest": "29.1.1",
     "ts-node": "10.9.2",
     "typescript": "5.8.2",
-    "tsup": "8.4.0"
+    "tsup": "8.4.0",
+    "typedoc": "0.28.17",
+    "typedoc-plugin-markdown": "4.10.0"
   }
 }

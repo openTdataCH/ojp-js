@@ -13,7 +13,21 @@ import { DefaultXML_Config, XML_BuilderConfigOJPv1 } from '../../../constants';
 
 import { SharedStopEventRequest } from './ser.shared';
 
+/**
+ * StopEventRequest (SER) class
+ *
+ * Instances are created via static methods below. Direct construction is intentionally disabled.
+ * 
+ * - `initWithPlaceRefAndDate` - use PlaceRef ids + date
+ *
+ * @category Request
+ */
 export class StopEventRequest extends SharedStopEventRequest <{ fetchResponse: StopEventRequestResponse }> {
+  /**
+   * The payload object that gets serialized to XML for the request
+   * 
+   * @see {@link https://vdvde.github.io/OJP/develop/documentation-tables/ojp.html#type_ojp__OJPStopEventRequestStructure OJP StopEventRequest XSD Schema}
+   */
   public payload: OJP_Types.StopEventRequestSchema;
 
   protected constructor(location: OJP_Types.SER_RequestLocationSchema, params: OJP_Types.SER_RequestParamsSchema | undefined = undefined) {
@@ -26,7 +40,10 @@ export class StopEventRequest extends SharedStopEventRequest <{ fetchResponse: S
     }
   }
 
-  // Used by Base.initWithRequestMock / initWithResponseMock
+  /**
+   * Used by BaseRequest methods (i.e. `initWithRequestMock`, `initWithResponseMock`
+   * @hidden
+   */
   public static Default() {
     const date = new Date();
     const location: OJP_Types.SER_RequestLocationSchema = {
@@ -45,6 +62,21 @@ export class StopEventRequest extends SharedStopEventRequest <{ fetchResponse: S
     return request;
   }
 
+  /**
+   * Creates a new StopEventRequest with the given place reference and date
+   *
+   * @param placeRefS The stop point reference ID (e.g. "8507000" for Bern)
+   * @param date The date and time for the stop event request (defaults to current date/time)
+   * @returns A new StopEventRequest instance
+   *
+   * @example
+   * ```typescript
+   * const request = StopEventRequest.initWithPlaceRefAndDate('8507000');
+   * const response = await request.fetch(sdk);
+   * ```
+   *
+   * @group Initialization
+   */
   public static initWithPlaceRefAndDate(placeRefS: string, date: Date = new Date()) {
     const location: OJP_Types.SER_RequestLocationSchema = {
       placeRef: {
@@ -63,6 +95,14 @@ export class StopEventRequest extends SharedStopEventRequest <{ fetchResponse: S
     return request;
   }
 
+  /**
+   * Builds the XML request string for the SER
+   *
+   * @param language The language to use for the request (e.g. "en", "de")
+   * @param requestorRef The requestor reference identifier
+   * @param xmlConfig XML configuration options for building the request, default {@link DefaultXML_Config} OJP 2.0
+   * @returns A formatted XML string representing the Location Information Request
+   */
   public buildRequestXML(language: Language, requestorRef: string, xmlConfig: XML_Config): string {
     this.payload.requestTimestamp = RequestHelpers.computeRequestTimestamp();
 

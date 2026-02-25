@@ -1,3 +1,4 @@
+/** @internal */
 export class DateHelpers {
   // 2021-06-03 21:38:04
   public static formatDate(d: Date) {

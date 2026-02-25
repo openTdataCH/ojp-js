@@ -13,7 +13,19 @@ import { DefaultXML_Config, XML_BuilderConfigOJPv1 } from '../../../../constants
 
 import { BaseRequest } from '../../../current/requests/base';
 
+/**
+ * FareRequest (FR) class for OJP 1.0
+ *
+ * Instances are created via static methods below. Direct construction is intentionally disabled.
+ * 
+ * - `initWithOJPv1Trips` - use Trip OJP 1.0 schema items
+ *
+ * @category Request OJP 1.0
+ */
 export class OJPv1_FareRequest extends BaseRequest<{ fetchResponse: FareRequestResponse }> {
+  /**
+   * The payload object that gets serialized to XML for the request (OJP v1)
+   */
   public payload: OJP_Types.FareRequestSchema[];
 
   protected constructor(items: OJP_Types.FareRequestSchema[]) {
@@ -47,7 +59,11 @@ export class OJPv1_FareRequest extends BaseRequest<{ fetchResponse: FareRequestR
     return params;
   }
 
-  // Used by Base.initWithRequestMock / initWithResponseMock
+  /**
+   * Used by BaseRequest methods (i.e. `initWithRequestMock`, `initWithResponseMock`
+   * 
+   * @hidden
+   */
   public static Default(): OJPv1_FareRequest {
     const request = new OJPv1_FareRequest([]);
     return request;
@@ -122,6 +138,13 @@ export class OJPv1_FareRequest extends BaseRequest<{ fetchResponse: FareRequestR
     });
   }
 
+  /**
+   * Inits FR with OJP 1.0 Trip schema items
+   *
+   * @param trips array of OJP_Types.OJPv1_TripSchema
+   * 
+   * @group Initialization
+   */
   public static initWithOJPv1Trips(trips: OJP_Types.OJPv1_TripSchema[]) {
     trips.map(tripV1 => {
       OJPv1_FareRequest.cleanTripForFareRequest(tripV1);
@@ -147,6 +170,14 @@ export class OJPv1_FareRequest extends BaseRequest<{ fetchResponse: FareRequestR
     return request;
   }
 
+  /**
+   * Builds the XML request string for the FR
+   *
+   * @param language The language to use for the request (e.g. "en", "de")
+   * @param requestorRef The requestor reference identifier
+   * @param xmlConfig XML configuration options for building the request, default {@link XML_BuilderConfigOJPv1} OJP 1.0
+   * @returns A formatted XML string representing the Location Information Request
+   */
   public buildRequestXML(language: Language, requestorRef: string, xmlConfig: XML_Config): string {
     if (xmlConfig.ojpVersion !== '1.0') {
       throw new Error('FareRequest can be consructed only with OJPv1 XML_Config');

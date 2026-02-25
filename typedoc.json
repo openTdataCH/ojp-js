@@ -1,0 +1,16 @@
+{
+  "entryPoints": [
+    "src/index.ts"
+  ],
+  "out": "docs",
+  "readme": "README.md",
+  "categorizeByGroup": false,
+  "groupOrder": ["Initialization", "Request Payload Modification", "Constructors", "Properties", "Methods", "*"],
+  "categoryOrder": ["Core", "Request", "Response", "Geo", "XML Utils", "Interoperability OJP 1.0", "Request OJP 1.0", "Response OJP 1.0", "*"],
+  "navigation": {
+    "includeCategories": true,
+    "includeFolders": true
+  },
+  "excludePrivate": true,
+  "excludeInternal": true
+}

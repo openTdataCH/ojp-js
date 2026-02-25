@@ -14,7 +14,21 @@ import { DefaultXML_Config, XML_BuilderConfigOJPv1 } from '../../../constants';
 
 import { BaseRequest } from './base';
 
+/**
+ * TripRefineRequest (TRR) class
+ *
+ * Instances are created via static methods below. Direct construction is intentionally disabled.
+ * 
+ * - `initWithTrip` - use a Trip OJP XSD schema to refine
+ *
+ * @category Request
+ */
 export class TripRefineRequest extends BaseRequest<{ fetchResponse: TripRefineRequestResponse }> {
+  /**
+   * The payload object that gets serialized to XML for the request
+   * 
+   * @see {@link https://vdvde.github.io/OJP/develop/documentation-tables/ojp.html#type_ojp__OJPTripRefineRequestStructure OJP TripRefineRequest XSD Schema}
+   */
   public payload: OJP_Types.TRR_RequestSchema;
 
   protected constructor(tripResult: OJP_Types.TripResultSchema, refineParams?: OJP_Types.TRR_RequestParamsSchema) {
@@ -37,7 +51,10 @@ export class TripRefineRequest extends BaseRequest<{ fetchResponse: TripRefineRe
     return params;
   }
 
-  // Used by Base.initWithRequestMock / initWithResponseMock
+  /**
+   * Used by BaseRequest methods (i.e. `initWithRequestMock`, `initWithResponseMock`
+   * @hidden
+   */
   public static Default() {
     const fakeTripResult = <OJP_Types.TripResultSchema>{};
     // update fake
@@ -47,6 +64,13 @@ export class TripRefineRequest extends BaseRequest<{ fetchResponse: TripRefineRe
     return request;
   }
 
+  /**
+   * Creates a new TripRefineRequest with the given Trip OJP XSD Schema
+   *
+   * @param trip the trip to be refined as Trip OJP XSD Schema
+   *
+   * @group Initialization
+   */
   public static initWithTrip(trip: Trip) {
     const tripResult: OJP_Types.TripResultSchema = {
       id: trip.id,
@@ -59,6 +83,14 @@ export class TripRefineRequest extends BaseRequest<{ fetchResponse: TripRefineRe
     return request;
   }
 
+  /**
+   * Builds the XML request string for the TIR
+   *
+   * @param language The language to use for the request (e.g. "en", "de")
+   * @param requestorRef The requestor reference identifier
+   * @param xmlConfig XML configuration options for building the request, default {@link DefaultXML_Config} OJP 2.0
+   * @returns A formatted XML string representing the Location Information Request
+   */
   public buildRequestXML(language: Language, requestorRef: string, xmlConfig: XML_Config): string {
     this.payload.requestTimestamp = RequestHelpers.computeRequestTimestamp();
 
