@@ -14,7 +14,20 @@ import { Place, PlaceRef } from '../../../../models/ojp';
 
 import { EndpointType, SharedTripRequest } from '../../../current/requests/tr.shared';
 
+/**
+ * TripRequest (TR) class for OJP 1.0
+ *
+ * Instances are created via static methods below. Direct construction is intentionally disabled.
+ * 
+ * - `initWithPlaceRefsOrCoords` - use place refs or literal coordinates (lat, lng) for origin, destinatio
+ * - `initWithPlaces` - use Place OJP XSD schema objects
+ *
+ * @category Request OJP 1.0
+ */
 export class OJPv1_TripRequest extends SharedTripRequest<{ fetchResponse: OJPv1_TripRequestResponse }> {
+  /**
+   * The payload object that gets serialized to XML for the request (OJP v1)
+   */
   public payload: OJP_Types.OJPv1_TripRequestSchema;
 
   protected constructor(
@@ -52,7 +65,11 @@ export class OJPv1_TripRequest extends SharedTripRequest<{ fetchResponse: OJPv1_
     return requestParams;
   }
 
-  // Used by Base.initWithRequestMock / initWithResponseMock
+  /**
+   * Used by BaseRequest methods (i.e. `initWithRequestMock`, `initWithResponseMock`
+   * 
+   * @hidden
+   */
   public static Default() {
     const date = new Date();
     const origin: OJP_Types.OJPv1_PlaceContextSchema = {
@@ -67,6 +84,15 @@ export class OJPv1_TripRequest extends SharedTripRequest<{ fetchResponse: OJPv1_
     const request = new OJPv1_TripRequest(origin, destination, [], params);
     return request;
   }
+
+  /**
+   * Initializes a TripRequest object with either place references or coordinates.
+   * 
+   * @param originPlaceRefS - The origin place reference string - place reference or coordinate literals (lat, lon WGS84)
+   * @param destinationPlaceRefS - The destination place reference string - place reference or coordinate literals (lat, lon WGS84)
+   * 
+   * @group Initialization
+  */
   public static initWithPlaceRefsOrCoords(originPlaceRefS: string, destinationPlaceRefS: string) {
     const origin: OJP_Types.OJPv1_PlaceContextSchema = {
       placeRef: PlaceRef.initWithPlaceRefsOrCoords(originPlaceRefS).asOJPv1Schema(),
@@ -83,6 +109,14 @@ export class OJPv1_TripRequest extends SharedTripRequest<{ fetchResponse: OJPv1_
     return request;
   }
 
+  /**
+   * Initializes a TripRequest object with Place OJP schema objects
+   * 
+   * @param origin - The origin place
+   * @param destination - The destination place
+   * 
+   * @group Initialization
+  */
   public static initWithPlaces(origin: Place, destination: Place) {
     const originPlaceRefS = origin.asStopPlaceRefOrCoords();
     const destinationPlaceRefS = destination.asStopPlaceRefOrCoords();
@@ -91,16 +125,29 @@ export class OJPv1_TripRequest extends SharedTripRequest<{ fetchResponse: OJPv1_
     return request;
   }
 
+  /**
+   * Updates arrival at destination datetime in the request payload
+   * 
+   * @group Request Payload Modification
+   */
   public setArrivalDatetime(newDatetime: Date = new Date()) {
     delete(this.payload.origin.depArrTime);
     this.payload.destination.depArrTime = newDatetime.toISOString();
   }
 
+  /**
+   * Updates departure from origin datetime in the request payload
+   * 
+   * @group Request Payload Modification
+   */
   public setDepartureDatetime(newDatetime: Date = new Date()) {
     delete(this.payload.destination.depArrTime);
     this.payload.origin.depArrTime = newDatetime.toISOString();
   }
 
+  /**
+   * @group Request Payload Modification
+   */
   public disableLinkProkection() {
     if (!this.payload.params) {
       return;
@@ -109,6 +156,9 @@ export class OJPv1_TripRequest extends SharedTripRequest<{ fetchResponse: OJPv1_
     this.payload.params.includeLegProjection = false;
   }
 
+  /**
+   * @group Request Payload Modification
+   */
   public enableLinkProkection() {
     if (!this.payload.params) {
       return;
@@ -117,6 +167,9 @@ export class OJPv1_TripRequest extends SharedTripRequest<{ fetchResponse: OJPv1_
     this.payload.params.includeLegProjection = true;
   }
 
+  /**
+   * @group Request Payload Modification
+   */
   public setPublicTransportRequest(motFilter: OJP_Types.VehicleModesOfTransportEnum[] | null): void {
     if (!this.payload.params) { return; }
 
@@ -132,45 +185,85 @@ export class OJPv1_TripRequest extends SharedTripRequest<{ fetchResponse: OJPv1_
     }
   }
 
+  /**
+   * @group Request Payload Modification
+   */
   public setCarRequest(): void {
     if (!this.payload.params) { return; }
 
     this.payload.params.itModesToCover = ['self-drive-car'];
   }
 
+  /**
+   * This modifier works only in OJP 2.0
+   * 
+   * @group Request Payload Modification
+   */
   public setRailSubmodes(railSubmodes: OJP_Types.RailSubmodeEnum | OJP_Types.RailSubmodeEnum[]): void {
-    // this is only in OJPv2
+
   }
 
+  /**
+   * This modifier works only in OJP 2.0
+   * 
+   * @group Request Payload Modification
+   */
   public setMaxDurationWalkingTime(maxDurationMinutes: number | undefined, endpointType: EndpointType): void {
-    // this is only in OJPv2
+
   }
 
+  /**
+   * @group Request Payload Modification
+   */
   public setNumberOfResults(resultsNo: number | null): void {
     if (!this.payload.params) { return; }
     this.payload.params.numberOfResults = resultsNo ?? undefined;
   }
+  /**
+   * @group Request Payload Modification
+   */
   public setNumberOfResultsAfter(resultsNo: number): void {
     if (!this.payload.params) { return; }
     this.payload.params.numberOfResultsAfter = resultsNo;
   }
+  /**
+   * @group Request Payload Modification
+   */
   public setNumberOfResultsBefore(resultsNo: number): void {
     if (!this.payload.params) { return; }
     this.payload.params.numberOfResultsBefore = resultsNo;
   }
 
+  /**
+   * This modifier works only in OJP 2.0
+   * 
+   * @group Request Payload Modification
+   */
   public setOriginDurationDistanceRestrictions(minDuration: number | null, maxDuration: number | null, minDistance: number | null, maxDistance: number | null): void {
-    // this is only in OJPv2
+
   }
 
+  /**
+   * This modifier works only in OJP 2.0
+   * 
+   * @group Request Payload Modification
+   */
   public setDestinationDurationDistanceRestrictions(minDuration: number | null, maxDuration: number | null, minDistance: number | null, maxDistance: number | null): void {
-    // this is only in OJPv2
+
   }
 
+  /**
+   * This modifier works only in OJP 2.0
+   * 
+   * @group Request Payload Modification
+   */
   public setWalkSpeedDeviation(walkSpeedPercent: number): void {
-    // this is only in OJPv2
+
   }
 
+  /**
+   * @group Request Payload Modification
+   */
   public setViaPlace(place: Place, dwellTime: number | null): void {
     const placeRefS = place.asStopPlaceRefOrCoords();
     const placeRef = PlaceRef.initWithPlaceRefsOrCoords(placeRefS).asOJPv1Schema();
@@ -187,6 +280,14 @@ export class OJPv1_TripRequest extends SharedTripRequest<{ fetchResponse: OJPv1_
     this.payload.via = [viaPointSchema];
   }
 
+  /**
+   * Builds the XML request string for the TR
+   *
+   * @param language The language to use for the request (e.g. "en", "de")
+   * @param requestorRef The requestor reference identifier
+   * @param xmlConfig XML configuration options for building the request, default {@link XML_BuilderConfigOJPv1} OJP 1.0
+   * @returns A formatted XML string representing the Location Information Request
+   */
   public buildRequestXML(language: Language, requestorRef: string, xmlConfig: XML_Config): string {
     this.payload.requestTimestamp = RequestHelpers.computeRequestTimestamp();
 
