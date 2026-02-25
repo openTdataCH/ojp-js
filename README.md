@@ -4,6 +4,8 @@ The OJP Javascript SDK is a Javascript/Typescript package used for communication
 
 ## Resources
 
+- SDK documentation: https://opentdatach.github.io/ojp-js
+
 - latest changes: [CHANGELOG](./CHANGELOG.md)
 - npm `ojp-sdk` package: https://www.npmjs.com/package/ojp-sdk
 - OJP Demo App: https://opentdatach.github.io/ojp-demo-app/ - web application using this SDK
