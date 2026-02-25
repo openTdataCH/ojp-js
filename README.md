@@ -4,9 +4,9 @@ The OJP Javascript SDK is a Javascript/Typescript package used for communication
 
 ## Resources
 
-- OJP Demo App: https://opentdatach.github.io/ojp-demo-app/ - web application using this SDK
-- [CHANGELOG](./CHANGELOG.md) for latest changes
+- latest changes: [CHANGELOG](./CHANGELOG.md)
 - npm `ojp-sdk` package: https://www.npmjs.com/package/ojp-sdk
+- OJP Demo App: https://opentdatach.github.io/ojp-demo-app/ - web application using this SDK
 
 ## Usage 
 
@@ -20,7 +20,12 @@ The OJP Javascript SDK is a Javascript/Typescript package used for communication
   }
 ```
 
-- use the SDK, see also [playground.component.ts](./examples/ojp-playground/src/app/playground/playground.component.ts) in examples
+- resources to use the SDK
+  - this repo's playground app - [playground.component.ts](./examples/ojp-playground/src/app/playground/playground.component.ts)
+  - SDK documentation: https://opentdatach.github.io/ojp-js
+  - OJP Demo App: https://opentdatach.github.io/ojp-demo-app/ - web application using this SDK
+
+### Create SDK
 
 ```
 import * as OJP from 'ojp-sdk-next';
@@ -39,29 +44,35 @@ const requestorRef = 'MyExampleTransportApp.v1';
 // create the SDK
 const language = 'de'; // de, fr, it, en
 const ojpSDK = OJP.SDK.create(requestorRef, httpConfig, language);
+```
 
-// build LIR by Name
+### Location Information Request (LIR)
+
+Find locations by name, stop reference or inside a bounding box rectangle.
+
+```
+// case1 - build LIR by Name
 const searchTerm = 'Bern';
-const request1 = ojpSDK.requests.LocationInformationRequest.initWithLocationName('Bern');
+const request = LocationInformationRequest.initWithLocationName('Bern');
 
 // build LIR by StopRef
 const stopRef = '8507000'; // Bern
-const request2 = ojpSDK.requests.LocationInformationRequest.initWithPlaceRef(stopRef);
+const request2 = LocationInformationRequest.initWithPlaceRef(stopRef);
 
 // build LIR by BBOX
 // these are equivalent
 let bbox: string | number[] = '7.433259,46.937798,7.475252,46.954805';
 bbox = [7.433259, 46.937798, 7.475252, 46.954805];
 
-const request3 =  ojpSDK.requests.LocationInformationRequest.initWithBBOX(bbox, ['stop']);
+const request3 =  ojpSDK.request.initWithBBOX(bbox, ['stop']);
 
 // change XML payload if needed
-request1.payload.initialInput ...
+request.payload.initialInput ...
 
-// fetch the results
+// Fetch the results
 async myMethod() {
   // ...
-  const response = await request1.fetchResponse(ojpSDK);
+  const response = await request.fetchResponse(ojpSDK);
 
   if (!response.ok) {
     // handle error
