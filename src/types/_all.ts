@@ -63,6 +63,25 @@ export interface XML_Config {
   mapNS: Record<string, string>
 }
 
+/**
+ * Interface containing request and response information
+ * 
+ * This interface holds metadata about HTTP requests and responses, including
+ * timestamps for request/response processing and the actual XML content.
+ * 
+ * @example
+ * ```typescript
+ * const requestInfo: RequestInfo = {
+ *   requestDateTime: new Date(),
+ *   requestXML: '<OJP>...</OJP>',
+ *   responseDateTime: new Date(),
+ *   responseXML: '<OJPResponse>...</OJPResponse>',
+ *   parseDateTime: new Date()
+ * };
+ * ```
+ * 
+ * @category Core
+ */
 export interface RequestInfo {
   requestDateTime: Date | null;
   requestXML: string | null;
