@@ -13,7 +13,23 @@ import { LocationInformationRequestResponse } from '../../../types/response';
 import { SharedLocationInformationRequest } from './lir.shared';
 import { DefaultXML_Config, XML_BuilderConfigOJPv1 } from '../../../constants';
 
+/**
+ * LocationInformationRequest (LIR) class
+ *
+ * Instances are created via static methods below. Direct construction is intentionally disabled.
+ * 
+ * - `initWithLocationName` - use location name, i.e. `Bern`
+ * - `initWithPlaceRef` - use place ref or literal coordinates (lat, lng)
+ * - `initWithBBOX` - use bounding box to filter locations
+ *
+ * @category Request
+ */
 export class LocationInformationRequest extends SharedLocationInformationRequest<{ fetchResponse: LocationInformationRequestResponse }> {
+  /**
+   * The payload object that gets serialized to XML for the request
+   * 
+   * @see {@link https://vdvde.github.io/OJP/develop/documentation-tables/ojp.html#type_ojp__OJPLocationInformationRequestStructure OJP LocationInformationRequest XSD Schema}
+   */
   public payload: OJP_Types.LocationInformationRequestSchema;
 
   protected constructor(restrictions: OJP_Types.LIR_RequestParamsSchema | undefined) {
@@ -27,6 +43,10 @@ export class LocationInformationRequest extends SharedLocationInformationRequest
     };
   }
 
+  /**
+   * Used by BaseRequest methods (i.e. `initWithRequestMock`, `initWithResponseMock`
+   * @hidden
+   */
   public static Default() {
     const restrictions = SharedLocationInformationRequest.DefaultRestrictionParams();
     const request = new LocationInformationRequest(restrictions);
@@ -34,7 +54,16 @@ export class LocationInformationRequest extends SharedLocationInformationRequest
     return request;
   }
 
-  public static initWithLocationName(name: string, placeTypes: OJP_Types.PlaceTypeEnum[] = [], numberOfResults: number = 10) {
+  /**
+   * Inits LIR with location name
+   *
+   * @param name string, location name
+   * @param placeTypes `OJP_Types.PlaceTypeEnum` "stop" | "address" | "poi" | "location" | "topographicPlace"
+   * @param numberOfResults maximum number of results to return (default: 10)
+   * 
+   * @group Initialization
+   */
+  public static initWithLocationName(name: string, placeTypes: OJP_Types.PlaceTypeEnum[] = [], numberOfResults: number = 10): LocationInformationRequest {
     const request = LocationInformationRequest.Default();
     request.payload.initialInput = {
       name: name,
@@ -47,6 +76,14 @@ export class LocationInformationRequest extends SharedLocationInformationRequest
     return request;
   }
 
+  /**
+   * Inits LIR with place ref or literal coords
+   *
+   * @param placeRefOrCoords place reference or coordinates string (e.g. `ch:1:sloid:7000:4:7` or `46.94857,7.43683` (latitude, longitude in WGS84))
+   * @param numberOfResults maximum number of results to return (default: 10)
+   * 
+   * @group Initialization
+   */
   public static initWithPlaceRef(placeRefOrCoords: string, numberOfResults: number = 10) {
     const request = LocationInformationRequest.Default();
     
@@ -59,6 +96,15 @@ export class LocationInformationRequest extends SharedLocationInformationRequest
     return request;
   }
 
+  /**
+   * Inits LIR with bounding box
+   *
+   * @param bboxData bounding box data as string ("minLon,minLat,maxLon,maxLat") or array [minLon, minLat, maxLon, maxLat]
+   * @param placeTypes `OJP_Types.PlaceTypeEnum` "stop" | "address" | "poi" | "location" | "topographicPlace"
+   * @param numberOfResults maximum number of results to return (default: 10)
+   * 
+   * @group Initialization
+   */
   public static initWithBBOX(bboxData: string | number[], placeTypes: OJP_Types.PlaceTypeEnum[] = [], numberOfResults: number = 10) {
     const request = LocationInformationRequest.Default();
 
@@ -77,7 +123,15 @@ export class LocationInformationRequest extends SharedLocationInformationRequest
     return request;
   }
 
-  public buildRequestXML(language: Language, requestorRef: string, xmlConfig: XML_Config): string {
+  /**
+   * Builds the XML request string for the LIR
+   *
+   * @param language The language to use for the request (e.g. "en", "de")
+   * @param requestorRef The requestor reference identifier
+   * @param xmlConfig XML configuration options for building the request, default {@link DefaultXML_Config} OJP 2.0
+   * @returns A formatted XML string representing the Location Information Request
+   */
+  public buildRequestXML(language: Language, requestorRef: string, xmlConfig: XML_Config = DefaultXML_Config): string {
     this.payload.requestTimestamp = RequestHelpers.computeRequestTimestamp();
 
     const requestOJP: OJP_Types.LocationInformationRequestOJP = {
