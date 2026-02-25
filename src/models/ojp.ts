@@ -4,6 +4,12 @@ import { parseXML } from '../helpers/xml/parser';
 
 import { GeoPosition, GeoPositionLike } from "./geoposition";
 
+/**
+ * @deprecated this class will be removed from SDK
+ * clients can implement specifc cases conforming to OJP_Types
+ * 
+ * @hidden
+ */
 export class PlaceRef implements OJP_Types.PlaceRefSchema {
   public stopPointRef?: string;
   public stopPlaceRef?: string;
@@ -55,6 +61,12 @@ export class PlaceRef implements OJP_Types.PlaceRefSchema {
   }
 }
 
+/**
+ * @deprecated this class will be removed from SDK
+ * clients can implement specifc cases conforming to OJP_Types
+ * 
+ * @hidden
+ */
 export class Trip implements OJP_Types.TripSchema {
   public id: string;
   public duration: string;
@@ -121,6 +133,12 @@ interface NearbyPlace {
   object: Place 
 }
 
+/**
+ * @deprecated this class will be removed from SDK
+ * clients can implement specifc cases conforming to OJP_Types
+ * 
+ * @hidden
+ */
 export class Place implements OJP_Types.PlaceSchema {
   public stopPoint?: OJP_Types.StopPointSchema;
   public stopPlace?: OJP_Types.StopPlaceSchema;
@@ -225,6 +243,12 @@ export class Place implements OJP_Types.PlaceSchema {
   }
 }
 
+/**
+ * @deprecated this class will be removed from SDK
+ * clients can implement specifc cases conforming to OJP_Types
+ * 
+ * @hidden
+ */
 export class PlaceResult implements OJP_Types.PlaceResultSchema {
   public place: Place;
   public complete: boolean;
@@ -255,6 +279,12 @@ export class PlaceResult implements OJP_Types.PlaceResultSchema {
   }
 }
 
+/**
+ * @deprecated this class will be removed from SDK
+ * clients can implement specifc cases conforming to OJP_Types
+ * 
+ * @hidden
+ */
 export class StopEventResult implements OJP_Types.StopEventResultSchema {
   public id: string;
   public stopEvent: OJP_Types.StopEventSchema;
