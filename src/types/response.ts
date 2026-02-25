@@ -12,6 +12,11 @@ type ResponseOk<T> = { ok: true; value: T };
 type ResponseError<E> = { ok: false; error: E };
 type OJP_Response<T, E> = ResponseOk<T> | ResponseError<E>;
 
+/**
+ * FR Response (OJP 1.0)
+ * 
+ * @category Response OJP 1.0
+ */
 export type FareRequestResponse = OJP_Response<OJP_Types.FareDeliverySchema, Error>;
 
 /**
@@ -22,6 +27,11 @@ export type FareRequestResponse = OJP_Response<OJP_Types.FareDeliverySchema, Err
  * @category Response
  */
 export type LocationInformationRequestResponse = OJP_Response<OJP_Types.LocationInformationDeliverySchema, Error>;
+/**
+ * LIR Response (OJP 1.0)
+ * 
+ * @category Response OJP 1.0
+ */
 export type OJPv1_LocationInformationRequestResponse = OJP_Response<OJP_Types.OJPv1_LocationInformationDeliverySchema, Error>;
 
 /**
@@ -32,6 +42,11 @@ export type OJPv1_LocationInformationRequestResponse = OJP_Response<OJP_Types.OJ
  * @category Response
  */
 export type StopEventRequestResponse = OJP_Response<OJP_Types.StopEventDeliverySchema, Error>;
+/**
+ * SER Response (OJP 1.0)
+ * 
+ * @category Response OJP 1.0
+ */
 export type OJPv1_StopEventRequestResponse = OJP_Response<OJP_Types.OJPv1_StopEventDeliverySchema, Error>;
 
 /**
@@ -42,6 +57,11 @@ export type OJPv1_StopEventRequestResponse = OJP_Response<OJP_Types.OJPv1_StopEv
  * @category Response
  */
 export type TripInfoRequestResponse = OJP_Response<OJP_Types.TripInfoDeliverySchema, Error>;
+/**
+ * TIR Response (OJP 1.0)
+ * 
+ * @category Response OJP 1.0
+ */
 export type OJPv1_TripInfoRequestResponse = OJP_Response<OJP_Types.OJPv1_TripInfoDeliverySchema, Error>;
 
 /**
@@ -61,4 +81,9 @@ export type TripRefineRequestResponse = OJP_Response<OJP_Types.TRR_DeliverySchem
  * @category Response
  */
 export type TripRequestResponse = OJP_Response<OJP_Types.TripDeliverySchema, Error>;
+/**
+ * TR Response (OJP 1.0)
+ * 
+ * @category Response OJP 1.0
+ */
 export type OJPv1_TripRequestResponse = OJP_Response<OJP_Types.OJPv1_TripDeliverySchema, Error>;
