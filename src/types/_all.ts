@@ -28,8 +28,18 @@ export interface HTTPConfig {
  */
 export type Language = 'de' | 'fr' | 'it' | 'en';
 
+/**
+ * SDK OJP version
+ * 
+ * @category Interoperability OJP 1.0
+ */
 export type OJP_VERSION = '1.0' | '2.0';
 
+/**
+ * SDK union type for applications using both OJP versions
+ * 
+ * @category Interoperability OJP 1.0
+ */
 export type AnySDK = SDK<'1.0'> | SDK<'2.0'>;
 
 /**
