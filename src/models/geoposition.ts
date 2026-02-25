@@ -2,6 +2,26 @@ import * as OJP_Types from 'ojp-shared-types';
 
 export type GeoPositionLike = OJP_Types.GeoPositionSchema | number[] | string;
 
+/**
+ * Represents a geographic position with longitude and latitude coordinate.
+ *
+ * @example
+ * ```typescript
+ * // Create from coordinates
+ * const position = new GeoPosition(8.54, 47.37);
+ * 
+ * // Create from array
+ * const position = new GeoPosition([8.54, 47.37]);
+ * 
+ * // Create from string (lat, long)
+ * const position = new GeoPosition("47.37,8.54");
+ * 
+ * // Create from GeoPositionSchema
+ * const position = new GeoPosition({ longitude: 8.54, latitude: 47.37 });
+ * ```
+ * 
+ * @category Geo
+ */
 export class GeoPosition implements OJP_Types.GeoPositionSchema {
   public longitude: number;
   public latitude: number;
