@@ -92,8 +92,6 @@ export class XmlSerializer {
     // Ensure first letter is lowercase
     newTagName = newTagName.replace(/^([A-Z])/, (match) => match.toLowerCase());
 
-    // console.log('transformToCamelCase:   ' + tagName + '->' + newTagName);
-
     return newTagName;
   }
 }
