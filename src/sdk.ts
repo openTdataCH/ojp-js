@@ -42,6 +42,17 @@ type Builders = typeof builders;
 type RequestKey = keyof Builders['2.0'];
 type ClassFor<V extends OJP_VERSION, K extends RequestKey> = Builders[V][K];
 
+/**
+ * SDK main class
+ * 
+ * Instances are created via static methods below. Direct construction is intentionally disabled.
+ * 
+ * ### Creation
+ * - `OJP.SDK.create( ... )` for OJPv2 instance
+ * - `OJP.SDK.v1( ... )` for legacy (OJPv1) instance
+ *
+ * @category Core
+ */
 export class SDK<V extends OJP_VERSION = '2.0'> {
   public readonly version: OJP_VERSION;
   public requestorRef: string;
@@ -55,15 +66,40 @@ export class SDK<V extends OJP_VERSION = '2.0'> {
     this.version = version;
   }
 
+  /**
+   * Create OJPv2 SDK
+   * 
+   * @param requestorRef string used for sending `<RequestorRef>` to OJP backend, be careful not to use a too much generic value
+   * @param httpConfig see {@link HTTPConfig | `HTTPConfig`} 
+   *
+   * @group Initialization
+   */
   public static create(requestorRef: string, httpConfig: HTTPConfig, language: Language = 'en'): SDK<'2.0'> {
     const sdk = new SDK<'2.0'>(requestorRef, httpConfig, language, '2.0');
     return sdk;
   }
+
+  /**
+   * Create OJPv1 SDK
+   * 
+   * @param requestorRef string used for sending `RequestorRef` to OJP backend, be careful not to use a too much generic value
+   * @param httpConfig see {@link HTTPConfig | `HTTPConfig`} 
+   *
+   * @group Initialization
+   */
   public static v1(requestorRef: string, httpConfig: HTTPConfig, language: Language = 'en'): SDK<'1.0'> {
     const sdk = new SDK<'1.0'>(requestorRef, httpConfig, language, '1.0');
     return sdk;
   }
 
+  /**
+   * Used by applications consuming both (OJPv1, OJPv2) SDK where the request class is infered from the main SDK constructor.
+   * 
+   * - `const mySDK: OJP.SDK<'2.0'> | OJP.SDK<'1.0'> = ...`
+   * - `mySDK.requests.LocationInformationRequest` will be either `OJP.LocationInformationRequest` or `OJP.OJPv1_LocationInformationRequest` class types
+   * 
+   * @hidden
+   */
   get requests(): { [K in RequestKey]: ClassFor<V, K> } {
     return builders[this.version] as { [K in RequestKey]: ClassFor<V, K> };
   }

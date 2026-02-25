@@ -1,10 +1,31 @@
 import { SDK } from "../sdk";
 
+/**
+ * Configuration interface for HTTP requests
+ * 
+ * This interface defines the structure for configuring HTTP request settings,
+ * including the target URL and authentication token.
+ * 
+ * @example
+ * ```typescript
+ * const config: HTTPConfig = {
+ *   url: 'https://api.example.com/data',
+ *   authToken: 'Bearer abc123xyz'
+ * };
+ * ```
+ * 
+ * @category Core
+ */
 export interface HTTPConfig {
   url: string;
   authToken: string | null;
 }
 
+/**
+ * SDK language
+ * 
+ * @category Core
+ */
 export type Language = 'de' | 'fr' | 'it' | 'en';
 
 export type OJP_VERSION = '1.0' | '2.0';

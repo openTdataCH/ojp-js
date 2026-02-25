@@ -1,5 +1,10 @@
 import { XML_Config } from "./types/_all";
 
+/**
+ * SDK current version
+ * 
+ * @category Core
+ */
 export const SDK_VERSION = '0.22.2';
 
 const mapNS = {
