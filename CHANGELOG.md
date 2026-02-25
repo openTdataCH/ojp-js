@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.22.3 - 25.02.2026
+- Updates docs
+  - use TypeDoc to generate https://opentdatach.github.io/ojp-js/
+
 ## 0.22.2 - 18.02.2026
 - Fix OJPv1 TR params - [PR #227](https://github.com/openTdataCH/ojp-js/pull/227)
   - fix OJPv1 TR setCarRequest()
