@@ -87,9 +87,107 @@ async myMethod() {
   });
 }
 ```
+### Trip Request (TR)
 
-TBA
-- update [docs](./docs/)
+Find trips between A-B endpoints defined by stop references and / or coordinates
+
+```
+// a) from/to StopPlaceRefs
+const fromStopRef = '8507000';  // Bern
+const toStopRef = '8503000';    // Zürich
+const request = OJP.TripRequest.initWithPlaceRefsOrCoords(fromStopRef, toStopRef);
+
+// b) from/to coord pairs (latitude, longitude)
+const fromCoordsRef = '46.957522,7.431170';
+const toCoordsRef = '46.931849,7.485132';
+const request2 = OJP.TripRequest.initWithPlaceRefsOrCoords(fromCoordsRef, toCoordsRef);
+
+// change XML payload if needed
+request.payload.params ...
+
+// or use one of modifier method
+
+// return precise route for legs, disabled by default
+request.enableLinkProkection();
+
+// set monomodal car requests
+request.setCarRequest();
+
+// Fetch the results
+async myMethod() {
+  // ...
+  const response = await request.fetchResponse(ojpSDK);
+
+  if (!response.ok) {
+    // handle error
+    console.log(response.error);
+    return;
+  }
+
+  // do something with the value
+  const tripResults = response.value.tripResult ?? [];
+  tripResults.forEach(tripResult => {
+    // handle tripResult response
+  });
+}
+```
+
+### Stop Event Request (SER)
+
+Display arrival / departure service information for stop references.
+
+```
+const stopRef = '8507000'; // Bern
+const request = OJP.StopEventRequest.initWithPlaceRefAndDate(stopRef, new Date());
+
+// change XML payload if needed
+request.payload.params ...
+
+// Fetch the results
+async myMethod() {
+  // ...
+  const response = await request.fetchResponse(ojpSDK);
+
+  if (!response.ok) {
+    // handle error
+    console.log(response.error);
+    return;
+  }
+
+  // do something with the value
+  const stopEventResults = response.value.stopEventResult ?? [];
+  stopEventResults.forEach(stopEventResult => {
+    // handle stopEventResult response
+  });
+}
+```
+
+### Trip Info Request (TIR)
+
+Display full service information (stop calls, service data)
+
+```
+const journeyRef = 'ch:1:sjyid:100001:2179-001'; // from a DatedJourneyService in a TR TimedLeg
+const request = OJP.StopEventRequest.initWithJourneyRef(journeyRef);
+
+// change XML payload if needed
+request.payload.params ...
+
+// Fetch the results
+async myMethod() {
+  // ...
+  const response = await request.fetchResponse(ojpSDK);
+
+  if (!response.ok) {
+    // handle error
+    console.log(response.error);
+    return;
+  }
+
+  // do something with the tripInfoResult
+  const tripInfoResult = response.value.tripInfoResult;
+}
+```
 
 ## License
 
