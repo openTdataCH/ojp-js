@@ -15,7 +15,8 @@
     "test": "jest",
     "build": "rm -rf lib && tsup src/index.ts --dts --format esm,cjs --out-dir lib",
     "dev": "tsup src/index.ts --dts --format esm,cjs --out-dir lib --watch",
-    "prepare": "npm run build"
+    "prepare": "npm run build",
+    "generate:docs": "typedoc"
   },
   "repository": {
     "type": "git",
