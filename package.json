@@ -1,7 +1,7 @@
 {
   "name": "ojp-sdk",
   "description": "OJP (Open Journey Planner) Javascript SDK",
-  "version": "0.22.2",
+  "version": "0.22.3",
   "type": "module",
   "main": "./lib/index.cjs",
   "module": "./lib/index.js",
