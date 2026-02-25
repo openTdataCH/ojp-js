@@ -1,8 +1,11 @@
 # CHANGELOG
 
 ## 0.22.3 - 25.02.2026
-- Updates docs
-  - use TypeDoc to generate https://opentdatach.github.io/ojp-js/
+- Updates docs - [PR #229](https://github.com/openTdataCH/ojp-js/pull/229)
+  - https://opentdatach.github.io/ojp-js/
+  - use `TypeDoc` to annotate the classes / methods
+  - group categories: `Core`, `Request`, `Response`, `Geo`, `XML Utils + OJP 1.0
+  - prepare to deprecate old models
 
 ## 0.22.2 - 18.02.2026
 - Fix OJPv1 TR params - [PR #227](https://github.com/openTdataCH/ojp-js/pull/227)
