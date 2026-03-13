@@ -1,12 +1,13 @@
 # OJP Javascript SDK
 
+https://github.com/openTdataCH/ojp-js/
+
 The OJP Javascript SDK is a Javascript/Typescript package used for communication with [OJP APIs](https://opentransportdata.swiss/en/cookbook/open-journey-planner-ojp/).
 
 ## Resources
 
-- SDK documentation: https://opentdatach.github.io/ojp-js
-
 - latest changes: [CHANGELOG](./CHANGELOG.md)
+- SDK documentation: https://opentdatach.github.io/ojp-js
 - npm `ojp-sdk` package: https://www.npmjs.com/package/ojp-sdk
 - OJP Demo App: https://opentdatach.github.io/ojp-demo-app/ - web application using this SDK
 
