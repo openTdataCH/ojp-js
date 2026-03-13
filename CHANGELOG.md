@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 0.22.4 - 13.03.2026
+- use latest `ojp-shared-types` - [PR #231](https://github.com/openTdataCH/ojp-js/pull/231)
+
 ## 0.22.3 - 25.02.2026
 - Updates docs - [PR #229](https://github.com/openTdataCH/ojp-js/pull/229)
   - https://opentdatach.github.io/ojp-js/
