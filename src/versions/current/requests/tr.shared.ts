@@ -29,4 +29,6 @@ export abstract class SharedTripRequest<S extends ResultSpec> extends BaseReques
   public abstract setDestinationDurationDistanceRestrictions(minDuration: number | null, maxDuration: number | null, minDistance: number | null, maxDistance: number | null): void;
 
   public abstract setViaPlace(place: Place, dwellTime: number | null): void;
+
+  public abstract setWalkRequest(): void;
 }
