@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.22.5 - 16.03.2026
+- updates TR
+  - adds setWalkRequest payload modifier - [PR #232](https://github.com/openTdataCH/ojp-js/pull/232)
+
 ## 0.22.4 - 13.03.2026
 - use latest `ojp-shared-types` - [PR #231](https://github.com/openTdataCH/ojp-js/pull/231)
 
