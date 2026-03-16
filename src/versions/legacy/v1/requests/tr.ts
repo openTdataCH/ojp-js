@@ -281,6 +281,15 @@ export class OJPv1_TripRequest extends SharedTripRequest<{ fetchResponse: OJPv1_
   }
 
   /**
+   * This modifier works only in OJP 2.0
+   * 
+   * @group Request Payload Modification
+   */
+  public setWalkRequest(): void {
+    
+  }
+
+  /**
    * Builds the XML request string for the TR
    *
    * @param language The language to use for the request (e.g. "en", "de")

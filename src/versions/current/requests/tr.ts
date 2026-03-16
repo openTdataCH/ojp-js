@@ -362,6 +362,20 @@ export class TripRequest extends SharedTripRequest<{ fetchResponse: TripRequestR
   }
 
   /**
+   * @group Request Payload Modification
+   */
+  public setWalkRequest(): void {
+    if (!this.payload.params) { return; }
+
+    this.payload.params.itModeToCover = [
+      {
+        personalMode: 'foot',
+        personalModeOfOperation: [],
+      }
+    ];
+  }
+
+  /**
    * Builds the XML request string for the TIR
    *
    * @param language The language to use for the request (e.g. "en", "de")
