@@ -304,8 +304,6 @@ export class OJPv1_TripRequest extends SharedTripRequest<{ fetchResponse: OJPv1_
   }
 
   /**
-   * This modifier works only in OJP 2.0
-   * 
    * @group Request Payload Modification
    */
   public setOriginDurationDistanceRestrictions(minDuration: number | null, maxDuration: number | null, minDistance: number | null, maxDistance: number | null): void {
