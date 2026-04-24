@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 0.23.2 - 24.04.2026
+- Updates npm publish - [PR #236](https://github.com/openTdataCH/ojp-js/pull/236)
+
 ## 0.23.1 - 24.04.2026
 - Updates TR API - [PR #234](https://github.com/openTdataCH/ojp-js/pull/234)
   - updates setOriginDurationDistanceRestrictions, setDestinationDurationDistanceRestrictions APIs, use transportMode
