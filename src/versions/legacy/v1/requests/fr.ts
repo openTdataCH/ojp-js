@@ -88,7 +88,7 @@ export class OJPv1_FareRequest extends BaseRequest<{ fetchResponse: FareRequestR
 
       if (leg.transferLeg) {
         leg.transferLeg = {
-          transferType: leg.transferLeg.transferType,
+          transferMode: leg.transferLeg.transferMode,
           legStart: {
             locationName: leg.transferLeg.legStart.locationName,
           },
