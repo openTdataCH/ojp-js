@@ -261,6 +261,30 @@ export class OJPv1_TripRequest extends SharedTripRequest<{ fetchResponse: OJPv1_
 
     return 'n/a-' + transportMode;
   }
+
+  private computeTransportOptions(transportMode: OJPv1_PersonalModesEnum, isShared: boolean, minDuration: number | null, maxDuration: number | null, minDistance: number | null, maxDistance: number | null): OJP_Types.OJPv1_IndividualTransportOptionSchema {
+    // convert from OJP_Types.PersonalModesEnum (OJP 2.0) to OJP 1.0
+    const legacyMode = this.computeLegacyTransportMode(transportMode, isShared);
+
+    const transportOptions: OJP_Types.OJPv1_IndividualTransportOptionSchema = {
+      mode: legacyMode,
+    };
+
+    if (minDuration !== null) {
+      transportOptions.minDuration = 'PT' + minDuration + 'M';
+    }
+    if (maxDuration !== null) {
+      transportOptions.maxDuration = 'PT' + maxDuration + 'M';
+    }
+    if (minDistance !== null) {
+      transportOptions.minDistance = minDistance;
+    }
+    if (maxDistance !== null) {
+      transportOptions.maxDistance = maxDistance;
+    }
+
+    return transportOptions;
+  }
   /**
    * This modifier works only in OJP 2.0
    * 
