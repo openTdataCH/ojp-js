@@ -306,17 +306,41 @@ export class OJPv1_TripRequest extends SharedTripRequest<{ fetchResponse: OJPv1_
   /**
    * @group Request Payload Modification
    */
-  public setOriginDurationDistanceRestrictions(minDuration: number | null, maxDuration: number | null, minDistance: number | null, maxDistance: number | null): void {
-
+  public setOriginDurationDistanceRestrictions(
+    operationMode: OJP_Types.PersonalModesOfOperationEnum, 
+    transportMode: OJP_Types.PersonalModesEnum, 
+    minDuration: number | null = null, 
+    maxDuration: number | null = null, 
+    minDistance: number | null = null, 
+    maxDistance: number | null = null
+  ): void {
+    const isShared = operationMode === 'lease';
+    const transportOptions = this.computeTransportOptions(transportMode, isShared, minDuration, maxDuration, minDistance, maxDistance);
+    if (isShared) {
+      this.setParamsEndpointExtension('origin', transportOptions);
+    } else {
+      this.payload.origin.individualTransportOptions = [transportOptions];
+    }
   }
 
   /**
-   * This modifier works only in OJP 2.0
-   * 
    * @group Request Payload Modification
    */
-  public setDestinationDurationDistanceRestrictions(minDuration: number | null, maxDuration: number | null, minDistance: number | null, maxDistance: number | null): void {
-
+  public setDestinationDurationDistanceRestrictions(
+    operationMode: OJP_Types.PersonalModesOfOperationEnum, 
+    transportMode: OJP_Types.PersonalModesEnum, 
+    minDuration: number | null = null, 
+    maxDuration: number | null = null, 
+    minDistance: number | null = null, 
+    maxDistance: number | null = null
+  ): void {
+    const isShared = operationMode === 'lease';
+    const transportOptions = this.computeTransportOptions(transportMode, isShared, minDuration, maxDuration, minDistance, maxDistance);
+    if (isShared) {
+      this.setParamsEndpointExtension('destination', transportOptions);
+    } else {
+      this.payload.destination.individualTransportOptions = [transportOptions];
+    }
   }
 
   /**
