@@ -2,6 +2,7 @@ import * as OJP_Types from 'ojp-shared-types';
 
 import { BaseRequest, ResultSpec } from "./base";
 import { Place } from '../../../models/ojp';
+import { OJPv1_TaxiModeEnum } from '../../legacy/v1/requests/tr';
 
 export type EndpointType = 'origin' | 'destination' | 'both';
 
@@ -33,4 +34,6 @@ export abstract class SharedTripRequest<S extends ResultSpec> extends BaseReques
   public abstract setWalkRequest(): void;
 
   public abstract setMonomodalRequest(operationMode: OJP_Types.PersonalModesOfOperationEnum, transportMode: OJP_Types.PersonalModesEnum): void;
+
+  public abstract setTaxiRequest(transportMode: OJPv1_TaxiModeEnum, endpointType: 'origin' | 'destination' | null, minDuration: number | null, maxDuration: number | null, minDistance: number | null, maxDistance: number | null): void;
 }
