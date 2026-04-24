@@ -2,6 +2,8 @@ name: Publish ojp-sdk on npm
 
 on:
   push:
+    branches:
+      - fix/publish-workflow-s2
     tags:
       - '0.23.*'
   # allow manual trigger
