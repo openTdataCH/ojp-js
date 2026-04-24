@@ -13,6 +13,7 @@ import { Place, PlaceRef } from '../../../models/ojp';
 import { DefaultXML_Config, XML_BuilderConfigOJPv1 } from '../../../constants';
 
 import { EndpointType, SharedTripRequest } from './tr.shared';
+import { OJPv1_TaxiModeEnum } from '../../legacy/v1/requests/tr';
 
 /**
  * TripRequest (TR) class
@@ -384,6 +385,31 @@ export class TripRequest extends SharedTripRequest<{ fetchResponse: TripRequestR
         personalModeOfOperation: [],
       }
     ];
+  }
+
+  /**
+   * This modifier works only in OJP 1.0
+   * 
+   * @group Request Payload Modification
+   */
+  public setMonomodalRequest(operationMode: OJP_Types.PersonalModesOfOperationEnum, transportMode: OJP_Types.PersonalModesEnum): void {
+
+  }
+
+  /**
+   * This modifier works only in OJP 1.0
+   * 
+   * @group Request Payload Modification
+   */
+  public setTaxiRequest(
+    transportMode: OJPv1_TaxiModeEnum,
+    endpointType: 'origin' | 'destination' | null = null, 
+    minDuration: number | null = null, 
+    maxDuration: number | null = null, 
+    minDistance: number | null = null, 
+    maxDistance: number | null = null
+  ): void {
+
   }
 
   /**
