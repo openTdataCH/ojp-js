@@ -285,6 +285,24 @@ export class OJPv1_TripRequest extends SharedTripRequest<{ fetchResponse: OJPv1_
 
     return transportOptions;
   }
+
+  private setParamsEndpointExtension(endpointType: EndpointType, transportOptions: OJP_Types.OJPv1_IndividualTransportOptionSchema): void {
+    if (!this.payload.params) {
+      return;
+    }
+
+    if (!this.payload.params.extension) {
+      this.payload.params.extension = {};
+    }
+
+    const isOrigin = endpointType === 'origin';
+    if (isOrigin) {
+      this.payload.params.extension.origin = transportOptions;
+    } else {
+      this.payload.params.extension.destination = transportOptions;
+    }
+  }
+
   /**
    * This modifier works only in OJP 2.0
    * 
