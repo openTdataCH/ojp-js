@@ -5,7 +5,7 @@ import { XML_Config } from "./types/_all";
  * 
  * @category Core
  */
-export const SDK_VERSION = '0.22.6';
+export const SDK_VERSION = '0.23.1';
 
 const mapNS = {
   'ojp': 'http://www.vdv.de/ojp',
