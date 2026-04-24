@@ -381,6 +381,28 @@ export class OJPv1_TripRequest extends SharedTripRequest<{ fetchResponse: OJPv1_
   }
 
   /**
+   * @group Request Payload Modification
+   * 
+   * @see {@link https://opentransportdata.swiss/de/cookbook/open-journey-planner-ojp/ojptriprequest/#Ueberblick_der_Kombinationsmoeglichkeiten }
+   */
+  public setMonomodalRequest(operationMode: OJP_Types.PersonalModesOfOperationEnum, transportMode: OJP_Types.PersonalModesEnum): void {
+    if (!this.payload.params) { return; }
+
+    const isShared = operationMode === 'lease';
+    const legacyTransportMode = this.computeLegacyTransportMode(transportMode, isShared);
+    
+    if (isShared) {
+      this.payload.params.extension = {
+        itModesToCover: [legacyTransportMode],
+      };
+    } else {
+      if (transportMode === 'bicycle') {
+        this.payload.params.itModesToCover = [legacyTransportMode];
+      }
+    }
+  }
+
+  /**
    * Builds the XML request string for the TR
    *
    * @param language The language to use for the request (e.g. "en", "de")
