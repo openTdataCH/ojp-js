@@ -14,6 +14,7 @@ import { Place, PlaceRef } from '../../../../models/ojp';
 
 import { EndpointType, SharedTripRequest } from '../../../current/requests/tr.shared';
 
+export type OJPv1_TaxiModeEnum = 'taxi' | 'others-drive-car';
 /**
  * TripRequest (TR) class for OJP 1.0
  *
