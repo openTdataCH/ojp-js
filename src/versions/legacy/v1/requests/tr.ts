@@ -15,6 +15,8 @@ import { Place, PlaceRef } from '../../../../models/ojp';
 import { EndpointType, SharedTripRequest } from '../../../current/requests/tr.shared';
 
 export type OJPv1_TaxiModeEnum = 'taxi' | 'others-drive-car';
+type OJPv1_PersonalModesEnum = OJP_Types.PersonalModesEnum | OJPv1_TaxiModeEnum;
+
 /**
  * TripRequest (TR) class for OJP 1.0
  *
@@ -398,6 +400,35 @@ export class OJPv1_TripRequest extends SharedTripRequest<{ fetchResponse: OJPv1_
     } else {
       if (transportMode === 'bicycle') {
         this.payload.params.itModesToCover = [legacyTransportMode];
+      }
+    }
+  }
+
+  /**
+   * This modifier works only in OJP 1.0
+   * 
+   * @group Request Payload Modification
+   */
+  public setTaxiRequest(
+    transportMode: OJPv1_TaxiModeEnum,
+    endpointType: 'origin' | 'destination' | null = null, 
+    minDuration: number | null = null, 
+    maxDuration: number | null = null, 
+    minDistance: number | null = null, 
+    maxDistance: number | null = null
+  ): void {
+    if (!this.payload.params) { return; }
+
+    if (endpointType === null) {
+      this.payload.params.itModesToCover = [transportMode];
+    } else {
+      const transportOptions = this.computeTransportOptions(transportMode, false, minDuration, maxDuration, minDistance, maxDistance);
+      
+      if (endpointType === 'origin') {
+        this.payload.origin.individualTransportOptions = [transportOptions];
+      }
+      if (endpointType === 'destination') {
+        this.payload.destination.individualTransportOptions = [transportOptions];
       }
     }
   }
