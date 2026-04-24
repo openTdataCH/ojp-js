@@ -31,4 +31,6 @@ export abstract class SharedTripRequest<S extends ResultSpec> extends BaseReques
   public abstract setViaPlace(place: Place, dwellTime: number | null): void;
 
   public abstract setWalkRequest(): void;
+
+  public abstract setMonomodalRequest(operationMode: OJP_Types.PersonalModesOfOperationEnum, transportMode: OJP_Types.PersonalModesEnum): void;
 }
