@@ -13,6 +13,7 @@ import { Place, PlaceRef } from '../../../models/ojp';
 import { DefaultXML_Config, XML_BuilderConfigOJPv1 } from '../../../constants';
 
 import { EndpointType, SharedTripRequest } from './tr.shared';
+import { OJPv1_TaxiModeEnum } from '../../legacy/v1/requests/tr';
 
 /**
  * TripRequest (TR) class
@@ -287,17 +288,14 @@ export class TripRequest extends SharedTripRequest<{ fetchResponse: TripRequestR
     this.payload.params.numberOfResultsBefore = resultsNo;
   }
 
-  /**
-   * @group Request Payload Modification
-   */
-  private setEndpointDurationDistanceRestrictions(placeContext: OJP_Types.PlaceContextSchema, minDuration: number | null, maxDuration: number | null, minDistance: number | null, maxDistance: number | null): void {
+  private setEndpointDurationDistanceRestrictions(placeContext: OJP_Types.PlaceContextSchema, transportMode: OJP_Types.PersonalModesEnum, minDuration: number | null, maxDuration: number | null, minDistance: number | null, maxDistance: number | null): void {
     if ((minDuration === null) && (maxDuration === null) && (minDistance === null) && (maxDistance === null)) {
       return;
     }
 
     const transportOption: OJP_Types.IndividualTransportOptionSchema = {
       itModeAndModeOfOperation: {
-        personalMode: 'foot',
+        personalMode: transportMode,
         personalModeOfOperation: ['own'],
       },
     };
@@ -321,17 +319,31 @@ export class TripRequest extends SharedTripRequest<{ fetchResponse: TripRequestR
   /**
    * @group Request Payload Modification
    */
-  public setOriginDurationDistanceRestrictions(minDuration: number | null, maxDuration: number | null, minDistance: number | null, maxDistance: number | null): void {
+  public setOriginDurationDistanceRestrictions(
+    operationMode: OJP_Types.PersonalModesOfOperationEnum, 
+    transportMode: OJP_Types.PersonalModesEnum, 
+    minDuration: number | null = null, 
+    maxDuration: number | null = null, 
+    minDistance: number | null = null, 
+    maxDistance: number | null = null
+  ): void {
     const placeContext = this.payload.origin;
-    this.setEndpointDurationDistanceRestrictions(placeContext, minDuration, maxDuration, minDistance, maxDistance);
+    this.setEndpointDurationDistanceRestrictions(placeContext, transportMode, minDuration, maxDuration, minDistance, maxDistance);
   }
 
   /**
    * @group Request Payload Modification
    */
-  public setDestinationDurationDistanceRestrictions(minDuration: number | null, maxDuration: number | null, minDistance: number | null, maxDistance: number | null): void {
+  public setDestinationDurationDistanceRestrictions(
+    operationMode: OJP_Types.PersonalModesOfOperationEnum,
+    transportMode: OJP_Types.PersonalModesEnum, 
+    minDuration: number | null = null, 
+    maxDuration: number | null = null, 
+    minDistance: number | null = null, 
+    maxDistance: number | null = null
+  ): void {
     const placeContext = this.payload.destination;
-    this.setEndpointDurationDistanceRestrictions(placeContext, minDuration, maxDuration, minDistance, maxDistance);
+    this.setEndpointDurationDistanceRestrictions(placeContext, transportMode, minDuration, maxDuration, minDistance, maxDistance);
   }
 
   /**
@@ -373,6 +385,31 @@ export class TripRequest extends SharedTripRequest<{ fetchResponse: TripRequestR
         personalModeOfOperation: [],
       }
     ];
+  }
+
+  /**
+   * This modifier works only in OJP 1.0
+   * 
+   * @group Request Payload Modification
+   */
+  public setMonomodalRequest(operationMode: OJP_Types.PersonalModesOfOperationEnum, transportMode: OJP_Types.PersonalModesEnum): void {
+
+  }
+
+  /**
+   * This modifier works only in OJP 1.0
+   * 
+   * @group Request Payload Modification
+   */
+  public setTaxiRequest(
+    transportMode: OJPv1_TaxiModeEnum,
+    endpointType: 'origin' | 'destination' | null = null, 
+    minDuration: number | null = null, 
+    maxDuration: number | null = null, 
+    minDistance: number | null = null, 
+    maxDistance: number | null = null
+  ): void {
+
   }
 
   /**

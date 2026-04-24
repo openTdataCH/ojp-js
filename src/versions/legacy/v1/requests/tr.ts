@@ -14,6 +14,9 @@ import { Place, PlaceRef } from '../../../../models/ojp';
 
 import { EndpointType, SharedTripRequest } from '../../../current/requests/tr.shared';
 
+export type OJPv1_TaxiModeEnum = 'taxi' | 'others-drive-car';
+type OJPv1_PersonalModesEnum = OJP_Types.PersonalModesEnum | OJPv1_TaxiModeEnum;
+
 /**
  * TripRequest (TR) class for OJP 1.0
  *
@@ -234,22 +237,112 @@ export class OJPv1_TripRequest extends SharedTripRequest<{ fetchResponse: OJPv1_
     this.payload.params.numberOfResultsBefore = resultsNo;
   }
 
-  /**
-   * This modifier works only in OJP 2.0
-   * 
-   * @group Request Payload Modification
-   */
-  public setOriginDurationDistanceRestrictions(minDuration: number | null, maxDuration: number | null, minDistance: number | null, maxDistance: number | null): void {
+  private computeLegacyTransportMode(transportMode: OJPv1_PersonalModesEnum, isShared: boolean): string {
+    if (transportMode === 'bicycle') {
+      if (isShared) {
+        return 'bicycle_rental';
+      } else {
+        return 'cycle';
+      }
+    }
 
+    if (transportMode === 'scooter') {
+      return 'escooter_rental';
+    }
+
+    if (transportMode === 'car') {
+      return 'car_sharing';
+    }
+
+    if (transportMode === 'taxi') {
+      return 'taxi';
+    }
+    if (transportMode === 'others-drive-car') {
+      return 'others-drive-car';
+    }
+
+    return 'n/a-' + transportMode;
+  }
+
+  private computeTransportOptions(transportMode: OJPv1_PersonalModesEnum, isShared: boolean, minDuration: number | null, maxDuration: number | null, minDistance: number | null, maxDistance: number | null): OJP_Types.OJPv1_IndividualTransportOptionSchema {
+    // convert from OJP_Types.PersonalModesEnum (OJP 2.0) to OJP 1.0
+    const legacyMode = this.computeLegacyTransportMode(transportMode, isShared);
+
+    const transportOptions: OJP_Types.OJPv1_IndividualTransportOptionSchema = {
+      mode: legacyMode,
+    };
+
+    if (minDuration !== null) {
+      transportOptions.minDuration = 'PT' + minDuration + 'M';
+    }
+    if (maxDuration !== null) {
+      transportOptions.maxDuration = 'PT' + maxDuration + 'M';
+    }
+    if (minDistance !== null) {
+      transportOptions.minDistance = minDistance;
+    }
+    if (maxDistance !== null) {
+      transportOptions.maxDistance = maxDistance;
+    }
+
+    return transportOptions;
+  }
+
+  private setParamsEndpointExtension(endpointType: EndpointType, transportOptions: OJP_Types.OJPv1_IndividualTransportOptionSchema): void {
+    if (!this.payload.params) {
+      return;
+    }
+
+    if (!this.payload.params.extension) {
+      this.payload.params.extension = {};
+    }
+
+    const isOrigin = endpointType === 'origin';
+    if (isOrigin) {
+      this.payload.params.extension.origin = transportOptions;
+    } else {
+      this.payload.params.extension.destination = transportOptions;
+    }
   }
 
   /**
-   * This modifier works only in OJP 2.0
-   * 
    * @group Request Payload Modification
    */
-  public setDestinationDurationDistanceRestrictions(minDuration: number | null, maxDuration: number | null, minDistance: number | null, maxDistance: number | null): void {
+  public setOriginDurationDistanceRestrictions(
+    operationMode: OJP_Types.PersonalModesOfOperationEnum, 
+    transportMode: OJP_Types.PersonalModesEnum, 
+    minDuration: number | null = null, 
+    maxDuration: number | null = null, 
+    minDistance: number | null = null, 
+    maxDistance: number | null = null
+  ): void {
+    const isShared = operationMode === 'lease';
+    const transportOptions = this.computeTransportOptions(transportMode, isShared, minDuration, maxDuration, minDistance, maxDistance);
+    if (isShared) {
+      this.setParamsEndpointExtension('origin', transportOptions);
+    } else {
+      this.payload.origin.individualTransportOptions = [transportOptions];
+    }
+  }
 
+  /**
+   * @group Request Payload Modification
+   */
+  public setDestinationDurationDistanceRestrictions(
+    operationMode: OJP_Types.PersonalModesOfOperationEnum, 
+    transportMode: OJP_Types.PersonalModesEnum, 
+    minDuration: number | null = null, 
+    maxDuration: number | null = null, 
+    minDistance: number | null = null, 
+    maxDistance: number | null = null
+  ): void {
+    const isShared = operationMode === 'lease';
+    const transportOptions = this.computeTransportOptions(transportMode, isShared, minDuration, maxDuration, minDistance, maxDistance);
+    if (isShared) {
+      this.setParamsEndpointExtension('destination', transportOptions);
+    } else {
+      this.payload.destination.individualTransportOptions = [transportOptions];
+    }
   }
 
   /**
@@ -287,6 +380,57 @@ export class OJPv1_TripRequest extends SharedTripRequest<{ fetchResponse: OJPv1_
    */
   public setWalkRequest(): void {
     
+  }
+
+  /**
+   * @group Request Payload Modification
+   * 
+   * @see {@link https://opentransportdata.swiss/de/cookbook/open-journey-planner-ojp/ojptriprequest/#Ueberblick_der_Kombinationsmoeglichkeiten }
+   */
+  public setMonomodalRequest(operationMode: OJP_Types.PersonalModesOfOperationEnum, transportMode: OJP_Types.PersonalModesEnum): void {
+    if (!this.payload.params) { return; }
+
+    const isShared = operationMode === 'lease';
+    const legacyTransportMode = this.computeLegacyTransportMode(transportMode, isShared);
+    
+    if (isShared) {
+      this.payload.params.extension = {
+        itModesToCover: [legacyTransportMode],
+      };
+    } else {
+      if (transportMode === 'bicycle') {
+        this.payload.params.itModesToCover = [legacyTransportMode];
+      }
+    }
+  }
+
+  /**
+   * This modifier works only in OJP 1.0
+   * 
+   * @group Request Payload Modification
+   */
+  public setTaxiRequest(
+    transportMode: OJPv1_TaxiModeEnum,
+    endpointType: 'origin' | 'destination' | null = null, 
+    minDuration: number | null = null, 
+    maxDuration: number | null = null, 
+    minDistance: number | null = null, 
+    maxDistance: number | null = null
+  ): void {
+    if (!this.payload.params) { return; }
+
+    if (endpointType === null) {
+      this.payload.params.itModesToCover = [transportMode];
+    } else {
+      const transportOptions = this.computeTransportOptions(transportMode, false, minDuration, maxDuration, minDistance, maxDistance);
+      
+      if (endpointType === 'origin') {
+        this.payload.origin.individualTransportOptions = [transportOptions];
+      }
+      if (endpointType === 'destination') {
+        this.payload.destination.individualTransportOptions = [transportOptions];
+      }
+    }
   }
 
   /**
