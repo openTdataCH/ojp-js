@@ -287,9 +287,6 @@ export class TripRequest extends SharedTripRequest<{ fetchResponse: TripRequestR
     this.payload.params.numberOfResultsBefore = resultsNo;
   }
 
-  /**
-   * @group Request Payload Modification
-   */
   private setEndpointDurationDistanceRestrictions(placeContext: OJP_Types.PlaceContextSchema, minDuration: number | null, maxDuration: number | null, minDistance: number | null, maxDistance: number | null): void {
     if ((minDuration === null) && (maxDuration === null) && (minDistance === null) && (maxDistance === null)) {
       return;
