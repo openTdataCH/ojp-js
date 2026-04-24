@@ -235,6 +235,32 @@ export class OJPv1_TripRequest extends SharedTripRequest<{ fetchResponse: OJPv1_
     this.payload.params.numberOfResultsBefore = resultsNo;
   }
 
+  private computeLegacyTransportMode(transportMode: OJPv1_PersonalModesEnum, isShared: boolean): string {
+    if (transportMode === 'bicycle') {
+      if (isShared) {
+        return 'bicycle_rental';
+      } else {
+        return 'cycle';
+      }
+    }
+
+    if (transportMode === 'scooter') {
+      return 'escooter_rental';
+    }
+
+    if (transportMode === 'car') {
+      return 'car_sharing';
+    }
+
+    if (transportMode === 'taxi') {
+      return 'taxi';
+    }
+    if (transportMode === 'others-drive-car') {
+      return 'others-drive-car';
+    }
+
+    return 'n/a-' + transportMode;
+  }
   /**
    * This modifier works only in OJP 2.0
    * 
