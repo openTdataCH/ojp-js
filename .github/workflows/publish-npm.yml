@@ -36,8 +36,5 @@ jobs:
       - run: npm pkg get version
       - run: npm pack --dry-run
 
-      - name: Debug package
-        run: npm pkg get name
-
       - name: Publish to npm
         run: npm publish --access public
