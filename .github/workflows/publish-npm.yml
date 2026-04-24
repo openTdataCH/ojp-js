@@ -2,8 +2,6 @@ name: Publish ojp-sdk on npm
 
 on:
   push:
-    branches:
-      - fix/publish-workflow-s2
     tags:
       - '0.23.*'
   # allow manual trigger
@@ -31,11 +29,6 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
-
-      # debug
-      - run: npm pkg get name
-      - run: npm pkg get version
-      - run: npm pack --dry-run
 
       - name: Publish to npm
         run: npm publish --access public
