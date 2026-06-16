@@ -3,27 +3,6 @@ import * as OJP_Types from 'ojp-shared-types';
 import { BaseRequest, ResultSpec } from "./base";
 
 export abstract class SharedLocationInformationRequest<S extends ResultSpec> extends BaseRequest<S> {
-  protected static DefaultRestrictionParams(): OJP_Types.LIR_RequestParamsSchema {
-    const restrictionParams: OJP_Types.LIR_RequestParamsSchema = {
-      type: [],
-      numberOfResults: undefined,
-      modes: undefined,
-      includePtModes: true,
-    };
-
-    return restrictionParams;
-  }
-
-  protected updateRestrictions(restrictions: OJP_Types.LIR_RequestParamsSchema, placeTypes: OJP_Types.PlaceTypeEnum[], numberOfResults: number) {
-    if (placeTypes.length > 0) {
-      restrictions.type = placeTypes;
-    }
-
-    if (numberOfResults !== null) {
-      restrictions.numberOfResults = numberOfResults;
-    }
-  }
-
   protected static computeGeoRestriction(bboxData: string | number[]): OJP_Types.GeoRestrictionsSchema | null {
     const bboxDataParts: number[] = (() => {
       if (Array.isArray(bboxData)) {

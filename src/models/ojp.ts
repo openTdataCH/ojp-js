@@ -107,7 +107,6 @@ export class Trip implements OJP_Types.TripSchema {
   }
 
   public static initWithTripXML(rawXML: string): Trip {
-    const parentTagName = 'TripResult';
     const parsedTrip = parseXML<{ trip: OJP_Types.TripSchema }>(rawXML, '2.0');
     const trip = new Trip(
       parsedTrip.trip.id,
