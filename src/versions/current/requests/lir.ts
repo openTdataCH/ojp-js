@@ -43,12 +43,37 @@ export class LocationInformationRequest extends SharedLocationInformationRequest
     };
   }
 
+  private static DefaultRestrictionParams(): OJP_Types.LIR_RequestParamsSchema {
+    const restrictionParams: OJP_Types.LIR_RequestParamsSchema = {
+      type: [],
+      numberOfResults: undefined,
+      modes: undefined,
+      includePtModes: true,
+    };
+
+    return restrictionParams;
+  }
+
+  private updateRestrictions(placeTypes: OJP_Types.PlaceTypeEnum[], numberOfResults: number) {
+    if (!this.payload.restrictions) {
+      return;
+    }
+
+    if (placeTypes.length > 0) {
+      this.payload.restrictions.type = placeTypes;
+    }
+
+    if (numberOfResults !== null) {
+      this.payload.restrictions.numberOfResults = numberOfResults;
+    }
+  }
+
   /**
    * Used by BaseRequest methods (i.e. `initWithRequestMock`, `initWithResponseMock`
    * @hidden
    */
   public static Default() {
-    const restrictions = SharedLocationInformationRequest.DefaultRestrictionParams();
+    const restrictions = LocationInformationRequest.DefaultRestrictionParams();
     const request = new LocationInformationRequest(restrictions);
 
     return request;
@@ -70,7 +95,7 @@ export class LocationInformationRequest extends SharedLocationInformationRequest
     };
 
     if (request.payload.restrictions) {
-      request.updateRestrictions(request.payload.restrictions, placeTypes, numberOfResults);
+      request.updateRestrictions(placeTypes, numberOfResults);
     }
 
     return request;
@@ -90,7 +115,7 @@ export class LocationInformationRequest extends SharedLocationInformationRequest
     request.payload.placeRef = PlaceRef.initWithPlaceRefsOrCoords(placeRefOrCoords);
 
     if (request.payload.restrictions) {
-      request.updateRestrictions(request.payload.restrictions, ['stop'], numberOfResults);
+      request.updateRestrictions(['stop'], numberOfResults);
     }
 
     return request;
@@ -117,7 +142,7 @@ export class LocationInformationRequest extends SharedLocationInformationRequest
     }
 
     if (request.payload.restrictions) {
-      request.updateRestrictions(request.payload.restrictions, placeTypes, numberOfResults);
+      request.updateRestrictions(placeTypes, numberOfResults);
     }
 
     return request;

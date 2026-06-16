@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 0.23.4 - 16.06.2026
+- Updates TR restriction params - [PR #238](https://github.com/openTdataCH/ojp-js/pull/238)
+  - use OJP 1.0 / 2.0 specific restriction params
+  - no more change for ContinuousLeg/Service in OJP 1.0 
+
 ## 0.23.3 - 24.04.2026
 - use latest `ojp-shared-types` - [PR #237](https://github.com/openTdataCH/ojp-js/pull/237)
 

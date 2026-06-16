@@ -31,7 +31,7 @@ export class OJPv1_LocationInformationRequest extends SharedLocationInformationR
    */
   public payload: OJP_Types.OJPv1_LocationInformationRequestSchema;
 
-  protected constructor(restrictions: OJP_Types.LIR_RequestParamsSchema) {
+  protected constructor(restrictions: OJP_Types.OJPv1_LIR_RequestParamsSchema) {
     super();
 
     this.payload = {
@@ -42,13 +42,38 @@ export class OJPv1_LocationInformationRequest extends SharedLocationInformationR
     };
   }
 
+  private static DefaultRestrictionParams(): OJP_Types.OJPv1_LIR_RequestParamsSchema {
+    const restrictionParams: OJP_Types.OJPv1_LIR_RequestParamsSchema = {
+      type: [],
+      numberOfResults: undefined,
+      modes: undefined,
+      includePtModes: true,
+    };
+
+    return restrictionParams;
+  }
+
+  private updateRestrictions(placeTypes: OJP_Types.PlaceTypeEnum[], numberOfResults: number) {
+    if (!this.payload.restrictions) {
+      return;
+    }
+
+    if (placeTypes.length > 0) {
+      this.payload.restrictions.type = placeTypes;
+    }
+
+    if (numberOfResults !== null) {
+      this.payload.restrictions.numberOfResults = numberOfResults;
+    }
+  }
+
   /**
    * Used by BaseRequest methods (i.e. `initWithRequestMock`, `initWithResponseMock`
    * 
    * @hidden
    */
   public static Default() {
-    const restrictions = SharedLocationInformationRequest.DefaultRestrictionParams();
+    const restrictions = OJPv1_LocationInformationRequest.DefaultRestrictionParams();
     const request = new OJPv1_LocationInformationRequest(restrictions);
 
     return request;
@@ -71,7 +96,7 @@ export class OJPv1_LocationInformationRequest extends SharedLocationInformationR
     };
 
     if (request.payload.restrictions) {
-      request.updateRestrictions(request.payload.restrictions, placeTypes, numberOfResults);
+      request.updateRestrictions(placeTypes, numberOfResults);
     }
 
     return request;
@@ -92,7 +117,7 @@ export class OJPv1_LocationInformationRequest extends SharedLocationInformationR
     request.payload.placeRef = placeRef.asOJPv1Schema();
 
     if (request.payload.restrictions) {
-      request.updateRestrictions(request.payload.restrictions, ['stop'], numberOfResults);
+      request.updateRestrictions(['stop'], numberOfResults);
     }
 
     return request;
@@ -119,7 +144,7 @@ export class OJPv1_LocationInformationRequest extends SharedLocationInformationR
     }
     
     if (request.payload.restrictions) {
-      request.updateRestrictions(request.payload.restrictions, placeTypes, numberOfResults);
+      request.updateRestrictions(placeTypes, numberOfResults);
     }
 
     return request;

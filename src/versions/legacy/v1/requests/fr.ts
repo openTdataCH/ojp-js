@@ -79,9 +79,7 @@ export class OJPv1_FareRequest extends BaseRequest<{ fetchResponse: FareRequestR
           legEnd: {
             locationName: leg.continuousLeg.legEnd.locationName,
           },
-          service: {
-            individualMode: 'foot'
-          },
+          service: leg.continuousLeg.service,
           duration: leg.continuousLeg.duration,
         };
       }
