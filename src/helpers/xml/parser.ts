@@ -55,7 +55,7 @@ export function transformJsonInPlace(root: unknown, ojpVersion: OJP_VERSION): vo
     return hasKey;
   }
 
-  function normalizeValue(value: unknown, parentKey: string | undefined, key: string): unknown {
+  function normalizeValue(value: unknown, key: string, parentKey?: string): unknown {
     if (parentKey === undefined) {
       return value;
     }
@@ -110,7 +110,7 @@ export function transformJsonInPlace(root: unknown, ojpVersion: OJP_VERSION): vo
           const arr = value as Array<Record<string, unknown>>;
 
           // prop1 -> array of normalized hashTextKey values
-          rec[key] = arr.map(o => normalizeValue(o[hashTextKey], currentNodeKey, key));
+          rec[key] = arr.map(o => normalizeValue(o[hashTextKey], key, currentNodeKey));
 
           // collect extra keys
           const extraKeys = new Set<string>();
@@ -133,7 +133,7 @@ export function transformJsonInPlace(root: unknown, ojpVersion: OJP_VERSION): vo
         }
 
         // Normal property: normalize then recurse
-        value = normalizeValue(value, currentNodeKey, key);
+        value = normalizeValue(value, key, currentNodeKey);
         rec[key] = value;
         visit(value, key);
       }
