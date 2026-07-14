@@ -55,12 +55,12 @@ export function transformJsonInPlace(root: unknown, ojpVersion: OJP_VERSION): vo
     return hasKey;
   }
 
-  function normalizeValue(value: unknown, path: string[]): unknown {
-    if (path.length < 2) {
+  function normalizeValue(value: unknown, parentKey: string | undefined, key: string): unknown {
+    if (parentKey === undefined) {
       return value;
     }
 
-    const pathSuffix = path.slice(-2).join('.');
+    const pathSuffix = `${parentKey}.${key}`;
 
     if ((pathSuffix in OJP_Types.OpenAPI_Dependencies.MapStringValues) && (typeof(value) !== 'string')) {
       return String(value);
@@ -69,12 +69,10 @@ export function transformJsonInPlace(root: unknown, ojpVersion: OJP_VERSION): vo
     return value;
   }
 
-  function visit(node: unknown, path: string[]): void {
-    const currentNodeKey = path.at(-1);
-
+  function visit(node: unknown, currentNodeKey?: string): void {
     if (Array.isArray(node)) {
       for (let i = 0; i < node.length; i++) {
-        visit(node[i], path);
+        visit(node[i], currentNodeKey);
       }
       return;
     }
@@ -86,7 +84,6 @@ export function transformJsonInPlace(root: unknown, ojpVersion: OJP_VERSION): vo
 
       for (const key of keys) {
         let value = rec[key];
-        const valuePath = [...path, key];
 
         // Case 1: check for #text property values
         if (isHashKeyObject(value)) {
@@ -111,10 +108,9 @@ export function transformJsonInPlace(root: unknown, ojpVersion: OJP_VERSION): vo
         // Case 2: if arrays, check for #text property values in the children
         if (Array.isArray(value) && value.length > 0 && value.every(isHashKeyObject)) {
           const arr = value as Array<Record<string, unknown>>;
-          const basePath = valuePath; // path to prop1
 
           // prop1 -> array of normalized hashTextKey values
-          rec[key] = arr.map(o => normalizeValue(o[hashTextKey], basePath));
+          rec[key] = arr.map(o => normalizeValue(o[hashTextKey], currentNodeKey, key));
 
           // collect extra keys
           const extraKeys = new Set<string>();
@@ -137,9 +133,9 @@ export function transformJsonInPlace(root: unknown, ojpVersion: OJP_VERSION): vo
         }
 
         // Normal property: normalize then recurse
-        value = normalizeValue(value, valuePath);
+        value = normalizeValue(value, currentNodeKey, key);
         rec[key] = value;
-        visit(value, valuePath);
+        visit(value, key);
       }
 
       // Enforce arrays, create empty nodes if needed
@@ -157,7 +153,7 @@ export function transformJsonInPlace(root: unknown, ojpVersion: OJP_VERSION): vo
     }
   }
 
-  visit(root, []);
+  visit(root);
 }
 
 const transformTagNameHandler = (tagName: string) => {
