@@ -13,6 +13,7 @@
   "files": ["lib/**/*"],
   "scripts": {
     "test": "jest",
+    "benchmark:xml-parser": "TS_NODE_COMPILER_OPTIONS='{\"module\":\"ESNext\",\"allowImportingTsExtensions\":true}' node --no-warnings --experimental-specifier-resolution=node --loader ts-node/esm benchmarks/xml-parser.bench.ts",
     "build": "rm -rf lib && tsup src/index.ts --dts --format esm,cjs --out-dir lib",
     "dev": "tsup src/index.ts --dts --format esm,cjs --out-dir lib --watch",
     "prepare": "npm run build",
