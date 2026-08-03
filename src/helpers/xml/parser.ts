@@ -160,8 +160,18 @@ export function transformJsonInPlace(root: unknown, ojpVersion: OJP_VERSION): vo
   visit(root, []);
 }
 
+// Tag names repeat heavily within a payload but the transform is a
+// non-trivial string operation, so memoize it per distinct tag name.
+const transformedTagNames = new Map<string, string>();
 const transformTagNameHandler = (tagName: string) => {
-  return XmlSerializer.transformTagName(tagName);
+  const cached = transformedTagNames.get(tagName);
+  if (cached !== undefined) {
+    return cached;
+  }
+
+  const transformed = XmlSerializer.transformTagName(tagName);
+  transformedTagNames.set(tagName, transformed);
+  return transformed;
 };
 
 const isArrayHandler = (tagName: string, jPath: string, ojpVersion: OJP_VERSION) => {
