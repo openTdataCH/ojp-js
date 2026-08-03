@@ -179,8 +179,8 @@ const isArrayHandler = (tagName: string, jPath: string, ojpVersion: OJP_VERSION)
   return false;
 };
 
-export function parseXML<T>(xml: string, ojpVersion: OJP_VERSION): T {
-  const parser = new XMLParser({
+function createParser(ojpVersion: OJP_VERSION): XMLParser {
+  return new XMLParser({
     ignoreAttributes: false,
     removeNSPrefix: true,
     transformTagName: transformTagNameHandler,
@@ -189,6 +189,17 @@ export function parseXML<T>(xml: string, ojpVersion: OJP_VERSION): T {
     },
     // parseTagValue: false,
   });
+}
+
+// OJP_VERSION only has two values, so both parsers are built once up front
+// instead of lazily caching them behind a mutable Map.
+const parsersByVersion: Record<OJP_VERSION, XMLParser> = {
+  '1.0': createParser('1.0'),
+  '2.0': createParser('2.0'),
+};
+
+export function parseXML<T>(xml: string, ojpVersion: OJP_VERSION): T {
+  const parser = parsersByVersion[ojpVersion];
 
   const response = parser.parse(xml) as T;
   transformJsonInPlace(response, ojpVersion);
