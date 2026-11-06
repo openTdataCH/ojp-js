@@ -4,6 +4,10 @@
 - Updates TR/TRR - [PR #244](https://github.com/openTdataCH/ojp-js/pull/244)
   - use latest ojp-shared-types
   - adds methods to modify request for accessible requests
+- Performance updates, thanks @jmporchet
+  - add XML parser benchmark and entity-decoding regression tests - [PR #239](https://github.com/openTdataCH/ojp-js/pull/239)
+  - reuse XMLParser instances across parseXML calls - [PR #240](https://github.com/openTdataCH/ojp-js/pull/240)
+  - memoize XML tag name transformation - [PR #241](https://github.com/openTdataCH/ojp-js/pull/241)
 
 ## 0.23.4 - 16.06.2026
 - Updates TR restriction params - [PR #238](https://github.com/openTdataCH/ojp-js/pull/238)
