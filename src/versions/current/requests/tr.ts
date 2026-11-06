@@ -413,6 +413,17 @@ export class TripRequest extends SharedTripRequest<{ fetchResponse: TripRequestR
   }
 
   /**
+   * @group Request Payload Modification
+   */
+  public setAccessibleRequest(): void {
+    if (!this.payload.params) { return; }
+
+    this.payload.params.noSingleStep = true;
+    this.payload.params.noStairs = true;
+    this.payload.params.noEscalator = true;
+  }
+
+  /**
    * Builds the XML request string for the TIR
    *
    * @param language The language to use for the request (e.g. "en", "de")
