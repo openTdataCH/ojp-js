@@ -36,4 +36,6 @@ export abstract class SharedTripRequest<S extends ResultSpec> extends BaseReques
   public abstract setMonomodalRequest(operationMode: OJP_Types.PersonalModesOfOperationEnum, transportMode: OJP_Types.PersonalModesEnum): void;
 
   public abstract setTaxiRequest(transportMode: OJPv1_TaxiModeEnum, endpointType: 'origin' | 'destination' | null, minDuration: number | null, maxDuration: number | null, minDistance: number | null, maxDistance: number | null): void;
+
+  public abstract setAccessibleRequest(): void;
 }
