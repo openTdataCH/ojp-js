@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## xx - yy
+- Updates TR/TRR - [PR #244](https://github.com/openTdataCH/ojp-js/pull/244)
+  - use latest ojp-shared-types
+  - adds methods to modify request for accessible requests
+
 ## 0.23.4 - 16.06.2026
 - Updates TR restriction params - [PR #238](https://github.com/openTdataCH/ojp-js/pull/238)
   - use OJP 1.0 / 2.0 specific restriction params
