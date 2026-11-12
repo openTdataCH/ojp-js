@@ -36,7 +36,7 @@
     "fast-xml-parser": "5.0.8"
   },
   "peerDependencies": {
-    "ojp-shared-types": "0.1.13"
+    "ojp-shared-types": "0.1.14"
   },
   "devDependencies": {
     "@types/geojson": "7946.0.16",
